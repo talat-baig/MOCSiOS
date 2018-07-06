@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="89" id="yBK-rA-PCe" customClass="AttachmentCell" customModule="mocs" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="396" height="89"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yBK-rA-PCe" id="Qnn-I4-ury">
+                <rect key="frame" x="0.0" y="0.0" width="396" height="88.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MyG-G7-GHg">
+                        <rect key="frame" x="20" y="10" width="356" height="68.5"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="3YX-Rd-cgq">
+                                <rect key="frame" x="0.0" y="0.0" width="356" height="60"/>
+                                <subviews>
+                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fFd-Ne-PR5">
+                                        <rect key="frame" x="0.0" y="0.0" width="58" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="58" id="Xgf-AC-cVL"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="3" minY="6" maxX="3" maxY="5"/>
+                                        <state key="normal" image="download"/>
+                                        <connections>
+                                            <action selector="downloadButton:" destination="yBK-rA-PCe" eventType="touchUpInside" id="zOO-Tc-6r8"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="3f5-e1-Hrz">
+                                        <rect key="frame" x="63" y="0.0" width="293" height="60"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eTs-HV-UMK">
+                                                <rect key="frame" x="0.0" y="0.0" width="293" height="20"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i35-M8-E6v">
+                                                <rect key="frame" x="0.0" y="20" width="293" height="20"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zeL-F1-Qzo">
+                                                <rect key="frame" x="0.0" y="40" width="293" height="20"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="fFd-Ne-PR5" firstAttribute="top" secondItem="3YX-Rd-cgq" secondAttribute="top" id="4fz-vt-HcI"/>
+                                    <constraint firstItem="fFd-Ne-PR5" firstAttribute="leading" secondItem="3YX-Rd-cgq" secondAttribute="leading" id="um1-WB-o7e"/>
+                                    <constraint firstAttribute="height" constant="60" id="y2J-oA-rsm"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="3YX-Rd-cgq" firstAttribute="leading" secondItem="MyG-G7-GHg" secondAttribute="leading" id="01N-u1-PME"/>
+                            <constraint firstAttribute="trailing" secondItem="3YX-Rd-cgq" secondAttribute="trailing" id="9Vi-zl-jFw"/>
+                            <constraint firstItem="3YX-Rd-cgq" firstAttribute="top" secondItem="MyG-G7-GHg" secondAttribute="top" id="AV9-jW-ue1"/>
+                        </constraints>
+                    </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="74p-C4-yfc">
+                        <rect key="frame" x="274" y="35.5" width="122" height="52"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="52" id="16m-3A-n23"/>
+                            <constraint firstAttribute="width" constant="122" id="5A3-R0-V1l"/>
+                        </constraints>
+                        <color key="tintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <state key="normal" image="delete_voucher">
+                            <color key="titleColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                    </button>
+                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" translatesAutoresizingMaskIntoConstraints="NO" id="f8d-6B-b2c">
+                        <rect key="frame" x="0.0" y="84.5" width="396" height="5"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="4" id="lLo-z3-idG"/>
+                        </constraints>
+                        <color key="progressTintColor" red="0.0" green="0.96671549479999996" blue="0.2965558619" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="trackTintColor" red="0.1647058824" green="0.43921568630000002" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </progressView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="f8d-6B-b2c" firstAttribute="top" secondItem="MyG-G7-GHg" secondAttribute="bottom" constant="6" id="1Sr-8s-VaI"/>
+                    <constraint firstAttribute="bottom" secondItem="74p-C4-yfc" secondAttribute="bottom" constant="1" id="1VN-Qa-ZG8"/>
+                    <constraint firstAttribute="trailing" secondItem="74p-C4-yfc" secondAttribute="trailing" id="3RV-Q8-K3f"/>
+                    <constraint firstItem="MyG-G7-GHg" firstAttribute="top" secondItem="Qnn-I4-ury" secondAttribute="top" constant="10" id="XoC-PQ-2Rn"/>
+                    <constraint firstItem="f8d-6B-b2c" firstAttribute="leading" secondItem="Qnn-I4-ury" secondAttribute="leading" id="dqC-5e-PxR"/>
+                    <constraint firstItem="MyG-G7-GHg" firstAttribute="leading" secondItem="Qnn-I4-ury" secondAttribute="leading" constant="20" id="lh0-tN-qAb"/>
+                    <constraint firstAttribute="trailing" secondItem="f8d-6B-b2c" secondAttribute="trailing" id="myb-5s-AKs"/>
+                    <constraint firstAttribute="trailing" secondItem="MyG-G7-GHg" secondAttribute="trailing" constant="20" id="vjS-rO-ksK"/>
+                    <constraint firstAttribute="bottom" secondItem="MyG-G7-GHg" secondAttribute="bottom" constant="10" id="yQw-it-SV7"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="btnDelete" destination="74p-C4-yfc" id="xvZ-Zk-eS3"/>
+                <outlet property="btnStatus" destination="fFd-Ne-PR5" id="ayN-vy-N7t"/>
+                <outlet property="fileDesc" destination="i35-M8-E6v" id="SRS-0d-nrJ"/>
+                <outlet property="progressBar" destination="f8d-6B-b2c" id="scX-mW-t7J"/>
+                <outlet property="status" destination="zeL-F1-Qzo" id="8Ze-9G-lIZ"/>
+                <outlet property="title" destination="eTs-HV-UMK" id="O41-0j-8RW"/>
+                <outlet property="vwOuter" destination="MyG-G7-GHg" id="fxu-l8-6mr"/>
+            </connections>
+            <point key="canvasLocation" x="-1" y="104.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="delete_voucher" width="101" height="32"/>
+        <image name="download" width="35" height="35"/>
+    </resources>
+</document>
