@@ -27,7 +27,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var delegateController: TLAViewController!
     var selectedItem : MenuDataObject?
     var helpDocViewer: UIDocumentInteractionController!
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form","3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form","3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report"]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -62,9 +62,11 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let ecr = MenuDataObject(name: "3.1.5 Employee Claims & Payments (ECR EPR)", storybdNAme: "EmployeePayment", vcName: "EmployeePaymentController", imageName: #imageLiteral(resourceName: "empty"))
         let ari = MenuDataObject(name: "3.1.6 Admin Receive Invoice (ARI)", storybdNAme: "AdminReceive", vcName: "AdminReceiveController", imageName: #imageLiteral(resourceName: "empty"))
         let tri = MenuDataObject(name: "3.1.7 Trade Received Invoice (TRI)", storybdNAme: "TradeInvoice", vcName: "TradeInvoiceController", imageName: #imageLiteral(resourceName: "empty"))
+        let ro = MenuDataObject(name: "3.1.8 Release Order (RO)", storybdNAme: "ReleaseOrder", vcName: "ReleaseOrderController", imageName: #imageLiteral(resourceName: "empty"))
+
         
         
-        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [pc,sc,dc,tcr,ecr,ari,tri], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
+        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [pc,sc,dc,tcr,ecr,ari,tri,ro], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
         
         let empDir = MenuDataObject(name: "Employee Directory", children: [], storybdNAme: "Employee", vcName: "EmployeeController", imageName: #imageLiteral(resourceName: "telephone"))
         

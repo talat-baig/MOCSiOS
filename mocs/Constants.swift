@@ -46,6 +46,8 @@ struct Constant
         static let DO = "Delivery Orders - Approval"
         static let SC = "Sales Contract - Approval"
         static let PC = "Purchase Contract - Approval"
+        static let RO = "Release Order - Approval"
+
 
     }
     

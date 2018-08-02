@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -93,14 +94,23 @@
                         <color key="progressTintColor" red="0.0" green="0.96671549479999996" blue="0.2965558619" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="trackTintColor" red="0.1647058824" green="0.43921568630000002" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </progressView>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="error" translatesAutoresizingMaskIntoConstraints="NO" id="exH-S0-Jzn">
+                        <rect key="frame" x="320" y="30" width="29" height="29"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="29" id="55U-Fh-wOY"/>
+                            <constraint firstAttribute="height" constant="29" id="6dg-db-94u"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="f8d-6B-b2c" firstAttribute="top" secondItem="MyG-G7-GHg" secondAttribute="bottom" constant="6" id="1Sr-8s-VaI"/>
                     <constraint firstAttribute="bottom" secondItem="74p-C4-yfc" secondAttribute="bottom" constant="1" id="1VN-Qa-ZG8"/>
                     <constraint firstAttribute="trailing" secondItem="74p-C4-yfc" secondAttribute="trailing" id="3RV-Q8-K3f"/>
+                    <constraint firstItem="exH-S0-Jzn" firstAttribute="centerY" secondItem="Qnn-I4-ury" secondAttribute="centerY" id="76K-eQ-TY2"/>
                     <constraint firstItem="MyG-G7-GHg" firstAttribute="top" secondItem="Qnn-I4-ury" secondAttribute="top" constant="10" id="XoC-PQ-2Rn"/>
                     <constraint firstItem="f8d-6B-b2c" firstAttribute="leading" secondItem="Qnn-I4-ury" secondAttribute="leading" id="dqC-5e-PxR"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="exH-S0-Jzn" secondAttribute="trailing" constant="27" id="esv-y0-3RW"/>
                     <constraint firstItem="MyG-G7-GHg" firstAttribute="leading" secondItem="Qnn-I4-ury" secondAttribute="leading" constant="20" id="lh0-tN-qAb"/>
                     <constraint firstAttribute="trailing" secondItem="f8d-6B-b2c" secondAttribute="trailing" id="myb-5s-AKs"/>
                     <constraint firstAttribute="trailing" secondItem="MyG-G7-GHg" secondAttribute="trailing" constant="20" id="vjS-rO-ksK"/>
@@ -111,6 +121,7 @@
                 <outlet property="btnDelete" destination="74p-C4-yfc" id="xvZ-Zk-eS3"/>
                 <outlet property="btnStatus" destination="fFd-Ne-PR5" id="ayN-vy-N7t"/>
                 <outlet property="fileDesc" destination="i35-M8-E6v" id="SRS-0d-nrJ"/>
+                <outlet property="imgError" destination="exH-S0-Jzn" id="hP7-c2-y4G"/>
                 <outlet property="progressBar" destination="f8d-6B-b2c" id="scX-mW-t7J"/>
                 <outlet property="status" destination="zeL-F1-Qzo" id="8Ze-9G-lIZ"/>
                 <outlet property="title" destination="eTs-HV-UMK" id="O41-0j-8RW"/>
@@ -122,5 +133,6 @@
     <resources>
         <image name="delete_voucher" width="101" height="32"/>
         <image name="download" width="35" height="35"/>
+        <image name="error" width="32" height="32"/>
     </resources>
 </document>

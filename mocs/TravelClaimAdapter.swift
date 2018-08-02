@@ -64,6 +64,7 @@ class TravelClaimAdapter: UITableViewCell {
         totalAmount.text = data.totalAmount
         self.data = data
     }
+    
     @IBAction func moreClick(_ sender: UIButton) {
         let optionMenu = UIAlertController(title: nil, message: data.headRef, preferredStyle: .actionSheet)
        

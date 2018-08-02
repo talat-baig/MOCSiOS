@@ -147,10 +147,15 @@ class EmployeeController: UIViewController , CNContactViewControllerDelegate , U
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 if Helper.isResponseValid(vc: self, response: response.result){
-                    let detail = self.storyboard?.instantiateViewController(withIdentifier: "DetailsController") as! DetailsController
-                    detail.response = response.result.value!
-                    detail.empId = data.id
-                    self.navigationController?.pushViewController(detail, animated: true)
+                    
+                    if data.id == "" {
+                        self.view.makeToast("Details not found")
+                    } else {
+                        let detail = self.storyboard?.instantiateViewController(withIdentifier: "DetailsController") as! DetailsController
+                        detail.response = response.result.value!
+                        detail.empId = data.id
+                        self.navigationController?.pushViewController(detail, animated: true)
+                    }
                 }
             }))
         } else {

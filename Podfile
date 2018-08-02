@@ -22,6 +22,8 @@ target 'mocs' do
     pod 'Kingfisher', '~> 4.6'
     pod 'RATreeView', '~> 2.1.2'
     pod 'Firebase/Core'
+    pod 'Fabric', '~> 1.7.9'
+    pod 'Crashlytics', '~> 3.10.5'
     pod 'MaterialShowcase'
     pod 'SQLite.swift', '~> 0.11.5'
     pod 'Siren'

@@ -10,7 +10,6 @@ import UIKit
 import SwiftyJSON
 class TRIAllocationCell: UITableViewCell {
     
-    
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var invoiceNo: UILabel!
     @IBOutlet weak var invoiceType: UILabel!

@@ -22,10 +22,9 @@ protocol UC_NotifyComplete {
 
 class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDocumentPickerDelegate {
     
-    
     var arrayList:[VoucherData] = []
     var tcrData = TravelClaimData()
-   /// -- ECR Data
+    /// -- ECR Data
     var ecrData = ECRClaimData()
     var moduleName = String()
     var imagePicker = UIImagePickerController()
@@ -88,7 +87,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         floaty.addItem("Select File", icon: #imageLiteral(resourceName: "fileExplorer"), handler: { item in
             let documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["public.text","com.apple.iwork.pages.pages", "public.data"], in: UIDocumentPickerMode.import)
             documentPicker.delegate = self
-
+            
             /// Set Document picker navigation bar text color
             UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor], for: .normal)
             documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
@@ -98,7 +97,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         })
         
         self.view.addSubview(floaty)
-
+        
         if isFromView {
             floaty.isHidden = true
             self.populateList(response: vouchResponse)
@@ -241,7 +240,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     //        dbRequest?.cancel()
     //    }
     
-    func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool)-> ()) {
+    func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
         
         GlobalVariables.shared.isUploadingSomething = true
         
@@ -252,15 +251,17 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
         dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
             .response { response, error in
-                
+                //                print(response?.description)
+                //                print(error?.description)
+               
                 DispatchQueue.main.async() {
                     if let response = response {
                         self.addItemToServer(dModName: Constant.MODULES.TCR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
                             
-                            comp(result)
+                            comp(result, "")
                         })
                     } else if error != nil {
-                        comp(false)
+                        comp(false, (error?.description)!)
                     }
                 }
             }
@@ -355,6 +356,10 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                 if result {
                     self.arrayList.remove(at: buttonRow)
                     self.tblVwVouchers.reloadData()
+                    if self.arrayList.count == 0 {
+                        print("Zeroooooooo")
+                        self.showEmptyState()
+                    }
                 } else {
                     Helper.showMessage(message: "No Internet Available, Please check your connection")
                 }
@@ -454,7 +459,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     
     @objc func populateList(response : Data?) {
         
-         self.tblVwVouchers.tableFooterView = nil
+        //        self.tblVwVouchers.tableFooterView = nil
         guard response != nil else {
             return
         }
@@ -469,7 +474,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         let array = jsonResponse.arrayObject as! [[String:AnyObject]]
         
         
-        if array.count > 0{
+        if array.count > 0 {
             
             self.arrayList.removeAll()
             
@@ -489,6 +494,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                 data.addedUser = j["AddedDate"].stringValue
                 self.arrayList.append(data)
             }
+             self.tblVwVouchers.tableFooterView = nil
             self.tblVwVouchers.reloadData()
             
         } else {
@@ -524,27 +530,24 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         newFileInfo.notifInfo.notifIdentifier = IndexPath(row:indx - 1, section: 0)
         newFileInfo.notifInfo.notifName = "UploadVoucher"
         
-        
         let fIndx = GlobalVariables.shared.uploadQueue.index(where: {$0.fName == fileInfo.fName})
         GlobalVariables.shared.uploadQueue[fIndx!] = newFileInfo
-        
         //---
-        
-        for neew in GlobalVariables.shared.uploadQueue {
-            
-            debugPrint(neew.fName)
-            debugPrint(neew.notifInfo.notifName)
+        for new in GlobalVariables.shared.uploadQueue {
+            debugPrint(new.fName)
+            debugPrint(new.notifInfo.notifName)
         }
         
         ///
+        self.tblVwVouchers.tableFooterView = nil
         self.tblVwVouchers.reloadData()
         self.uploadFilesFromQueue()
         
     }
     
-    private class func sendNotificationsToCell(progress: Double, cellIndexpath: IndexPath, fileName : String) {
-        NotificationCenter.default.post(name: Notification.Name("UploadVoucher"), object: nil, userInfo: ["progress": progress, "notifIdentifier":(cellIndexpath, fileName)])
-    }
+//    private class func sendNotificationsToCell(progress: Double, cellIndexpath: IndexPath, fileName : String) {
+//        NotificationCenter.default.post(name: Notification.Name("UploadVoucher"), object: nil, userInfo: ["progress": progress, "notifIdentifier":(cellIndexpath, fileName)])
+//    }
     
     func uploadFilesFromQueue() {
         
@@ -563,7 +566,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         //   if GlobalVariables.shared.uploadQueue.count > 1 {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        self.uploadImageData(fileInfo : newUpload ,comp: { result in
+        self.uploadImageData(fileInfo : newUpload ,comp: { result,errmessg  in
             
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             
@@ -573,11 +576,17 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             self.uploadFilesFromQueue()
             
             if result {
-
+                
             } else {
-
+                
                 if let d = self.ucNotifyDelegate {
-                    d.notifyUCVouchers(messg: "Sorry! Unable to Upload Voucher. Please try Again", success: false)
+                    
+                    if errmessg.debugDescription.contains("conflict") {
+                           d.notifyUCVouchers(messg: "Unable to Upload. File with this name already exists. Please enter different name.", success: false)
+                    } else {
+                          d.notifyUCVouchers(messg: "Sorry! Unable to Upload Voucher. Please try Again", success: false)
+                    }
+                    self.getVouchersData()
                 }
                 self.dbRequest?.cancel()
                 return
@@ -701,16 +710,7 @@ extension VouchersListViewController: UITableViewDataSource, UITableViewDelegate
                 cellView.btnDelete.isHidden = false
             }
         }
-        
-        
-        //
-        //        if GlobalVariables.shared.isUploadingSomething {
-        //            cellView.isUserInteractionEnabled = false
-        //        } else {
-        //            cellView.isUserInteractionEnabled = true
-        //        }
-        //
-        
+
         if !Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension)  {
             cellView.btnStatus.setImage(#imageLiteral(resourceName: "download"), for: .normal)
             cellView.status.text = "(Tap to Download)"

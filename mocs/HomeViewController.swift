@@ -28,7 +28,13 @@ class HomeViewController: UIViewController , filterViewDelegate {
         refreshController = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
         tableView.addSubview(refreshController)
         FilterViewController.filterDelegate = self
-        populateList()
+        
+        if Session.news == "" {
+            populateList()
+        } else {
+            parseAndAssign(response: Session.news)
+        }
+//        populateList()
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
@@ -37,7 +43,7 @@ class HomeViewController: UIViewController , filterViewDelegate {
         vwTopHeader.lblSubTitle.isHidden = true
 
         self.title = "OCS-Home"
-        
+//        fatalError()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
     }
     
@@ -108,12 +114,9 @@ class HomeViewController: UIViewController , filterViewDelegate {
         self.populateList()
     }
     
-//    func clearAllTapped() {
-//        self.populateList()
-//    }
-//    
+
     @objc func populateList(){
-        if Session.news == "" {
+//        if Session.news == "" {
             if internetStatus != .notReachable {
                 let url = String.init(format: Constant.API.NEWS, Session.authKey)
                 refreshController.beginRefreshing()
@@ -132,10 +135,10 @@ class HomeViewController: UIViewController , filterViewDelegate {
                 Helper.showNoInternetMessg()
                 Helper.showNoInternetState(vc: self, tb: tableView,action: #selector(populateList))
             }
-        } else {
-            parseAndAssign(response: Session.news)
-            self.refreshController.endRefreshing()
-        }
+//        } else {
+//            parseAndAssign(response: Session.news)
+//            self.refreshController.endRefreshing()
+//        }
     }
  
     func parseAndAssign(response:String){

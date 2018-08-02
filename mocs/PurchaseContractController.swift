@@ -13,7 +13,6 @@ import SwiftyJSON
 
 class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate, filterViewDelegate, customPopUpDelegate {
     
-    
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -25,12 +24,9 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     
-   
-    
     func cancelFilter(filterString: String) {
         self.populateList()
     }
-    
     
     func applyFilter(filterString: String) {
         if !arrayList.isEmpty  {
@@ -47,7 +43,6 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
         self.tableView.register(UINib(nibName: "ContractCell", bundle: nil), forCellReuseIdentifier: "cell")
         self.tableView.addSubview(self.refreshControl)
      
-        
         srchBar.delegate = self
         
         

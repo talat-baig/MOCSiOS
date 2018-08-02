@@ -8,7 +8,11 @@
 
 import UIKit
 import Firebase
+
 import Siren
+
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,8 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    
         FirebaseApp.configure()
-//        MocsDB.setUpDatabase()
+        self.logUser()
+
         UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
         UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
@@ -39,6 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.window?.makeKeyAndVisible()
         
+        Fabric.with([Crashlytics.self])
+//        Fabric.sharedSDK().debug = true
         return true
     }
     
@@ -68,6 +76,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     }
 
+    
+    func logUser() {
+        // TODO: Use the current user's information
+        // You can call any combination of these three methods
+        Crashlytics.sharedInstance().setUserEmail(Session.email)
+        Crashlytics.sharedInstance().setUserIdentifier(Session.authKey)
+        Crashlytics.sharedInstance().setUserName(Session.user)
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
        
     }
