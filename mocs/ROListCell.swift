@@ -30,9 +30,10 @@ class ROListCell: UITableViewCell {
     @IBOutlet weak var lblReleaseFor: UILabel!
     @IBOutlet weak var lblStorageLoc: UILabel!
     @IBOutlet weak var vwInner: UIView!
-    var data:PurchaseContractData?
+    var data:ROData?
     weak var delegate:onButtonClickListener?
     
+    @IBOutlet weak var lblRefId: UILabel!
     
 //    weak var roMenuDelegate : onROListMoreListener?
 //    weak var roOptionItemDelegate : onROListMoreItemListener?
@@ -44,9 +45,17 @@ class ROListCell: UITableViewCell {
         self.vwInner.layer.borderColor = AppColor.universalHeaderColor.cgColor
     }
     
-    func setDataToView(data:PurchaseContractData?){
-   
+    func setDataToView(data:ROData?){
+
         self.data = data
+        lblDate.text = data?.date
+        lblCompany.text = data?.company
+        lblLocation.text = data?.location
+        lblCommodity.text = data?.commodity
+        lblReleaseFor.text = data?.releaseFor
+        lblBusinessUnit.text = data?.businessUnit
+        lblRefId.text = data?.refId
+        
     }
     
     

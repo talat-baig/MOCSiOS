@@ -14,7 +14,15 @@ XLPagerTabStrip => https://github.com/xmartlabs/XLPagerTabStrip <br/>
 SwiftyDropbox=> https://github.com/dropbox/SwiftyDropbox <br/>
 NotificationBannerSwift=> https://github.com/Daltron/NotificationBanner <br/>
 Charts => https://github.com/danielgindi/Charts
-
-
-
+Floaty => https://github.com/kciter/Floaty
+DropDown => https://github.com/AssistoLab/DropDown
+FileBrowser => https://github.com/marmelroy/FileBrowser
+Kingfisher => https://github.com/onevcat/Kingfisher
+RATreeView => https://github.com/Augustyniak/RATreeView
+Firebase/Core => https://github.com/firebase/firebase-ios-sdk/tree/master/Firebase/Core
+Fabric => https://github.com/edx/edx-app-ios/tree/master/Pods/Fabric
+Crashlytics => https://github.com/crashlytics
+MaterialShowcase => https://github.com/aromajoin/material-showcase-ios
+Siren => https://github.com/ArtSabintsev/Siren
+UIEmptyState => https://github.com/luispadron/UIEmptyState
 

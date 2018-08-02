@@ -153,8 +153,8 @@ class Helper: UIView {
             debugPrint("Response",jsonResponse)
             if jsonResponse.arrayObject is [[String:AnyObject]]{
                 let data = jsonResponse.arrayObject as! [[String:AnyObject]]
-                if data.count > 0{
-                    for(_,j):(String,JSON) in jsonResponse{
+                if data.count > 0 { 
+                    for(_,j):(String,JSON) in jsonResponse {
                         switch j["ServerMsg"] != JSON.null ? j["ServerMsg"].stringValue : "" {
                         case "Success":
                             isValid = true

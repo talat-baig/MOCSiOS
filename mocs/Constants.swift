@@ -393,6 +393,18 @@ struct Constant
         static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARIMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&ARIRefNo=%@&Comments=%@"
     }
     
+    
+    struct RO {
+        
+        static let LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
+        
+    }
+    
+   
+    
+    
+    
+    
     struct TRI {
         /**
          *Get list Trave Receive Invoice*
