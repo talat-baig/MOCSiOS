@@ -15,6 +15,20 @@ class ROPrimaryViewController: UIViewController, IndicatorInfoProvider {
         return IndicatorInfo(title: "PRIMARY DETAILS")
     }
     
+    
+    @IBOutlet weak var lblCompany: UILabel!
+    
+    @IBOutlet weak var lblLocation: UILabel!
+    
+    @IBOutlet weak var lblBUnit: UILabel!
+    
+    @IBOutlet weak var lblCommodity: UILabel!
+    
+    @IBOutlet weak var lblReleaseFor: UILabel!
+    
+    @IBOutlet weak var lblReqTo: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.

@@ -688,6 +688,14 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ucj-oe-r3D"/>
                     </view>
+                    <connections>
+                        <outlet property="lblBUnit" destination="h0Z-ac-kJX" id="7qk-m9-wnu"/>
+                        <outlet property="lblCommodity" destination="r7V-mg-MXd" id="eJw-kk-IUn"/>
+                        <outlet property="lblCompany" destination="KLm-vo-gci" id="iJg-Ee-elt"/>
+                        <outlet property="lblLocation" destination="7tB-gy-e4I" id="kCP-fe-OZ8"/>
+                        <outlet property="lblReleaseFor" destination="5Vt-cp-fRe" id="hmZ-A9-uHG"/>
+                        <outlet property="lblReqTo" destination="0er-XW-pDZ" id="vkt-Pq-edJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QGj-Jp-6Cv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1656,7 +1664,7 @@
                                                                 </constraints>
                                                             </stackView>
                                                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="OBX-2a-LGx">
-                                                                <rect key="frame" x="-10" y="-88" width="355" height="35"/>
+                                                                <rect key="frame" x="-10" y="-122" width="355" height="35"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="WHR/SR Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngi-BQ-Ags">
                                                                         <rect key="frame" x="0.0" y="0.0" width="355" height="16"/>
@@ -1683,7 +1691,7 @@
                                                                 </constraints>
                                                             </stackView>
                                                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="m3M-oX-24w">
-                                                                <rect key="frame" x="-10" y="-122" width="355" height="35"/>
+                                                                <rect key="frame" x="-10" y="-104" width="355" height="35"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Balance RO Qty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6SA-yj-ts4">
                                                                         <rect key="frame" x="0.0" y="0.0" width="355" height="16"/>
@@ -1710,7 +1718,7 @@
                                                                 </constraints>
                                                             </stackView>
                                                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="xGy-1V-lZW">
-                                                                <rect key="frame" x="-10" y="-122" width="355" height="35"/>
+                                                                <rect key="frame" x="-10" y="-88" width="355" height="35"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="3nO-Bw-Nqk">
                                                                         <rect key="frame" x="0.0" y="0.0" width="177.5" height="35"/>
@@ -1793,7 +1801,7 @@
                                                                 </constraints>
                                                             </stackView>
                                                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Od3-xX-hbX">
-                                                                <rect key="frame" x="-10" y="-122" width="355" height="45"/>
+                                                                <rect key="frame" x="-10" y="-123" width="355" height="45"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Bag Size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gV9-Hl-HyH">
                                                                         <rect key="frame" x="0.0" y="0.0" width="355" height="16"/>

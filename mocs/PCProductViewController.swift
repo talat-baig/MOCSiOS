@@ -30,10 +30,10 @@ class PCProductViewController: UIViewController, IndicatorInfoProvider {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
-
+        
         parseAndAssign()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -51,6 +51,7 @@ class PCProductViewController: UIViewController, IndicatorInfoProvider {
             data.brand = j["Brand"].stringValue
             data.bagSize = j["Bag size"].stringValue
             data.quantity = j["Quanity"].stringValue
+            data.sku = j["SKU"].stringValue
             data.quantityMT = j["Quanity (MT)"].stringValue
             data.price = j["Price"].stringValue
             arrayList.append(data)
@@ -71,7 +72,7 @@ class PCProductViewController: UIViewController, IndicatorInfoProvider {
         lblQtyMT.text! = data.quantityMT
         lblPrice.text! = data.price
     }
-
+    
 }
 extension PCProductViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

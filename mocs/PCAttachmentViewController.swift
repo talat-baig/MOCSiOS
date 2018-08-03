@@ -28,12 +28,16 @@ class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+        tableView.register(UINib.init(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "cell")
+        showEmptyState()
+        tableView.reloadData()
+//        showEmptyState()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         
-        tableView.register(UINib.init(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "cell")
-        showEmptyState()
+//        tableView.register(UINib.init(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "cell")
+//        showEmptyState()
         tableView.reloadData()
     }
     
@@ -77,6 +81,7 @@ class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
                             data.addedUser = j["AddedDate"].stringValue
                             self.arrayList.append(data)
                         }
+                        self.tableView.tableFooterView = nil
                         self.tableView.reloadData()
                         
                     }else{

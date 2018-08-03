@@ -24,11 +24,8 @@ struct AppColor {
     
     static let universalHeaderColor = UIColor(red:69.0/255.0, green:138.0/255.0, blue:255.0/255.0, alpha:1.0)
     static let universalBodyColor = UIColor(red:37.0/255.0, green:108.0/255.0, blue:230.0/255.0, alpha:1.0)
-    
     static let univPopUpBckgColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
-    
     static let univVoucherCell = UIColor(red:69.0/255.0, green:138.0/255.0, blue:255.0/255.0, alpha:0.3)
-    
     static let sideMenuGreen = UIColor(red: 26.0/255.0, green: 188.0/255.0, blue: 156.0/255.0, alpha: 1.0)
 
 }
@@ -47,7 +44,6 @@ struct Constant
         static let SC = "Sales Contract - Approval"
         static let PC = "Purchase Contract - Approval"
         static let RO = "Release Order - Approval"
-
 
     }
     

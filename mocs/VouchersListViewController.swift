@@ -494,7 +494,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                 data.addedUser = j["AddedDate"].stringValue
                 self.arrayList.append(data)
             }
-             self.tblVwVouchers.tableFooterView = nil
+            self.tblVwVouchers.tableFooterView = nil
             self.tblVwVouchers.reloadData()
             
         } else {
