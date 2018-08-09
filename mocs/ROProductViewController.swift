@@ -8,15 +8,19 @@
 
 import UIKit
 import XLPagerTabStrip
+import SwiftyJSON
 
 class ROProductViewController: UIViewController, IndicatorInfoProvider {
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "PRODUCT")
     }
-    
+//    
+//    var response:Data!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+//        parseAndAssign()
     }
 
     override func didReceiveMemoryWarning() {
@@ -25,5 +29,7 @@ class ROProductViewController: UIViewController, IndicatorInfoProvider {
     }
     
 
+
+    
 
 }

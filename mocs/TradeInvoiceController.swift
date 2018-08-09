@@ -138,7 +138,6 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         
         if isApprove {
             
-            // self.approveContract(data: data as! PurchaseContractData, remark: text)
         } else {
             self.declineInvoice(data: data as! TRIData)
             declVw.removeFromSuperviewWithAnimate()

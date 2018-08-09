@@ -14,6 +14,14 @@ class ROData {
     var location:String = String()
     var businessUnit:String = String()
     var commodity:String = String()
-    var releaseFor:String = String()
+    var roGuid:String = String()
+    var reqQty: String = String()
+    var rcvdQty: String = String()
+    
+    var uom : String = String()
+    var wghtTrms : String = String()
+    var balQty : String = String()
+    var netTerms : String = String()
+    var relOrderNum : String = String()
     var date:String = String()
 }

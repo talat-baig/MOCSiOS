@@ -15,6 +15,7 @@ import DropDown
 class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     @IBOutlet weak var btnSubmit: UIButton!
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     @IBOutlet weak var scrlVw: UIScrollView!

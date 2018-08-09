@@ -239,10 +239,11 @@ extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onB
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if arrayList.count > 0{
+        
+        if arrayList.count > 0 {
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
-        }else{
+        } else {
             tableView.backgroundView?.isHidden = false
             tableView.separatorStyle = .none
         }
@@ -259,6 +260,7 @@ extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onB
     }
     
     func onViewClick(data: AnyObject) {
+        
         let viewController =  self.storyboard?.instantiateViewController(withIdentifier: "ARIViewController") as! ARIViewController
         viewController.data = (data as! ARIData)
         viewController.title = (data as! ARIData).refId

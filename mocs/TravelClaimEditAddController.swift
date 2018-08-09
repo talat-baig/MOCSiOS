@@ -246,6 +246,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
     }
     
     func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String, eprStr : String = "", counter : Int = 0 ){
+        
         if self.internetStatus != .notReachable {
             
             self.view.showLoading()

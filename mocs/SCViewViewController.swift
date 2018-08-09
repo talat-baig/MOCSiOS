@@ -53,7 +53,7 @@ class SCViewViewController: ButtonBarPagerTabStripViewController {
     }
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
-        var controlelrs:[UIViewController] = []
+        var controllers:[UIViewController] = []
         
         let primary = self.storyboard!.instantiateViewController(withIdentifier: "SCPrimaryController") as! SCPrimaryController
         primary.response = response
@@ -73,19 +73,19 @@ class SCViewViewController: ButtonBarPagerTabStripViewController {
         let product = UIStoryboard(name: "PurchaseContract", bundle: nil).instantiateViewController(withIdentifier: "PCProductViewController") as! PCProductViewController
         product.response = response
         
-        controlelrs.append(primary)
-        controlelrs.append(payment)
-        controlelrs.append(shipment)
+        controllers.append(primary)
+        controllers.append(payment)
+        controllers.append(shipment)
         var jsonResponse = JSON(self.response)
         var array = jsonResponse.arrayObject as! [[String:AnyObject]]
         var rawJson = JSON.init(parseJSON: (array[0]["Products"] as! String))
         if (rawJson.null == nil) {
             if (rawJson.arrayObject as! [[String:AnyObject]]).count > 0{
-                controlelrs.append(product)
+                controllers.append(product)
             }
         }
-        controlelrs.append(attachment)
-        return controlelrs
+        controllers.append(attachment)
+        return controllers
     }
 
 }

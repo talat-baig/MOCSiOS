@@ -190,7 +190,7 @@ class TravelClaimController: UIViewController, UIGestureRecognizerDelegate, onTC
     func sendEmail(data:TravelClaimData){
         showLoading()
         
-        if internetStatus != .notReachable{
+        if internetStatus != .notReachable {
             let url = String.init(format: Constant.API.SEND_EMAIL_TCR, Session.authKey,"TCR", data.headRef, data.counter)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.hideLoading()
@@ -225,7 +225,8 @@ class TravelClaimController: UIViewController, UIGestureRecognizerDelegate, onTC
         }
     }
     
-    func deleteClaim(data:TravelClaimData){
+    func deleteClaim(data:TravelClaimData) {
+        
         if internetStatus != .notReachable {
             showLoading()
             print(data.headRef)

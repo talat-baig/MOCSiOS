@@ -11,7 +11,9 @@ import XLPagerTabStrip
 
 class ROBaseViewController: ButtonBarPagerTabStripViewController {
     
-    var data:ARIData?
+    var roData = ROData()
+    var response:Data!
+    var cargoResponse : Data!
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
@@ -41,7 +43,7 @@ class ROBaseViewController: ButtonBarPagerTabStripViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = "Release Order"
-        vwTopHeader.lblSubTitle.text = "RRD17-25-0009"
+        vwTopHeader.lblSubTitle.text = roData.refId
         self.navigationController?.isNavigationBarHidden = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
     }
@@ -54,19 +56,22 @@ class ROBaseViewController: ButtonBarPagerTabStripViewController {
         var viewArray:[UIViewController] = [];
         
         let primary = self.storyboard!.instantiateViewController(withIdentifier: "ROPrimaryViewController") as! ROPrimaryViewController
+        primary.response = response
+        primary.roData = roData
         
-        let cargoInfo = self.storyboard!.instantiateViewController(withIdentifier: "ROPaymentViewController") as! ROPaymentViewController
-        
-//        let product = self.storyboard!.instantiateViewController(withIdentifier: "ROProductViewController") as! ROProductViewController
+        let cargoInfo = self.storyboard!.instantiateViewController(withIdentifier: "ROCarfoInfoVC") as! ROCarfoInfoVC
+        cargoInfo.cResponse = cargoResponse
+        cargoInfo.roData = roData
         
         let storageInfo = self.storyboard!.instantiateViewController(withIdentifier: "ROStorageInfoVC") as! ROStorageInfoVC
-
+        storageInfo.response = response
+//        storageInfo.roData = roData
+        
         
         viewArray.append(primary)
         viewArray.append(storageInfo)
 
         viewArray.append(cargoInfo)
-//        viewArray.append(product)
         
         return viewArray
     }

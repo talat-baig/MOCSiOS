@@ -8,6 +8,13 @@
 
 import UIKit
 import DropDown
+import  Alamofire
+
+
+protocol onRRcptSubmit: NSObjectProtocol {
+    func onOkClick() -> Void
+}
+
 
 class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     
@@ -45,7 +52,14 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var datePicker: UIDatePicker!
     
-    let arrUOM = ["Mt","Kg"]
+    weak var okSubmitDelegate : onRRcptSubmit?
+    
+    //    var rrcptData : RecordRcptData?
+    var roRefId : String = ""
+    var whrNum : String = ""
+    
+    
+    let arrUOM = ["Mt"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +72,7 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = "Add New Record Receipt"
         vwTopHeader.lblSubTitle.isHidden = true
-
+        
         txtRcptDate.inputView = datePickerTool
         
         vwRcptDate.layer.borderWidth = 1
@@ -95,21 +109,16 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        
-//        let lastView : UIView! = mySubVw.subviews.last
-//        let height = lastView.frame.size.height
-//        let pos = lastView.frame.origin.y
-//        let sizeOfContent = height + pos + 30
-//        
-//        scrlVw.contentSize.height = sizeOfContent
+        
     }
     
     
@@ -119,6 +128,81 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func btnSubmitTapped(_ sender: Any) {
+        
+        
+        
+        guard let rcptDate = txtRcptDate.text, !rcptDate.isEmpty else {
+            Helper.showMessage(message: "Please enter Receipt Date")
+            return
+        }
+        
+        guard let roNumbr = txtRONum.text, !roNumbr.isEmpty else {
+            Helper.showMessage(message: "Please enter RO Number")
+            return
+        }
+        
+        guard let qtyRcvd = txtQtyRcvd.text, !qtyRcvd.isEmpty else {
+            Helper.showMessage(message: "Please enter Quantity Received")
+            return
+        }
+        
+        self.handleTap()
+        
+        if self.internetStatus != .notReachable {
+            
+            self.view.showLoading()
+            
+            let url = String.init(format: Constant.RO.ADD_RECEIPT, Session.authKey, Session.email)
+            print(url)
+            //
+            //            let newRecord = ["ROReferenceID": "RRD18-25-0263", "IsDeleted": "0", "ROReceiveReleaseOrderNo": "1", "ROReceiveReceiptDate": "7/8/2018", "ROReceiveQuantityReceived":  "22", "ROReceiveQuantityReceivedinmt": "22" , "ROReceiveUOM":  "mt" , "ROReceiveDescription": "test", "ROReceivedByUser": Session.user, "ROReceivedDate" : "7/8/2018" , "ROGUID" : "WHR18-25-CAL-19-047883e5e2d0-eb5e-4c29-ad02-11f0921c5162", "ROExRelease": "0"] as [String : Any]
+            
+    
+            
+            let newRecord = ["ROReferenceID": self.roRefId, "IsDeleted": "0", "ROReceiveReleaseOrderNo": "1", "ROReceiveReceiptDate": rcptDate , "ROReceiveQuantityReceived":  txtQtyRcvd.text as Any, "ROReceiveQuantityReceivedinmt":  txtQtyRcvd.text as Any , "ROReceiveUOM":  btnUom.titleLabel?.text as Any , "ROReceiveDescription": txtDesc.text as Any, "ROReceivedByUser": Session.user, "ROReceivedDate" : rcptDate , "ROGUID" : whrNum, "ROExRelease": "0"] as [String : Any]
+            
+            
+            Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
+                .responseString(completionHandler: {  response in
+                    self.view.hideLoading()
+                    debugPrint(response.result.value as Any)
+                    
+                    if response.result.value == "Success" {
+                        
+                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
+                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+                            
+                            if let d = self.okSubmitDelegate {
+                                d.onOkClick()
+                            }
+                            self.navigationController?.popViewController(animated: true)
+                        }))
+                        self.present(success, animated: true, completion: nil)
+                    } else if response.result.value == "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check" {
+                        
+                        let failure = UIAlertController(title: "", message: "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check", preferredStyle: .alert)
+                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+                            
+                            
+                            self.navigationController?.popViewController(animated: true)
+                        }))
+                        self.present(failure, animated: true, completion: nil)
+                    } else {
+                        let failure = UIAlertController(title: "Oops", message: "Something went wrong! Unable to add Receipt", preferredStyle: .alert)
+                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+                            
+                            self.navigationController?.popViewController(animated: true)
+                        }))
+                        self.present(failure, animated: true, completion: nil)
+                    }
+                    
+                })
+            
+        } else {
+            Helper.showNoInternetMessg()
+        }
+        
+        
     }
     
     @IBAction func btnUOMTapped(_ sender: Any) {
@@ -185,13 +269,6 @@ extension AddNewRecordRcptVC: UITextFieldDelegate , UITextViewDelegate {
         if textField == txtRcptDate {
             datePickerTool.isHidden = false
         }
-        
-//        if textField == txtDesc {
-////            datePickerTool.isHidden = false
-//            let scrollPoint:CGPoint = CGPoint(x:0, y:  stckVwQty.frame.origin.y + 10 )
-//            scrlVw!.setContentOffset(scrollPoint, animated: true)
-//        }
-        
         return true
     }
     

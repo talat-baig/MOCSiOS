@@ -347,7 +347,8 @@ class ExpenseAddEditViewController: UIViewController , UIGestureRecognizerDelega
     
     
     
-    func addOrEditExpense(tcrRefNo:String , expDate:String, expCat : String, expSubCat : String, expVendor : String ,expPayment : String, expCurr : String, expAmt : String ,expComments : String, tcrCounter : Int){
+    func addOrEditExpense(tcrRefNo:String , expDate:String, expCat : String, expSubCat : String, expVendor : String ,expPayment : String, expCurr : String, expAmt : String ,expComments : String, tcrCounter : Int) {
+        
         if self.internetStatus != .notReachable {
             
             self.view.showLoading()

@@ -42,7 +42,6 @@ class TravelClaimAdapter: UITableViewCell {
     
     weak var data:TravelClaimData!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         

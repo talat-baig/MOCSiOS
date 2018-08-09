@@ -394,13 +394,18 @@ struct Constant
         
         static let LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
         
+        static let VIEW = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"
+        
+        static let CARGO_DETAILS = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByRO?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&reference=%@&authid=%@"
+
+        static let RRCPT_LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&guid=%@"
+
+        static let ADD_RECEIPT = "http://172.16.12.12/OCSWebApi/api/RequestOrder/SaveROtoWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@"
+
+        static let EMAIL_RO = "http://172.16.12.12/OCSWebApi/api/RequestOrder/ROMailSend?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@&referenceid=%@"
     }
     
    
-    
-    
-    
-    
     struct TRI {
         /**
          *Get list Trave Receive Invoice*

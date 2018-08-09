@@ -13,19 +13,38 @@ protocol onCargoMoreClickListener: NSObjectProtocol {
 }
 
 protocol onCargoOptionIemClickListener: NSObjectProtocol {
-    func onViewClick() -> Void
+
     func onCancelClick() -> Void
-    func onApproveClick() -> Void
+    func onReceiveClick(sender : UIButton) -> Void
 }
 
 class CargoInfoCell: UITableViewCell {
     
     @IBOutlet weak var vwOuter: UIView!
     
-    @IBOutlet weak var lblWHRNum: UILabel!
+    @IBOutlet weak var vesselName: UILabel!
+    
+    @IBOutlet weak var whrSrDate: UILabel!
+    
+    @IBOutlet weak var lblMt: UIStackView!
+    @IBOutlet weak var lblWhtTerms: UILabel!
+    
+    @IBOutlet weak var lblProduct: UILabel!
+    
+    @IBOutlet weak var lblWHRId: UILabel!
+    @IBOutlet weak var lblUom: UILabel!
+    @IBOutlet weak var lblBagSize: UILabel!
+    
+    @IBOutlet weak var lblQuality: UILabel!
+    
+    @IBOutlet weak var lblQtyRcvd: UILabel!
+    @IBOutlet weak var lblBrand: UILabel!
+    
     @IBOutlet weak var btnMore: UIButton!
+    
     weak var menuDelegate : onCargoMoreClickListener?
     weak var optionMenuDelegate : onCargoOptionIemClickListener?
+    var data : WHRListData?
     
     @IBOutlet weak var lblStatus: UILabel!
     
@@ -46,36 +65,52 @@ class CargoInfoCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    func setDataToView(data:WHRListData?){
+
+        self.data = data
+        vesselName.text = data?.vesselName
+        whrSrDate.text = data?.whrDate
+        lblQtyRcvd.text = data?.qtyRcvd
+        lblUom.text = data?.uom
+        lblWhtTerms.text = data?.wtTerms
+        lblProduct.text = data?.product
+        lblBagSize.text = data?.bagSize
+        lblQuality.text = data?.quality
+        lblBrand.text = data?.brand
+        lblWHRId.text = data?.whrId
+
+    }
+
     
     @IBAction func moreClick(_ sender: UIButton) {
         
-//        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
-//
-//        let viewAction = UIAlertAction(title: "View", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.optionMenuDelegate?.responds(to: Selector(("onViewClick"))) != nil){
-//                self.optionMenuDelegate?.onViewClick()
-//            }
-//        })
-//
-//        optionMenu.addAction(viewAction)
+        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
+
+        let recvAction = UIAlertAction(title: "Receive", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.optionMenuDelegate?.responds(to: Selector(("onReceiveClick"))) != nil){
+                self.optionMenuDelegate?.onReceiveClick(sender: sender)
+            }
+        })
+
+        optionMenu.addAction(recvAction)
         
         
-//        let approveAction = UIAlertAction(title: "Approve", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.optionMenuDelegate?.responds(to: Selector(("onApproveClick"))) != nil){
-//                self.optionMenuDelegate?.onViewClick()
-//            }
-//        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.optionMenuDelegate?.responds(to: Selector(("onCancelClick"))) != nil){
+                self.optionMenuDelegate?.onCancelClick()
+            }
+        })
         
 //        if sender.tag == 1 {
-//            optionMenu.addAction(approveAction)
+            optionMenu.addAction(cancelAction)
 //        }
-//
+
         
-//        if ((menuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
-//            menuDelegate?.onClick(optionMenu: optionMenu , sender: sender)
-//        }
-//        
-//        
+        if ((menuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
+            menuDelegate?.onClick(optionMenu: optionMenu , sender: sender)
+        }
+        
+        
         
         
     }

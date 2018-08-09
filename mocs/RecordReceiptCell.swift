@@ -27,6 +27,15 @@ class RecordReceiptCell: UITableViewCell {
     
     @IBOutlet weak var btnMore: UIButton!
     
+    
+    @IBOutlet weak var lblRcptDate: UILabel!
+    
+    @IBOutlet weak var lblDesc: UILabel!
+    @IBOutlet weak var lblROrderNum: UILabel!
+    @IBOutlet weak var lblRcptQty: UILabel!
+    
+    @IBOutlet weak var lblUom: UILabel!
+    var data : RRcptData?
     weak var rrMenuDelegate : onRRcptMoreClickListener?
     weak var rrOptionClickDelegate : onRRcptItemClickListener?
     
@@ -41,6 +50,18 @@ class RecordReceiptCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    
+    func setDataToView(data:RRcptData?) {
+        
+        self.data = data
+        lblRcptDate.text = data?.rcptDate
+        lblROrderNum.text = data?.releaseOrderNum
+        lblRcptQty.text = data?.rcvdQty
+        lblUom.text = data?.uom
+        lblDesc.text = data?.desc
+       
+    }
+
     
     @IBAction func moreClick(_ sender: UIButton) {
         

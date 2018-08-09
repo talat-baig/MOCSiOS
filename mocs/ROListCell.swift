@@ -9,16 +9,16 @@
 import UIKit
 
 
-//protocol onROListMoreListener: NSObjectProtocol {
-//    func onClick(optionMenu:UIViewController, sender : UIButton ) -> Void
-//}
-//
-//protocol onROListMoreItemListener: NSObjectProtocol {
-//    func onViewClick() -> Void
-//    func onMailClick() -> Void
-//    func onCancelClick() -> Void
+protocol onROListMoreListener: NSObjectProtocol {
+    func onClick(optionMenu:UIViewController, sender : UIButton ) -> Void
+}
+
+protocol onROListMoreItemListener: NSObjectProtocol {
+    func onViewClick(data: ROData) -> Void
+    func onMailClick(data: ROData) -> Void
+    func onCancelClick() -> Void
 //    func onApproveClick() -> Void
-//}
+}
 
 class ROListCell: UITableViewCell {
     
@@ -27,16 +27,17 @@ class ROListCell: UITableViewCell {
     @IBOutlet weak var lblLocation: UILabel!
     @IBOutlet weak var lblDate: UILabel!
     @IBOutlet weak var lblCommodity: UILabel!
-    @IBOutlet weak var lblReleaseFor: UILabel!
-    @IBOutlet weak var lblStorageLoc: UILabel!
+    @IBOutlet weak var lblReqQty: UILabel!
+    @IBOutlet weak var lblRecvdQty: UILabel!
     @IBOutlet weak var vwInner: UIView!
     var data:ROData?
     weak var delegate:onButtonClickListener?
+    @IBOutlet weak var btnMore: UIButton!
     
     @IBOutlet weak var lblRefId: UILabel!
     
-//    weak var roMenuDelegate : onROListMoreListener?
-//    weak var roOptionItemDelegate : onROListMoreItemListener?
+    weak var roMenuDelegate : onROListMoreListener?
+    weak var roOptionItemDelegate : onROListMoreItemListener?
     
     
     override func awakeFromNib() {
@@ -52,7 +53,9 @@ class ROListCell: UITableViewCell {
         lblCompany.text = data?.company
         lblLocation.text = data?.location
         lblCommodity.text = data?.commodity
-        lblReleaseFor.text = data?.releaseFor
+        lblReqQty.text = data?.reqQty
+        lblRecvdQty.text = data?.rcvdQty
+
         lblBusinessUnit.text = data?.businessUnit
         lblRefId.text = data?.refId
         
@@ -61,39 +64,38 @@ class ROListCell: UITableViewCell {
     
     @IBAction func onMoretapped(_ sender: Any) {
         
-//        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
-//
-//        let viewAction = UIAlertAction(title: "View", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.roOptionItemDelegate?.responds(to: Selector(("onViewClick"))) != nil){
-//                self.roOptionItemDelegate?.onViewClick()
-//            }
-//        })
-//
-//        optionMenu.addAction(viewAction)
-//
-//        let mailAction = UIAlertAction(title: "Mail", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.roOptionItemDelegate?.responds(to: Selector(("onMailClick"))) != nil){
-//                self.roOptionItemDelegate?.onMailClick()
-//            }
-//        })
-//
-//
-//        optionMenu.addAction(mailAction)
-//
-//
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.roOptionItemDelegate?.responds(to: Selector(("onCancelClick"))) != nil){
-//                self.roOptionItemDelegate?.onCancelClick()
-//            }
-//        })
-//
-//
-//        optionMenu.addAction(cancelAction)
-//
-//        if ((roMenuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
-//            roMenuDelegate?.onClick(optionMenu: optionMenu , sender: sender as! UIButton)
-//        }
-//
+        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
+
+        let viewAction = UIAlertAction(title: "View", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.roOptionItemDelegate?.responds(to: Selector(("onViewClick"))) != nil){
+                self.roOptionItemDelegate?.onViewClick(data: self.data!)
+            }
+        })
+
+        optionMenu.addAction(viewAction)
+
+        let mailAction = UIAlertAction(title: "Mail", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.roOptionItemDelegate?.responds(to: Selector(("onMailClick"))) != nil){
+                self.roOptionItemDelegate?.onMailClick(data: self.data!)
+            }
+        })
+
+
+        optionMenu.addAction(mailAction)
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.roOptionItemDelegate?.responds(to: Selector(("onCancelClick"))) != nil){
+                self.roOptionItemDelegate?.onCancelClick()
+            }
+        })
+        
+        
+        optionMenu.addAction(cancelAction)
+
+        if ((roMenuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
+            roMenuDelegate?.onClick(optionMenu: optionMenu , sender: sender as! UIButton)
+        }
+
         
     }
     

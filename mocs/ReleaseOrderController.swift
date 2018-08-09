@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate {
+class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, filterViewDelegate {
     
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -19,8 +19,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate {
     /// Array of TRIData elements
     var arrayList:[ROData] = []
     
-    /// Array of TRIData elements
-    var newArray:[ROData] = []
+    var newArray : [ROData] = []
     
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
@@ -28,17 +27,17 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //        self.tableView.register(UINib(nibName: "ROListCell", bundle: nil), forCellReuseIdentifier: "ROListCell")
-        self.tableView.addSubview(self.refreshControl)
-        
         srchBar.delegate = self
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
-        
+        FilterViewController.filterDelegate = self
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.isNavigationBarHidden = true
+        
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
+        tableView.addSubview(refreshControl)
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
@@ -57,14 +56,34 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate {
         self.view.endEditing(true)
     }
     
+    
+ 
+    
+    /// Cancel filters selections
+    func cancelFilter(filterString: String) {
+        self.populateList()
+    }
+    
+    ///  Apply Fitler for the list.
+    /// - filterString - Filter selected String
+    func applyFilter(filterString: String) {
+        
+        if !arrayList.isEmpty {
+            arrayList.removeAll()
+        }
+        self.populateList()
+    }
+    
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
     }
     
+    //Helper.encodeURL(url: "35+Ivory Coast+06,35+Ivory Coast+05"),"D7BE635C-FACA-44FF-A3F1-E1E0CC8E
     @objc func populateList(){
-        if internetStatus != .notReachable{
-            let url = String.init(format: Constant.RO.LIST,
-                                  Helper.encodeURL(url: "35+Ivory Coast+06,35+Ivory Coast+05"),"D7BE635C-FACA-44FF-A3F1-E1E0CC8E")
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url: FilterViewController.getFilterString()), Session.authKey)
+                
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -76,9 +95,8 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate {
                     let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
                     self.arrayList.removeAll()
-                    if jsonArray.count > 0{
+                    if jsonArray.count > 0 {
                         
-                        //                        self.arrayList.removeAll()
                         for(_,j):(String,JSON) in jsonResponse{
                             let data = ROData()
                             data.company = j["Company Name"].stringValue
@@ -87,7 +105,14 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate {
                             data.commodity = j["Commodity"].stringValue
                             data.date = j["Date"].stringValue
                             data.refId = j["ReferenceID"].stringValue
-                            data.releaseFor = j["Release For"].stringValue
+                            
+                            data.reqQty = j["RORequestedQty"].stringValue
+                            data.relOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
+                            data.rcvdQty = j["ROReceiveQuantityReceivedinmt"].stringValue
+                            data.balQty = j["ROBalanceQty"].stringValue
+                            data.uom = j["RoUom"].stringValue
+                            data.wghtTrms = j["ROWeightTerms"].stringValue
+//                             data.roGuid = j["ROGUID"].stringValue
                             self.arrayList.append(data)
                         }
                         self.newArray = self.arrayList
@@ -107,75 +132,136 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    func viewRO() {
-        //        if internetStatus != .notReachable{
-        //            let url = String.init(format: Constant.PC.VIEW, Session.authKey,data.RefNo)
-        //            self.view.showLoading()
-        //            Alamofire.request(url).responseData(completionHandler: ({ response in
-        //                self.view.hideLoading()
-        //                if Helper.isResponseValid(vc: self, response: response.result){
-        //                    let responseJson = JSON(response.result.value!)
-        //                    let arrData = responseJson.arrayObject as! [[String:AnyObject]]
-        //                    if (arrData.count > 0){
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ROBaseViewController") as! ROBaseViewController
+    func viewRO(data : ROData) {
         
-        //                        vc.response = response.result.value
-        //                        vc.title = data.RefNo
-        //                        vc.titleHead = data.RefNo
-        self.navigationController!.pushViewController(vc, animated: true)
-        //                    }else{
-        //                        self.view.makeToast("No Data To Show")
-        //                    }
-        //                }
-        //            }))
-        //        }else{
-        //            Helper.showNoInternetMessg()
-        //        }
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.RO.VIEW, Session.authKey, data.refId)
+            
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    let responseJson = JSON(response.result.value!)
+                    let arrData = responseJson.arrayObject as! [[String:AnyObject]]
+                    if (arrData.count > 0) {
+                        
+                        self.getCargoDetailsAndNavigate(response: response.result.value!, data : data)
+                    } else {
+                        self.view.makeToast("No Data To Show")
+                    }
+                }
+            }))
+        }else{
+            Helper.showNoInternetMessg()
+        }
+        
     }
     
+    func sendEmail(refId:String){
+        
+        if internetStatus != .notReachable{
+            
+            let url = String.init(format: Constant.RO.EMAIL_RO, Session.authKey, Session.email, refId)
+            
+            self.view.showLoading()
+              Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+//            Alamofire.request(url).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                debugPrint(response.result.value)
+                if response.result.value == "Success" {
+                    let alert = UIAlertController(title: "Success", message: "Mail has been sent Successfully", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        }else{
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    func getCargoDetailsAndNavigate(response : Data , data : ROData) {
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.RO.CARGO_DETAILS, data.refId , Session.authKey)
+            
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ cargoResponse in
+                
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: cargoResponse.result){
+                    let responseJson = JSON(cargoResponse.result.value!)
+                    let arrData = responseJson.arrayObject as! [[String:AnyObject]]
+                    if (arrData.count > 0) {
+                        
+                        let roVC = self.storyboard?.instantiateViewController(withIdentifier: "ROBaseViewController") as! ROBaseViewController
+                        roVC.cargoResponse = cargoResponse.result.value
+                        roVC.response = response
+                        roVC.roData = data
+                        
+                        self.navigationController!.pushViewController(roVC, animated: true)
+                    } else {
+                        self.view.makeToast("No Data To Show")
+                    }
+                }
+            }))
+        }else{
+            Helper.showNoInternetMessg()
+        }
+        
+    }
 }
+
 
 extension ReleaseOrderController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        //        if  searchText.isEmpty {
-        //            self.arrayList = newArray
-        //        } else {
-        //            let filteredArray =   newArray.filter {
-        //                $0.RefNo.localizedCaseInsensitiveContains(searchText)
-        //            }
-        //            self.arrayList = filteredArray
-        //        }
-        //        tableView.reloadData()
+        if  searchText.isEmpty {
+            self.arrayList = newArray
+        } else {
+            let filteredArray =   newArray.filter {
+                $0.refId.localizedCaseInsensitiveContains(searchText)
+            }
+            self.arrayList = filteredArray
+        }
+        tableView.reloadData()
     }
 }
 
 
-extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, onButtonClickListener  {
-    //    func onApproveClick() {
-    //
-    //    }
-    //
-    //
-    //    func onClick(optionMenu: UIViewController, sender: UIButton) {
-    //          self.present(optionMenu, animated: true, completion: nil)
-    //    }
-    //
-    //    func onViewClick() {
-    //        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ROBaseViewController") as! ROBaseViewController
-    //        self.navigationController!.pushViewController(vc, animated: true)
-    //    }
-    //
-    //    func onCancelClick() {
-    //
-    //    }
-    //
-    //    func onMailClick() {
-    //
-    //    }
+extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, onROListMoreListener, onROListMoreItemListener  {
+    
+    
+    func onCancelClick() {
+        
+    }
+    
+    func onClick(optionMenu: UIViewController, sender: UIButton) {
+        self.present(optionMenu, animated: true, completion: nil)
+    }
+    
+    func onViewClick(data:ROData) {
+        viewRO(data: data)
+    }
+    
+    func onMailClick(data: ROData) {
+        self.handleTap()
+        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
+            self.sendEmail(refId: data.refId)
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 294
+        return 240
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -191,7 +277,6 @@ extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, on
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewRO()
     }
     
     
@@ -200,52 +285,11 @@ extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, on
         let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "ROListCell") as! ROListCell
         cell.setDataToView(data: data)
-        //        cell.roMenuDelegate = self
-        //        cell.roOptionItemDelegate = self
-        //        cell.selectionStyle = .none
-        cell.delegate = self
+        cell.roMenuDelegate = self
+        cell.roOptionItemDelegate = self
+        cell.btnMore.tag = indexPath.row
+        
         return cell;
-    }
-    
-    func onViewClick(data: AnyObject) {
-        
-        viewRO()
-    }
-    
-    func onMailClick(data: AnyObject) {
-        
-        //        self.handleTap()
-        //        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This email will be sent to your official email ID", preferredStyle: .alert)
-        //        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: {(UIAlertAction) -> Void in
-        //        }))
-        //
-        //        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: {(UIAlertAction)-> Void in
-        //            self.sendEmail(data: data as! PurchaseContractData)
-        //        }))
-        //        self.present(alert, animated: true, completion: nil)
-    }
-    
-    
-    func onApproveClick(data: AnyObject) {
-        
-        //        self.handleTap()
-        //        myView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
-        //        myView.setDataToCustomView(title: "Approve?", description: "Are you sure you want to approve this Contract? You can't revert once approved", leftButton: "GO BACK", rightButton: "APPROVE",isTxtVwHidden: false, isApprove:  true)
-        //        myView.data = data
-        //        myView.cpvDelegate = self
-        //        self.view.addMySubview(myView)
-    }
-    
-    
-    func onDeclineClick(data: AnyObject) {
-        
-        //        self.handleTap()
-        //
-        //        declView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
-        //        declView.setDataToCustomView(title: "Decline?", description: "Are you sure you want to decline this Contract? You can't revert once declined", leftButton: "GO BACK", rightButton: "DECLINE", isTxtVwHidden: false, isApprove: false)
-        //        declView.data = data
-        //        declView.cpvDelegate = self
-        //        self.view.addMySubview(declView)
     }
     
 }
