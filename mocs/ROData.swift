@@ -17,11 +17,13 @@ class ROData {
     var roGuid:String = String()
     var reqQty: String = String()
     var rcvdQty: String = String()
-    
+    var roStatus : String = String()
     var uom : String = String()
     var wghtTrms : String = String()
     var balQty : String = String()
     var netTerms : String = String()
     var relOrderNum : String = String()
-    var date:String = String()
+    var reqDate:String = String()
+    var rcptDate:String = String()
+
 }

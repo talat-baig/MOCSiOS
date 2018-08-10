@@ -23,6 +23,12 @@ class WHRListData {
     var whrNum = String()
     var roID = String()
     var roGuid = String()
+    var reqQty = String()
+    var balQty = String()
+    var rcptQty = String()
 
+    var manualNo = String()
+    var balRoQty = String()
+    var fundBank = String()
 
 }

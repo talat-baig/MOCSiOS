@@ -30,6 +30,11 @@ class ROListCell: UITableViewCell {
     @IBOutlet weak var lblReqQty: UILabel!
     @IBOutlet weak var lblRecvdQty: UILabel!
     @IBOutlet weak var vwInner: UIView!
+    
+    @IBOutlet weak var lblRcptDate: UILabel!
+    @IBOutlet weak var lblUOM: UILabel!
+    @IBOutlet weak var lblBalQty: UILabel!
+    @IBOutlet weak var lblStatus: UILabel!
     var data:ROData?
     weak var delegate:onButtonClickListener?
     @IBOutlet weak var btnMore: UIButton!
@@ -49,16 +54,18 @@ class ROListCell: UITableViewCell {
     func setDataToView(data:ROData?){
 
         self.data = data
-        lblDate.text = data?.date
+        lblDate.text = data?.reqDate
         lblCompany.text = data?.company
         lblLocation.text = data?.location
         lblCommodity.text = data?.commodity
         lblReqQty.text = data?.reqQty
         lblRecvdQty.text = data?.rcvdQty
-
+        lblBalQty.text = data?.balQty
         lblBusinessUnit.text = data?.businessUnit
         lblRefId.text = data?.refId
-        
+        lblStatus.text = data?.roStatus
+//        lblUOM.text = data?.uom
+        lblRcptDate.text = data?.rcptDate
     }
     
     

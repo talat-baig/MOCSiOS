@@ -83,11 +83,11 @@ extension EPRListView: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let eprData = arrayList[indexPath.row]
+//        let eprData = arrayList[indexPath.row]
         
         let cell = tblVwEPR.dequeueReusableCell(withIdentifier: "eprCell") as! EPRListCell
         cell.layer.masksToBounds = true
-        cell.setupDataToView(tcrEPRData: eprData, isSelected: eprData.isSelect)
+//        cell.setupDataToView(tcrEPRData: eprData, isSelected: eprData.isSelect)
         
         return cell
     }

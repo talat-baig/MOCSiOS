@@ -45,6 +45,9 @@ class ROPrimaryViewController: UIViewController, IndicatorInfoProvider {
     
     @IBOutlet weak var lblRelOrderNo: UILabel!
     
+    @IBOutlet weak var lblRcptDate: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         parseAndAssign()
@@ -78,11 +81,12 @@ class ROPrimaryViewController: UIViewController, IndicatorInfoProvider {
             lblReqDate.text! = j["Request Date"].stringValue
             
             lblReqQty.text! = roData.reqQty
-            lblUom.text! = roData.uom
+//            lblUom.text! = roData.uom
             lblWhtTrms.text! = roData.wghtTrms
             lblBalQty.text! = roData.balQty
             lblRelOrderNo.text! = roData.relOrderNum
             lblQtyRcvd.text! = roData.rcvdQty
+            lblRcptDate.text! = roData.rcptDate
 
             
             

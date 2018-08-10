@@ -9,6 +9,8 @@
 import UIKit
 import DropDown
 import  Alamofire
+import SwiftyJSON
+import NotificationBannerSwift
 
 
 protocol onRRcptSubmit: NSObjectProtocol {
@@ -54,12 +56,18 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     
     weak var okSubmitDelegate : onRRcptSubmit?
     
-    //    var rrcptData : RecordRcptData?
+    @IBOutlet weak var lblReqQty: UILabel!
+    @IBOutlet weak var lblRcptQty: UILabel!
+    
+    @IBOutlet weak var lblBalQty: UILabel!
+    
     var roRefId : String = ""
-    var whrNum : String = ""
+    
+    @IBOutlet weak var vwTillDateVal: UIView!
+    var whrData = WHRListData()
     
     
-    let arrUOM = ["Mt"]
+    let arrUOM = ["MT"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +108,15 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         vwDescription.layer.cornerRadius = 5
         vwDescription.layer.masksToBounds = true;
         
-        btnUom.setTitle("Mt", for: .normal)
+        btnUom.setTitle("MT", for: .normal)
+        
+        vwTillDateVal.layer.borderWidth = 1
+        vwTillDateVal.layer.borderColor = UIColor.lightGray.cgColor
+        
+        
+        lblReqQty.text = whrData.reqQty
+        lblRcptQty.text = whrData.rcptQty
+        lblBalQty.text = whrData.balQty
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
@@ -130,7 +146,6 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func btnSubmitTapped(_ sender: Any) {
         
         
-        
         guard let rcptDate = txtRcptDate.text, !rcptDate.isEmpty else {
             Helper.showMessage(message: "Please enter Receipt Date")
             return
@@ -154,12 +169,9 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
             
             let url = String.init(format: Constant.RO.ADD_RECEIPT, Session.authKey, Session.email)
             print(url)
-            //
-            //            let newRecord = ["ROReferenceID": "RRD18-25-0263", "IsDeleted": "0", "ROReceiveReleaseOrderNo": "1", "ROReceiveReceiptDate": "7/8/2018", "ROReceiveQuantityReceived":  "22", "ROReceiveQuantityReceivedinmt": "22" , "ROReceiveUOM":  "mt" , "ROReceiveDescription": "test", "ROReceivedByUser": Session.user, "ROReceivedDate" : "7/8/2018" , "ROGUID" : "WHR18-25-CAL-19-047883e5e2d0-eb5e-4c29-ad02-11f0921c5162", "ROExRelease": "0"] as [String : Any]
             
-    
             
-            let newRecord = ["ROReferenceID": self.roRefId, "IsDeleted": "0", "ROReceiveReleaseOrderNo": "1", "ROReceiveReceiptDate": rcptDate , "ROReceiveQuantityReceived":  txtQtyRcvd.text as Any, "ROReceiveQuantityReceivedinmt":  txtQtyRcvd.text as Any , "ROReceiveUOM":  btnUom.titleLabel?.text as Any , "ROReceiveDescription": txtDesc.text as Any, "ROReceivedByUser": Session.user, "ROReceivedDate" : rcptDate , "ROGUID" : whrNum, "ROExRelease": "0"] as [String : Any]
+            let newRecord = ["ROReferenceID": self.roRefId, "IsDeleted": "0", "ROReceiveReleaseOrderNo": roNumbr, "ROReceiveReceiptDate": rcptDate , "ROReceiveQuantityReceived":  txtQtyRcvd.text as Any, "ROReceiveQuantityReceivedinmt":  txtQtyRcvd.text as Any , "ROReceiveUOM":  btnUom.titleLabel?.text as Any , "ROReceiveDescription": txtDesc.text as Any, "ROReceivedByUser": Session.user, "ROReceivedDate" : "" , "ROGUID" : whrData.whrNum, "ROExRelease": "0"] as [String : Any]
             
             
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
@@ -167,8 +179,11 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
                     self.view.hideLoading()
                     debugPrint(response.result.value as Any)
                     
-                    if response.result.value == "Success" {
-                        
+                    let jsonResponse = JSON.init(parseJSON: response.result.value!)
+                    
+                    print(jsonResponse)
+                    
+                    if jsonResponse["ServerMsg"].stringValue == "Success" {
                         let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
                         success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                             
@@ -178,79 +193,110 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
                             self.navigationController?.popViewController(animated: true)
                         }))
                         self.present(success, animated: true, completion: nil)
-                    } else if response.result.value == "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check" {
+                    } else if jsonResponse["ServerMsg"].stringValue == "Sorry you cannot Process this request, Receipt Qty is greater than the Received Quantity, please check" {
                         
-                        let failure = UIAlertController(title: "", message: "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check", preferredStyle: .alert)
-                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-                            
-                            
-                            self.navigationController?.popViewController(animated: true)
-                        }))
-                        self.present(failure, animated: true, completion: nil)
+                        NotificationBanner(title: "", subtitle: "Sorry you cannot Process this request, Receipt Qty is greater than the Received Quantity, please check", style: .danger).show()
+
                     } else {
-                        let failure = UIAlertController(title: "Oops", message: "Something went wrong! Unable to add Receipt", preferredStyle: .alert)
-                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-                            
-                            self.navigationController?.popViewController(animated: true)
-                        }))
-                        self.present(failure, animated: true, completion: nil)
+                        
+                        NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
                     }
-                    
                 })
+        }
+        
+            //                    if Helper.isResponseStringValid(vc: self, response: response.result) {
+            //
+            //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
+            //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+            //
+            //                            if let d = self.okSubmitDelegate {
+            //                                d.onOkClick()
+            //                            }
+            //                            self.navigationController?.popViewController(animated: true)
+            //                        }))
+            //                        self.present(success, animated: true, completion: nil)
+            //                    }
             
-        } else {
-            Helper.showNoInternetMessg()
-        }
-        
-        
-    }
-    
-    @IBAction func btnUOMTapped(_ sender: Any) {
-        let dropDown = DropDown()
-        dropDown.anchorView = btnUom
-        dropDown.dataSource = arrUOM
-        dropDown.selectionAction = { [weak self] (index, item) in
-            self?.btnUom.setTitle(item, for: .normal)
-        }
-        dropDown.show()
-    }
-    
-    
-    @IBAction func btnDoneTapped(sender:UIButton){
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        txtRcptDate.text = dateFormatter.string(from: datePicker.date) as String
-        self.view.endEditing(true)
-    }
-    
-    @IBAction func btnCancelTapped(sender:UIButton){
-        datePickerTool.isHidden = true
-        self.view.endEditing(true)
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
-        
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            var keyboardHeight : CGFloat
-            keyboardHeight = keyboardRectangle.height
-            var contentInset:UIEdgeInsets = self.scrlVw.contentInset
-            contentInset.bottom = keyboardHeight
+            //                    if response.result.value == "Success" {
+            //
+            //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
+            //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+            //
+            //                            if let d = self.okSubmitDelegate {
+            //                                d.onOkClick()
+            //                            }
+            //                            self.navigationController?.popViewController(animated: true)
+            //                        }))
+            //                        self.present(success, animated: true, completion: nil)
+            //                    } else if response.result.value == "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check" {
+            //
+            //                        let failure = UIAlertController(title: "", message: "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check", preferredStyle: .alert)
+            //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+            //
+            //
+            //                            self.navigationController?.popViewController(animated: true)
+            //                        }))
+            //                        self.present(failure, animated: true, completion: nil)
+            //                    } else {
+            //                        let failure = UIAlertController(title: "Oops", message: "Something went wrong! Unable to add Receipt", preferredStyle: .alert)
+            //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+            //
+            //                            self.navigationController?.popViewController(animated: true)
+            //                        }))
+            //                        self.present(failure, animated: true, completion: nil)
+            //                    }
             
-            self.scrlVw.isScrollEnabled = true
-            self.scrlVw.contentInset = contentInset
-        }
+        
+    
+    
+}
+
+@IBAction func btnUOMTapped(_ sender: Any) {
+    let dropDown = DropDown()
+    dropDown.anchorView = btnUom
+    dropDown.dataSource = arrUOM
+    dropDown.selectionAction = { [weak self] (index, item) in
+        self?.btnUom.setTitle(item, for: .normal)
     }
+    dropDown.show()
+}
+
+
+@IBAction func btnDoneTapped(sender:UIButton){
     
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    txtRcptDate.text = dateFormatter.string(from: datePicker.date) as String
+    self.view.endEditing(true)
+}
+
+@IBAction func btnCancelTapped(sender:UIButton){
+    datePickerTool.isHidden = true
+    self.view.endEditing(true)
+}
+
+@objc func keyboardWillShow(notification: NSNotification) {
     
-    /// Invoked before hiding keyboard and used to move view down
-    @objc func keyboardWillHide(notification: NSNotification) {
+    if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        var keyboardHeight : CGFloat
+        keyboardHeight = keyboardRectangle.height
+        var contentInset:UIEdgeInsets = self.scrlVw.contentInset
+        contentInset.bottom = keyboardHeight
+        
         self.scrlVw.isScrollEnabled = true
-        let contentInset:UIEdgeInsets = .zero
         self.scrlVw.contentInset = contentInset
     }
-    
+}
+
+
+/// Invoked before hiding keyboard and used to move view down
+@objc func keyboardWillHide(notification: NSNotification) {
+    self.scrlVw.isScrollEnabled = true
+    let contentInset:UIEdgeInsets = .zero
+    self.scrlVw.contentInset = contentInset
+}
+
 }
 
 
@@ -268,9 +314,19 @@ extension AddNewRecordRcptVC: UITextFieldDelegate , UITextViewDelegate {
         
         if textField == txtRcptDate {
             datePickerTool.isHidden = false
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMM yyyy"
+            
+            let newMinDate = dateFormatter.date(from: whrData.whrDate)
+            datePicker.minimumDate = newMinDate
+            datePicker.maximumDate = Date.distantFuture
+            
         }
         return true
     }
+    
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         

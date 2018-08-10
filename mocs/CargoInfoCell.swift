@@ -27,7 +27,7 @@ class CargoInfoCell: UITableViewCell {
     @IBOutlet weak var whrSrDate: UILabel!
     
     @IBOutlet weak var lblMt: UIStackView!
-    @IBOutlet weak var lblWhtTerms: UILabel!
+    @IBOutlet weak var lblRcptQty: UILabel!
     
     @IBOutlet weak var lblProduct: UILabel!
     
@@ -41,6 +41,12 @@ class CargoInfoCell: UITableViewCell {
     @IBOutlet weak var lblBrand: UILabel!
     
     @IBOutlet weak var btnMore: UIButton!
+    
+    @IBOutlet weak var lblReqQty: UILabel!
+    
+    @IBOutlet weak var lblBalROQty: UILabel!
+    
+    @IBOutlet weak var lblManualNo: UILabel!
     
     weak var menuDelegate : onCargoMoreClickListener?
     weak var optionMenuDelegate : onCargoOptionIemClickListener?
@@ -71,14 +77,18 @@ class CargoInfoCell: UITableViewCell {
         vesselName.text = data?.vesselName
         whrSrDate.text = data?.whrDate
         lblQtyRcvd.text = data?.qtyRcvd
-        lblUom.text = data?.uom
-        lblWhtTerms.text = data?.wtTerms
+//        lblUom.text = data?.uom
+        lblRcptQty.text = data?.rcptQty
         lblProduct.text = data?.product
         lblBagSize.text = data?.bagSize
         lblQuality.text = data?.quality
         lblBrand.text = data?.brand
         lblWHRId.text = data?.whrId
 
+//        lblRcptQty.text = data?.rcptQty
+        lblManualNo.text = data?.manualNo
+        lblReqQty.text = data?.reqQty
+        lblBalROQty.text = data?.balQty
     }
 
     

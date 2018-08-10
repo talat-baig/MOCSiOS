@@ -17,16 +17,19 @@ class ROCargoDetailsEditVC: UIViewController {
     @IBOutlet weak var mySubVw: UIView!
     @IBOutlet weak var tableView: UITableView!
     
-//    var roGuid : String = ""
+    @IBOutlet weak var lblRecvdQtyTillDteTxt: UILabel!
+    @IBOutlet weak var outerVw: UIView!
+    //    var roGuid : String = ""
     var roId : String = ""
-    var whrId : String = ""
-    var whrNum : String = ""
-
+    //    var whrId : String = ""
+    //    var whrNum : String = ""
+    //    var whrDate : String = ""
+    
+    var whrData = WHRListData()
     var arrayList: [RRcptData] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -34,7 +37,14 @@ class ROCargoDetailsEditVC: UIViewController {
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = "Record Receipt"
-        vwTopHeader.lblSubTitle.text = whrId
+        vwTopHeader.lblSubTitle.text = whrData.whrId
+        
+        outerVw.layer.borderWidth = 1
+        outerVw.layer.borderColor = UIColor.lightGray.cgColor
+        outerVw.layer.masksToBounds = true;
+        
+        
+        tableView.separatorStyle = .none
         
         populateList()
         
@@ -44,26 +54,26 @@ class ROCargoDetailsEditVC: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let lastView : UIView! = mySubVw.subviews.last
-        let height = lastView.frame.size.height
-        let pos = lastView.frame.origin.y
-        let sizeOfContent = height + pos + 100
-        
-        scrlVw.contentSize.height = sizeOfContent
-    }
+    //    override func viewDidLayoutSubviews() {
+    //        super.viewDidLayoutSubviews()
+    //
+    //        let lastView : UIView! = mySubVw.subviews.last
+    //        let height = lastView.frame.size.height
+    //        let pos = lastView.frame.origin.y
+    //        let sizeOfContent = height + pos + 100
+    //
+    //        scrlVw.contentSize.height = sizeOfContent
+    //    }
     
     func showEmptyState(){
-        Helper.showNoItemState(vc:self , messg: "No Receipt Found\nTap on + button to add new receipt" , tb:tableView)
+        Helper.showNoItemState(vc:self , messg: "No Receipt Found\nTap Receive Release button to add new receipt" , tb:tableView)
     }
     
     func populateList() {
         var data: [RRcptData] = []
         
         if internetStatus != .notReachable {
-            let url = String.init(format: Constant.RO.RRCPT_LIST,  "D7BE635C-FACA-44FF-A3F1-E1E0CC8E", roId, whrNum)
+            let url = String.init(format: Constant.RO.RRCPT_LIST,  Session.authKey, roId, whrData.whrNum)
             self.view.showLoading()
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -84,14 +94,15 @@ class ROCargoDetailsEditVC: UIViewController {
                             rrData.desc = j["ROReceiveDescription"].stringValue
                             rrData.releaseOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
                             rrData.roRefId = j["ROReferenceID"].stringValue
-//                            self.roId = j["ROReferenceID"].stringValue
+                            //                            self.roId = j["ROReferenceID"].stringValue
                             data.append(rrData)
                         }
                         
                         self.arrayList = data
                         self.tableView.tableFooterView = nil
                     } else {
-                           self.showEmptyState()
+                        self.lblRecvdQtyTillDteTxt.isHidden = true
+                        self.showEmptyState()
                     }
                     self.tableView.reloadData()
                 }
@@ -107,7 +118,7 @@ class ROCargoDetailsEditVC: UIViewController {
         
         let rrAddVC = self.storyboard?.instantiateViewController(withIdentifier: "AddNewRecordRcptVC") as! AddNewRecordRcptVC
         rrAddVC.roRefId = roId
-        rrAddVC.whrNum = whrNum
+        rrAddVC.whrData = whrData
         rrAddVC.okSubmitDelegate = self
         self.navigationController?.pushViewController(rrAddVC, animated: true)
     }
@@ -152,7 +163,7 @@ extension ROCargoDetailsEditVC: UITableViewDelegate, UITableViewDataSource, onRR
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 170
+        return 110
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

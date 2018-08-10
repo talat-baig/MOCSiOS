@@ -42,7 +42,7 @@ class RecordReceiptCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        vwOuter.layer.borderColor = AppColor.universalHeaderColor.cgColor
+        vwOuter.layer.borderColor = UIColor.lightGray.cgColor
         vwOuter.layer.borderWidth = 1.0
     }
     
@@ -58,7 +58,7 @@ class RecordReceiptCell: UITableViewCell {
         lblROrderNum.text = data?.releaseOrderNum
         lblRcptQty.text = data?.rcvdQty
         lblUom.text = data?.uom
-        lblDesc.text = data?.desc
+//        lblDesc.text = data?.desc
        
     }
 

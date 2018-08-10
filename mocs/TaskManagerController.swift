@@ -54,7 +54,7 @@ class TaskManagerController: UIViewController {
     /// Method that calls API to list tasks and populate table view according to API response data
     @objc func populateList(){
         
-        if internetStatus != .notReachable{
+        if internetStatus != .notReachable {
             var data:[TaskData] = []
             self.view.showLoading()
             let url:String = String.init(format: Constant.TASK_MANAGER.LIST,Session.email)

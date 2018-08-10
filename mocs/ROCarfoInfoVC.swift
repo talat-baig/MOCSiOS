@@ -51,16 +51,28 @@ class ROCarfoInfoVC: UIViewController, IndicatorInfoProvider {
                     whrList.vesselName = k["ROVesselName"].stringValue
                     whrList.uom = k["ROUom"].stringValue
                     whrList.product = k["ROProduct"].stringValue
-                    whrList.whrDate = k["ROReceiveReceiptDate"].stringValue
+//                    whrList.whrDate = k["ROReceiveReceiptDate"].stringValue
                     whrList.brand = k["ROBrand"].stringValue
                     whrList.bagSize = k["ROBagSize"].stringValue
                     whrList.quality = k["ROQuality"].stringValue
                     whrList.wtTerms = k["ROWeightTerms"].stringValue
-                    whrList.qtyRcvd = k["ROQuantityReceived"].stringValue
+                    whrList.qtyRcvd = k["ROQuantityReceivedinmt"].stringValue
                     whrList.whrDate = k["ROWhrDateORGrnDate"].stringValue
                     whrList.whrId = k["RUID"].stringValue
                     whrList.whrNum = k["ROWhrNoORGrnNo"].stringValue
                     whrList.roID = k["ROReferenceID"].stringValue
+                    whrList.reqQty = k["RORequestedQtyinmt"].stringValue
+                    whrList.balQty = k["ROBalanceQtyinmt"].stringValue
+                    whrList.manualNo = k["WHR_Manual_No"].stringValue
+
+
+                    if k["ROReceiptQtyinmt"].stringValue == "" {
+                         whrList.rcptQty = "-"
+                    } else {
+                         whrList.rcptQty = k["ROReceiptQtyinmt"].stringValue
+                    }
+//                    whrList.rcptQty = k["ROReceiptQtyinmt"].stringValue
+
 //                    whrList.roGuid = k["ROGUID"].stringValue
                     
                     data.append(whrList)
@@ -108,21 +120,12 @@ extension ROCarfoInfoVC:UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return 280
+        return 410
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        //        let whrID = arrayList[indexPath.row].whrId
-        //        let whrNum = arrayList[indexPath.row].whrNum
-        //        let roID = arrayList[indexPath.row].roID
-        //
-        //        let detail = self.storyboard?.instantiateViewController(withIdentifier: "ROCargoDetailsEditVC") as! ROCargoDetailsEditVC
-        //        detail.whrId = whrID
-        //        detail.whrNum = whrNum
-        //        detail.roId = roID
-        //
-        //        self.navigationController?.pushViewController(detail, animated: true)
+       
         
     }
 }
@@ -133,9 +136,12 @@ extension ROCarfoInfoVC: onCargoMoreClickListener , onCargoOptionIemClickListene
     func onReceiveClick(sender : UIButton) {
         
         let detail = self.storyboard?.instantiateViewController(withIdentifier: "ROCargoDetailsEditVC") as! ROCargoDetailsEditVC
-        detail.whrId = arrayList[sender.tag].whrId
-        detail.whrNum = arrayList[sender.tag].whrNum
+//        detail.whrId = arrayList[sender.tag].whrId
+//        detail.whrNum = arrayList[sender.tag].whrNum
         detail.roId = roData.refId
+//        detail.whrDate = arrayList[sender.tag].whrDate
+        detail.whrData = arrayList[sender.tag]
+        
 //        detail.roGuid = roData.roGuid
         
         self.navigationController?.pushViewController(detail, animated: true)

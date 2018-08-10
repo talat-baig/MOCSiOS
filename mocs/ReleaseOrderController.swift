@@ -88,7 +88,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
-                
+                debugPrint(response.result)
                 if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView){
                     
                     let jsonResponse = JSON(response.result.value!);
@@ -99,24 +99,40 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                         
                         for(_,j):(String,JSON) in jsonResponse{
                             let data = ROData()
-                            data.company = j["Company Name"].stringValue
+                            data.company = j["ROCompanyName"].stringValue
                             data.businessUnit = j["Businessunit"].stringValue
                             data.location = j["Location"].stringValue
                             data.commodity = j["Commodity"].stringValue
-                            data.date = j["Date"].stringValue
+                            data.reqDate = j["Date"].stringValue
                             data.refId = j["ReferenceID"].stringValue
-                            
-                            data.reqQty = j["RORequestedQty"].stringValue
-                            data.relOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
+                            data.roStatus = j["BalanceToPay"].stringValue
+                            data.reqQty = j["RORequestedQtyinmt"].stringValue
+//                            data.relOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
                             data.rcvdQty = j["ROReceiveQuantityReceivedinmt"].stringValue
-                            data.balQty = j["ROBalanceQty"].stringValue
+                            data.balQty = j["ROBalanceQtyinmt"].stringValue
+                            data.balQty = j["ROBalanceQtyinmt"].stringValue
+//                            data.rcptDate = j["ROReceiveReceiptDate"].stringValue
+
                             data.uom = j["RoUom"].stringValue
                             data.wghtTrms = j["ROWeightTerms"].stringValue
-//                             data.roGuid = j["ROGUID"].stringValue
+                            
+                            if j["ROReceiveReleaseOrderNo"].stringValue == "" {
+                                data.relOrderNum = "-"
+                            } else {
+                                data.relOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
+                            }
+                            
+                            if j["ROReceiveReceiptDate"].stringValue == "" {
+                                data.rcptDate = "-"
+                            } else {
+                                data.rcptDate = j["ROReceiveReceiptDate"].stringValue
+                            }
+                            
                             self.arrayList.append(data)
                         }
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
+                        
                     }else{
                         self.refreshControl.endRefreshing()
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
@@ -168,9 +184,9 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
             
             self.view.showLoading()
               Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
-//            Alamofire.request(url).responseString(completionHandler: {  response in
+
                 self.view.hideLoading()
-                debugPrint(response.result.value)
+//                debugPrint(response.result.value)
                 if response.result.value == "Success" {
                     let alert = UIAlertController(title: "Success", message: "Mail has been sent Successfully", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -196,17 +212,17 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                 if Helper.isResponseValid(vc: self, response: cargoResponse.result){
                     let responseJson = JSON(cargoResponse.result.value!)
                     let arrData = responseJson.arrayObject as! [[String:AnyObject]]
-                    if (arrData.count > 0) {
-                        
+//                    if (arrData.count > 0) {
+                    
                         let roVC = self.storyboard?.instantiateViewController(withIdentifier: "ROBaseViewController") as! ROBaseViewController
                         roVC.cargoResponse = cargoResponse.result.value
                         roVC.response = response
                         roVC.roData = data
                         
                         self.navigationController!.pushViewController(roVC, animated: true)
-                    } else {
-                        self.view.makeToast("No Data To Show")
-                    }
+//                    } else {
+//                        self.view.makeToast("No Data To Show")
+//                    }
                 }
             }))
         }else{
@@ -261,7 +277,7 @@ extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, on
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 240
+        return 280
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

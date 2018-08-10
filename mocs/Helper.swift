@@ -143,7 +143,7 @@ class Helper: UIView {
         return UserDefaults.standard.object(forKey: key) != nil
     }
     
-    
+
     public static func isResponseValid(vc: UIViewController, response:Result<Data>, tv:UITableView? = nil)-> Bool{
         var isValid: Bool = false
         
@@ -184,45 +184,11 @@ class Helper: UIView {
                             }))
                             vc.present(alert, animated: true, completion: nil)
                             break
-//                        case "Email Sent...":
-//                            isValid = true
-//                            break
+
                         case "Email Sent...","Success. Please click on List Vouchers", "New List Added","New Task Added" ,"Note Updated" , "Purchase Contract marked as declined","Sales Contract marked as declined","ARI marked as declined", "ARI marked as approved","TRI marked as approved","TRI marked as declined","TCR marked as Declined","TCR marked as Approved","EPR | ECR marked as Declined","EPR | ECR claim marked as Approved","DO marked as Approved","DO marked as Declined":
                             isValid = true
                             break
-//                        case "Success. Please click on List Vouchers" :
-//                            isValid = true
-//                        case "New List Added" :
-//                            isValid = true
-//                        case "New Task Added" :
-//                            isValid = true
-//                        case "Note Updated" :
-//                            isValid = true
-//                        case "Purchase Contract marked as declined" :
-//                            isValid = true
-//                        case "Sales Contract marked as declined" :
-//                            isValid = true
-//                        case "ARI marked as declined" :
-//                            isValid = true
-//                        case "ARI marked as approved" :
-//                            isValid = true
-//                        case "TRI marked as approved" :
-//                            isValid = true
-//                        case "TRI marked as declined" :
-//                            isValid = true
-//                        case "TCR marked as Declined" :
-//                            isValid = true
-//                        case "TCR marked as Approved" :
-//                            isValid = true
-//                        case "EPR | ECR marked as Declined" :
-//                            isValid = true
-//                        case "EPR | ECR claim marked as Approved" :
-//                            isValid = true
-//                        case "DO marked as Approved" :
-//                            isValid = true
-//                        case "DO marked as Declined" :
-//                            isValid = true
-//
+
                         default:
                             isValid = false
                             NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
