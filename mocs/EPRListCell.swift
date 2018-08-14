@@ -28,9 +28,9 @@ class EPRListCell: UITableViewCell {
         LblAmt.text = tcrEPRData.eprAmt
         
         if isSelected! {
-            btnCheckUncheck.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
+            btnCheckUncheck.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
         } else {
-            btnCheckUncheck.setImage(#imageLiteral(resourceName: "unchecked"), for: .normal)
+            btnCheckUncheck.setImage(#imageLiteral(resourceName: "unchecked_black"), for: .normal)
         }
     }
     

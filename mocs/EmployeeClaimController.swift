@@ -8,12 +8,23 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class EmployeeClaimController: UIViewController, onMoreClickListener {
 
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
+    
+  
+    var arrayList:[EmployeeClaimData] = []
+    var newArray : [EmployeeClaimData] = []
+
+    
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,11 +39,75 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
         self.navigationController?.navigationBar.isHidden = true
         
         
+        populateList()
+//        srchBar.delegate = self
+        
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
+        tableView.addSubview(refreshControl)
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    func showLoading(){
+        self.view.showLoading()
+    }
+    
+    func hideLoading(){
+        self.view.hideLoading()
+    }
+    
+    
+    @objc func populateList() {
+        var data: [EmployeeClaimData] = []
+        
+        if internetStatus != .notReachable {
+            
+            self.showLoading()
+            let url:String = String.init(format: Constant.API.ECR_LIST)
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+                if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView) {
+                    
+                    let jsonResponse = JSON(response.result.value!)
+                    let array = jsonResponse.arrayObject as! [[String:AnyObject]]
+                    if array.count > 0 {
+                        self.arrayList.removeAll()
+                        
+                        for(_,json):(String,JSON) in jsonResponse{
+                            let ecData = EmployeeClaimData()
+                            ecData.headRef = json["EPRMainReferenceID"].stringValue
+                            ecData.headStatus = json["DepartmentApprovalStatus"].stringValue
+                            ecData.companyName = json["EPRMainCompanyName"].stringValue
+                            ecData.employeeDepartment = json["EPRMainDepartment"].stringValue
+                            ecData.location = json["EPRMainLocation"].stringValue
+                            ecData.reqAmount = json["Total Requested value"].stringValue
+                            ecData.currency = json["EPRMainRequestedCurrency"].stringValue
+                            ecData.paidAmount = json["Total Paid Value"].stringValue
+                            ecData.balance = json["Balance To Pay"].stringValue
+                            ecData.requestedDate = json["EPRMainRequestedValueDate"].stringValue
+
+                            data.append(ecData)
+                        }
+                        self.arrayList = data
+                        self.newArray = data
+                        self.tableView.tableFooterView = nil
+                        self.tableView.reloadData()
+                    }
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    
     
     @IBAction func btnAddNewClaimTapped(_ sender: Any) {
         let ecAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmployeeClaimAddEditVC") as! EmployeeClaimAddEditVC
@@ -49,25 +124,26 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
         self.view.endEditing(true)
     }
     
+    
 }
 
 extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-//        if arrayList.count > 0 {
-//            tableView.backgroundView?.isHidden = true
-//            tableView.separatorStyle = .singleLine
-//        } else {
-//            tableView.backgroundView?.isHidden = false
-//            tableView.separatorStyle = .none
-//        }
-//        return arrayList.count
-        return 1
+        if arrayList.count > 0 {
+            tableView.backgroundView?.isHidden = true
+            tableView.separatorStyle = .singleLine
+        } else {
+            tableView.backgroundView?.isHidden = false
+            tableView.separatorStyle = .none
+        }
+        return arrayList.count
+//        return 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 305
+        return 275
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -96,13 +172,11 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let data = arrayList[indexPath.row]
-       // let view = tableView.dequeueReusableCell(withIdentifier: "EmployeeClaimAdapter") as! EmployeeClaimAdapter
+       
+        let data = arrayList[indexPath.row]
         let view = tableView.dequeueReusableCell(withIdentifier: "empClaimAdapter") as! EmployeeClaimAdapter
-//        view.btnMenu.tag = indexPath.row
-        view.setDataToView(data: nil)
+        view.setDataToView(data: data)
         view.delegate = self
-//        view.optionClickListener = self
         return view
     }
     

@@ -22,6 +22,8 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     weak var currentTxtFld: UITextField? = nil
     var pickerData: [String] = [String]()
     var arrCurrency: [String] = [String]()
+    var arrPaymentType: [String] = [String]()
+
     var isAdvance = true
     var response:Data?
     
@@ -37,17 +39,20 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     @IBOutlet weak var btnLocation: UIButton!
     @IBOutlet weak var btnBVertical: UIButton!
     
+    @IBOutlet weak var vwBenfName: UIView!
+    @IBOutlet weak var btnBenfName: UIButton!
     @IBOutlet weak var vwCompany: UIView!
     @IBOutlet weak var vwBusiness: UIView!
     @IBOutlet weak var vwLocation: UIView!
     @IBOutlet weak var vwClaimType: UIView!
-    @IBOutlet weak var vwPot: UIView!
+//    @IBOutlet weak var vwPot: UIView!
     @IBOutlet weak var vwReqCurrency: UIView!
     
     @IBOutlet weak var claimPicker: UIPickerView!
-    @IBOutlet weak var txtFldStartDate: UITextField!
-    @IBOutlet weak var txtFldEndDate: UITextField!
+//    @IBOutlet weak var txtFldStartDate: UITextField!
+//    @IBOutlet weak var txtFldEndDate: UITextField!
     
+    @IBOutlet weak var btnPaymentMethd: UIButton!
     
     @IBOutlet weak var txtFldReqDate: UITextField!
     @IBOutlet weak var stckVw: UIStackView!
@@ -85,7 +90,8 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         
         pickerData = ["Advance", "Claim Reimbursement"]
         arrCurrency = ["AED", "AFN", "INR", "AUD" , "BSD", "DOP", "CUC" ]
-        
+        arrPaymentType = ["CASH", "ET", "Cheque", "DD" , "Company Card", "Bank Settlement" ]
+
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
@@ -96,10 +102,12 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnCompany.contentHorizontalAlignment = .left
         btnLocation.contentHorizontalAlignment = .left
         btnBVertical.contentHorizontalAlignment = .left
+        btnBenfName.contentHorizontalAlignment = .left
+
         
         txtFldClaimType.inputView = claimTypePickerTool
-        txtFldStartDate.inputView = datePickerTool
-        txtFldEndDate.inputView = datePickerTool
+//        txtFldStartDate.inputView = datePickerTool
+//        txtFldEndDate.inputView = datePickerTool
         
         vwCompany.layer.borderWidth = 1
         vwCompany.layer.borderColor = UIColor.lightGray.cgColor
@@ -116,11 +124,11 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         vwBusiness.layer.cornerRadius = 5
         vwBusiness.layer.masksToBounds = true;
         
-        vwPot.layer.borderWidth = 1
-        vwPot.layer.borderColor = UIColor.lightGray.cgColor
-        vwPot.layer.cornerRadius = 5
-        vwPot.layer.masksToBounds = true;
-        
+        vwBenfName.layer.borderWidth = 1
+        vwBenfName.layer.borderColor = UIColor.lightGray.cgColor
+        vwBenfName.layer.cornerRadius = 5
+        vwBenfName.layer.masksToBounds = true;
+//
         vwClaimType.layer.borderWidth = 1
         vwClaimType.layer.borderColor = UIColor.lightGray.cgColor
         vwClaimType.layer.cornerRadius = 5
@@ -135,6 +143,11 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnReqCurrency.layer.borderColor = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1.0).cgColor
         btnReqCurrency.layer.cornerRadius = 5
         btnReqCurrency.layer.masksToBounds = true;
+        
+        btnPaymentMethd.layer.borderWidth = 1
+        btnPaymentMethd.layer.borderColor = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1.0).cgColor
+        btnPaymentMethd.layer.cornerRadius = 5
+        btnPaymentMethd.layer.masksToBounds = true;
         
         btnOpenEPRVal.layer.borderWidth = 1
         btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor
@@ -153,6 +166,8 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         let dateString = dateFormatter.string(from: date)
         txtFldReqDate.text = dateString
         
+         showHideEPRBtn()
+        
         if isToUpdate {
             /// Edit
             vwTopHeader.isHidden = true
@@ -168,7 +183,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             btnSubmit.setTitle("SAVE",for: .normal)
         }
         
-        showHideEPRBtn()
+       
     }
     
     override func didReceiveMemoryWarning() {
@@ -186,7 +201,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         let lastView : UIView! = mySubVw.subviews.last
         let height = lastView.frame.size.height
         let pos = lastView.frame.origin.y
-        let sizeOfContent = height + pos + 100
+        let sizeOfContent = height + pos + 200
         
         scrlVw.contentSize.height = sizeOfContent
     }
@@ -244,6 +259,15 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     }
     
     
+    @IBAction func btnPaymentTapped(_ sender: Any) {
+        let dropDown = DropDown()
+        dropDown.anchorView = btnPaymentMethd // UIView or UIBarButtonItem
+        dropDown.dataSource = arrPaymentType
+        dropDown.selectionAction = { [weak self] (index, item) in
+            self?.btnPaymentMethd.setTitle(item, for: .normal)
+        }
+        dropDown.show()
+    }
     
     @IBAction func btnPickerCancelTapped(_ sender: Any) {
         self.view.endEditing(true)
@@ -254,16 +278,10 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        if currentTxtFld == txtFldStartDate {
-            txtFldStartDate.text = dateFormatter.string(from: datePicker.date) as String
-            //            startDate = datePicker.date
+        if currentTxtFld == txtFldReqDate {
+
         }
-        
-        if currentTxtFld == txtFldEndDate {
-            txtFldEndDate.text = dateFormatter.string(from: datePicker.date) as String
-            //            endDate = datePicker.date
-        }
-        
+
         self.view.endEditing(true)
     }
     
@@ -363,6 +381,13 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         dropDown.show()
     }
     
+    @IBAction func btnBenfNameTapped(_ sender: Any) {
+        let dropDown = DropDown()
+        dropDown.anchorView = btnBenfName
+        dropDown.dataSource = ["Talat Baig"]
+        dropDown.show()
+    }
+    
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -425,48 +450,11 @@ extension EmployeeClaimAddEditVC: UITextFieldDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         
-        currentTxtFld = textField
-        if textField == txtFldStartDate  {
-            
-            datePickerTool.isHidden = false
-            datePicker.maximumDate = Date()
-            datePicker.minimumDate = Date.distantPast
-            
-        } else if textField == txtReqValDate  {
-            
-            datePickerTool.isHidden = false
-            datePicker.maximumDate = Date()
-            datePicker.minimumDate = Date.distantPast
-            
-        } else if textField == txtFldEndDate  {
-            
-            let startDte = txtFldStartDate.text
-            
-            if startDte != "" {
-                txtFldEndDate.reloadInputViews()
-                datePickerTool.isHidden = false
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                
-                let newStartDate = dateFormatter.date(from: startDte!)
-                datePicker.minimumDate = newStartDate
-                datePicker.maximumDate = Date.distantFuture
-            } else {
-                
-                self.view.makeToast("Please enter start date")
-                datePickerTool.isHidden = true
-                return false
-            }
-            
-        }
-        
-        if textField == txtFldReqDate {
+         if textField == txtFldReqDate {
             
             let scrollPoint:CGPoint = CGPoint(x:0, y:  vwBusiness.frame.origin.y  )
             scrlVw!.setContentOffset(scrollPoint, animated: true)
         }
-        
         
         return true
     }

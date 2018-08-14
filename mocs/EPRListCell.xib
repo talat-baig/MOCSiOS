@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -20,17 +20,18 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="CFf-vz-kZP">
-                        <rect key="frame" x="8" y="8" width="304" height="57.5"/>
+                        <rect key="frame" x="16" y="8" width="288" height="57.5"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SDE-nd-1Jk">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SDE-nd-1Jk">
                                 <rect key="frame" x="0.0" y="0.0" width="40" height="57.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="CeJ-L2-ZHk"/>
                                 </constraints>
-                                <state key="normal" image="checked"/>
+                                <inset key="imageEdgeInsets" minX="8" minY="12" maxX="8" maxY="12"/>
+                                <state key="normal" image="checked_black"/>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="gyQ-zI-5KQ">
-                                <rect key="frame" x="45" y="0.0" width="259" height="57.5"/>
+                                <rect key="frame" x="45" y="0.0" width="243" height="57.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cej-VP-qHN">
                                         <rect key="frame" x="0.0" y="0.0" width="39.5" height="30"/>
@@ -60,10 +61,10 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="CFf-vz-kZP" secondAttribute="trailing" constant="8" id="CnL-UQ-SkO"/>
+                    <constraint firstAttribute="trailing" secondItem="CFf-vz-kZP" secondAttribute="trailing" constant="16" id="CnL-UQ-SkO"/>
                     <constraint firstItem="CFf-vz-kZP" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="QbZ-KN-CLE"/>
                     <constraint firstAttribute="bottom" secondItem="CFf-vz-kZP" secondAttribute="bottom" constant="8" id="aPA-OM-KKG"/>
-                    <constraint firstItem="CFf-vz-kZP" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="asK-lh-fmd"/>
+                    <constraint firstItem="CFf-vz-kZP" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="asK-lh-fmd"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -76,6 +77,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="checked" width="29" height="29"/>
+        <image name="checked_black" width="50" height="50"/>
     </resources>
 </document>

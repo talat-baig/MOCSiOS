@@ -26,9 +26,9 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     @IBOutlet weak var vwExpenseDetails: UIView!
     
-    @IBOutlet weak var vwCurrType: UIView!
+//    @IBOutlet weak var vwCurrType: UIView!
     
-    @IBOutlet weak var vwPymntType: UIView!
+//    @IBOutlet weak var vwPymntType: UIView!
     
     @IBOutlet weak var vwComments: UIView!
     
@@ -44,17 +44,17 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     @IBOutlet weak var stckVwCurrency: UIStackView!
     
-    @IBOutlet weak var btnPymntType: UIButton!
+//    @IBOutlet weak var btnPymntType: UIButton!
     
-    @IBOutlet weak var btnCurrType: UIButton!
+//    @IBOutlet weak var btnCurrType: UIButton!
     
     @IBOutlet var datePickerTool: UIView!
     
     @IBOutlet weak var datePicker: UIDatePicker!
     
-    var arrCurrType = ["-","INR","AED","USD","DNH"]
+//    var arrCurrType = ["-","INR","AED","USD","DNH"]
     
-    var arrPymntType = ["-","CARD","CASH"]
+//    var arrPymntType = ["-","CARD","CASH"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,9 +79,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         
-        btnCurrType.contentHorizontalAlignment = .left
-        btnPymntType.contentHorizontalAlignment = .left
-        
         txtExpDate.inputView = datePickerTool
         
         vwPymntReason.layer.borderWidth = 1
@@ -94,31 +91,16 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         vwVendor.layer.cornerRadius = 5
         vwVendor.layer.masksToBounds = true;
         
-        
         vwExpenseDetails.layer.borderWidth = 1
         vwExpenseDetails.layer.borderColor = UIColor.lightGray.cgColor
         vwExpenseDetails.layer.cornerRadius = 5
         vwExpenseDetails.layer.masksToBounds = true;
-        
-        
-        vwCurrType.layer.borderWidth = 1
-        vwCurrType.layer.borderColor = UIColor.lightGray.cgColor
-        vwCurrType.layer.cornerRadius = 5
-        vwCurrType.layer.masksToBounds = true;
-        
-        vwPymntType.layer.borderWidth = 1
-        vwPymntType.layer.borderColor = UIColor.lightGray.cgColor
-        vwPymntType.layer.cornerRadius = 5
-        vwPymntType.layer.masksToBounds = true;
         
         vwComments.layer.borderWidth = 1
         vwComments.layer.borderColor = UIColor.lightGray.cgColor
         vwComments.layer.cornerRadius = 5
         vwComments.layer.masksToBounds = true;
         
-        
-        btnPymntType.setTitle(arrPymntType[0], for: .normal)
-        btnCurrType.setTitle(arrPymntType[0], for: .normal)
     }
     
     /// Handle user tap when keyboard is open
@@ -154,26 +136,7 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         self.scrlVw.contentInset = contentInset
     }
     
-    @IBAction func btnPaymentTapped(_ sender: Any) {
-        let dropDown = DropDown()
-        dropDown.anchorView = btnPymntType // UIView or UIBarButtonItem
-        dropDown.dataSource = arrPymntType
-        dropDown.selectionAction = { [weak self] (index, item) in
-            self?.btnPymntType.setTitle(item, for: .normal)
-        }
-        dropDown.show()
-    }
-    
-    
-    @IBAction func btnCurrencyTapped(_ sender: Any) {
-        let dropDown = DropDown()
-        dropDown.anchorView = btnCurrType // UIView or UIBarButtonItem
-        dropDown.dataSource = arrCurrType
-        dropDown.selectionAction = { [weak self] (index, item) in
-            self?.btnCurrType.setTitle(item, for: .normal)
-        }
-        dropDown.show()
-    }
+
     
     @IBAction func btnDoneTapped(sender:UIButton){
         
@@ -194,8 +157,8 @@ extension EmpClaimExpenseAddEditVC : UITextViewDelegate {
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
        
         if textView == txtComments {
-            let scrollPoint:CGPoint = CGPoint(x:0, y: stckVwCurrency.frame.origin.y)
-            scrlVw!.setContentOffset(scrollPoint, animated: true)
+//            let scrollPoint:CGPoint = CGPoint(x:0, y: stckVwCurrency.frame.origin.y)
+//            scrlVw!.setContentOffset(scrollPoint, animated: true)
         }
         return true
     }
@@ -217,9 +180,9 @@ extension EmpClaimExpenseAddEditVC : UITextFieldDelegate {
         }
         
         if textField == txtComments {
-            
-            let scrollPoint:CGPoint = CGPoint(x:0, y: stckVwCurrency.frame.origin.y)
-            scrlVw!.setContentOffset(scrollPoint, animated: true)
+//
+//            let scrollPoint:CGPoint = CGPoint(x:0, y: stckVwCurrency.frame.origin.y)
+//            scrlVw!.setContentOffset(scrollPoint, animated: true)
         }
         
         return true

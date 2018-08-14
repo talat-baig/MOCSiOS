@@ -219,7 +219,6 @@ class ExpenseAddEditViewController: UIViewController , UIGestureRecognizerDelega
     
     func setupDefaultValues() {
         
-        
         btnCategory.setTitle(expCategories[0].category, for: .normal)
         btnSubCategory.setTitle(expCategories[0].subCategory[0], for: .normal)
         btnCurrency.setTitle(arrCurrency[0], for: .normal)

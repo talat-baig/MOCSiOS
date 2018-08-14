@@ -94,7 +94,7 @@ class ROCargoDetailsEditVC: UIViewController {
                             rrData.desc = j["ROReceiveDescription"].stringValue
                             rrData.releaseOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
                             rrData.roRefId = j["ROReferenceID"].stringValue
-                            //                            self.roId = j["ROReferenceID"].stringValue
+
                             data.append(rrData)
                         }
                         

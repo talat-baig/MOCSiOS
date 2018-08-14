@@ -21,6 +21,8 @@ class TravelClaimController: UIViewController, UIGestureRecognizerDelegate, onTC
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBAction func btnAdvances(_ sender: Any) {
+    }
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     override func viewDidLoad() {

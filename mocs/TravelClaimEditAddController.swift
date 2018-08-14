@@ -16,7 +16,8 @@ protocol onTCRSubmit: NSObjectProtocol {
 }
 
 
-class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate , notifyChilds_UC {
+class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate , notifyChilds_UC , addEPRAdvancesDelegate  {
+   
     
     
     weak var currentTxtFld: UITextField? = nil
@@ -29,6 +30,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
     
     var tcrEprArr : [TCREPRListData] = []
     
+    @IBOutlet weak var btnAdvances: UIButton!
     @IBOutlet weak var btnSubmit: UIButton!
     @IBOutlet weak var scrlVw: UIScrollView!
     
@@ -171,6 +173,11 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         vwCities.layer.cornerRadius = 5
         vwCities.layer.masksToBounds = true;
         
+//        btnAdvances.backgroundColor = .clear
+        btnAdvances.layer.cornerRadius = 5
+        btnAdvances.layer.borderWidth = 1
+        btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
+        
     }
     
     
@@ -213,7 +220,6 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
             self.txtFldPurposeVisit.text = j["Purpose of Travel"].stringValue
             self.txtFldCitiesVisited.text = j["Places Visited"].stringValue
             
-            print( j["Travel Start Date"].stringValue)
             startDate = Helper.convertToDate(dateString: j["Travel Start Date"].stringValue)
             endDate = Helper.convertToDate(dateString: j["Travel End Date"].stringValue)
             
@@ -232,20 +238,142 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
                 tcSwitchControl.isOn = false
             }
             
-            // checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
+            if j["Alloted_EPR"].stringValue == "" {
+
+            } else {
+                checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
+            }
+            
+//             checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
             
         }
     }
     
     
+    func onAddTap(eprIdString: String, tempArr: [TCREPRListData]) {
+        if eprIdString == "" {
+            btnAdvances.setTitle("Open Advances", for: .normal)
+        } else {
+            btnAdvances.setTitle(eprIdString, for: .normal)
+        }
+        self.tcrEprArr = tempArr
+    }
     
+    
+    func onCancelTap() {
+        let eprString = btnAdvances.currentTitle
+        if eprString != "" {
+            let newStrArr = eprString?.components(separatedBy: ",")
+            for newTmp in self.tcrEprArr {
+                for j in newStrArr! {
+                    if newTmp.eprRefId == j {
+                        newTmp.isSelect = true
+                    }
+                }
+            }
+        }
+
+    }
+    
+    func checkAllotedEPR(res : String) {
+        
+        var json = JSON.init(parseJSON: res)
+        let jsonArr = json.arrayObject as! [[String:Any]]
+        
+        if jsonArr.count > 0 {
+            for(_,j):(String,JSON) in json {
+                let newObj = TCREPRListData()
+                newObj.eprRefId = j["EPR_REF_ID"].stringValue
+                newObj.eprAmt = j["Total_Requested_Value"].stringValue
+                newObj.isSelect = true
+                self.tcrEprArr.append(newObj)
+            }
+        }
+        let refIdStrings =  self.tcrEprArr.map {$0.eprRefId}
+        
+        let advancesString = refIdStrings.joined(separator: ",")
+        
+        if refIdStrings.isEmpty {
+            btnAdvances.setTitle("Open Advances", for: .normal)
+        } else {
+            btnAdvances.setTitle(advancesString, for: .normal)
+        }
+    }
+    
+    @IBAction func btnEPRAdvancesTapped(_ sender: Any) {
+        
+        // Call EPR API
+        if internetStatus != .notReachable{
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.TCR.TCR_EPR_LIST, Session.authKey)
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let jsonRes = JSON(response.result.value!)
+                    let jsonArray = jsonRes.arrayObject as! [[String:AnyObject]]
+                    
+                    if jsonArray.count > 0 {
+                        var tempArr1 : [TCREPRListData] = []
+                        
+                        for(_,j):(String,JSON) in jsonRes {
+                            let newObj = TCREPRListData()
+                            newObj.eprRefId = j["EPRMainReferenceID"].stringValue
+                            newObj.eprAmt = j["EPRitemsAmount"].stringValue
+                            newObj.isSelect = false
+                            tempArr1.append(newObj)
+                        }
+                        
+                        var tempArr2 : [TCREPRListData] = []
+                        
+                        
+                        for newEpr in tempArr1 {
+                            for newTmp in self.tcrEprArr {
+                                if newEpr.eprRefId == newTmp.eprRefId {
+                                    tempArr2.append(newEpr)
+                                }
+                            }
+                        }
+                        
+                        for newObj in tempArr2 {
+                            if let index = tempArr1.index(where: { $0.eprRefId == newObj.eprRefId }) {
+                                tempArr1.remove(at: index)
+                            }
+                        }
+                        
+                        self.tcrEprArr.append(contentsOf: tempArr1)
+                        
+                        let eprView = Bundle.main.loadNibNamed("EPRListView", owner: nil, options: nil)![0] as! EPRListView
+                        eprView.setEprData(arrData: self.tcrEprArr)
+                        eprView.delegate = self
+                        DispatchQueue.main.async {
+                            self.navigationController?.view.addMySubview(eprView)
+                        }
+                    } else {
+                        if self.tcrEprArr.count > 0 {
+                            let eprView = Bundle.main.loadNibNamed("EPRListView", owner: nil, options: nil)![0] as! EPRListView
+                            eprView.setEprData(arrData: self.tcrEprArr)
+                            eprView.delegate = self
+                            DispatchQueue.main.async {
+                                self.navigationController?.view.addMySubview(eprView)
+                            }
+                        } else {
+                            Helper.showMessage(message: "You have no Advances")
+                        }
+                    }
+                }
+            }))
+        }else{
+            Helper.showMessage(message: "No Internet, Please Try Again")
+        }
+    }
     
     /// Handle user tap when keyboard is open
     @objc func handleTap() {
         self.view.endEditing(true)
     }
     
-    func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String, eprStr : String = "", counter : Int = 0 ){
+    func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String,  counter : Int = 0 , eprStr : String ){
         
         if self.internetStatus != .notReachable {
             
@@ -255,7 +383,9 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
             if response == nil {
                 url = String.init(format: Constant.API.TCR_INSERT, Session.authKey, travelType, Helper.encodeURL(url:bPurpose), Helper.encodeURL(url:places), fromStr, toStr, eprStr)
             } else {
-                url = String.init(format: Constant.API.TCR_UPDATE, Session.authKey, tcrRefNo, travelType, Helper.encodeURL(url:bPurpose),Helper.encodeURL(url:places), fromStr, toStr,  Helper.encodeURL(url:eprStr), counter)
+                url = String.init(format: Constant.API.TCR_UPDATE, Session.authKey, tcrRefNo, travelType, Helper.encodeURL(url:bPurpose),Helper.encodeURL(url:places), fromStr, toStr, counter , Helper.encodeURL(url:eprStr))
+                
+                
             }
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -345,7 +475,22 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         
         self.handleTap()
         
-        self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter )
+        
+        if let eprString = btnAdvances.titleLabel?.text {
+
+            if eprString == "Open Advances" {
+                self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter , eprStr: "" )
+                
+            } else {
+                self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter ,  eprStr: eprString)
+            }
+            
+        }
+        
+      
+        
+        
+//        self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter , )
         
     }
     

@@ -67,7 +67,7 @@ class ROCarfoInfoVC: UIViewController, IndicatorInfoProvider {
 
 
                     if k["ROReceiptQtyinmt"].stringValue == "" {
-                         whrList.rcptQty = "-"
+                         whrList.rcptQty = "0"
                     } else {
                          whrList.rcptQty = k["ROReceiptQtyinmt"].stringValue
                     }

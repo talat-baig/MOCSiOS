@@ -1,14 +1,15 @@
 //
-//  TravelClaimData.swift
+//  EmployeeClaimData.swift
 //  mocs
 //
-//  Created by Rv on 28/01/18.
+//  Created by Talat Baig on 8/13/18.
 //  Copyright © 2018 Rv. All rights reserved.
 //
 
+import UIKit
 import Foundation
 
-class TravelClaimData {
+class EmployeeClaimData {
     
     var headRef: String = ""
     var headStatus: String = ""
@@ -17,10 +18,10 @@ class TravelClaimData {
     var companyName: String = ""
     var location: String = ""
     var businessVertical: String = ""
-    var purposeOfTravel: String = ""
-    var periodOfTravel: String = ""
-    var claimRaisedOn: String = ""
-    var totalAmount: String = ""
-    var counter: Int = 0
-    var endDate: String = ""
+    var requestedDate: String = ""
+    var currency: String = ""
+    var reqAmount: String = ""
+    var paidAmount: String = ""
+    var balance: String = ""
+    
 }

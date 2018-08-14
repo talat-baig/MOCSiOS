@@ -51,7 +51,7 @@ class TravelClaimAdapter: UITableViewCell {
         vwOuter.layer.shadowColor = UIColor.black.cgColor
     }
     
-    func setDataToView(data:TravelClaimData){
+    func setDataToView(data:TravelClaimData) {
         headRefID.text = data.headRef
         headStatus.text = "(" + data.headStatus + ")"
         companyName.text = data.companyName

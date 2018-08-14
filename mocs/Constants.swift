@@ -110,7 +110,7 @@ struct Constant
          - 1: AuthID
          - 2: RefId
          */
-        static let TCR_UPDATE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFUTCR?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&TravelType=%@&BusinessPurpose=%@&PlacesVisisted=%@&DateFrom=%@&DateTo=%@&EPRRef=%@&TEXCounter=%d"
+        static let TCR_UPDATE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFUTCR?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&TravelType=%@&BusinessPurpose=%@&PlacesVisisted=%@&DateFrom=%@&DateTo=%@&TEXCounter=%d&EPRRef=%@"
         
         
         /**
@@ -134,6 +134,11 @@ struct Constant
         
         static let EXPENSE_DELETE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFDTCREI?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&ExpenseId=%@&TEXCounter=%d"
         
+        
+        
+        static let ECR_LIST = "http://172.16.12.12/OCSWebApi/api/ECR/GetECR?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&loginid=ajaiswar"
+        
+
     }
     
     struct AR {
