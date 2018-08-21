@@ -11,23 +11,28 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class EmployeeClaimController: UIViewController, onMoreClickListener {
-
+class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdate, onECRSubmit, notifyChilds_UC {
+    
+    
+    
+    
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
-  
+    
     var arrayList:[EmployeeClaimData] = []
     var newArray : [EmployeeClaimData] = []
-
+    @IBOutlet weak var srchBar: UISearchBar!
+    
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = true
@@ -40,13 +45,12 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
         
         
         populateList()
-//        srchBar.delegate = self
-        
+        srchBar.delegate = self
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
         tableView.addSubview(refreshControl)
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -59,6 +63,13 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
         self.view.hideLoading()
     }
     
+    func onECRUpdateClick() {
+        self.populateList()
+    }
+    
+    func notifyChild(messg: String, success: Bool) {
+        Helper.showVUMessage(message: messg, success: success)
+    }
     
     @objc func populateList() {
         var data: [EmployeeClaimData] = []
@@ -66,7 +77,7 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
         if internetStatus != .notReachable {
             
             self.showLoading()
-            let url:String = String.init(format: Constant.API.ECR_LIST)
+            let url:String = String.init(format: Constant.API.ECR_LIST, Session.authKey)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.hideLoading()
                 self.refreshControl.endRefreshing()
@@ -78,10 +89,11 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
                     if array.count > 0 {
                         self.arrayList.removeAll()
                         
-                        for(_,json):(String,JSON) in jsonResponse{
+                        for(_,json):(String,JSON) in jsonResponse {
+                            
                             let ecData = EmployeeClaimData()
                             ecData.headRef = json["EPRMainReferenceID"].stringValue
-                            ecData.headStatus = json["DepartmentApprovalStatus"].stringValue
+                            ecData.headStatus = json["Status"].stringValue
                             ecData.companyName = json["EPRMainCompanyName"].stringValue
                             ecData.employeeDepartment = json["EPRMainDepartment"].stringValue
                             ecData.location = json["EPRMainLocation"].stringValue
@@ -90,7 +102,19 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
                             ecData.paidAmount = json["Total Paid Value"].stringValue
                             ecData.balance = json["Balance To Pay"].stringValue
                             ecData.requestedDate = json["EPRMainRequestedValueDate"].stringValue
+                            ecData.benefName = json["EPRMainBeneficiaryName"].stringValue
+                            ecData.paymntMethd = json["EPRMainRequestedPaymentMode"].stringValue
+                            ecData.claimType = json["EPRMainPaymentRequestType"].stringValue
+                            ecData.counter = json["EprRefIDCounter"].intValue
+                            
 
+                            if json["EPRMainOpenAdvanceValue"].stringValue == "" {
+                                ecData.eprValue = ""
+                            } else {
+                                ecData.eprValue = json["EPRMainOpenAdvanceValue"].stringValue
+                            }
+                            
+                            
                             data.append(ecData)
                         }
                         self.arrayList = data
@@ -111,23 +135,42 @@ class EmployeeClaimController: UIViewController, onMoreClickListener {
     
     @IBAction func btnAddNewClaimTapped(_ sender: Any) {
         let ecAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmployeeClaimAddEditVC") as! EmployeeClaimAddEditVC
-//        tcAddEditVC.response = nil\
-        ecAddEditVC.isToUpdate = false
-//        tcAddEditVC.okTCRSubmit = self
+        ecAddEditVC.empCurrencyRes = Session.currency
+        ecAddEditVC.okECRSubmit = self
         self.navigationController?.pushViewController(ecAddEditVC, animated: true)
-        
-        
     }
     
-    /// Handle user tap when keyboard is open
+    
     @objc func handleTap() {
         self.view.endEditing(true)
+    }
+    
+    func onOkClick() {
+        self.populateList()
     }
     
     
 }
 
-extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate {
+extension EmployeeClaimController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if  searchText.isEmpty {
+            self.arrayList = newArray
+        } else {
+            let filteredArray = newArray.filter {
+                $0.headRef.localizedCaseInsensitiveContains(searchText)
+            }
+            self.arrayList = filteredArray
+        }
+        tableView.reloadData()
+    }
+}
+
+
+extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, onOptionECRTapDelegate {
+    
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -139,7 +182,7 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate {
             tableView.separatorStyle = .none
         }
         return arrayList.count
-//        return 1
+        //        return 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -149,32 +192,37 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         handleTap()
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ECRBaseViewController") as! ECRBaseViewController
+        let data = arrayList[indexPath.row]
         
-        self.navigationController!.pushViewController(vc, animated: true)
-//        let data = arrayList[indexPath.row]
-//
-//        if (data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame){
-//            viewClaim(data: data, counter: data.counter , isFromView: false)
-//        } else {
-//            viewClaim(data: data, counter: data.counter , isFromView: true)
-//        }
-//
-//        if (data.headStatus.caseInsensitiveCompare("submitted") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved by finance") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved By manager")  == ComparisonResult.orderedSame) {
-//            self.view.makeToast("Claim already submitted, cannot be edited")
-//        }
-//
-//        if (data.headStatus.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
-//            self.view.makeToast("Claim has been deleted, cannot be edited")
-//        }
-//
+        if (data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame){
+            viewClaim(data: data, counter: data.counter , isFromView: false)
+        } else {
+            viewClaim(data: data, counter: data.counter , isFromView: true)
+        }
+        
+        //        if (data.headStatus.caseInsensitiveCompare("submitted") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved by finance") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved By manager")  == ComparisonResult.orderedSame) {
+        //            self.view.makeToast("Claim already submitted, cannot be edited")
+        //        }
+        //
+        //        if (data.headStatus.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
+        //            self.view.makeToast("Claim has been deleted, cannot be edited")
+        //        }
+        
+        /*  let vc = self.storyboard?.instantiateViewController(withIdentifier: "ECRBaseViewController") as! ECRBaseViewController
+         vc.isFromView = true
+         vc.ecrBaseDelegate = self
+         
+         self.navigationController!.pushViewController(vc, animated: true) */
+        
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       
+        
         let data = arrayList[indexPath.row]
         let view = tableView.dequeueReusableCell(withIdentifier: "empClaimAdapter") as! EmployeeClaimAdapter
+        view.btnOptionMenu.tag = indexPath.row
+        view.optionECRTapDelegate = self
         view.setDataToView(data: data)
         view.delegate = self
         return view
@@ -187,7 +235,7 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate {
         let section = 0
         let indexPath = IndexPath(row: sender.tag, section: section)
         let cell: EmployeeClaimAdapter = self.tableView.cellForRow(at: indexPath) as! EmployeeClaimAdapter
-
+        
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             if let presentation = optionMenu.popoverPresentationController {
                 presentation.sourceView = cell.btnOptionMenu
@@ -197,86 +245,156 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-    func onViewClick(data: TravelClaimData) {
-//        viewClaim(data: data ,isFromView: true)
+    func onViewClick(data: EmployeeClaimData) {
+        viewClaim(data: data ,isFromView: true)
     }
     
-    func viewClaim(data:TravelClaimData, counter: Int = 0, isFromView : Bool){
-//        if internetStatus != .notReachable{
-//            let url = String.init(format: Constant.TCR.VIEW, Session.authKey,
-//                                  data.headRef,data.counter)
-//            self.view.showLoading()
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//
-//                    self.getVouchersDataAndNavigate(tcrData: data, isFromView: isFromView, tcrResponse: response.result.value)
-//                }
-//            }))
-//        } else {
-//            Helper.showNoInternetMessg()
-//        }
+    func onEditClick(data: EmployeeClaimData) {
+        viewClaim(data: data, counter:data.counter , isFromView: false)
+    }
+    
+    func onDeleteClick(data: EmployeeClaimData) {
+        
+    }
+    
+    func onSubmitClick(data: EmployeeClaimData) {
+        
+    }
+    
+    func onEmailClick(data: EmployeeClaimData) {
+        
+    }
+    
+    
+    func viewClaim(data:EmployeeClaimData, counter: Int = 0, isFromView : Bool) {
+        
+        self.getPaymentAndVouchersData(ecrData: data, isFromView: isFromView)
+    }
+    
+    
+    func getPaymentAndVouchersData(ecrData :EmployeeClaimData, isFromView : Bool ) {
+        
+        if internetStatus != .notReachable{
+            let url = String.init(format: Constant.API.ECR_EXPENSE_LIST, Session.authKey,
+                                  ecrData.headRef, ecrData.counter)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+                    
+                     self.getVouchersDataAndNavigate(ecrData: ecrData, isFromView: isFromView, ecrPaymentRes: response.result.value)
+                    
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
+        
+    }
+        
+     func getVouchersDataAndNavigate(ecrData :EmployeeClaimData, isFromView : Bool , ecrPaymentRes : Data?) {
+        
+        
+                let docRefId = String(format: "%@D%d", ecrData.headRef , ecrData.counter)
+                if internetStatus != .notReachable {
+        
+                    var url = String()
+        
+                    if(ecrData.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame) {
+                        url =  String.init(format: Constant.DROPBOX.LIST,
+                                           Session.authKey,
+                                           Helper.encodeURL(url: Constant.MODULES.EPRECR),
+                                           Helper.encodeURL(url: docRefId))
+                    } else {
+                        url =  String.init(format: Constant.DROPBOX.LIST,
+                                           Session.authKey,
+                                           Helper.encodeURL(url: Constant.MODULES.EPRECR),
+                                           Helper.encodeURL(url: ecrData.headRef))
+                    }
+        
+                    self.view.showLoading()
+                    Alamofire.request(url).responseData(completionHandler: ({ response in
+                        self.view.hideLoading()
+                        self.refreshControl.endRefreshing()
+                        if Helper.isResponseValid(vc: self, response: response.result){
+        
+                            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ECRBaseViewController") as! ECRBaseViewController
+                            vc.isFromView = isFromView
+                            vc.ecrBaseDelegate = self
+                            vc.notifyChilds = self
+                            vc.title = ecrData.headRef
+                            vc.voucherResponse = response.result.value
+                            vc.ecrData = ecrData
+                            vc.paymntRes = ecrPaymentRes
+                            self.navigationController!.pushViewController(vc, animated: true)
+        
+                        }
+                    }))
+                } else {
+                    Helper.showNoInternetMessg()
+                }
     }
     
     
     
-//    func onEditClick(data: TravelClaimData) {
-////        viewClaim(data: data, counter:data.counter , isFromView: false)
-//    }
-//
-//    func onDeleteClick(data: TravelClaimData) {
-//        let alert = UIAlertController(title: "Delete Claim?", message: "Are you sure you want to delete this claim? After deleting you'll not be able to rollback", preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-//        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-////            self.deleteClaim(data: data)
-//        }))
-//        self.present(alert, animated: true, completion: nil)
-//    }
-//
-//    func onSubmitClick(data: TravelClaimData) {
-//
-//        let currentDate = Date()
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "dd MMM yyyy"
-//        dateFormatter.calendar = Calendar(identifier: .iso8601)
-//        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-//        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-//        let travelEndDate = dateFormatter.date(from: data.endDate)
-//
-//        if travelEndDate! > currentDate {
-//            Helper.showMessage(message: "Travel end date cannot be greater then current date")
-//            return
-//
-//        } else if data.totalAmount == "0.00" {
-//            Helper.showMessage(message: "Please add expense before submitting")
-//            return
-//
-//        } else {
-//
-//            let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this claim? After submitting you'll not be able to edit the claim", preferredStyle: .alert)
-//
-//            alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-//
-//            alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-//
-////                self.submitInvoice(data:data)
-//            }))
-//            self.present(alert, animated: true, completion: nil)
-//        }
-//
-//    }
-//
-//    func onEmailClick(data: TravelClaimData) {
-//
-//        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-//        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
-////            self.sendEmail(data: data)
-//        }))
-//        self.present(alert, animated: true, completion: nil)
-//    }
+    //    func onEditClick(data: TravelClaimData) {
+    ////        viewClaim(data: data, counter:data.counter , isFromView: false)
+    //    }
+    //
+    //    func onDeleteClick(data: TravelClaimData) {
+    //        let alert = UIAlertController(title: "Delete Claim?", message: "Are you sure you want to delete this claim? After deleting you'll not be able to rollback", preferredStyle: .alert)
+    //
+    //        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+    //        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
+    ////            self.deleteClaim(data: data)
+    //        }))
+    //        self.present(alert, animated: true, completion: nil)
+    //    }
+    //
+    //    func onSubmitClick(data: TravelClaimData) {
+    //
+    //        let currentDate = Date()
+    //        let dateFormatter = DateFormatter()
+    //        dateFormatter.dateFormat = "dd MMM yyyy"
+    //        dateFormatter.calendar = Calendar(identifier: .iso8601)
+    //        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+    //        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    //        let travelEndDate = dateFormatter.date(from: data.endDate)
+    //
+    //        if travelEndDate! > currentDate {
+    //            Helper.showMessage(message: "Travel end date cannot be greater then current date")
+    //            return
+    //
+    //        } else if data.totalAmount == "0.00" {
+    //            Helper.showMessage(message: "Please add expense before submitting")
+    //            return
+    //
+    //        } else {
+    //
+    //            let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this claim? After submitting you'll not be able to edit the claim", preferredStyle: .alert)
+    //
+    //            alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+    //
+    //            alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
+    //
+    ////                self.submitInvoice(data:data)
+    //            }))
+    //            self.present(alert, animated: true, completion: nil)
+    //        }
+    //
+    //    }
+    //
+    //    func onEmailClick(data: TravelClaimData) {
+    //
+    //        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
+    //
+    //        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+    //        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
+    ////            self.sendEmail(data: data)
+    //        }))
+    //        self.present(alert, animated: true, completion: nil)
+    //    }
 }
 
 extension EmployeeClaimController: WC_HeaderViewDelegate {

@@ -19,7 +19,6 @@ protocol onTCRSubmit: NSObjectProtocol {
 class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate , notifyChilds_UC , addEPRAdvancesDelegate  {
    
     
-    
     weak var currentTxtFld: UITextField? = nil
     var response:Data?
     var typeOfTravel = String()
@@ -67,6 +66,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
     
     weak var okTCRSubmit : onTCRSubmit?
     
+    
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "PRIMARY DETAILS")
     }
@@ -75,6 +75,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         super.viewDidLoad()
         
         initialSetup()
+        
         if response != nil {
             /// Edit
             vwTopHeader.isHidden = true
@@ -192,7 +193,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         let height = lastView.frame.size.height
         let pos = lastView.frame.origin.y
         let sizeOfContent = height + pos + 100
-        
+        print(sizeOfContent)
         scrlVw.contentSize.height = sizeOfContent
     }
     
@@ -244,8 +245,6 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
                 checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
             }
             
-//             checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
-            
         }
     }
     
@@ -284,7 +283,9 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
             for(_,j):(String,JSON) in json {
                 let newObj = TCREPRListData()
                 newObj.eprRefId = j["EPR_REF_ID"].stringValue
-                newObj.eprAmt = j["Total_Requested_Value"].stringValue
+                let newAmt = Float(j["Total_Requested_Value"].stringValue)
+                
+                newObj.eprAmt = newAmt!
                 newObj.isSelect = true
                 self.tcrEprArr.append(newObj)
             }
@@ -319,7 +320,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
                         for(_,j):(String,JSON) in jsonRes {
                             let newObj = TCREPRListData()
                             newObj.eprRefId = j["EPRMainReferenceID"].stringValue
-                            newObj.eprAmt = j["EPRitemsAmount"].stringValue
+                            newObj.eprAmt = Float(j["EPRitemsAmount"].stringValue)!
                             newObj.isSelect = false
                             tempArr1.append(newObj)
                         }
@@ -373,7 +374,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         self.view.endEditing(true)
     }
     
-    func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String,  counter : Int = 0 , eprStr : String ){
+    func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String,  counter : Int = 0 , eprStr : String ) {
         
         if self.internetStatus != .notReachable {
             
@@ -384,13 +385,11 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
                 url = String.init(format: Constant.API.TCR_INSERT, Session.authKey, travelType, Helper.encodeURL(url:bPurpose), Helper.encodeURL(url:places), fromStr, toStr, eprStr)
             } else {
                 url = String.init(format: Constant.API.TCR_UPDATE, Session.authKey, tcrRefNo, travelType, Helper.encodeURL(url:bPurpose),Helper.encodeURL(url:places), fromStr, toStr, counter , Helper.encodeURL(url:eprStr))
-                
-                
             }
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isResponseValid(vc: self, response: response.result) {
                     var messg = String()
                     
                     if self.tcrNo != "" {
@@ -488,8 +487,6 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         }
         
       
-        
-        
 //        self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter , )
         
     }

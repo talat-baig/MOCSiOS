@@ -14,7 +14,6 @@ import SwiftyDropbox
 import Alamofire
 import SwiftyJSON
 import FileBrowser
-import MaterialShowcase
 
 protocol UC_NotifyComplete {
     func notifyUCVouchers(messg : String, success : Bool) -> Void
@@ -25,7 +24,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     var arrayList:[VoucherData] = []
     var tcrData = TravelClaimData()
     /// -- ECR Data
-    var ecrData = ECRClaimData()
+    //    var ecrData = ECRClaimData()
     var moduleName = String()
     var imagePicker = UIImagePickerController()
     var delegate:uploadFileDelegate?
@@ -115,7 +114,6 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     }
     
     
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
@@ -174,12 +172,12 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         if controller.documentPickerMode == UIDocumentPickerMode.import {
             
-            let data = getDataFromFileUrl(fileUrl: url)
+            let data = Helper.getDataFromFileUrl(fileUrl: url)
             let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
             myView.frame = (self.navigationController?.view.frame)!
             myView.data = data
             myView.extensn = url.pathExtension
-            let image = self.getImage(ext: url.pathExtension) ?? #imageLiteral(resourceName: "file.png")
+            let image = Helper.getImage(ext: url.pathExtension) ?? #imageLiteral(resourceName: "file.png")
             myView.setImageToView(image: image , docArray: self.arrayList)
             myView.uploadDelegate = self
             DispatchQueue.main.async {
@@ -189,24 +187,23 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     }
     
     
-    func getImage(ext : String) -> UIImage? {
-        
-        var selectedImg = UIImage()
-        
-        switch ext {
-        case "pdf": selectedImg = #imageLiteral(resourceName: "pdf")
-            break
-        case "png", "JPG" , "jpg":  selectedImg = #imageLiteral(resourceName: "imageIcon")
-            break
-        case "txt", "xlsx", ".docx" , ".rtf" : selectedImg = #imageLiteral(resourceName: "file")
-            break
-        default:
-            break
-        }
-        return selectedImg
-        
-    }
-    
+    //    func getImage(ext : String) -> UIImage? {
+    //
+    //        var selectedImg = UIImage()
+    //
+    //        switch ext {
+    //        case "pdf": selectedImg = #imageLiteral(resourceName: "pdf")
+    //            break
+    //        case "png", "JPG" , "jpg":  selectedImg = #imageLiteral(resourceName: "imageIcon")
+    //            break
+    //        case "txt", "xlsx", ".docx" , ".rtf" : selectedImg = #imageLiteral(resourceName: "file")
+    //            break
+    //        default:
+    //            break
+    //        }
+    //        return selectedImg
+    //    }
+    //
     func getDataFromFile(file : FBFile) -> Data? {
         
         var pData = Data()
@@ -219,17 +216,17 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         
     }
     
-    func getDataFromFileUrl(fileUrl: URL) -> Data? {
-        
-        var pData = Data()
-        do {
-            let fileData = try Data.init(contentsOf: fileUrl)
-            pData = fileData
-        } catch {
-            print(error)
-        }
-        return pData
-    }
+    //    func getDataFromFileUrl(fileUrl: URL) -> Data? {
+    //
+    //        var pData = Data()
+    //        do {
+    //            let fileData = try Data.init(contentsOf: fileUrl)
+    //            pData = fileData
+    //        } catch {
+    //            print(error)
+    //        }
+    //        return pData
+    //    }
     
     
     func showEmptyState(){
@@ -253,7 +250,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             .response { response, error in
                 //                print(response?.description)
                 //                print(error?.description)
-               
+                
                 DispatchQueue.main.async() {
                     if let response = response {
                         self.addItemToServer(dModName: Constant.MODULES.TCR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
@@ -319,12 +316,8 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                                   Session.authKey,Helper.encodeURL(url: dModName), Helper.encodeURL(url: company), Helper.encodeURL(url:location),Helper.encodeURL(url: bUnit), docRefId,
                                   Helper.encodeURL(url: docName),
                                   Helper.encodeURL(url: docDesc), Helper.encodeURL(url:docFilePath))
-            //            self.view.showLoading()
-            //            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             Alamofire.request(url).responseData(completionHandler: ({ response in
-                //                self.view.hideLoading()
-                //                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                //                GlobalVariables.shared.isUploadingSomething = false
+                
                 if Helper.isResponseValid(vc: self, response: response.result) {
                     compHandler(true)
                 } else {
@@ -545,9 +538,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         
     }
     
-//    private class func sendNotificationsToCell(progress: Double, cellIndexpath: IndexPath, fileName : String) {
-//        NotificationCenter.default.post(name: Notification.Name("UploadVoucher"), object: nil, userInfo: ["progress": progress, "notifIdentifier":(cellIndexpath, fileName)])
-//    }
+
     
     func uploadFilesFromQueue() {
         
@@ -582,9 +573,9 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                 if let d = self.ucNotifyDelegate {
                     
                     if errmessg.debugDescription.contains("conflict") {
-                           d.notifyUCVouchers(messg: "Unable to Upload. File with this name already exists. Please enter different name.", success: false)
+                        d.notifyUCVouchers(messg: "Unable to Upload. File with this name already exists. Please enter different name.", success: false)
                     } else {
-                          d.notifyUCVouchers(messg: "Sorry! Unable to Upload Voucher. Please try Again", success: false)
+                        d.notifyUCVouchers(messg: "Sorry! Unable to Upload Voucher. Please try Again", success: false)
                     }
                     self.getVouchersData()
                 }
@@ -622,9 +613,8 @@ extension VouchersListViewController: UIImagePickerControllerDelegate, UINavigat
         self.imagePicker.dismiss(animated: true, completion: { () -> Void in
             self.view.showLoading()
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                //                let imgData = UIImagePNGRepresentation(image)
+
                 let compressData = UIImageJPEGRepresentation(image, 0.5) //max value is 1.0 and minimum is 0.0
-                //                let compressedImage = UIImage(data: compressData!)
                 
                 let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
                 myView.frame = (self.navigationController?.view.frame)!
@@ -710,7 +700,7 @@ extension VouchersListViewController: UITableViewDataSource, UITableViewDelegate
                 cellView.btnDelete.isHidden = false
             }
         }
-
+        
         if !Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension)  {
             cellView.btnStatus.setImage(#imageLiteral(resourceName: "download"), for: .normal)
             cellView.status.text = "(Tap to Download)"
@@ -748,6 +738,7 @@ extension VouchersListViewController: UITableViewDataSource, UITableViewDelegate
             self.docFileViewer.presentPreview(animated: true)
             
         } else {
+            
             Helper.showLoading(vc: self)
             self.downloadFile(path: arrayList[indexPath.row].documentPath, fileName : arrayList[indexPath.row].documentName, comp: { result in
                 Helper.hideLoading(vc: self)

@@ -25,7 +25,7 @@ class EPRListCell: UITableViewCell {
     
     func setupDataToView(tcrEPRData : TCREPRListData,  isSelected:Bool? = false ) {
         lblRefId.text = tcrEPRData.eprRefId
-        LblAmt.text = tcrEPRData.eprAmt
+        LblAmt.text = String(format: "%.2f", tcrEPRData.eprAmt)
         
         if isSelected! {
             btnCheckUncheck.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)

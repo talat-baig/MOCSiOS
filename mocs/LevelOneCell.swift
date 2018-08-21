@@ -17,13 +17,13 @@ class LevelOneCell: UITableViewCell {
     @IBOutlet weak var imgIcon: UIImageView!
     
     @IBOutlet weak var seperatorVw: UIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
     
     

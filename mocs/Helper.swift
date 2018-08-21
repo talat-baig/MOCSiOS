@@ -484,6 +484,38 @@ class Helper: UIView {
         return path
     }
     
+    
+    public static func getImage(ext : String) -> UIImage? {
+        
+        var selectedImg = UIImage()
+        
+        switch ext {
+        case "pdf": selectedImg = #imageLiteral(resourceName: "pdf")
+            break
+        case "png", "JPG" , "jpg":  selectedImg = #imageLiteral(resourceName: "imageIcon")
+            break
+        case "txt", "xlsx", ".docx" , ".rtf" : selectedImg = #imageLiteral(resourceName: "file")
+            break
+        default:
+            break
+        }
+        return selectedImg
+    }
+    
+    
+    
+    public static func getDataFromFileUrl(fileUrl: URL) -> Data? {
+        
+        var pData = Data()
+        do {
+            let fileData = try Data.init(contentsOf: fileUrl)
+            pData = fileData
+        } catch {
+            print(error)
+        }
+        return pData
+    }
+    
 }
 protocol Utility {
     

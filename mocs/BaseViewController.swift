@@ -9,14 +9,10 @@
 import UIKit
 import  XLPagerTabStrip
 
+
 protocol onTCRUpdate {
     func onTCRUpdateClick()
 }
-//
-//protocol cancelRequestDelegate {
-//    func cancelUploadReq()
-//}
-
 
 protocol notifyChilds_UC {
     func notifyChild(messg : String , success : Bool)

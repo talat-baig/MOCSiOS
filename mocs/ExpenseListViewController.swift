@@ -31,11 +31,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
 
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getExpenseData))
         
-        guard let respValue = response else {
-            Helper.showMessage(message: "Something went wrong!, Please try refreshing")
-            return
-        }
-        
+      
         if isFromView {
             btnAddExpense.isHidden = true
             
@@ -43,6 +39,13 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
             btnAddExpense.isHidden = false
             tblVwExpenseList.addSubview(refreshControl)
         }
+        
+        guard let respValue = response else {
+            Helper.showMessage(message: "Something went wrong!, Please try refreshing")
+            return
+        }
+        
+        
         populateList(response: respValue)
         
     }
@@ -88,6 +91,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
     
     
     func populateList(response : Data) {
+        
         var data: [ExpenseListData] = []
         let jsonResponse = JSON(response)
         

@@ -23,6 +23,12 @@ class ECRExpenseListAdapter: UITableViewCell {
     weak var delegate: onMoreClickListener?
     weak var ecrExpMenuTapDelegate: onEcrExpOptionMenuTap?
     
+    @IBOutlet weak var lblReason: UILabel!
+    @IBOutlet weak var lblAmount: UILabel!
+    @IBOutlet weak var lblVendor: UILabel!
+    @IBOutlet weak var lblComments: UILabel!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -37,12 +43,13 @@ class ECRExpenseListAdapter: UITableViewCell {
     }
     
     func setDataToView(data:ECRExpenseListData?){
-        //        lblExpDate.text = data.expDate
-        //        lblCategory.text = data.expCategory
-        //        lblVendor.text = data.expVendor
-        //        lblPayment.text = String.init(format: "%@ %@ by %@", data.expCurrency,data.expAmount,data.expPaymentType)
-        //        lblComments.text = data.expComments
-//        self.data = data
+        
+        lblReason.text = data?.reason
+        lblAmount.text = data?.expAmount
+        lblVendor.text = data?.vendor
+        lblComments.text = data?.comments
+        
+        self.data = data
     }
     
     @IBAction func moreClick(_ sender: UIButton) {

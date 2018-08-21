@@ -10,11 +10,11 @@ import UIKit
 import Toast_Swift
 
 protocol onOptionECRTapDelegate: NSObjectProtocol {
-    func onViewClick(data:ECRClaimData) -> Void
-    func onEditClick(data:ECRClaimData) -> Void
-    func onDeleteClick(data:ECRClaimData) -> Void
-    func onSubmitClick(data:ECRClaimData) -> Void
-    func onEmailClick(data:ECRClaimData) -> Void
+    func onViewClick(data:EmployeeClaimData) -> Void
+    func onEditClick(data:EmployeeClaimData) -> Void
+    func onDeleteClick(data:EmployeeClaimData) -> Void
+    func onSubmitClick(data:EmployeeClaimData) -> Void
+    func onEmailClick(data:EmployeeClaimData) -> Void
 }
 
 
@@ -67,7 +67,7 @@ class EmployeeClaimAdapter: UITableViewCell {
        
         
             lblRefId.text = data.headRef
-            lblStatus.text = data.headStatus
+            lblStatus.text = "(" + data.headStatus + ")"
 
             lblCompany.text = data.companyName
             lblEmpDept.text = data.employeeDepartment
@@ -84,53 +84,53 @@ class EmployeeClaimAdapter: UITableViewCell {
     
     
     @IBAction func moreClick(_ sender: UIButton) {
-//        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
-//
-//        let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.optionECRTapDelegate?.responds(to: Selector(("onEditClick:"))) != nil){
-//                self.optionECRTapDelegate?.onEditClick(data:self.data!)
-//            }
-//        })
-//
-//        let deleteActon = UIAlertAction(title: "Delete", style: .default, handler: { (UIAlertAction)-> Void in
-//            if (self.optionECRTapDelegate?.responds(to: Selector(("onDeleteClick:"))) != nil){
-//                self.optionECRTapDelegate?.onDeleteClick(data: self.data!)
-//            }
-//        })
-//
-//        let submitAction = UIAlertAction(title: "Submit", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.optionECRTapDelegate?.responds(to: Selector(("onSubmitClick:"))) != nil){
-//                self.optionECRTapDelegate?.onSubmitClick(data: self.data!)
-//            }
-//        })
-//
-//        let viewAction = UIAlertAction(title: "View", style: .default, handler: { (alert:UIAlertAction!)-> Void in
-//            if (self.optionECRTapDelegate?.responds(to: Selector(("onViewClick:"))) != nil){
-//                self.optionECRTapDelegate?.onViewClick(data: self.data!)
-//            }
-//        })
-//
-//        let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.optionECRTapDelegate?.responds(to: Selector(("onEmailClick:"))) != nil){
-//                self.optionECRTapDelegate?.onEmailClick(data: self.data!)
-//            }
-//        })
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in
-//
-//        })
-//
-//        //        if data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame{
-//        optionMenu.addAction(editAction)
-//        optionMenu.addAction(deleteActon)
-//        optionMenu.addAction(submitAction)
-//        //        }
-//        optionMenu.addAction(viewAction)
-//        optionMenu.addAction(emailAction)
-//        optionMenu.addAction(cancelAction)
-//
-//        if ((delegate?.responds(to: Selector(("onClick:")))) != nil){
-//            delegate?.onClick(optionMenu: optionMenu , sender: sender)
-//        }
+        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
+
+        let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.optionECRTapDelegate?.responds(to: Selector(("onEditClick:"))) != nil){
+                self.optionECRTapDelegate?.onEditClick(data:self.data!)
+            }
+        })
+
+        let deleteActon = UIAlertAction(title: "Delete", style: .default, handler: { (UIAlertAction)-> Void in
+            if (self.optionECRTapDelegate?.responds(to: Selector(("onDeleteClick:"))) != nil){
+                self.optionECRTapDelegate?.onDeleteClick(data: self.data!)
+            }
+        })
+
+        let submitAction = UIAlertAction(title: "Submit", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.optionECRTapDelegate?.responds(to: Selector(("onSubmitClick:"))) != nil){
+                self.optionECRTapDelegate?.onSubmitClick(data: self.data!)
+            }
+        })
+
+        let viewAction = UIAlertAction(title: "View", style: .default, handler: { (alert:UIAlertAction!)-> Void in
+            if (self.optionECRTapDelegate?.responds(to: Selector(("onViewClick:"))) != nil){
+                self.optionECRTapDelegate?.onViewClick(data: self.data!)
+            }
+        })
+
+        let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.optionECRTapDelegate?.responds(to: Selector(("onEmailClick:"))) != nil){
+                self.optionECRTapDelegate?.onEmailClick(data: self.data!)
+            }
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in
+
+        })
+
+        //        if data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame{
+        optionMenu.addAction(editAction)
+        optionMenu.addAction(deleteActon)
+        optionMenu.addAction(submitAction)
+        //        }
+        optionMenu.addAction(viewAction)
+        optionMenu.addAction(emailAction)
+        optionMenu.addAction(cancelAction)
+
+        if ((delegate?.responds(to: Selector(("onClick:")))) != nil){
+            delegate?.onClick(optionMenu: optionMenu , sender: sender)
+        }
         
         
     }

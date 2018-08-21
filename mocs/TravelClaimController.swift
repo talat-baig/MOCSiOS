@@ -293,7 +293,6 @@ extension TravelClaimController: UITableViewDataSource, UITableViewDelegate, onM
         handleTap()
         let data = arrayList[indexPath.row]
         
-        
         if (data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame){
             viewClaim(data: data, counter: data.counter , isFromView: false)
         } else {

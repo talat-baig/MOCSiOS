@@ -27,6 +27,8 @@ struct AppColor {
     static let univPopUpBckgColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
     static let univVoucherCell = UIColor(red:69.0/255.0, green:138.0/255.0, blue:255.0/255.0, alpha:0.3)
     static let sideMenuGreen = UIColor(red: 26.0/255.0, green: 188.0/255.0, blue: 156.0/255.0, alpha: 1.0)
+    static let lightGray = UIColor(red: 209.0/255.0, green: 209.0/255.0, blue: 209.0/255.0, alpha: 1.0)
+
 
 }
 
@@ -136,7 +138,22 @@ struct Constant
         
         
         
-        static let ECR_LIST = "http://172.16.12.12/OCSWebApi/api/ECR/GetECR?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&loginid=ajaiswar"
+        static let ECR_LIST = "http://172.16.12.12/OCSWebApi/api/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        
+        static let ECR_ADD = "http://172.16.12.12/OCSWebApi/api/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
+
+        
+       static let ECR_UPDATE =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
+        
+        
+        static let ECR_EXPENSE_LIST =  "http://172.16.12.12/OCSWebApi/api/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+        
+        
+        static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
+        
+//        http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?string apikey, string authid, string EPRtype, string type, string referenceid
+        
+        
         
 
     }
@@ -359,6 +376,10 @@ struct Constant
          - 3: Comment
          */
         static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_EPRMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&EPRRefNo=%@&Comments=%@"
+        
+        
+        
+        
         
     }
     
