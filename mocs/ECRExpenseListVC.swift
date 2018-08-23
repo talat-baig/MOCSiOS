@@ -11,7 +11,9 @@ import XLPagerTabStrip
 import Alamofire
 import SwiftyJSON
 
-class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickListener ,onEcrExpOptionMenuTap {
+class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickListener ,onEcrExpOptionMenuTap , onECRPaymentAddDelegate {
+   
+    
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "PAYMENT ITEMS")
@@ -31,6 +33,8 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getECRExpenseData))
+
         if isFromView {
             btnAddExpense.isHidden = true
             
@@ -45,7 +49,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         }
         
         populateList(response: respValue)
-
+        //        getPaymentReason(ecrData: ecrData)
         
     }
     
@@ -65,7 +69,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
             
             for(_,k):(String,JSON) in pJson {
                 let expList = ECRExpenseListData()
-
+                
                 expList.addedDate = k["AddDate"].stringValue
                 expList.eprRefId = k["EPRMainReferenceID"].stringValue
                 expList.accntCharge = k["EPRItemsCategory"].stringValue
@@ -77,7 +81,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
                 expList.eprRefId =  k["EPRMainReferenceID"].stringValue
                 expList.vendor = k["EPRItemsVendorName"].stringValue
                 expList.reason = k["EPRItemsAccountChargeHead"].stringValue
-
+                
                 data.append(expList)
             }
             
@@ -113,18 +117,54 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         }
     }
     
-    
+    func getPaymentReason(ecrData: EmployeeClaimData) {
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, "Claim Reimbursement" , "Employee Benefits", ecrData.headRef)
+            
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let jsonString = JSON(response.result.value!)
+                    print(jsonString)
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
     
     @IBAction func btnAddExpenseTapped(_ sender: Any) {
         
         let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmpClaimExpenseAddEditVC") as! EmpClaimExpenseAddEditVC
-        
+        expAddEditVC.ecrExpListData = nil
+        expAddEditVC.ecrData = self.ecrData
+        expAddEditVC.okPymntDelegate = self
         self.navigationController?.pushViewController(expAddEditVC, animated: true)
     }
     
-    func onEditClick() {
-        let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmpClaimExpenseAddEditVC") as! EmpClaimExpenseAddEditVC
+    func onEditClick(data: ECRExpenseListData) {
         
+        
+        //        let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "ExpenseAddEditViewController") as! ExpenseAddEditViewController
+        //        expAddEditVC.currResponse = Session.currency
+        //        expAddEditVC.expCatResponse = Session.category
+        //        expAddEditVC.tcrRefNo =  self.tcrData.headRef
+        //        expAddEditVC.startDate = self.startDateStr
+        //        expAddEditVC.endDate = self.endDateStr
+        //        expAddEditVC.tcrCounter = self.tcrData.counter
+        //        expAddEditVC.eplData = eplData
+        //        expAddEditVC.okSubmitDelegate = self
+        //        self.navigationController?.pushViewController(expAddEditVC, animated: true)
+        
+        let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmpClaimExpenseAddEditVC") as! EmpClaimExpenseAddEditVC
+        expAddEditVC.ecrExpListData = data
+        expAddEditVC.okPymntDelegate = self
         self.navigationController?.pushViewController(expAddEditVC, animated: true)
     }
     
@@ -146,7 +186,10 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         self.present(optionMenu, animated: true, completion: nil)
     }
     
- 
+    func onOkClick() {
+        self.getECRExpenseData()
+    }
+    
 }
 
 

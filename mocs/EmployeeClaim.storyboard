@@ -1079,7 +1079,6 @@
                                                                         </state>
                                                                         <connections>
                                                                             <action selector="btnSubmitTapped:" destination="9Ow-rk-81d" eventType="touchUpInside" id="PUg-hd-lrP"/>
-                                                                            <action selector="btnUpdateTapped:" destination="9Ow-rk-81d" eventType="touchUpInside" id="qgG-3L-reL"/>
                                                                         </connections>
                                                                     </button>
                                                                 </subviews>
@@ -1486,6 +1485,7 @@
                                             <outlet property="lblAmount" destination="oTA-bk-ISW" id="XBc-6J-Icy"/>
                                             <outlet property="lblComments" destination="HA5-GX-x7g" id="bBj-c9-aNI"/>
                                             <outlet property="lblReason" destination="gdX-X7-zvn" id="aVC-tE-1rC"/>
+                                            <outlet property="lblStatus" destination="jNM-hI-5p9" id="ImV-PG-rSm"/>
                                             <outlet property="lblVendor" destination="IPe-DQ-b1r" id="IU1-vn-Hjs"/>
                                             <outlet property="vwOuter" destination="LIS-qA-9s8" id="2Cs-tH-AA0"/>
                                         </connections>
@@ -1870,7 +1870,7 @@
                                                                                                 <color key="textColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                                 <nil key="highlightedColor"/>
                                                                                             </label>
-                                                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jxq-bY-hip">
+                                                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jxq-bY-hip">
                                                                                                 <rect key="frame" x="0.0" y="27" width="349" height="40"/>
                                                                                                 <constraints>
                                                                                                     <constraint firstAttribute="height" constant="40" id="qh0-WG-LIn"/>
@@ -1878,6 +1878,9 @@
                                                                                                 <color key="textColor" red="0.83514147999999999" green="0.1175813401" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                                 <textInputTraits key="textInputTraits"/>
+                                                                                                <connections>
+                                                                                                    <outlet property="delegate" destination="2dQ-ol-hob" id="dxD-gh-ZFz"/>
+                                                                                                </connections>
                                                                                             </textField>
                                                                                         </subviews>
                                                                                     </stackView>
@@ -1949,6 +1952,9 @@
                                                                 <state key="normal" title="SUBMIT">
                                                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 </state>
+                                                                <connections>
+                                                                    <action selector="btnSubmitTapped:" destination="2dQ-ol-hob" eventType="touchUpInside" id="jNG-m7-j5j"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                     </stackView>
@@ -2002,6 +2008,7 @@
                         <outlet property="txtAmtPaid" destination="wyx-xg-I4z" id="QPc-B1-GgG"/>
                         <outlet property="txtComments" destination="bPI-Ea-D9Q" id="Zf9-yD-5Os"/>
                         <outlet property="txtExpDate" destination="bj1-8k-kcL" id="SGg-bB-V77"/>
+                        <outlet property="txtInvoiceNum" destination="Jxq-bY-hip" id="5e2-Cn-vGN"/>
                         <outlet property="txtVendor" destination="WSm-z3-arH" id="ber-7Y-wgd"/>
                         <outlet property="vwAccChargeHd" destination="Fjo-jT-EbQ" id="5IG-cv-8Ne"/>
                         <outlet property="vwComments" destination="JhW-Qt-y1n" id="4ES-Aq-JWs"/>

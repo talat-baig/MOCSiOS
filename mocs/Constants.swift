@@ -148,6 +148,8 @@ struct Constant
         
         static let ECR_EXPENSE_LIST =  "http://172.16.12.12/OCSWebApi/api/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
         
+        static let ECR_ADD_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/AddExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+
         
         static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
         

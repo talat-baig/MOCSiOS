@@ -29,6 +29,13 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     var arrCurrency: [String] = [String]()
     var arrPaymentType: [String] = [String]()
     var arrClaimType: [String] = [String]()
+    var arrCompName: [String] = [String]()
+    var arrDept: [String] = [String]()
+    var arrLocation: [String] = [String]()
+    var arrBenfName: [String] = [String]()
+    
+    
+    
     var empCurrencyRes = String()
     var ecrNo = String()
     var isAdvance = true
@@ -96,10 +103,38 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         if ecrNo != ""  {
             /// Edit
             
+            arrPaymentType = [ecrDta.paymntMethd]
+            
+            var claimType = String()
+            
+            if ecrDta.claimType == "Reimbursement" {
+                claimType = "Claim Reimbursement"
+            } else {
+                claimType = ecrDta.claimType
+            }
+            arrClaimType = [claimType]
+            
+            arrCompName = [ecrDta.companyName]
+            arrDept = [ecrDta.employeeDepartment]
+            arrLocation = [ecrDta.location]
+            arrBenfName = [ecrDta.benefName]
+            
+            
+            self.accessOpenAdvancesBtn(item: claimType)
+            
+            
             vwTopHeader.isHidden = true
             stckVw.frame  = CGRect(x: 0, y: 20, width: self.view.frame.size.width, height: self.view.frame.size.height + 200)
             
             btnSubmit.setTitle("UPDATE",for: .normal)
+            
+            
+            
+            
+            
+            
+            
+            
             assignDataToViews()
             
         } else {
@@ -107,6 +142,10 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             
             arrPaymentType = ["CASH", "ET", "Cheque", "DD" , "Company Card", "Bank Settlement" ]
             arrClaimType = ["Advance", "Claim Reimbursement"]
+            arrCompName = [Session.company]
+            arrDept = [Session.department]
+            arrLocation = [Session.location]
+            arrBenfName = [Session.user]
             
             btnCompany.setTitle(Session.company, for:.normal)
             btnLocation.setTitle(Session.location, for:.normal)
@@ -114,8 +153,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             btnBenfName.setTitle(Session.user, for:.normal)
             
             btnSubmit.setTitle("SAVE",for: .normal)
-            
-            
             
             
         }
@@ -265,7 +302,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     
     func assignDataToViews() {
         
-        arrPaymentType = [ecrDta.paymntMethd]
+        //        arrPaymentType = [ecrDta.paymntMethd]
         
         btnCompany.setTitle(ecrDta.companyName, for:.normal)
         btnLocation.setTitle( ecrDta.location, for:.normal)
@@ -273,21 +310,27 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnBenfName.setTitle(ecrDta.benefName, for:.normal)
         btnPaymentMethd.setTitle(ecrDta.paymntMethd, for:.normal)
         
-        
-        
-        var claimType = String()
-        
         if ecrDta.claimType == "Reimbursement" {
-            claimType = "Claim Reimbursement"
+            btnClaimType.setTitle("Claim Reimbursement", for:.normal)
         } else {
-            claimType = ecrDta.claimType
+            btnClaimType.setTitle(ecrDta.claimType, for:.normal)
         }
         
-        arrClaimType = [claimType]
-        btnClaimType.setTitle(claimType, for:.normal)
         
-  
-        self.accessOpenAdvancesBtn(item: claimType)
+        
+        //        var claimType = String()
+        //
+        //        if ecrDta.claimType == "Reimbursement" {
+        //            claimType = "Claim Reimbursement"
+        //        } else {
+        //            claimType = ecrDta.claimType
+        //        }
+        
+        //        arrClaimType = [claimType]
+        //        btnClaimType.setTitle(claimType, for:.normal)
+        
+        
+        //        self.accessOpenAdvancesBtn(item: claimType)
         
         if ecrDta.eprValue == "" {
             
@@ -646,16 +689,13 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
                     }
                 })
         }
-        
-        
-        
     }
     
     
     @IBAction func btnCompanyTapped(_ sender: Any) {
         let dropDown = DropDown()
         dropDown.anchorView = btnCompany
-        dropDown.dataSource = [Session.company]
+        dropDown.dataSource = arrCompName
         dropDown.show()
     }
     
@@ -663,21 +703,21 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     @IBAction func btnLocationTapped(_ sender: Any) {
         let dropDown = DropDown()
         dropDown.anchorView = btnLocation
-        dropDown.dataSource = [Session.location]
+        dropDown.dataSource = arrLocation
         dropDown.show()
     }
     
     @IBAction func btnBVerticalTapped(_ sender: Any) {
         let dropDown = DropDown()
         dropDown.anchorView = btnBVertical
-        dropDown.dataSource = [Session.department]
+        dropDown.dataSource = arrDept
         dropDown.show()
     }
     
     @IBAction func btnBenfNameTapped(_ sender: Any) {
         let dropDown = DropDown()
         dropDown.anchorView = btnBenfName
-        dropDown.dataSource = [Session.user]
+        dropDown.dataSource = arrBenfName
         dropDown.show()
     }
     
@@ -687,17 +727,31 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     }
     
     
-    
-    
     @IBAction func btnUpdateTapped(_ sender: Any) {
     }
     
     func onAddTap(eprIdString: String, tempArr: [TCREPRListData]) {
-        
+        if eprIdString == "" {
+            btnOpenEPRVal.setTitle("Open Advances", for: .normal)
+        } else {
+            btnOpenEPRVal.setTitle(eprIdString, for: .normal)
+        }
+        self.tcrEprArr = tempArr
     }
     
     func onCancelTap() {
-        
+        let eprString = btnOpenEPRVal.currentTitle
+        if eprString != "" {
+            let newStrArr = eprString?.components(separatedBy: ",")
+            for newTmp in self.tcrEprArr {
+                for j in newStrArr! {
+                    if newTmp.eprRefId == j {
+                        newTmp.isSelect = true
+                    }
+                }
+            }
+        }
+
     }
 }
 

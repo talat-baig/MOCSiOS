@@ -10,13 +10,14 @@ import UIKit
 
 protocol onEcrExpOptionMenuTap: NSObjectProtocol {
     
-    func onEditClick() -> Void
+    func onEditClick(data: ECRExpenseListData) -> Void
     func onDeleteClick(data:ECRExpenseListData) -> Void
 }
 
 class ECRExpenseListAdapter: UITableViewCell {
     
-    weak var data: ECRExpenseListData?
+    
+    weak var data: ECRExpenseListData!
     @IBOutlet weak var vwOuter: UIView!
     
     @IBOutlet weak var btnMenu: UIButton!
@@ -28,6 +29,7 @@ class ECRExpenseListAdapter: UITableViewCell {
     @IBOutlet weak var lblVendor: UILabel!
     @IBOutlet weak var lblComments: UILabel!
     
+    @IBOutlet weak var lblStatus: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -48,7 +50,7 @@ class ECRExpenseListAdapter: UITableViewCell {
         lblAmount.text = data?.expAmount
         lblVendor.text = data?.vendor
         lblComments.text = data?.comments
-        
+        lblStatus.text = data?.addedDate
         self.data = data
     }
     
@@ -60,7 +62,7 @@ class ECRExpenseListAdapter: UITableViewCell {
                 if (self.ecrExpMenuTapDelegate?.responds(to: Selector(("onEditClick:"))) != nil){
                  
                     
-                    self.ecrExpMenuTapDelegate?.onEditClick()
+                    self.ecrExpMenuTapDelegate?.onEditClick(data: self.data)
                 }
             })
             let deleteAction = UIAlertAction(title: "Delete", style: .default, handler: { (UIAlertAction) -> Void in
@@ -73,7 +75,7 @@ class ECRExpenseListAdapter: UITableViewCell {
             })
             
             optionMenu.addAction(editAction)
-            optionMenu.addAction(deleteAction)
+//            optionMenu.addAction(deleteAction)
             optionMenu.addAction(cancelAction)
             
             delegate!.onClick(optionMenu: optionMenu, sender : sender)

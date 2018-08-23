@@ -101,7 +101,10 @@ class ECRBaseViewController: ButtonBarPagerTabStripViewController, onECRSubmit, 
         
         let ecrVoucher = self.storyboard?.instantiateViewController(withIdentifier: "ECRVoucherListVC") as! ECRVoucherListVC
         ecrVoucher.isFromView = isFromView
-        
+        ecrVoucher.vouchResponse = self.voucherResponse
+        ecrVoucher.ecrData = self.ecrData
+        ecrVoucher.moduleName = Constant.MODULES.EPRECR
+        ecrVoucher.ucNotifyDelegate = self
         
         viewArray.append(ecrExpenseVC)
         viewArray.append(ecrVoucher)

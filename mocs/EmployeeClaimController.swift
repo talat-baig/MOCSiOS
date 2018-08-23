@@ -13,22 +13,17 @@ import SwiftyJSON
 
 class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdate, onECRSubmit, notifyChilds_UC {
     
-    
-    
-    
-    
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
-    
-    var arrayList:[EmployeeClaimData] = []
-    var newArray : [EmployeeClaimData] = []
     @IBOutlet weak var srchBar: UISearchBar!
     
     
-    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+    var arrayList:[EmployeeClaimData] = []
+    var newArray : [EmployeeClaimData] = []
     
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,14 +102,12 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
                             ecData.claimType = json["EPRMainPaymentRequestType"].stringValue
                             ecData.counter = json["EprRefIDCounter"].intValue
                             
-
+                            
                             if json["EPRMainOpenAdvanceValue"].stringValue == "" {
                                 ecData.eprValue = ""
                             } else {
                                 ecData.eprValue = json["EPRMainOpenAdvanceValue"].stringValue
                             }
-                            
-                            
                             data.append(ecData)
                         }
                         self.arrayList = data
@@ -283,7 +276,7 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
                 self.refreshControl.endRefreshing()
                 if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
                     
-                     self.getVouchersDataAndNavigate(ecrData: ecrData, isFromView: isFromView, ecrPaymentRes: response.result.value)
+                    self.getVouchersDataAndNavigate(ecrData: ecrData, isFromView: isFromView, ecrPaymentRes: response.result.value)
                     
                 }
             }))
@@ -292,48 +285,48 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
         }
         
     }
+    
+    
+    func getVouchersDataAndNavigate(ecrData :EmployeeClaimData, isFromView : Bool , ecrPaymentRes : Data?) {
         
-     func getVouchersDataAndNavigate(ecrData :EmployeeClaimData, isFromView : Bool , ecrPaymentRes : Data?) {
-        
-        
-                let docRefId = String(format: "%@D%d", ecrData.headRef , ecrData.counter)
-                if internetStatus != .notReachable {
-        
-                    var url = String()
-        
-                    if(ecrData.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame) {
-                        url =  String.init(format: Constant.DROPBOX.LIST,
-                                           Session.authKey,
-                                           Helper.encodeURL(url: Constant.MODULES.EPRECR),
-                                           Helper.encodeURL(url: docRefId))
-                    } else {
-                        url =  String.init(format: Constant.DROPBOX.LIST,
-                                           Session.authKey,
-                                           Helper.encodeURL(url: Constant.MODULES.EPRECR),
-                                           Helper.encodeURL(url: ecrData.headRef))
-                    }
-        
-                    self.view.showLoading()
-                    Alamofire.request(url).responseData(completionHandler: ({ response in
-                        self.view.hideLoading()
-                        self.refreshControl.endRefreshing()
-                        if Helper.isResponseValid(vc: self, response: response.result){
-        
-                            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ECRBaseViewController") as! ECRBaseViewController
-                            vc.isFromView = isFromView
-                            vc.ecrBaseDelegate = self
-                            vc.notifyChilds = self
-                            vc.title = ecrData.headRef
-                            vc.voucherResponse = response.result.value
-                            vc.ecrData = ecrData
-                            vc.paymntRes = ecrPaymentRes
-                            self.navigationController!.pushViewController(vc, animated: true)
-        
-                        }
-                    }))
-                } else {
-                    Helper.showNoInternetMessg()
+        let docRefId = String(format: "%@D%d", ecrData.headRef , ecrData.counter)
+        if internetStatus != .notReachable {
+            
+            var url = String()
+            
+            if(ecrData.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame) {
+                url =  String.init(format: Constant.DROPBOX.LIST,
+                                   Session.authKey,
+                                   Helper.encodeURL(url: Constant.MODULES.EPRECR),
+                                   Helper.encodeURL(url: docRefId))
+            } else {
+                url =  String.init(format: Constant.DROPBOX.LIST,
+                                   Session.authKey,
+                                   Helper.encodeURL(url: Constant.MODULES.EPRECR),
+                                   Helper.encodeURL(url: ecrData.headRef))
+            }
+            
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "ECRBaseViewController") as! ECRBaseViewController
+                    vc.isFromView = isFromView
+                    vc.ecrBaseDelegate = self
+                    vc.notifyChilds = self
+                    vc.title = ecrData.headRef
+                    vc.voucherResponse = response.result.value
+                    vc.ecrData = ecrData
+                    vc.paymntRes = ecrPaymentRes
+                    self.navigationController!.pushViewController(vc, animated: true)
+                    
                 }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
     
     

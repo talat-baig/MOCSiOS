@@ -329,7 +329,7 @@ class ExpenseAddEditViewController: UIViewController , UIGestureRecognizerDelega
             Helper.showMessage(message: "Please enter Comment")
             return
         }
-        
+    
         if btnCurrency.titleLabel?.text == "-" {
             Helper.showMessage(message: "Please enter Currency")
             return

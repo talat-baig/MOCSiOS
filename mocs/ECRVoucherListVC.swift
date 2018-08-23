@@ -23,10 +23,11 @@ protocol UCECR_NotifyComplete {
 }
 
 class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPickerDelegate{
-
+    
     
     var arrayList:[VoucherData] = []
     var ecrData = EmployeeClaimData()
+    //    var response : Data?
     
     var moduleName = String()
     var imagePicker = UIImagePickerController()
@@ -49,8 +50,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-      refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVouchersData))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVouchersData))
         
         let floaty = Floaty()
         
@@ -113,7 +113,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         self.delegate = self
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -188,11 +188,11 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     @objc func getVouchersData() {
         
         let docRefId = String(format: "%@D%d",self.ecrData.headRef ,self.ecrData.counter)
-
+        
         if internetStatus != .notReachable {
-
+            
             var url = String()
-
+            
             if(ecrData.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame) {
                 url =  String.init(format: Constant.DROPBOX.LIST,
                                    Session.authKey,
@@ -203,9 +203,9 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                                    Session.authKey,
                                    Helper.encodeURL(url: self.moduleName),
                                    Helper.encodeURL(url: self.ecrData.headRef))
-
+                
             }
-
+            
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -302,8 +302,8 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
         dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
             .response { response, error in
-
-            
+                
+                
                 DispatchQueue.main.async() {
                     if let response = response {
                         self.addItemToServer(dModName: Constant.MODULES.EPRECR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
@@ -438,6 +438,91 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         }
         
     }
+    
+    
+    func deleteItemFromServer(docId : String, comp : @escaping(Bool) -> ()){
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.DROPBOX.REMOVE_ITEM,
+                                  Session.authKey,docId)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result) {
+                    self.view.makeToast("File Deleted")
+                    comp(true)
+                }
+            }))
+        } else {
+            comp(false)
+            Helper.showNoInternetMessg()
+        }
+        
+    }
+    
+    func downloadFile( path : String, fileName : String, comp : @escaping(Bool) -> ()) {
+        let path = Helper.getModifiedPath( path:  path)
+        
+        let fileManager = FileManager.default
+        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let destURL = directoryURL.appendingPathComponent(fileName + "." + URL(fileURLWithPath: path).pathExtension)
+        
+        let destination: (URL, HTTPURLResponse) -> URL = { temporaryURL, response in
+            return destURL
+        }
+        
+        DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
+        DropboxClientsManager.authorizedClient?.files.download(path: path, overwrite: true,destination: destination)
+            .response { response, error in
+                if let response = response {
+                    comp(true)
+                } else if let error = error {
+                    print(error)
+                    comp(false)
+                }
+            }
+            .progress { progressData in
+                if progressData.fractionCompleted == 1.0 {
+                    comp(true)
+                }
+        }
+        
+    }
+    
+    @objc func deleteFileTapped(sender:UIButton) {
+        
+        let buttonRow = sender.tag
+        
+        if GlobalVariables.shared.isUploadingSomething {
+            self.view.makeToast("File uploading is in progress, Please wait..")
+            return
+        }
+        
+        let deleteAlert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete the voucher?", preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: "YES", style: .default, handler: { (action) -> Void in
+            
+            self.deleteItemFromServer(docId: self.arrayList[buttonRow].documentID, comp: { (result) in
+                if result {
+                    self.arrayList.remove(at: buttonRow)
+                    self.tableView.reloadData()
+                    if self.arrayList.count == 0 {
+                        print("Zeroooooooo")
+                        self.showEmptyState()
+                    }
+                } else {
+                    Helper.showMessage(message: "No Internet Available, Please check your connection")
+                }
+            })
+        })
+        
+        let cancel = UIAlertAction(title: "GO BACK", style: .destructive, handler: { (action) -> Void in })
+        
+        deleteAlert.addAction(cancel)
+        deleteAlert.addAction(yesAction)
+        
+        present(deleteAlert, animated: true, completion: nil)
+    }
 }
 
 
@@ -469,7 +554,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     
     func uploadFile(data: Data, fileName: String, ext: String, fileDesc: String) {
-       
+        
         self.view.makeToast("Your file upload is in progress, we'll notify when uploaded")
         
         let uploadFileData = FileInfo()
@@ -484,7 +569,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
         self.addRowWithCell(fileInfo : uploadFileData)
     }
     
-
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(80)
@@ -492,7 +577,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-//        return 1
+        //        return 1
         if arrayList.count > 0{
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
@@ -505,14 +590,65 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        //        let cellView = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentCell
+        //        cellView.title.text = "test"
+        //        cellView.status.text = "Tap to Download"
+        //        cellView.selectionStyle = .none
+        //
+        //        cellView.btnStatus.tag = indexPath.row
+        //        cellView.btnDelete.tag = indexPath.row
+        //
+        //
+        //        return cellView
+        
+        let newVoucher = arrayList[indexPath.row]
+        
         let cellView = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentCell
-        cellView.title.text = "test"
-        cellView.status.text = "Tap to Download"
+        cellView.title.text = newVoucher.documentName
+        
+        
+        if newVoucher.documentDesc == "" {
+            
+            cellView.fileDesc.isHidden = true
+        } else {
+            cellView.fileDesc.isHidden = false
+            cellView.fileDesc.text = newVoucher.documentDesc
+        }
+        
         cellView.selectionStyle = .none
+        
+        if newVoucher.isFileUploading {
+            cellView.progressBar.isHidden = false
+            cellView.progressBar.progress = 0.0
+            //            cellView.selectionStyle = .none
+            cellView.btnDelete.isHidden = true
+            cellView.contentView.backgroundColor = AppColor.univVoucherCell
+            
+        } else {
+            cellView.progressBar.isHidden = true
+            cellView.contentView.backgroundColor = UIColor.clear
+            
+            
+            if isFromView {
+                cellView.btnDelete.isHidden = true
+            } else {
+                cellView.btnDelete.isHidden = false
+            }
+        }
+        
+        if !Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension)  {
+            cellView.btnStatus.setImage(#imageLiteral(resourceName: "download"), for: .normal)
+            cellView.status.text = "(Tap to Download)"
+        } else {
+            cellView.status.text = "Downloaded.(Tap to View)"
+            cellView.btnStatus.setImage(#imageLiteral(resourceName: "view"), for: .normal)
+        }
+        
         
         cellView.btnStatus.tag = indexPath.row
         cellView.btnDelete.tag = indexPath.row
         
+        cellView.btnDelete.addTarget(self, action: #selector(self.deleteFileTapped(sender:)), for: UIControlEvents.touchUpInside)
         
         return cellView
     }
@@ -520,7 +656,54 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-       
+        if GlobalVariables.shared.isUploadingSomething {
+            self.view.makeToast("File uploading is in progress, Please wait..")
+            return
+        }
+        
+        if Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension) {
+            
+            let path = Helper.getPathFromDirectory(directoryName: "", savedFileName: arrayList[indexPath.row].documentName, ext: URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension)
+            self.docFileViewer = UIDocumentInteractionController.init(url: path)
+            
+            /// Configure Document Interaction Controller
+            self.docFileViewer.delegate = self
+            self.docFileViewer.name = ""
+            self.docFileViewer.presentPreview(animated: true)
+            
+        } else {
+            
+            Helper.showLoading(vc: self)
+            self.downloadFile(path: arrayList[indexPath.row].documentPath, fileName : arrayList[indexPath.row].documentName, comp: { result in
+                Helper.hideLoading(vc: self)
+                if result {
+                } else {
+                    Helper.showMessage(message: "Sorry! Unable to download file")
+                }
+                self.tableView.reloadData()
+                
+            })
+        }
+        
+        
     }
     
 }
+
+// MARK: - UIDocumentInteractionControllerDelegate method
+extension ECRVoucherListVC: UIDocumentInteractionControllerDelegate {
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
+        UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor]
+        return self.navigationController!
+    }
+    
+    func documentInteractionControllerDidDismissOpenInMenu(_ controller: UIDocumentInteractionController) {
+        docFileViewer = nil
+    }
+}
+
+
+

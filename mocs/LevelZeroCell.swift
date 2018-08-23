@@ -24,7 +24,7 @@ class LevelZeroCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setupCellViews(title : String, image : UIImage){
+    func setupCellViews(title : String, image : UIImage) {
         lblTitle.text = title
         imgIcon.image = image
     }
