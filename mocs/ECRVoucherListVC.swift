@@ -24,30 +24,38 @@ protocol UCECR_NotifyComplete {
 
 class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPickerDelegate{
     
-    
     var arrayList:[VoucherData] = []
-    var ecrData = EmployeeClaimData()
-    //    var response : Data?
     
     var moduleName = String()
-    var imagePicker = UIImagePickerController()
-    var delegate:uploadFileDelegate?
-    var docFileViewer: UIDocumentInteractionController!
-    var isFromView : Bool = false
-    var vouchResponse : Data?
-    var refreshControl: UIRefreshControl = UIRefreshControl()
-    var fileInfoObj : FileInfo?
+    
+    var ecrData = EmployeeClaimData()
+    
+    var uf_delegate:uploadFileDelegate?
+    
     var dbRequest : SwiftyDropbox.UploadRequest<Files.FileMetadataSerializer, Files.UploadErrorSerializer>?
+    
     var ucNotifyDelegate : UC_NotifyComplete?
     
-    @IBOutlet weak var tableView: UITableView!
+    var fileInfoObj : FileInfo?
     
+    var isFromView : Bool = false
+    
+    var vouchResponse : Data?
+    
+    var imagePicker = UIImagePickerController()
+    
+    var docFileViewer: UIDocumentInteractionController!
+    
+    var refreshControl: UIRefreshControl = UIRefreshControl()
+    
+    @IBOutlet weak var tableView: UITableView!
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "VOUCHERS")
     }
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVouchersData))
@@ -89,7 +97,9 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         })
         
         floaty.addItem("Select File", icon: #imageLiteral(resourceName: "fileExplorer"), handler: { item in
+            
             let documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["public.text","com.apple.iwork.pages.pages", "public.data"], in: UIDocumentPickerMode.import)
+            
             documentPicker.delegate = self
             
             /// Set Document picker navigation bar text color
@@ -110,7 +120,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
             showEmptyState()
             tableView.addSubview(refreshControl)
         }
-        self.delegate = self
+        self.uf_delegate = self
         
     }
     
@@ -124,8 +134,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     }
     
     @objc func populateList(response : Data?) {
-        
-        //        self.tblVwVouchers.tableFooterView = nil
+
         guard response != nil else {
             return
         }
@@ -139,12 +148,12 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         
         let array = jsonResponse.arrayObject as! [[String:AnyObject]]
         
-        
         if array.count > 0 {
             
             self.arrayList.removeAll()
             
-            for(_,j):(String,SwiftyJSON.JSON) in jsonResponse{
+            for(_,j):(String,SwiftyJSON.JSON) in jsonResponse {
+                
                 let data = VoucherData()
                 data.documentID = j["DocumentID"].stringValue
                 data.moduleName = j["DocumentModuleName"].stringValue
@@ -577,7 +586,6 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        //        return 1
         if arrayList.count > 0{
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
@@ -589,38 +597,26 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        //        let cellView = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentCell
-        //        cellView.title.text = "test"
-        //        cellView.status.text = "Tap to Download"
-        //        cellView.selectionStyle = .none
-        //
-        //        cellView.btnStatus.tag = indexPath.row
-        //        cellView.btnDelete.tag = indexPath.row
-        //
-        //
-        //        return cellView
+     
         
         let newVoucher = arrayList[indexPath.row]
         
         let cellView = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentCell
         cellView.title.text = newVoucher.documentName
-        
+        cellView.selectionStyle = .none
         
         if newVoucher.documentDesc == "" {
-            
             cellView.fileDesc.isHidden = true
         } else {
             cellView.fileDesc.isHidden = false
             cellView.fileDesc.text = newVoucher.documentDesc
         }
         
-        cellView.selectionStyle = .none
         
         if newVoucher.isFileUploading {
             cellView.progressBar.isHidden = false
             cellView.progressBar.progress = 0.0
-            //            cellView.selectionStyle = .none
+
             cellView.btnDelete.isHidden = true
             cellView.contentView.backgroundColor = AppColor.univVoucherCell
             
@@ -684,7 +680,6 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
                 
             })
         }
-        
         
     }
     

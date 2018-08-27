@@ -139,76 +139,21 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         vwTopHeader.lblTitle.text = "Add New Claim"
         vwTopHeader.lblSubTitle.isHidden = true
         
-        vwCompany.layer.borderWidth = 1
-        vwCompany.layer.borderColor = UIColor.lightGray.cgColor
-        vwCompany.layer.cornerRadius = 5
-        vwCompany.layer.masksToBounds = true;
+        Helper.addBordersToView(view: vwCompany)
+        Helper.addBordersToView(view: vwLocation)
+        Helper.addBordersToView(view: vwBusiness)
+        Helper.addBordersToView(view: vwTripType)
+        Helper.addBordersToView(view: vwPot)
+        Helper.addBordersToView(view: vwPov)
+        Helper.addBordersToView(view: vwCities)
         
-        vwLocation.layer.borderWidth = 1
-        vwLocation.layer.borderColor = UIColor.lightGray.cgColor
-        vwLocation.layer.cornerRadius = 5
-        vwLocation.layer.masksToBounds = true;
-        
-        vwBusiness.layer.borderWidth = 1
-        vwBusiness.layer.borderColor = UIColor.lightGray.cgColor
-        vwBusiness.layer.cornerRadius = 5
-        vwBusiness.layer.masksToBounds = true;
-        
-        vwTripType.layer.borderWidth = 1
-        vwTripType.layer.borderColor = UIColor.lightGray.cgColor
-        vwTripType.layer.cornerRadius = 5
-        vwTripType.layer.masksToBounds = true;
-        
-        vwPot.layer.borderWidth = 1
-        vwPot.layer.borderColor = UIColor.lightGray.cgColor
-        vwPot.layer.cornerRadius = 5
-        vwPot.layer.masksToBounds = true;
-        
-        vwPov.layer.borderWidth = 1
-        vwPov.layer.borderColor = UIColor.lightGray.cgColor
-        vwPov.layer.cornerRadius = 5
-        vwPov.layer.masksToBounds = true;
-        
-        vwCities.layer.borderWidth = 1
-        vwCities.layer.borderColor = UIColor.lightGray.cgColor
-        vwCities.layer.cornerRadius = 5
-        vwCities.layer.masksToBounds = true;
-        
-//        btnAdvances.backgroundColor = .clear
+    
         btnAdvances.layer.cornerRadius = 5
         btnAdvances.layer.borderWidth = 1
         btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
         
     }
     
-    
-    @IBAction func switchToggled(_ sender: UISwitch) {
-        self.checkSwitchValue()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let lastView : UIView! = mySubVw.subviews.last
-        let height = lastView.frame.size.height
-        let pos = lastView.frame.origin.y
-        let sizeOfContent = height + pos + 100
-        print(sizeOfContent)
-        scrlVw.contentSize.height = sizeOfContent
-    }
-    
-    func checkSwitchValue() {
-        
-        if tcSwitchControl.isOn {
-            typeOfTravel = "International"
-        } else {
-            typeOfTravel = "Domestic"
-        }
-    }
-    
-    func notifyChild(messg: String , success : Bool) {
-        Helper.showVUMessage(message: messg, success: success)
-    }
     
     func parseAndAssign() {
         let jsonResponse = JSON(response!)
@@ -240,12 +185,41 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
             }
             
             if j["Alloted_EPR"].stringValue == "" {
-
+                
             } else {
                 checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
             }
             
         }
+    }
+    
+    
+    @IBAction func switchToggled(_ sender: UISwitch) {
+        self.checkSwitchValue()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let lastView : UIView! = mySubVw.subviews.last
+        let height = lastView.frame.size.height
+        let pos = lastView.frame.origin.y
+        let sizeOfContent = height + pos + 100
+        print(sizeOfContent)
+        scrlVw.contentSize.height = sizeOfContent
+    }
+    
+    func checkSwitchValue() {
+        
+        if tcSwitchControl.isOn {
+            typeOfTravel = "International"
+        } else {
+            typeOfTravel = "Domestic"
+        }
+    }
+    
+    func notifyChild(messg: String , success : Bool) {
+        Helper.showVUMessage(message: messg, success: success)
     }
     
     
@@ -271,7 +245,6 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
                 }
             }
         }
-
     }
     
     func checkAllotedEPR(res : String) {

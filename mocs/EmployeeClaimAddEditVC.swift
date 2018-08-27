@@ -196,54 +196,22 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnPaymentMethd.contentHorizontalAlignment = .left
         btnClaimType.contentHorizontalAlignment = .left
         
-        vwCompany.layer.borderWidth = 1
-        vwCompany.layer.borderColor = UIColor.lightGray.cgColor
-        vwCompany.layer.cornerRadius = 5
-        vwCompany.layer.masksToBounds = true;
         
-        vwLocation.layer.borderWidth = 1
-        vwLocation.layer.borderColor = UIColor.lightGray.cgColor
-        vwLocation.layer.cornerRadius = 5
-        vwLocation.layer.masksToBounds = true;
+        Helper.addBordersToView(view: vwCompany)
+        Helper.addBordersToView(view: vwLocation)
+        Helper.addBordersToView(view: vwBusiness)
+        Helper.addBordersToView(view: vwClaimType)
+        Helper.addBordersToView(view: vwBenfName)
+        Helper.addBordersToView(view: vwPaymentMthd)
+        Helper.addBordersToView(view: vwClaimType)
+        Helper.addBordersToView(view: vwReqCurrency)
+
+//        btnReqCurrency.layer.borderWidth = 1
+//        btnReqCurrency.layer.borderColor = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1.0).cgColor
+//        btnReqCurrency.layer.cornerRadius = 5
+//        btnReqCurrency.layer.masksToBounds = true;
         
-        vwBusiness.layer.borderWidth = 1
-        vwBusiness.layer.borderColor = UIColor.lightGray.cgColor
-        vwBusiness.layer.cornerRadius = 5
-        vwBusiness.layer.masksToBounds = true;
-        
-        vwClaimType.layer.borderWidth = 1
-        vwClaimType.layer.borderColor = UIColor.lightGray.cgColor
-        vwClaimType.layer.cornerRadius = 5
-        vwClaimType.layer.masksToBounds = true;
-        
-        vwBenfName.layer.borderWidth = 1
-        vwBenfName.layer.borderColor = UIColor.lightGray.cgColor
-        vwBenfName.layer.cornerRadius = 5
-        vwBenfName.layer.masksToBounds = true;
-        
-        
-        vwPaymentMthd.layer.borderWidth = 1
-        vwPaymentMthd.layer.borderColor = UIColor.lightGray.cgColor
-        vwPaymentMthd.layer.cornerRadius = 5
-        vwPaymentMthd.layer.masksToBounds = true;
-        
-        
-        vwClaimType.layer.borderWidth = 1
-        vwClaimType.layer.borderColor = UIColor.lightGray.cgColor
-        vwClaimType.layer.cornerRadius = 5
-        vwClaimType.layer.masksToBounds = true;
-        
-        vwReqCurrency.layer.borderWidth = 1
-        vwReqCurrency.layer.borderColor = UIColor.lightGray.cgColor
-        vwReqCurrency.layer.cornerRadius = 5
-        vwReqCurrency.layer.masksToBounds = true;
-        
-        btnReqCurrency.layer.borderWidth = 1
-        btnReqCurrency.layer.borderColor = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1.0).cgColor
-        btnReqCurrency.layer.cornerRadius = 5
-        btnReqCurrency.layer.masksToBounds = true;
-        
-        
+        Helper.addBordersToView(view: btnReqCurrency)
         
         btnOpenEPRVal.layer.borderWidth = 1
         btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor

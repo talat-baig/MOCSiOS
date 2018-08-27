@@ -10,8 +10,8 @@ import UIKit
 import XLPagerTabStrip
 import SwiftyJSON
 
-class EmployeeClaimNonEditVC: UIViewController, IndicatorInfoProvider {
-
+class EmployeeClaimNonEditVC: UIViewController, IndicatorInfoProvider , notifyChilds_UC {
+   
     var ecrData = EmployeeClaimData()
     
     @IBOutlet weak var lblCompany: UILabel!
@@ -26,11 +26,9 @@ class EmployeeClaimNonEditVC: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var lblPaidVal: UILabel!
 
     
-    
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "PRIMARY DETAILS")
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,22 +52,12 @@ class EmployeeClaimNonEditVC: UIViewController, IndicatorInfoProvider {
         lblBalToPay.text = self.ecrData.balance
         lblPaidVal.text = self.ecrData.paidAmount
 
-        
-        
-//        let jsonResponse = JSON(response!)
-//        for(_,j):(String,JSON) in jsonResponse{
-//            lblCompany.text! = j["Company Name"].stringValue
-//            lblDepartment.text! = j["Employee Department"].stringValue
-//            lblToDate.text! = j["Travel End Date"].stringValue
-//            lblFromDate.text! = j["Travel Start Date"].stringValue
-//            lblTravelType.text! = j["Type of Travel"].stringValue
-//            lblTravelPurpose.text! = j["Purpose of Travel"].stringValue
-//            lblPlaces.text! = j["Places Visited"].stringValue
-//            lblTotalAmt.text! = j["Total Amount"].stringValue
-//            lblTotalDays.text! = j["Total days"].stringValue
-//            lblClaimRaised.text! = j["Claim Raised On"].stringValue
-//        }
     }
  
+    func notifyChild(messg: String, success: Bool) {
+        Helper.showVUMessage(message: messg, success: success)
 
+    }
+    
+   
 }

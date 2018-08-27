@@ -202,7 +202,7 @@ class TaskListViewController: UIViewController {
     /// Method that calls API for List Task and Populates tableview according to Response
     @objc func populateList(){
         
-        if internetStatus != .notReachable{
+        if internetStatus != .notReachable {
             var newData:[TaskDetails] = []
             self.view.showLoading()
             let url:String = String.init(format: Constant.TASK_MANAGER.LIST_TASK ,taskData.serialId)

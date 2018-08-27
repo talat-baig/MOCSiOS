@@ -11,9 +11,7 @@ import XLPagerTabStrip
 import Alamofire
 import SwiftyJSON
 
-class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickListener ,onEcrExpOptionMenuTap , onECRPaymentAddDelegate {
-   
-    
+class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickListener ,onEcrExpOptionMenuTap , notifyChilds_UC, onECRPaymentAddDelegate {
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "PAYMENT ITEMS")
@@ -56,6 +54,11 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    func notifyChild(messg: String, success: Bool) {
+          Helper.showVUMessage(message: messg, success: success)
+    }
+    
     
     
     func populateList(response : Data) {
@@ -149,18 +152,6 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     }
     
     func onEditClick(data: ECRExpenseListData) {
-        
-        
-        //        let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "ExpenseAddEditViewController") as! ExpenseAddEditViewController
-        //        expAddEditVC.currResponse = Session.currency
-        //        expAddEditVC.expCatResponse = Session.category
-        //        expAddEditVC.tcrRefNo =  self.tcrData.headRef
-        //        expAddEditVC.startDate = self.startDateStr
-        //        expAddEditVC.endDate = self.endDateStr
-        //        expAddEditVC.tcrCounter = self.tcrData.counter
-        //        expAddEditVC.eplData = eplData
-        //        expAddEditVC.okSubmitDelegate = self
-        //        self.navigationController?.pushViewController(expAddEditVC, animated: true)
         
         let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmpClaimExpenseAddEditVC") as! EmpClaimExpenseAddEditVC
         expAddEditVC.ecrExpListData = data

@@ -79,7 +79,7 @@ class BaseViewController: ButtonBarPagerTabStripViewController, onTCRSubmit, UC_
     }
     
     func notifyUCVouchers(messg: String, success: Bool) {
-//         Helper.showMessage(message: messg, style: .success)
+
         if let d = notifyChilds {
             d.notifyChild(messg: messg, success : success)
         }

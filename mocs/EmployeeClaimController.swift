@@ -19,11 +19,12 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
     
     @IBOutlet weak var srchBar: UISearchBar!
     
-    
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+
     var arrayList:[EmployeeClaimData] = []
+    
     var newArray : [EmployeeClaimData] = []
     
-    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,11 +39,11 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.navigationBar.isHidden = true
         
-        
-        populateList()
         srchBar.delegate = self
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
         tableView.addSubview(refreshControl)
+
+        populateList()
         
     }
     
@@ -146,6 +147,7 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
 }
 
 extension EmployeeClaimController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
@@ -163,8 +165,6 @@ extension EmployeeClaimController: UISearchBarDelegate {
 
 extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, onOptionECRTapDelegate {
     
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if arrayList.count > 0 {
@@ -175,7 +175,7 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
             tableView.separatorStyle = .none
         }
         return arrayList.count
-        //        return 1
+
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -193,20 +193,13 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
             viewClaim(data: data, counter: data.counter , isFromView: true)
         }
         
-        //        if (data.headStatus.caseInsensitiveCompare("submitted") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved by finance") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved By manager")  == ComparisonResult.orderedSame) {
-        //            self.view.makeToast("Claim already submitted, cannot be edited")
-        //        }
-        //
-        //        if (data.headStatus.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
-        //            self.view.makeToast("Claim has been deleted, cannot be edited")
-        //        }
+        if (data.headStatus.caseInsensitiveCompare("submitted") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved by finance") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved By manager")  == ComparisonResult.orderedSame) {
+            self.view.makeToast("Claim already submitted, cannot be edited")
+        }
         
-        /*  let vc = self.storyboard?.instantiateViewController(withIdentifier: "ECRBaseViewController") as! ECRBaseViewController
-         vc.isFromView = true
-         vc.ecrBaseDelegate = self
-         
-         self.navigationController!.pushViewController(vc, animated: true) */
-        
+        if (data.headStatus.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
+            self.view.makeToast("Claim has been deleted, cannot be edited")
+        }
         
     }
     
@@ -267,13 +260,13 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
     
     func getPaymentAndVouchersData(ecrData :EmployeeClaimData, isFromView : Bool ) {
         
-        if internetStatus != .notReachable{
+        if internetStatus != .notReachable {
             let url = String.init(format: Constant.API.ECR_EXPENSE_LIST, Session.authKey,
                                   ecrData.headRef, ecrData.counter)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-                self.refreshControl.endRefreshing()
+              
                 if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
                     
                     self.getVouchersDataAndNavigate(ecrData: ecrData, isFromView: isFromView, ecrPaymentRes: response.result.value)

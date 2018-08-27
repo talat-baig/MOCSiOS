@@ -47,15 +47,15 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     @IBOutlet weak var txtExpDate: UITextField!
     
     weak var ecrExpListData : ECRExpenseListData!
+    
     weak var ecrData : EmployeeClaimData!
 
-    
-    
     @IBOutlet weak var stckVwCurrency: UIStackView!
     
-    
     @IBOutlet weak var btnReason: UIButton!
+
     @IBOutlet weak var vwInvNo: UIView!
+
     @IBOutlet weak var vwAccChargeHd: UIView!
     
     @IBOutlet var datePickerTool: UIView!
@@ -89,41 +89,19 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         
         txtExpDate.inputView = datePickerTool
         
-        vwPymntReason.layer.borderWidth = 1
-        vwPymntReason.layer.borderColor = UIColor.lightGray.cgColor
-        vwPymntReason.layer.cornerRadius = 5
-        vwPymntReason.layer.masksToBounds = true;
-        
-        vwVendor.layer.borderWidth = 1
-        vwVendor.layer.borderColor = UIColor.lightGray.cgColor
-        vwVendor.layer.cornerRadius = 5
-        vwVendor.layer.masksToBounds = true;
-        
-        
-        vwInvNo.layer.borderWidth = 1
-        vwInvNo.layer.borderColor = UIColor.lightGray.cgColor
-        vwInvNo.layer.cornerRadius = 5
-        vwInvNo.layer.masksToBounds = true;
+        Helper.addBordersToView(view: vwPymntReason)
+        Helper.addBordersToView(view: vwVendor)
+        Helper.addBordersToView(view: vwInvNo)
+        Helper.addBordersToView(view: vwAccChargeHd)
+        Helper.addBordersToView(view: vwExpenseDetails)
+        Helper.addBordersToView(view: vwComments)
+
         
         btnReason.contentHorizontalAlignment = .left
-        
         btnAccChrgHd.contentHorizontalAlignment = .left
         
         btnAccChrgHd.setTitle("Advance", for:.normal)
-        vwAccChargeHd.layer.borderWidth = 1
-        vwAccChargeHd.layer.borderColor = UIColor.lightGray.cgColor
-        vwAccChargeHd.layer.cornerRadius = 5
-        vwAccChargeHd.layer.masksToBounds = true;
         
-        vwExpenseDetails.layer.borderWidth = 1
-        vwExpenseDetails.layer.borderColor = UIColor.lightGray.cgColor
-        vwExpenseDetails.layer.cornerRadius = 5
-        vwExpenseDetails.layer.masksToBounds = true;
-        
-        vwComments.layer.borderWidth = 1
-        vwComments.layer.borderColor = UIColor.lightGray.cgColor
-        vwComments.layer.cornerRadius = 5
-        vwComments.layer.masksToBounds = true;
         
         self.automaticallyAdjustsScrollViewInsets = false
         
@@ -132,10 +110,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         } else {
             
         }
-        
-        
-        
-        
         
     }
     
@@ -173,7 +147,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -190,6 +163,12 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         }
     }
     
+    /// Invoked before hiding keyboard and used to move view down
+    @objc func keyboardWillHide(notification: NSNotification) {
+        self.scrlVw.isScrollEnabled = true
+        let contentInset:UIEdgeInsets = .zero
+        self.scrlVw.contentInset = contentInset
+    }
     
     @IBAction func btnSubmitTapped(_ sender: Any) {
         
@@ -240,13 +219,11 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     func addOrEditClaim( ecrRefNo : String, pymntDate : String, invoiceNo : String, comments : String, amtPaid : String ,vendor : String,  accntChrgHead: String , itemsCategory : String, counter : Int = 0) {
         
-        
         if self.internetStatus != .notReachable {
             
             self.view.showLoading()
             var url = String()
             var newRecord = [String : Any]()
-            
             
             if ecrExpListData == nil {
                 
@@ -260,7 +237,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
                 //   newRecord = ["EPRMainRequestedValueDate": txtFldReqDate.text ?? "" , "EPRMainRequestedCurrency": currency] as [String : Any]
             }
             
-            
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
                 .responseString(completionHandler: {  response in
                     self.view.hideLoading()
@@ -269,7 +245,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
                     let jsonResponse = JSON.init(parseJSON: response.result.value!)
                     
                     if jsonResponse["ServerMsg"].stringValue == "Success" {
-                        
                         
                         var messg = String()
                         
@@ -295,14 +270,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
                     }
                 })
         }
-    }
-    
-    
-    /// Invoked before hiding keyboard and used to move view down
-    @objc func keyboardWillHide(notification: NSNotification) {
-        self.scrlVw.isScrollEnabled = true
-        let contentInset:UIEdgeInsets = .zero
-        self.scrlVw.contentInset = contentInset
     }
     
     
@@ -364,8 +331,8 @@ extension EmpClaimExpenseAddEditVC : UITextViewDelegate {
 
 extension EmpClaimExpenseAddEditVC : UITextFieldDelegate {
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
         datePickerTool.isHidden = true
         self.view.endEditing(true)
         return true

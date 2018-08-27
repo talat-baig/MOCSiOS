@@ -57,15 +57,16 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     weak var okSubmitDelegate : onRRcptSubmit?
     
     @IBOutlet weak var lblReqQty: UILabel!
+    
     @IBOutlet weak var lblRcptQty: UILabel!
     
     @IBOutlet weak var lblBalQty: UILabel!
     
+    @IBOutlet weak var vwTillDateVal: UIView!
+    
     var roRefId : String = ""
     
-    @IBOutlet weak var vwTillDateVal: UIView!
     var whrData = WHRListData()
-    
     
     let arrUOM = ["MT"]
     
@@ -83,36 +84,16 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         
         txtRcptDate.inputView = datePickerTool
         
-        vwRcptDate.layer.borderWidth = 1
-        vwRcptDate.layer.borderColor = UIColor.lightGray.cgColor
-        vwRcptDate.layer.cornerRadius = 5
-        vwRcptDate.layer.masksToBounds = true;
-        
-        vwReleaseOrderNum.layer.borderWidth = 1
-        vwReleaseOrderNum.layer.borderColor = UIColor.lightGray.cgColor
-        vwReleaseOrderNum.layer.cornerRadius = 5
-        vwReleaseOrderNum.layer.masksToBounds = true;
-        
-        vwQtyRcvd.layer.borderWidth = 1
-        vwQtyRcvd.layer.borderColor = UIColor.lightGray.cgColor
-        vwQtyRcvd.layer.cornerRadius = 5
-        vwQtyRcvd.layer.masksToBounds = true;
-        
-        vwUOM.layer.borderWidth = 1
-        vwUOM.layer.borderColor = UIColor.lightGray.cgColor
-        vwUOM.layer.cornerRadius = 5
-        vwUOM.layer.masksToBounds = true;
-        
-        vwDescription.layer.borderWidth = 1
-        vwDescription.layer.borderColor = UIColor.lightGray.cgColor
-        vwDescription.layer.cornerRadius = 5
-        vwDescription.layer.masksToBounds = true;
-        
+        Helper.addBordersToView(view: vwRcptDate)
+        Helper.addBordersToView(view: vwReleaseOrderNum)
+        Helper.addBordersToView(view: vwQtyRcvd)
+        Helper.addBordersToView(view: vwUOM)
+        Helper.addBordersToView(view: vwDescription)
+
         btnUom.setTitle("MT", for: .normal)
         
         vwTillDateVal.layer.borderWidth = 1
         vwTillDateVal.layer.borderColor = UIColor.lightGray.cgColor
-        
         
         lblReqQty.text = whrData.reqQty
         lblRcptQty.text = whrData.rcptQty

@@ -16,20 +16,25 @@ protocol onEcrExpOptionMenuTap: NSObjectProtocol {
 
 class ECRExpenseListAdapter: UITableViewCell {
     
-    
-    weak var data: ECRExpenseListData!
     @IBOutlet weak var vwOuter: UIView!
     
     @IBOutlet weak var btnMenu: UIButton!
-    weak var delegate: onMoreClickListener?
-    weak var ecrExpMenuTapDelegate: onEcrExpOptionMenuTap?
     
     @IBOutlet weak var lblReason: UILabel!
+    
     @IBOutlet weak var lblAmount: UILabel!
+    
     @IBOutlet weak var lblVendor: UILabel!
+    
     @IBOutlet weak var lblComments: UILabel!
     
     @IBOutlet weak var lblStatus: UILabel!
+    
+    weak var data: ECRExpenseListData!
+    
+    weak var delegate: onMoreClickListener?
+    
+    weak var ecrExpMenuTapDelegate: onEcrExpOptionMenuTap?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -55,6 +60,7 @@ class ECRExpenseListAdapter: UITableViewCell {
     }
     
     @IBAction func moreClick(_ sender: UIButton) {
+        
         if (delegate?.responds(to: Selector(("onClick:"))) != nil){
             
             let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)

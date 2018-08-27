@@ -143,7 +143,13 @@ class Helper: UIView {
         return UserDefaults.standard.object(forKey: key) != nil
     }
     
-
+    class func addBordersToView(view : UIView){
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.layer.cornerRadius = 5
+        view.layer.masksToBounds = true;
+    }
+    
     public static func isResponseValid(vc: UIViewController, response:Result<Data>, tv:UITableView? = nil)-> Bool{
         var isValid: Bool = false
         
@@ -647,8 +653,7 @@ extension UIView{
         let nib = UINib(nibName: nibName, bundle: bundle)
         return nib.instantiate(withOwner: self, options: nil).first as! UIView
     }
-    
-    
+
     
     func removeFromSuperviewWithAnimate(_ animationDuration: TimeInterval = 0.15) {
         

@@ -16,8 +16,6 @@ protocol onECRUpdate {
 
 class ECRBaseViewController: ButtonBarPagerTabStripViewController, onECRSubmit, UC_NotifyComplete {
     
-    
-    
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -82,6 +80,8 @@ class ECRBaseViewController: ButtonBarPagerTabStripViewController, onECRSubmit, 
             
             let ecNonEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmployeeClaimNonEditVC") as! EmployeeClaimNonEditVC
             ecNonEditVC.ecrData = self.ecrData
+            self.notifyChilds = ecNonEditVC
+
             viewArray.append(ecNonEditVC)
         } else {
             
@@ -96,6 +96,7 @@ class ECRBaseViewController: ButtonBarPagerTabStripViewController, onECRSubmit, 
         let ecrExpenseVC = self.storyboard?.instantiateViewController(withIdentifier: "ECRExpenseListVC") as! ECRExpenseListVC
         ecrExpenseVC.isFromView = isFromView
         ecrExpenseVC.paymntRes = paymntRes
+        self.notifyChilds = ecrExpenseVC
         ecrExpenseVC.ecrData = self.ecrData
         
         

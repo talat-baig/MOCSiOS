@@ -17,9 +17,11 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
     var refreshControl: UIRefreshControl = UIRefreshControl()
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var srchBar: UISearchBar!
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
 
     override func viewDidLoad() {
@@ -58,7 +60,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         self.populateList()
     }
     
-    @objc func populateList(){
+    @objc func populateList() {
         var newData :[EPRData] = []
         if internetStatus != .notReachable {
             let url = String.init(format: Constant.EPR.LIST, Session.authKey,
@@ -90,7 +92,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                         self.newArray = newData
                         self.arrayList = newData
                         self.tableView.tableFooterView = nil
-//                        self.tableView.reloadData()
+
                     }else{
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                     }

@@ -115,41 +115,13 @@ class ExpenseAddEditViewController: UIViewController , UIGestureRecognizerDelega
         btnCurrency.contentHorizontalAlignment = .left
         btnPaymentType.contentHorizontalAlignment = .left
         
-        
-        vwCategory.layer.borderWidth = 1
-        vwCategory.layer.borderColor = UIColor.lightGray.cgColor
-        vwCategory.layer.cornerRadius = 5
-        vwCategory.layer.masksToBounds = true;
-        
-        vwSubCategory.layer.borderWidth = 1
-        vwSubCategory.layer.borderColor = UIColor.lightGray.cgColor
-        vwSubCategory.layer.cornerRadius = 5
-        vwSubCategory.layer.masksToBounds = true;
-        
-        vwVendor.layer.borderWidth = 1
-        vwVendor.layer.borderColor = UIColor.lightGray.cgColor
-        vwVendor.layer.cornerRadius = 5
-        vwVendor.layer.masksToBounds = true;
-        
-        vwPot.layer.borderWidth = 1
-        vwPot.layer.borderColor = UIColor.lightGray.cgColor
-        vwPot.layer.cornerRadius = 5
-        vwPot.layer.masksToBounds = true;
-        
-        vwCurrType.layer.borderWidth = 1
-        vwCurrType.layer.borderColor = UIColor.lightGray.cgColor
-        vwCurrType.layer.cornerRadius = 5
-        vwCurrType.layer.masksToBounds = true;
-        
-        vwPaymentType.layer.borderWidth = 1
-        vwPaymentType.layer.borderColor = UIColor.lightGray.cgColor
-        vwPaymentType.layer.cornerRadius = 5
-        vwPaymentType.layer.masksToBounds = true;
-        
-        vwComments.layer.borderWidth = 1
-        vwComments.layer.borderColor = UIColor.lightGray.cgColor
-        vwComments.layer.cornerRadius = 5
-        vwComments.layer.masksToBounds = true;
+        Helper.addBordersToView(view: vwCategory)
+        Helper.addBordersToView(view: vwSubCategory)
+        Helper.addBordersToView(view: vwVendor)
+        Helper.addBordersToView(view: vwPot)
+        Helper.addBordersToView(view: vwCurrType)
+        Helper.addBordersToView(view: vwPaymentType)
+        Helper.addBordersToView(view: vwComments)
 
         self.navigationController?.isNavigationBarHidden = true
 
