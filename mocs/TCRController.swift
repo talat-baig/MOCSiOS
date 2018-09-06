@@ -130,7 +130,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         }
     }
     
-    func viewClaim(data:TravelClaimData){
+    func viewClaim(data:TravelClaimData) {
         if internetStatus != .notReachable{
             let url = String.init(format: Constant.TCR.VIEW, Session.authKey,
                                   data.headRef, data.counter)

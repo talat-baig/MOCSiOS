@@ -21,5 +21,6 @@ class ECRExpenseListData: NSObject {
     var accntCharge = String()
     var eprRefIdCounter = String()
     var eprCategory = String()
-    
+    var eprItemsId = String()
+
 }

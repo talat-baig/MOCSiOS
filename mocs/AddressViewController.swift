@@ -1,19 +1,18 @@
 //
-//  ROProductViewController.swift
+//  AddressViewController.swift
 //  mocs
 //
-//  Created by Talat Baig on 7/6/18.
+//  Created by Talat Baig on 8/28/18.
 //  Copyright © 2018 Rv. All rights reserved.
 //
 
 import UIKit
 import XLPagerTabStrip
-import SwiftyJSON
 
-class ROProductViewController: UIViewController, IndicatorInfoProvider {
-    
+class AddressViewController: UIViewController, IndicatorInfoProvider {
+
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "PRODUCT")
+         return IndicatorInfo(title: "ADDRESS")
     }
 
     override func viewDidLoad() {
@@ -22,11 +21,9 @@ class ROProductViewController: UIViewController, IndicatorInfoProvider {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-
     }
     
 
-
-    
+ 
 
 }

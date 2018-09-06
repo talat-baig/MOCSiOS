@@ -8,7 +8,7 @@
 
 struct ApiKey {
     // LIVE
-//    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+    //    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
     static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
@@ -28,8 +28,9 @@ struct AppColor {
     static let univVoucherCell = UIColor(red:69.0/255.0, green:138.0/255.0, blue:255.0/255.0, alpha:0.3)
     static let sideMenuGreen = UIColor(red: 26.0/255.0, green: 188.0/255.0, blue: 156.0/255.0, alpha: 1.0)
     static let lightGray = UIColor(red: 209.0/255.0, green: 209.0/255.0, blue: 209.0/255.0, alpha: 1.0)
-
-
+    static let lightestBlue = UIColor(red: 218.0/255.0, green: 231.0/255.0, blue: 254.0/255.0, alpha: 1.0)
+    
+    
 }
 
 
@@ -37,7 +38,7 @@ struct Constant
 {
     
     struct PAHeaderTitle {
-       
+        
         static let TRI = "Trade Invoice - Approval"
         static let ARI = "Admin Receive Invoice - Approval"
         static let ECR = "Employee Claims - Approval"
@@ -46,7 +47,9 @@ struct Constant
         static let SC = "Sales Contract - Approval"
         static let PC = "Purchase Contract - Approval"
         static let RO = "Release Order - Approval"
-
+        static let CP = "Counterparty - Approval"
+        
+        
     }
     
     /// Help Document Url link
@@ -139,23 +142,28 @@ struct Constant
         static let ECR_LIST = "http://172.16.12.12/OCSWebApi/api/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
         static let ECR_ADD = "http://172.16.12.12/OCSWebApi/api/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
+        
+        
+        static let ECR_UPDATE =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
+        
+        static let ECR_DELETE = "http://172.16.12.12/OCSWebApi/api/ECR/DeleteECR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EmployeePaymentRequestMainID=%@"
+
+        static let ECR_SUBMIT = "http://172.16.12.12/OCSWebApi/api/ECR/SubmitDraftedECR?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EPRMainReferenceID=%@&chktype=%d&EmployeePaymentRequestMainID=%@&EprRefIDCounter=%d"
+
+        static let ECR_SEND_EMAIL = "http://172.16.12.12/OCSWebApi/api/ECR/SendECRMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&emailid=%@&EmployeePaymentRequestMainID=%@&EPRMainReferenceID=%@&EprRefIDCounter=%d"
 
         
-       static let ECR_UPDATE =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
-        
-        
-        static let ECR_EXPENSE_LIST =  "http://172.16.12.12/OCSWebApi/api/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+        static let ECR_PAYMENT_LIST =  "http://172.16.12.12/OCSWebApi/api/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&count=%d"
         
         static let ECR_ADD_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/AddExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+        
+        static let ECR_UPDATE_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EmployeePaymentRequestItemsID=%@"
 
+        static let GET_ACCOUNT_CHARGE =  "http://172.16.12.12/OCSWebApi/api/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid="
         
-        static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
-        
-//        http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?string apikey, string authid, string EPRtype, string type, string referenceid
-        
+        static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid="
         
         
-
     }
     
     struct AR {
@@ -423,15 +431,24 @@ struct Constant
         static let VIEW = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"
         
         static let CARGO_DETAILS = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByRO?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&reference=%@&authid=%@"
-
+        
         static let RRCPT_LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&guid=%@"
-
+        
         static let ADD_RECEIPT = "http://172.16.12.12/OCSWebApi/api/RequestOrder/SaveROtoWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@"
-
+        
         static let EMAIL_RO = "http://172.16.12.12/OCSWebApi/api/RequestOrder/ROMailSend?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@&referenceid=%@"
     }
     
-   
+    
+    struct CP {
+        
+        static let LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        
+        static let VIEW = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+
+        
+    }
+    
     struct TRI {
         /**
          *Get list Trave Receive Invoice*
@@ -476,7 +493,7 @@ struct Constant
         static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_LDI?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&DocumentReferenceID=%@"
         
         static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-//          static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+        //          static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

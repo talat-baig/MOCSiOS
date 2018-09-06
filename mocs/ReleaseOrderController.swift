@@ -56,9 +56,6 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         self.view.endEditing(true)
     }
     
-    
- 
-    
     /// Cancel filters selections
     func cancelFilter(filterString: String) {
         self.populateList()
@@ -97,7 +94,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                     self.arrayList.removeAll()
                     if jsonArray.count > 0 {
                         
-                        for(_,j):(String,JSON) in jsonResponse{
+                        for(_,j):(String,JSON) in jsonResponse {
                             let data = ROData()
                             data.company = j["ROCompanyName"].stringValue
                             data.businessUnit = j["Businessunit"].stringValue
@@ -107,11 +104,9 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                             data.refId = j["ReferenceID"].stringValue
                             data.roStatus = j["BalanceToPay"].stringValue
                             data.reqQty = j["RORequestedQtyinmt"].stringValue
-//                            data.relOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
                             data.rcvdQty = j["ROReceiveQuantityReceivedinmt"].stringValue
                             data.balQty = j["ROBalanceQtyinmt"].stringValue
                             data.balQty = j["ROBalanceQtyinmt"].stringValue
-//                            data.rcptDate = j["ROReceiveReceiptDate"].stringValue
 
                             data.uom = j["RoUom"].stringValue
                             data.wghtTrms = j["ROWeightTerms"].stringValue

@@ -150,6 +150,59 @@ class Helper: UIView {
         view.layer.masksToBounds = true;
     }
     
+    
+    public static func isPostResponseValid(vc: UIViewController, response : Result<String>, tv:UITableView? = nil)-> Bool{
+        
+        var isValid: Bool = false
+        
+        switch response {
+        case .success:
+            let jsonResponse = JSON.init(parseJSON: response.value!)
+            debugPrint("Response",jsonResponse)
+            if jsonResponse.dictionaryObject != nil {
+                
+                let data = jsonResponse.dictionaryObject
+                
+                if data != nil {
+                    
+                    if (data?.count)! > 0 {
+                        
+                        switch data!["ServerMsg"] as! String {
+                        case "Success":
+                            isValid = true
+                            break
+                        default:
+                            break
+                        }
+                    } else {
+                        isValid = true
+                    }
+                }
+                
+            } else {
+                NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
+            }
+            
+            break
+        case .failure(let error):
+            if error._code == NSURLErrorTimedOut{
+                isValid = false
+                NotificationBanner(title: "Timeout",subtitle:"Request taking time too long, Check your connection and please try again", style: .warning).show()
+                if tv != nil{
+                    showNoInternetState(vc: vc, tb: tv!, action: nil)
+                }
+            } else if error._code == -1009 {
+                Helper.showNoInternetMessg()
+            } else {
+                NotificationBanner(title: "Opps!",subtitle:"Unexpected error occurred, Please try again later", style: .warning).show()
+            }
+            break
+        }
+        return isValid
+    }
+    
+    
+    
     public static func isResponseValid(vc: UIViewController, response:Result<Data>, tv:UITableView? = nil)-> Bool{
         var isValid: Bool = false
         
@@ -190,11 +243,11 @@ class Helper: UIView {
                             }))
                             vc.present(alert, animated: true, completion: nil)
                             break
-
+                            
                         case "Email Sent...","Success. Please click on List Vouchers", "New List Added","New Task Added" ,"Note Updated" , "Purchase Contract marked as declined","Sales Contract marked as declined","ARI marked as declined", "ARI marked as approved","TRI marked as approved","TRI marked as declined","TCR marked as Declined","TCR marked as Approved","EPR | ECR marked as Declined","EPR | ECR claim marked as Approved","DO marked as Approved","DO marked as Declined":
                             isValid = true
                             break
-
+                            
                         default:
                             isValid = false
                             NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
@@ -653,7 +706,7 @@ extension UIView{
         let nib = UINib(nibName: nibName, bundle: bundle)
         return nib.instantiate(withOwner: self, options: nil).first as! UIView
     }
-
+    
     
     func removeFromSuperviewWithAnimate(_ animationDuration: TimeInterval = 0.15) {
         

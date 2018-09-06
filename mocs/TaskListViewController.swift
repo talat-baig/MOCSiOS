@@ -140,7 +140,7 @@ class TaskListViewController: UIViewController {
             dateFormatterGet.dateFormat = "yyyy-MM-dd"
             let someDate = self.addNoteAlert.textFields![1].text
             
-            if dateFormatterGet.date(from: someDate!) != nil && self.addNoteAlert.textFields![0].text!.count > 0{
+            if dateFormatterGet.date(from: someDate!) != nil && self.addNoteAlert.textFields![0].text!.count > 0 {
                 submitAction.isEnabled = true
             } else {
                 submitAction.isEnabled = false

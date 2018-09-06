@@ -18,6 +18,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     }
     
     var arrayList: [ECRExpenseListData] = []
+    var categoryArr = [String]()
     var paymntRes : Data?
     @IBOutlet weak var btnAddExpense: UIButton!
     var isFromView : Bool = false
@@ -32,7 +33,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         super.viewDidLoad()
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getECRExpenseData))
-
+        
         if isFromView {
             btnAddExpense.isHidden = true
             
@@ -47,7 +48,9 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         }
         
         populateList(response: respValue)
-        //        getPaymentReason(ecrData: ecrData)
+
+        getAccountCharge(ecrData: ecrData)
+        
         
     }
     
@@ -56,7 +59,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     }
     
     func notifyChild(messg: String, success: Bool) {
-          Helper.showVUMessage(message: messg, success: success)
+        Helper.showVUMessage(message: messg, success: success)
     }
     
     
@@ -84,7 +87,8 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
                 expList.eprRefId =  k["EPRMainReferenceID"].stringValue
                 expList.vendor = k["EPRItemsVendorName"].stringValue
                 expList.reason = k["EPRItemsAccountChargeHead"].stringValue
-                
+                expList.eprItemsId = k["EmployeePaymentRequestItemsID"].stringValue
+
                 data.append(expList)
             }
             
@@ -105,9 +109,10 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     @objc func getECRExpenseData() {
         
         if internetStatus != .notReachable {
-            let url = String.init(format: Constant.API.ECR_EXPENSE_LIST, Session.authKey,
+            let url = String.init(format: Constant.API.ECR_PAYMENT_LIST, Session.authKey,
                                   ecrData.headRef, ecrData.counter)
             self.view.showLoading()
+            
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
@@ -120,32 +125,43 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         }
     }
     
-    func getPaymentReason(ecrData: EmployeeClaimData) {
+
+    func getAccountCharge(ecrData: EmployeeClaimData) {
         
         if internetStatus != .notReachable {
+            var newData:[String] = []
             
-            let url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, "Claim Reimbursement" , "Employee Benefits", ecrData.headRef)
+            let url = String.init(format: Constant.API.GET_ACCOUNT_CHARGE, Session.authKey,ecrData.claimTypeInInt)
             
             self.view.showLoading()
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
+       
                 
                 if Helper.isResponseValid(vc: self, response: response.result){
                     
                     let jsonString = JSON(response.result.value!)
                     print(jsonString)
+                    for(_,j):(String,JSON) in jsonString {
+                        let newCurr = j["Category"].stringValue
+                        newData.append(newCurr)
+                    }
+                    self.categoryArr = newData
                 }
             }))
         } else {
             Helper.showNoInternetMessg()
         }
     }
+
     
     @IBAction func btnAddExpenseTapped(_ sender: Any) {
         
         let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmpClaimExpenseAddEditVC") as! EmpClaimExpenseAddEditVC
         expAddEditVC.ecrExpListData = nil
+        expAddEditVC.arrAccChrg = self.categoryArr
+
         expAddEditVC.ecrData = self.ecrData
         expAddEditVC.okPymntDelegate = self
         self.navigationController?.pushViewController(expAddEditVC, animated: true)
@@ -155,6 +171,9 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         
         let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmpClaimExpenseAddEditVC") as! EmpClaimExpenseAddEditVC
         expAddEditVC.ecrExpListData = data
+        expAddEditVC.arrAccChrg = self.categoryArr
+        expAddEditVC.ecrData = self.ecrData
+
         expAddEditVC.okPymntDelegate = self
         self.navigationController?.pushViewController(expAddEditVC, animated: true)
     }
@@ -209,7 +228,7 @@ extension ECRExpenseListVC: UITableViewDataSource {
         let data = arrayList[indexPath.row]
         
         let view = tableView.dequeueReusableCell(withIdentifier: "ECRExpenseListAdapter") as! ECRExpenseListAdapter
-        
+        view.btnMenu.tag = indexPath.row
         if isFromView {
             view.btnMenu.isHidden = true
         } else {

@@ -1,32 +1,31 @@
 //
-//  ROProductViewController.swift
+//  LegalInfoController.swift
 //  mocs
 //
-//  Created by Talat Baig on 7/6/18.
+//  Created by Talat Baig on 8/28/18.
 //  Copyright © 2018 Rv. All rights reserved.
 //
 
 import UIKit
 import XLPagerTabStrip
-import SwiftyJSON
 
-class ROProductViewController: UIViewController, IndicatorInfoProvider {
-    
+class LegalInfoController: UIViewController, IndicatorInfoProvider {
+
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "PRODUCT")
+        return IndicatorInfo(title: "LEGAL INFORMATION")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-
+        // Dispose of any resources that can be recreated.
     }
     
 
-
-    
-
+  
 }

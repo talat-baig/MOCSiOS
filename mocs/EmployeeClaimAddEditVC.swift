@@ -100,19 +100,16 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         
         arrCurrency = parseAndAssignCurrency()
         
+        
+        let currentDate = Date()
+        datePicker.date = currentDate
+        datePicker.maximumDate = currentDate
+        
         if ecrNo != ""  {
             /// Edit
             
             arrPaymentType = [ecrDta.paymntMethd]
-            
-            var claimType = String()
-            
-            if ecrDta.claimType == "Reimbursement" {
-                claimType = "Claim Reimbursement"
-            } else {
-                claimType = ecrDta.claimType
-            }
-            arrClaimType = [claimType]
+            arrClaimType = [ecrDta.claimType]
             
             arrCompName = [ecrDta.companyName]
             arrDept = [ecrDta.employeeDepartment]
@@ -120,20 +117,13 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             arrBenfName = [ecrDta.benefName]
             
             
-            self.accessOpenAdvancesBtn(item: claimType)
+            self.accessOpenAdvancesBtn(item: ecrDta.claimType)
             
             
             vwTopHeader.isHidden = true
             stckVw.frame  = CGRect(x: 0, y: 20, width: self.view.frame.size.width, height: self.view.frame.size.height + 200)
             
             btnSubmit.setTitle("UPDATE",for: .normal)
-            
-            
-            
-            
-            
-            
-            
             
             assignDataToViews()
             
@@ -154,10 +144,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             
             btnSubmit.setTitle("SAVE",for: .normal)
             
-            
         }
-        
-        
         
         
     }
@@ -177,8 +164,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
-        
-        
         
         self.navigationController?.isNavigationBarHidden = true
         
@@ -206,12 +191,10 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         Helper.addBordersToView(view: vwClaimType)
         Helper.addBordersToView(view: vwReqCurrency)
 
-//        btnReqCurrency.layer.borderWidth = 1
-//        btnReqCurrency.layer.borderColor = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1.0).cgColor
-//        btnReqCurrency.layer.cornerRadius = 5
-//        btnReqCurrency.layer.masksToBounds = true;
         
         Helper.addBordersToView(view: btnReqCurrency)
+        Helper.addBordersToView(view: txtFldReqDate)
+
         
         btnOpenEPRVal.layer.borderWidth = 1
         btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor
@@ -277,13 +260,13 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnBVertical.setTitle(ecrDta.employeeDepartment, for:.normal)
         btnBenfName.setTitle(ecrDta.benefName, for:.normal)
         btnPaymentMethd.setTitle(ecrDta.paymntMethd, for:.normal)
-        
-        if ecrDta.claimType == "Reimbursement" {
-            btnClaimType.setTitle("Claim Reimbursement", for:.normal)
-        } else {
-            btnClaimType.setTitle(ecrDta.claimType, for:.normal)
-        }
-        
+        btnClaimType.setTitle(ecrDta.claimType, for:.normal)
+//        if ecrDta.claimType == "Reimbursement" {
+//            btnClaimType.setTitle("Claim Reimbursement", for:.normal)
+//        } else {
+//            btnClaimType.setTitle(ecrDta.claimType, for:.normal)
+//        }
+//
         
         
         //        var claimType = String()

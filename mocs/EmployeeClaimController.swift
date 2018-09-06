@@ -100,8 +100,19 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
                             ecData.requestedDate = json["EPRMainRequestedValueDate"].stringValue
                             ecData.benefName = json["EPRMainBeneficiaryName"].stringValue
                             ecData.paymntMethd = json["EPRMainRequestedPaymentMode"].stringValue
-                            ecData.claimType = json["EPRMainPaymentRequestType"].stringValue
+//                            ecData.claimType = json["EPRMainPaymentRequestType"].stringValue
                             ecData.counter = json["EprRefIDCounter"].intValue
+                            
+                            ecData.eprMainId = json["EmployeePaymentRequestMainID"].stringValue
+
+                            if json["EPRMainPaymentRequestType"].stringValue == "Advance" {
+                                ecData.claimTypeInInt = 0
+                                ecData.claimType = "Advance"
+                            } else {
+                                ecData.claimTypeInInt = 1
+                                ecData.claimType = "Claim Reimbursement"
+
+                            }
                             
                             
                             if json["EPRMainOpenAdvanceValue"].stringValue == "" {
@@ -241,14 +252,40 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
     
     func onDeleteClick(data: EmployeeClaimData) {
         
+        let alert = UIAlertController(title: "Delete Claim?", message: "Are you sure you want to delete this claim? After deleting you'll not be able to rollback", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
+            self.deleteClaim(data: data)
+        }))
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     func onSubmitClick(data: EmployeeClaimData) {
         
+        let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this claim? After submitting you'll not be able to edit the claim", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
+            
+            self.submitInvoice(data:data)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func onEmailClick(data: EmployeeClaimData) {
         
+        
+        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
+            self.sendEmail(data: data)
+        }))
+        self.present(alert, animated: true, completion: nil)
+
     }
     
     
@@ -257,11 +294,84 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
         self.getPaymentAndVouchersData(ecrData: data, isFromView: isFromView)
     }
     
+    func sendEmail(data:EmployeeClaimData) {
+        
+        showLoading()
+        
+        if internetStatus != .notReachable {
+         
+            let url = String.init(format: Constant.API.ECR_SEND_EMAIL, Session.authKey,Session.email,data.eprMainId,data.headRef, data.counter)
+            print("Email url",url)
+          
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                
+                if response.result.value == "Success" {
+
+                    let alert = UIAlertController(title: "Success", message: "Claim has been Mailed Successfully", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+            })
+        }else{
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    func submitInvoice(data: EmployeeClaimData){
+        if self.internetStatus != .notReachable{
+            showLoading()
+            let url = String.init(format: Constant.API.ECR_SUBMIT, Session.authKey, data.headRef, data.claimTypeInInt, data.eprMainId, data.counter)
+            print("Submit EPR/ECR", url)
+            
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let success = UIAlertController(title: "Success", message: "Claim has been Submitted Successfully", preferredStyle: .alert)
+                    success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(AlertAction) ->  Void in
+                        self.populateList()
+                    }))
+                    self.present(success, animated: true, completion: nil)
+                }
+           
+            })
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    func deleteClaim(data:EmployeeClaimData) {
+    
+        if internetStatus != .notReachable {
+            showLoading()
+            print(data.headRef)
+            let url = String.init(format: Constant.API.ECR_DELETE, Session.authKey, data.eprMainId)
+            print(url)
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+
+                self.view.hideLoading()
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Claim Successfully deleted", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {(AlertAction) ->  Void in
+                        self.populateList()
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
     
     func getPaymentAndVouchersData(ecrData :EmployeeClaimData, isFromView : Bool ) {
         
         if internetStatus != .notReachable {
-            let url = String.init(format: Constant.API.ECR_EXPENSE_LIST, Session.authKey,
+            let url = String.init(format: Constant.API.ECR_PAYMENT_LIST, Session.authKey,
                                   ecrData.headRef, ecrData.counter)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -276,7 +386,6 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
         } else {
             Helper.showNoInternetMessg()
         }
-        
     }
     
     

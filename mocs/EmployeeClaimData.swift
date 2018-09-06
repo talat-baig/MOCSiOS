@@ -33,6 +33,8 @@ class EmployeeClaimData {
     
     var counter: Int = 0
     
+    var claimTypeInInt: Int = 0
+    
     var balance: String = ""
     
     var benefName : String = ""
@@ -42,5 +44,7 @@ class EmployeeClaimData {
     var claimType : String = ""
     
     var eprValue : String = ""
+    
+    var eprMainId : String = ""
 
 }

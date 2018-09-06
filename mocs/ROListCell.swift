@@ -64,7 +64,7 @@ class ROListCell: UITableViewCell {
         lblBusinessUnit.text = data?.businessUnit
         lblRefId.text = data?.refId
         lblStatus.text = data?.roStatus
-//        lblUOM.text = data?.uom
+
         lblRcptDate.text = data?.rcptDate
     }
     

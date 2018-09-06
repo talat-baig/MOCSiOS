@@ -18,8 +18,6 @@ class ROStorageInfoVC: UIViewController, IndicatorInfoProvider {
     
     var response:Data?
     
-   
-    
     @IBOutlet weak var lblStorageLoc: UILabel!
     
     @IBOutlet weak var lblSiteName: UILabel!

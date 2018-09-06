@@ -200,7 +200,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
         }
     }
     
-    func deleteExpense(data : ExpenseListData){
+    func deleteExpense(data : ExpenseListData) {
         if internetStatus != .notReachable {
             self.view.showLoading()
             let url = String.init(format: Constant.API.EXPENSE_DELETE, Session.authKey, self.tcrData.headRef, data.expId.trimmingCharacters(in: .whitespaces), self.tcrData.counter)
