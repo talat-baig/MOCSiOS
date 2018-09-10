@@ -8,7 +8,7 @@
 
 import UIKit
 import DropDown
-import  Alamofire
+import Alamofire
 import SwiftyJSON
 import NotificationBannerSwift
 
@@ -89,7 +89,7 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         Helper.addBordersToView(view: vwQtyRcvd)
         Helper.addBordersToView(view: vwUOM)
         Helper.addBordersToView(view: vwDescription)
-
+        
         btnUom.setTitle("MT", for: .normal)
         
         vwTillDateVal.layer.borderWidth = 1
@@ -168,16 +168,16 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
                         let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
                         success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                             
-                            if let d = self.okSubmitDelegate {
-                                d.onOkClick()
-                            }
-                            self.navigationController?.popViewController(animated: true)
+//                            if let d = self.okSubmitDelegate {
+//                                d.onOkClick()
+//                            }
+                            self.navigationController?.popToRootViewController(animated: true)
                         }))
                         self.present(success, animated: true, completion: nil)
                     } else if jsonResponse["ServerMsg"].stringValue == "Sorry you cannot Process this request, Receipt Qty is greater than the Received Quantity, please check" {
                         
                         NotificationBanner(title: "", subtitle: "Sorry you cannot Process this request, Receipt Qty is greater than the Received Quantity, please check", style: .danger).show()
-
+                        
                     } else {
                         
                         NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
@@ -185,99 +185,99 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
                 })
         }
         
-            //                    if Helper.isResponseStringValid(vc: self, response: response.result) {
-            //
-            //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
-            //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-            //
-            //                            if let d = self.okSubmitDelegate {
-            //                                d.onOkClick()
-            //                            }
-            //                            self.navigationController?.popViewController(animated: true)
-            //                        }))
-            //                        self.present(success, animated: true, completion: nil)
-            //                    }
-            
-            //                    if response.result.value == "Success" {
-            //
-            //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
-            //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-            //
-            //                            if let d = self.okSubmitDelegate {
-            //                                d.onOkClick()
-            //                            }
-            //                            self.navigationController?.popViewController(animated: true)
-            //                        }))
-            //                        self.present(success, animated: true, completion: nil)
-            //                    } else if response.result.value == "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check" {
-            //
-            //                        let failure = UIAlertController(title: "", message: "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check", preferredStyle: .alert)
-            //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-            //
-            //
-            //                            self.navigationController?.popViewController(animated: true)
-            //                        }))
-            //                        self.present(failure, animated: true, completion: nil)
-            //                    } else {
-            //                        let failure = UIAlertController(title: "Oops", message: "Something went wrong! Unable to add Receipt", preferredStyle: .alert)
-            //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-            //
-            //                            self.navigationController?.popViewController(animated: true)
-            //                        }))
-            //                        self.present(failure, animated: true, completion: nil)
-            //                    }
-            
+        //                    if Helper.isResponseStringValid(vc: self, response: response.result) {
+        //
+        //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
+        //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+        //
+        //                            if let d = self.okSubmitDelegate {
+        //                                d.onOkClick()
+        //                            }
+        //                            self.navigationController?.popViewController(animated: true)
+        //                        }))
+        //                        self.present(success, animated: true, completion: nil)
+        //                    }
         
-    
-    
-}
-
-@IBAction func btnUOMTapped(_ sender: Any) {
-    let dropDown = DropDown()
-    dropDown.anchorView = btnUom
-    dropDown.dataSource = arrUOM
-    dropDown.selectionAction = { [weak self] (index, item) in
-        self?.btnUom.setTitle(item, for: .normal)
+        //                    if response.result.value == "Success" {
+        //
+        //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
+        //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+        //
+        //                            if let d = self.okSubmitDelegate {
+        //                                d.onOkClick()
+        //                            }
+        //                            self.navigationController?.popViewController(animated: true)
+        //                        }))
+        //                        self.present(success, animated: true, completion: nil)
+        //                    } else if response.result.value == "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check" {
+        //
+        //                        let failure = UIAlertController(title: "", message: "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check", preferredStyle: .alert)
+        //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+        //
+        //
+        //                            self.navigationController?.popViewController(animated: true)
+        //                        }))
+        //                        self.present(failure, animated: true, completion: nil)
+        //                    } else {
+        //                        let failure = UIAlertController(title: "Oops", message: "Something went wrong! Unable to add Receipt", preferredStyle: .alert)
+        //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+        //
+        //                            self.navigationController?.popViewController(animated: true)
+        //                        }))
+        //                        self.present(failure, animated: true, completion: nil)
+        //                    }
+        
+        
+        
+        
     }
-    dropDown.show()
-}
-
-
-@IBAction func btnDoneTapped(sender:UIButton){
     
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd"
-    txtRcptDate.text = dateFormatter.string(from: datePicker.date) as String
-    self.view.endEditing(true)
-}
-
-@IBAction func btnCancelTapped(sender:UIButton){
-    datePickerTool.isHidden = true
-    self.view.endEditing(true)
-}
-
-@objc func keyboardWillShow(notification: NSNotification) {
+    @IBAction func btnUOMTapped(_ sender: Any) {
+        let dropDown = DropDown()
+        dropDown.anchorView = btnUom
+        dropDown.dataSource = arrUOM
+        dropDown.selectionAction = { [weak self] (index, item) in
+            self?.btnUom.setTitle(item, for: .normal)
+        }
+        dropDown.show()
+    }
     
-    if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
-        let keyboardRectangle = keyboardFrame.cgRectValue
-        var keyboardHeight : CGFloat
-        keyboardHeight = keyboardRectangle.height
-        var contentInset:UIEdgeInsets = self.scrlVw.contentInset
-        contentInset.bottom = keyboardHeight
+    
+    @IBAction func btnDoneTapped(sender:UIButton){
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        txtRcptDate.text = dateFormatter.string(from: datePicker.date) as String
+        self.view.endEditing(true)
+    }
+    
+    @IBAction func btnCancelTapped(sender:UIButton){
+        datePickerTool.isHidden = true
+        self.view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        
+        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            var keyboardHeight : CGFloat
+            keyboardHeight = keyboardRectangle.height
+            var contentInset:UIEdgeInsets = self.scrlVw.contentInset
+            contentInset.bottom = keyboardHeight
+            
+            self.scrlVw.isScrollEnabled = true
+            self.scrlVw.contentInset = contentInset
+        }
+    }
+    
+    
+    /// Invoked before hiding keyboard and used to move view down
+    @objc func keyboardWillHide(notification: NSNotification) {
         self.scrlVw.isScrollEnabled = true
+        let contentInset:UIEdgeInsets = .zero
         self.scrlVw.contentInset = contentInset
     }
-}
-
-
-/// Invoked before hiding keyboard and used to move view down
-@objc func keyboardWillHide(notification: NSNotification) {
-    self.scrlVw.isScrollEnabled = true
-    let contentInset:UIEdgeInsets = .zero
-    self.scrlVw.contentInset = contentInset
-}
-
+    
 }
 
 

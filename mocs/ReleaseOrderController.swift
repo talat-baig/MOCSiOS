@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, filterViewDelegate {
+class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, filterViewDelegate ,onRRcptSubmit {
     
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -71,8 +71,19 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         self.populateList()
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.populateList()
+    }
+    
+    
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
+    }
+    
+    func onOkClick() {
+        self.populateList()
     }
     
     //Helper.encodeURL(url: "35+Ivory Coast+06,35+Ivory Coast+05"),"D7BE635C-FACA-44FF-A3F1-E1E0CC8E
@@ -80,7 +91,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url: FilterViewController.getFilterString()), Session.authKey)
-                
+            
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -106,8 +117,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                             data.reqQty = j["RORequestedQtyinmt"].stringValue
                             data.rcvdQty = j["ROReceiveQuantityReceivedinmt"].stringValue
                             data.balQty = j["ROBalanceQtyinmt"].stringValue
-                            data.balQty = j["ROBalanceQtyinmt"].stringValue
-
+                            
                             data.uom = j["RoUom"].stringValue
                             data.wghtTrms = j["ROWeightTerms"].stringValue
                             
@@ -142,6 +152,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
             refreshControl.endRefreshing()
         }
     }
+    
     
     func viewRO(data : ROData) {
         
@@ -178,10 +189,10 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
             let url = String.init(format: Constant.RO.EMAIL_RO, Session.authKey, Session.email, refId)
             
             self.view.showLoading()
-              Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
-
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                
                 self.view.hideLoading()
-//                debugPrint(response.result.value)
+                //                debugPrint(response.result.value)
                 if response.result.value == "Success" {
                     let alert = UIAlertController(title: "Success", message: "Mail has been sent Successfully", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -207,17 +218,17 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                 if Helper.isResponseValid(vc: self, response: cargoResponse.result){
                     let responseJson = JSON(cargoResponse.result.value!)
                     let arrData = responseJson.arrayObject as! [[String:AnyObject]]
-//                    if (arrData.count > 0) {
+                    //                    if (arrData.count > 0) {
                     
-                        let roVC = self.storyboard?.instantiateViewController(withIdentifier: "ROBaseViewController") as! ROBaseViewController
-                        roVC.cargoResponse = cargoResponse.result.value
-                        roVC.response = response
-                        roVC.roData = data
-                        
-                        self.navigationController!.pushViewController(roVC, animated: true)
-//                    } else {
-//                        self.view.makeToast("No Data To Show")
-//                    }
+                    let roVC = self.storyboard?.instantiateViewController(withIdentifier: "ROBaseViewController") as! ROBaseViewController
+                    roVC.cargoResponse = cargoResponse.result.value
+                    roVC.response = response
+                    roVC.roData = data
+                    
+                    self.navigationController!.pushViewController(roVC, animated: true)
+                    //                    } else {
+                    //                        self.view.makeToast("No Data To Show")
+                    //                    }
                 }
             }))
         }else{

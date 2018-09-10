@@ -440,19 +440,11 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     
     @IBAction func btnEPRAdvancesTapped(_ sender: Any) {
         
-        //
-        //        let eprView = Bundle.main.loadNibNamed("EPRListView", owner: nil, options: nil)![0] as! EPRListView
-        //        //        eprView.setEprData(arrData: self.tcrEprArr)
-        //        eprView.delegate = self
-        //        DispatchQueue.main.async {
-        //            self.navigationController?.view.addMySubview(eprView)
-        //        }
-        
         
         // Call EPR API
         if internetStatus != .notReachable{
             self.view.showLoading()
-            let url:String = String.init(format: Constant.TCR.TCR_EPR_LIST, Session.authKey)
+            let url:String = String.init(format: Constant.API.ECR_EPR_ADVANCES, Session.authKey)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 if Helper.isResponseValid(vc: self, response: response.result){

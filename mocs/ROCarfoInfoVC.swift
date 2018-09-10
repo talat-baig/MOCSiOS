@@ -17,6 +17,8 @@ class ROCarfoInfoVC: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var tableView: UITableView!
     var cResponse : Data?
     var arrayList: [WHRListData] = []
+    var refreshControl: UIRefreshControl = UIRefreshControl()
+
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "CARGO INFO")
@@ -51,7 +53,6 @@ class ROCarfoInfoVC: UIViewController, IndicatorInfoProvider {
                     whrList.vesselName = k["ROVesselName"].stringValue
                     whrList.uom = k["ROUom"].stringValue
                     whrList.product = k["ROProduct"].stringValue
-//                    whrList.whrDate = k["ROReceiveReceiptDate"].stringValue
                     whrList.brand = k["ROBrand"].stringValue
                     whrList.bagSize = k["ROBagSize"].stringValue
                     whrList.quality = k["ROQuality"].stringValue

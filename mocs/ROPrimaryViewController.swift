@@ -9,6 +9,7 @@
 import UIKit
 import XLPagerTabStrip
 import SwiftyJSON
+import Alamofire
 
 class ROPrimaryViewController: UIViewController, IndicatorInfoProvider {
     
@@ -81,17 +82,75 @@ class ROPrimaryViewController: UIViewController, IndicatorInfoProvider {
             lblReqDate.text! = j["Request Date"].stringValue
             
             lblReqQty.text! = roData.reqQty
-//            lblUom.text! = roData.uom
             lblWhtTrms.text! = roData.wghtTrms
             lblBalQty.text! = roData.balQty
             lblRelOrderNo.text! = roData.relOrderNum
             lblQtyRcvd.text! = roData.rcvdQty
             lblRcptDate.text! = roData.rcptDate
-
-            
             
         }
     }
 
+    
+//    @objc func populateList() {
+//        if internetStatus != .notReachable {
+//            
+//            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url: FilterViewController.getFilterString()), Session.authKey)
+//            
+//            self.view.showLoading()
+//            Alamofire.request(url).responseData(completionHandler: ({ response in
+//                self.view.hideLoading()
+//                debugPrint(response.result)
+//                if Helper.isResponseValid(vc: self, response: response.result ){
+//                    
+//                    let jsonResponse = JSON(response.result.value!);
+//                    let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
+//                    
+//                    if jsonArray.count > 0 {
+//                        
+//                        for(_,j):(String,JSON) in jsonResponse {
+//                            let data = ROData()
+//                            data.company = j["ROCompanyName"].stringValue
+//                            data.businessUnit = j["Businessunit"].stringValue
+//                            data.location = j["Location"].stringValue
+//                            data.commodity = j["Commodity"].stringValue
+//                            data.reqDate = j["Date"].stringValue
+//                            data.refId = j["ReferenceID"].stringValue
+//                            data.roStatus = j["BalanceToPay"].stringValue
+//                            data.reqQty = j["RORequestedQtyinmt"].stringValue
+//                            data.rcvdQty = j["ROReceiveQuantityReceivedinmt"].stringValue
+//                            data.balQty = j["ROBalanceQtyinmt"].stringValue
+//                            
+//                            data.uom = j["RoUom"].stringValue
+//                            data.wghtTrms = j["ROWeightTerms"].stringValue
+//                            
+//                            if j["ROReceiveReleaseOrderNo"].stringValue == "" {
+//                                data.relOrderNum = "-"
+//                            } else {
+//                                data.relOrderNum = j["ROReceiveReleaseOrderNo"].stringValue
+//                            }
+//                            
+//                            if j["ROReceiveReceiptDate"].stringValue == "" {
+//                                data.rcptDate = "-"
+//                            } else {
+//                                data.rcptDate = j["ROReceiveReceiptDate"].stringValue
+//                            }
+//                            
+//                        }
+//                        
+//                    }else{
+////                        Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
+//                    }
+//                }
+//            }))
+//        }else{
+//            Helper.showNoInternetMessg()
+//        }
+//    }
+    
+    
+    
+    
+    
     
 }

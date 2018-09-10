@@ -17,6 +17,8 @@ class KYCViewController: ButtonBarPagerTabStripViewController, IndicatorInfoProv
         return IndicatorInfo(title: "KYC DETAILS")
     }
     
+    var response : Data?
+    var custId = String()
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
 
@@ -46,7 +48,7 @@ class KYCViewController: ButtonBarPagerTabStripViewController, IndicatorInfoProv
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = "KYC DETAILS"
-        vwTopHeader.lblSubTitle.text = "CP-001678"
+        vwTopHeader.lblSubTitle.text = custId
         self.navigationController?.isNavigationBarHidden = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
@@ -63,16 +65,26 @@ class KYCViewController: ButtonBarPagerTabStripViewController, IndicatorInfoProv
         var views:[UIViewController] = []
         
         let kycPrimary = self.storyboard?.instantiateViewController(withIdentifier: "KYCPrimaryViewController") as! KYCPrimaryViewController
-      
+        kycPrimary.response = response
+        
         let transDetails = self.storyboard?.instantiateViewController(withIdentifier: "TransactionDetailsController") as! TransactionDetailsController
+         transDetails.response = response
+        
         
         let legal = self.storyboard?.instantiateViewController(withIdentifier: "LegalInfoController") as! LegalInfoController
+        legal.response = response
+
         
         let financial = self.storyboard?.instantiateViewController(withIdentifier: "FinancialInfoController") as! FinancialInfoController
+        financial.response = response
+
         
         let initiation = self.storyboard?.instantiateViewController(withIdentifier: "InitiationViewController") as! InitiationViewController
+        initiation.response = response
 
+        
         let kycApprovl = self.storyboard?.instantiateViewController(withIdentifier: "KYCApprovalController") as! KYCApprovalController
+        kycApprovl.response = response
 
         let kycAttachmnt = self.storyboard?.instantiateViewController(withIdentifier: "KYCAttachmentController") as! KYCAttachmentController
 

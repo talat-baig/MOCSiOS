@@ -8,6 +8,21 @@
 
 import UIKit
 
+
+
+
+protocol onCPListMoreListener: NSObjectProtocol {
+    func onClick(optionMenu:UIViewController, sender : UIButton ) -> Void
+}
+
+protocol onCPListMoreItemListener: NSObjectProtocol {
+    
+    func onViewClick(data: CPListData) -> Void
+    func onMailClick(data: CPListData) -> Void
+    func onCancelClick() -> Void
+    
+}
+
 class CPCell: UITableViewCell {
     
     @IBOutlet weak var vwInner: UIView!
@@ -22,12 +37,10 @@ class CPCell: UITableViewCell {
     
     @IBOutlet weak var lblCustomerId: UILabel!
     
-    
-    
-    
-    
-    
-    weak var delegate:onButtonClickListener?
+    @IBOutlet weak var btnMore: UIButton!
+    //    weak var delegate:onButtonClickListener?
+    weak var cpMenuDelegate : onCPListMoreListener?
+    weak var cpOptionItemDelegate : onCPListMoreItemListener?
     
     var data:CPListData?
     
@@ -40,7 +53,6 @@ class CPCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
         // Configure the view for the selected state
     }
     
@@ -65,32 +77,90 @@ class CPCell: UITableViewCell {
         self.data = data
     }
     
-    @IBAction func onViewClick(_ sender: Any) {
-        if(self.delegate?.responds(to: #selector(CPCell.onViewClick(_:))) != nil){
-            delegate?.onViewClick(data: data!)
-        }
-    }
+    //    @IBAction func onViewClick(_ sender: Any) {
+    //        if(self.delegate?.responds(to: #selector(CPCell.onViewClick(_:))) != nil){
+    //            delegate?.onViewClick(data: data!)
+    //        }
+    //    }
+    //
+    //    @IBAction func onMailClick(_ sender: Any) {
+    //
+    //        if(self.delegate?.responds(to: #selector(CPCell.onMailClick(_:))) != nil){
+    //            delegate?.onMailClick(data: data!)
+    //        }
+    //    }
+    //
+    //    @IBAction func onApproveClick(_ sender: Any) {
+    //
+    //        if(self.delegate?.responds(to: #selector(CPCell.onApproveClick(_:))) != nil){
+    //            delegate?.onApproveClick(data: data!)
+    //        }
+    //    }
+    //
+    //    @IBAction func onDeclineClick(_ sender: Any) {
+    //
+    //        if(self.delegate?.responds(to: #selector(CPCell.onDeclineClick(_:))) != nil){
+    //            delegate?.onViewClick(data: data!)
+    //        }
+    //    }
     
-    @IBAction func onMailClick(_ sender: Any) {
+    
+    @IBAction func onMoretapped(_ sender: Any) {
         
-        if(self.delegate?.responds(to: #selector(CPCell.onMailClick(_:))) != nil){
-            delegate?.onMailClick(data: data!)
+        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
+        
+        let viewAction = UIAlertAction(title: "View", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.cpOptionItemDelegate?.responds(to: Selector(("onViewClick"))) != nil){
+                self.cpOptionItemDelegate?.onViewClick(data: self.data!)
+            }
+        })
+        
+        optionMenu.addAction(viewAction)
+        
+        let mailAction = UIAlertAction(title: "Mail", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.cpOptionItemDelegate?.responds(to: Selector(("onMailClick"))) != nil){
+                self.cpOptionItemDelegate?.onMailClick(data: self.data!)
+            }
+        })
+        
+        
+        optionMenu.addAction(mailAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.cpOptionItemDelegate?.responds(to: Selector(("onCancelClick"))) != nil){
+                self.cpOptionItemDelegate?.onCancelClick()
+            }
+        })
+        
+        
+        optionMenu.addAction(cancelAction)
+        
+        if ((cpMenuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
+            cpMenuDelegate?.onClick(optionMenu: optionMenu , sender: sender as! UIButton)
         }
+        
     }
     
-    @IBAction func onApproveClick(_ sender: Any) {
-      
-        if(self.delegate?.responds(to: #selector(CPCell.onApproveClick(_:))) != nil){
-            delegate?.onApproveClick(data: data!)
-        }
-    }
     
-    @IBAction func onDeclineClick(_ sender: Any) {
-      
-        if(self.delegate?.responds(to: #selector(CPCell.onDeclineClick(_:))) != nil){
-            delegate?.onViewClick(data: data!)
-        }
-    }
+//
+//
+//    @IBAction func onViewTap(_ sender: Any) {
+//        if(self.cpMenuDelegate?.responds(to: #selector(ROListCell.onViewTap(_:))) != nil){
+//            print("onViewTap")
+//            cpMenuDelegate?.onViewClick(data: data!)
+//        }
+//    }
+    
+    
+//    @IBAction func onMailTap(_ sender: Any) {
+//        if(self.cpMenuDelegate?.responds(to: #selector(ROListCell.onMailTap(_:))) != nil){
+//            cpMenuDelegate?.onMailClick(data: data!)
+//        }
+//    }
+//
+    
+    
+    
     
     
 }

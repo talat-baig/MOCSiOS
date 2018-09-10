@@ -10,7 +10,8 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelegate , customPopUpDelegate {
+class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelegate , onCPApprove  {
+   
     
     
     
@@ -22,7 +23,8 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
-    var myView = CustomPopUpView()
+//    var myView = CustomPopUpView()
+//    var declView = CustomPopUpView()
     
     var arrayList:[CPListData] = []
     var newArray : [CPListData] = []
@@ -138,37 +140,181 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         }
     }
     
+    func onOkClick() {
+        self.populateList()
+    }
     
     func viewClaim(data:CPListData) {
-        //        if internetStatus != .notReachable{
-        //            let url = String.init(format: Constant.TCR.VIEW, Session.authKey,
-        //                                  data.headRef, data.counter)
-        //            self.view.showLoading()
-        //            Alamofire.request(url).responseData(completionHandler: ({ response in
-        //                self.view.hideLoading()
-        //                if Helper.isResponseValid(vc: self, response: response.result){
-        let vc = self.storyboard!.instantiateViewController(withIdentifier: "CPPrimaryViewController") as! CPPrimaryViewController
-        self.navigationController?.pushViewController(vc, animated: true)
-        //                }
-        //            }))
-        //        }else{
-        //            Helper.showNoInternetMessg()
-        //        }
+        
+        if internetStatus != .notReachable {
+            let url = String.init(format: Constant.CP.VIEW, Session.authKey, data.custId)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let responseJson = JSON(response.result.value!)
+                    let arrData = responseJson.arrayObject as! [[String:AnyObject]]
+                    
+                    if (arrData.count > 0) {
+                        
+                        self.getBankDetailsAndNavigate(primResponse: response.result.value!, data : data)
+                    } else {
+                        self.view.makeToast("No Data To Show")
+                    }
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
     
     
-    
-    func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
+    func getBankDetailsAndNavigate(primResponse : Data , data : CPListData) {
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.CP.BANK_DETAILS, Session.authKey, data.custId)
+            
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ bnkResponse in
+                
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: bnkResponse.result) {
+                    
+                    let responseJson = JSON(bnkResponse.result.value!)
+                    
+                    self.getRelationShipDetailsAndNavigate(primResponse: primResponse, bnkResponse: bnkResponse.result.value! , data : data)
+                    
+                }
+            }))
+        }else{
+            Helper.showNoInternetMessg()
+        }
         
     }
     
+    func getRelationShipDetailsAndNavigate(primResponse : Data , bnkResponse : Data , data : CPListData) {
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.CP.REL_DETAILS, Session.authKey, data.custId)
+            
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ relResponse in
+                
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: relResponse.result) {
+                    
+                    let responseJson = JSON(relResponse.result.value!)
+                    
+                    let vc = self.storyboard!.instantiateViewController(withIdentifier: "CPBaseViewController") as! CPBaseViewController
+                    vc.bnkCredResponse = bnkResponse
+                    vc.cpResponse = primResponse
+                    vc.relResponse = relResponse.result.value
+                    vc.cpListData = data
+                    
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    
+                }
+            }))
+        }else{
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    func sendEmail(refId:String){
+        if internetStatus != .notReachable{
+            let url = String.init(format: Constant.CP.CP_MAIL, Session.authKey, refId)
+            self.view.showLoading()
+          
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                
+                if response.result.value == "Success" {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Mail has been sent Successfully", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        }else{
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    
+//    func approveOrDeclineCP( event : Int, data:CPListData, comment:String){
+//
+//        if internetStatus != .notReachable {
+//            let url = String.init(format: Constant.CP.CP_APPROVE, Session.authKey,
+//                                  Helper.encodeURL(url: data.custId), event, data.kycContactType, data.kycRequired, data.refId )
+//            self.view.showLoading()
+//            Alamofire.request(url).responseData(completionHandler: ({ response in
+//                self.view.hideLoading()
+//                if Helper.isResponseValid(vc: self, response: response.result){
+//                    let alert = UIAlertController(title: "Success", message: "Counterparty Successfully Approved", preferredStyle: .alert)
+//                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
+//                        (UIAlertAction) -> Void in
+//                        self.populateList()
+//                    }))
+//                    self.present(alert, animated: true, completion: nil)
+//                }
+//            }))
+//        } else {
+//            Helper.showNoInternetMessg()
+//        }
+//    }
+    
+    
+//    func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
+//        if isApprove {
+//            self.approveOrDeclineCP(event: 0, data: data as! CPListData, comment: text)
+//            myView.removeFromSuperviewWithAnimate()
+//        } else {
+//
+//            if text == "" || text == "Enter Comment" {
+//                Helper.showMessage(message: "Please Enter Comment")
+//                return
+//            } else {
+//                self.approveOrDeclineCP(event: 1, data: data as! CPListData , comment: text)
+//                declView.removeFromSuperviewWithAnimate()
+//            }
+//        }
+//    }
+    
 }
 
-extension CounterpartyProfileController: UITableViewDataSource, UITableViewDelegate, onButtonClickListener {
+extension CounterpartyProfileController: UITableViewDataSource, UITableViewDelegate, onCPListMoreListener, onCPListMoreItemListener {
     
+    
+    func onClick(optionMenu: UIViewController, sender: UIButton) {
+         self.present(optionMenu, animated: true, completion: nil)
+    }
+    
+    func onViewClick(data: CPListData) {
+        viewClaim(data: data)
+    }
+    
+    func onMailClick(data: CPListData) {
+        self.handleTap()
+        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
+            self.sendEmail(refId: data.custId)
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func onCancelClick() {
+        
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 305
+        return 240
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -192,38 +338,43 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
         let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cplistcell") as! CPCell
         cell.setDataToView(data: data)
-        cell.delegate = self
+        cell.cpMenuDelegate = self
+        cell.cpOptionItemDelegate = self
         return cell;
     }
     
-    func onViewClick(data: AnyObject) {
-        //         viewClaim(data: data as! CPListData)
-        let vc = self.storyboard!.instantiateViewController(withIdentifier: "CPBaseViewController") as! CPBaseViewController
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func onMailClick(data: AnyObject) {
-        
-    }
-    
-    func onApproveClick(data: AnyObject) {
-        
-        self.handleTap()
-        
-        let myView = Bundle.main.loadNibNamed("EnterKYCDetailsView", owner: nil, options: nil)![0] as! EnterKYCDetailsView
-        //        myView.setDataToCustomView(title: "Approve?", description: "Are you sure you want to approve this Claim? You can't revert once approved", leftButton: "GO BACK", rightButton: "APPROVE",isTxtVwHidden: false, isApprove: true)
-        //        myView.data = data
-        //        myView.cpvDelegate = self
-        //        myView.isApprove = true
-        self.view.addMySubview(myView)
-        
-        
-        
-    }
-    
-    func onDeclineClick(data: AnyObject) {
-        
-    }
+//    func onViewClick(data: AnyObject) {
+//
+//        viewClaim(data: data as! CPListData)
+//    }
+//
+//    func onMailClick(data: AnyObject) {
+//
+//    }
+//
+//    func onApproveClick(data: AnyObject) {
+//
+//        self.handleTap()
+//
+//        myView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
+//        myView.setDataToCustomView(title: "Approve?", description: "Are you sure you want to approve this Counterparty? You can't revert once approved", leftButton: "GO BACK", rightButton: "APPROVE",isTxtVwHidden: false, isApprove: true)
+//        myView.data = data
+//        myView.cpvDelegate = self
+//        myView.isApprove = true
+//        self.view.addMySubview(myView)
+//
+//    }
+//
+//    func onDeclineClick(data: AnyObject) {
+//
+//        declView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
+//        declView.setDataToCustomView(title: "Decline?", description: "Are you sure you want to decline this Counterparty? You can't revert once declined", leftButton: "GO BACK", rightButton: "DECLINE", isTxtVwHidden: false, isApprove:  false)
+//        declView.data = data
+//        declView.isApprove = false
+//        declView.cpvDelegate = self
+//        self.view.addMySubview(declView)
+//
+//    }
     
     
     
@@ -236,7 +387,7 @@ extension CounterpartyProfileController: UISearchBarDelegate {
             self.arrayList = newArray
         } else {
             let filteredArray =   newArray.filter {
-                $0.refId.localizedCaseInsensitiveContains(searchText)
+                $0.custId.localizedCaseInsensitiveContains(searchText)
             }
             self.arrayList = filteredArray
         }

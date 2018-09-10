@@ -64,7 +64,9 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         var newData :[EPRData] = []
         if internetStatus != .notReachable {
             let url = String.init(format: Constant.EPR.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()))
+                                  Helper.encodeURL(url: FilterViewController.getFilterString(noBU: true)))
+            
+            print(url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -109,6 +111,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         if isApprove {
             self.approveClaim(data:data as! EPRData, comment : text)
+            myView.removeFromSuperviewWithAnimate()
         } else {
             
             if text == "" || text == "Enter Comment" {

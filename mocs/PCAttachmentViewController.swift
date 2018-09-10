@@ -23,7 +23,7 @@ class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
     var refId:String = ""
     var moduleName:String = ""
     var docFileViewer: UIDocumentInteractionController!
-
+    var isFromCP : Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,13 +48,22 @@ class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
     func showEmptyState(){
         Helper.showNoItemState(vc:self ,  messg: "List is Empty\nTry to load by tapping below button" ,  tb:tableView, action:#selector(populateList))
     }
-
+    
     @objc func populateList(){
         if internetStatus != .notReachable{
-            let url = String.init(format: Constant.DROPBOX.LIST,
+            
+            var url = String()
+            
+            if isFromCP {
+                url = String.init(format: Constant.DROPBOX.CP_LIST,
+                                  Session.authKey,  Helper.encodeURL(url: self.refId))
+            } else {
+                url = String.init(format: Constant.DROPBOX.LIST,
                                   Session.authKey,
                                   Helper.encodeURL(url: self.moduleName),
                                   Helper.encodeURL(url: self.refId))
+            }
+            
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -80,6 +89,8 @@ class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
                             data.addDate = j["AddedByUser"].stringValue
                             data.addedUser = j["AddedDate"].stringValue
                             self.arrayList.append(data)
+                            
+                            
                         }
                         self.tableView.tableFooterView = nil
                         self.tableView.reloadData()

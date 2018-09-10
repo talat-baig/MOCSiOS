@@ -245,11 +245,20 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     }
     
     
-    static func getFilterString() -> String {
+    static func getFilterString(noBU : Bool = false ) -> String {
         
         var newStrArr : [String]  = []
+        var newStr = String()
         for newObj in self.selectedDataObj {
-            let  newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeURL(url:(newObj.location?.locName)!) + "+" +  newObj.code!
+            
+            if noBU {
+                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeURL(url:(newObj.location?.locName)!)
+            } else {
+                
+                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeURL(url:(newObj.location?.locName)!) + "+" +  newObj.code!
+
+            }
+            
             newStrArr.append(newStr)
         }
         

@@ -17,4 +17,5 @@ class RRcptData {
     var uom:String = String()
     var desc:String = String()
     var roRefId:String = String()
+    var rcptQty: String = String()
 }

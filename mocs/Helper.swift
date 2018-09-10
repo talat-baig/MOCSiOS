@@ -256,7 +256,7 @@ class Helper: UIView {
                 }else{
                     isValid = true
                 }
-            }else{
+            } else {
                 NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
             }
             break
