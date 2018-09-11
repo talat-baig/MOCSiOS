@@ -8,10 +8,10 @@
 
 struct ApiKey {
     // LIVE
-        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+    //        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-//    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 
@@ -139,35 +139,35 @@ struct Constant
         
         static let EXPENSE_DELETE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFDTCREI?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&ExpenseId=%@&TEXCounter=%d"
         
-        static let ECR_LIST = "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        static let ECR_LIST = "http://172.16.12.12/OCSWebApi/api/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
-        static let ECR_ADD = "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
+        static let ECR_ADD = "http://172.16.12.12/OCSWebApi/api/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
         
         
-        static let ECR_UPDATE =  "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
+        static let ECR_UPDATE =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
         
-        static let ECR_DELETE = "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/DeleteECR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EmployeePaymentRequestMainID=%@"
-
-        static let ECR_SUBMIT = "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/SubmitDraftedECR?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EPRMainReferenceID=%@&chktype=%d&EmployeePaymentRequestMainID=%@&EprRefIDCounter=%d"
-
-        static let ECR_SEND_EMAIL = "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/SendECRMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&emailid=%@&EmployeePaymentRequestMainID=%@&EPRMainReferenceID=%@&EprRefIDCounter=%d"
-
+        static let ECR_DELETE = "http://172.16.12.12/OCSWebApi/api/ECR/DeleteECR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EmployeePaymentRequestMainID=%@"
         
-        static let ECR_PAYMENT_LIST =  "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&count=%d"
+        static let ECR_SUBMIT = "http://172.16.12.12/OCSWebApi/api/ECR/SubmitDraftedECR?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EPRMainReferenceID=%@&chktype=%d&EmployeePaymentRequestMainID=%@&EprRefIDCounter=%d"
         
-        static let ECR_ADD_PAYMENT =  "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/AddExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+        static let ECR_SEND_EMAIL = "http://172.16.12.12/OCSWebApi/api/ECR/SendECRMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&emailid=%@&EmployeePaymentRequestMainID=%@&EPRMainReferenceID=%@&EprRefIDCounter=%d"
         
-        static let ECR_UPDATE_PAYMENT =  "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/UpdateExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EmployeePaymentRequestItemsID=%@"
-
-        static let GET_ACCOUNT_CHARGE =  "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid="
         
-        static let GET_PAYMENT_REASON =  "http://ocsmis.phoenixgroup.net/MOCS_API/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid="
+        static let ECR_PAYMENT_LIST =  "http://172.16.12.12/OCSWebApi/api/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&count=%d"
+        
+        static let ECR_ADD_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/AddExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+        
+        static let ECR_UPDATE_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EmployeePaymentRequestItemsID=%@"
+        
+        static let GET_ACCOUNT_CHARGE =  "http://172.16.12.12/OCSWebApi/api/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid="
+        
+        static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid="
         
         static let ECR_EPR_ADVANCES =  "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
-
-
         
-//        https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey=739f9e13-e618-4214-9ffb-d1040609f5c2&AuthId=CAD1266B-90CD-408D-8039-98BF38A0
+        
+        
+        //        https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey=739f9e13-e618-4214-9ffb-d1040609f5c2&AuthId=CAD1266B-90CD-408D-8039-98BF38A0
     }
     
     struct AR {
@@ -430,40 +430,44 @@ struct Constant
     
     struct RO {
         
-//        http://ocsmis.phoenixgroup.net/MOCS_API/api/
-        static let LIST = "http://ocsmis.phoenixgroup.net/MOCS_API/api/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
+        //        http://172.16.12.12/OCSWebApi/api/
+        static let LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
         
-        static let VIEW = "http://ocsmis.phoenixgroup.net/MOCS_API/api/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"
+        static let VIEW = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"
         
-        static let CARGO_DETAILS = "http://ocsmis.phoenixgroup.net/MOCS_API/api/RequestOrder/GetCargoinfoByRO?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&reference=%@&authid=%@"
+        static let CARGO_DETAILS = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByRO?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&reference=%@&authid=%@"
         
-        static let RRCPT_LIST = "http://ocsmis.phoenixgroup.net/MOCS_API/api/RequestOrder/GetCargoinfoByWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&guid=%@"
+        static let RRCPT_LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&guid=%@"
         
-        static let ADD_RECEIPT = "http://ocsmis.phoenixgroup.net/MOCS_API/api/RequestOrder/SaveROtoWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@"
+        static let ADD_RECEIPT = "http://172.16.12.12/OCSWebApi/api/RequestOrder/SaveROtoWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@"
         
-        static let EMAIL_RO = "http://ocsmis.phoenixgroup.net/MOCS_API/api/RequestOrder/ROMailSend?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@&referenceid=%@"
+        static let EMAIL_RO = "http://172.16.12.12/OCSWebApi/api/RequestOrder/ROMailSend?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@&referenceid=%@"
     }
     
     
     struct CP {
         
-        static let LIST = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        //        http://172.16.12.12/OCSWebApi/api/
         
-        static let VIEW = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
+        static let LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
-        static let BANK_DETAILS = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/GetCounterPartyBankDetailsByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustID=%@"
-
-        static let REL_DETAILS = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/GetCounterPartyRelationByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CuID=%@"
-
-        static let CP_ATTACHMENT = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
-
-        static let CP_KYC_DETAILS = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/GetCounterPartyKYC?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomerID=%@"
+        //        static let LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
-        static let CP_APPROVE = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CPApproval/CheckCPApproved?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CusID=%@&Event=%d&KYCContactType=%@&KYCRequired=%@&REFID=%@"
+        static let VIEW = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
         
-        static let CP_MAIL = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/SendCPMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&CstrID=%@"
-
-   
+        static let BANK_DETAILS = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyBankDetailsByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustID=%@"
+        
+        static let REL_DETAILS = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyRelationByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CuID=%@"
+        
+        static let CP_ATTACHMENT = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
+        
+        static let CP_KYC_DETAILS = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyKYC?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomerID=%@"
+        
+        static let CP_APPROVE = "http://172.16.12.12/OCSWebApi/api/CPApproval/CheckCPApproved?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CusID=%@&Event=%d&KYCContactType=%@&KYCRequired=%@&REFID=%@"
+        
+        static let CP_MAIL = "http://172.16.12.12/OCSWebApi/api/CounterParty/SendCPMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&CstrID=%@"
+        
+        
     }
     
     struct TRI {
@@ -510,10 +514,10 @@ struct Constant
         static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_LDI?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&DocumentReferenceID=%@"
         
         
-        static let CP_LIST = "http://ocsmis.phoenixgroup.net/MOCS_API/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
+        static let CP_LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-//        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-                  static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+        // static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

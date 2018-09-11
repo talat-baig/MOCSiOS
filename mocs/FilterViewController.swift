@@ -139,8 +139,6 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         
         let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
         
-        
-        
         if jsonArr.count > 0 {
             
             let companies = jsonResponse[0]["Companies"].stringValue
@@ -252,10 +250,10 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         for newObj in self.selectedDataObj {
             
             if noBU {
-                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeURL(url:(newObj.location?.locName)!)
+                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeWhiteSpaces(url:(newObj.location?.locName)!)
             } else {
                 
-                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeURL(url:(newObj.location?.locName)!) + "+" +  newObj.code!
+                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeWhiteSpaces(url: (newObj.location?.locName)!) + "+" +  newObj.code!
 
             }
             

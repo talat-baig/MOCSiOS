@@ -25,6 +25,8 @@ protocol onProcessItemClickListener: NSObjectProtocol {
 
 class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
    
+   
+   
 
     
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
@@ -115,6 +117,13 @@ class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
         return views
     }
     
+    
+    
+    func onOkCPClick() {
+        if let d = self.cpBaseDel {
+            d.onCPUpdateClick()
+        }
+    }
     
     
     func onOkClick() {

@@ -76,9 +76,10 @@ class CargoInfoCell: UITableViewCell {
         self.data = data
         vesselName.text = data?.vesselName
         whrSrDate.text = data?.whrDate
-        lblQtyRcvd.text = data?.qtyRcvd
+        
+        lblQtyRcvd.text = String(format:"%.2f",Double(data?.qtyRcvd ?? "0.0") ?? 0.0)
 //        lblUom.text = data?.uom
-        lblRcptQty.text = data?.rcptQty
+        lblRcptQty.text =  String(format:"%.2f",Double(data?.rcptQty ?? "0.0") ?? 0.0)
         lblProduct.text = data?.product
         lblBagSize.text = data?.bagSize
         lblQuality.text = data?.quality
@@ -87,11 +88,10 @@ class CargoInfoCell: UITableViewCell {
 
 //        lblRcptQty.text = data?.rcptQty
         lblManualNo.text = data?.manualNo
-        lblReqQty.text = data?.reqQty
-        lblBalROQty.text = data?.balQty
-    }
+        lblReqQty.text =  String(format:"%.2f",Double(data?.reqQty ?? "0.0") ?? 0.0)
+        lblBalROQty.text =  String(format:"%.2f",Double(data?.balQty ?? "0.0") ?? 0.0)
 
-    
+    }
     @IBAction func moreClick(_ sender: UIButton) {
         
         let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)

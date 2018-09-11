@@ -46,15 +46,12 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         parseAndAssign()
     }
     
     
-
     override func viewWillAppear(_ animated: Bool) {
     }
-    
     
     func parseAndAssign() {
         
@@ -101,12 +98,35 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
                 lblPhno1.text! = j["PhoneNo1"].stringValue
             }
             
-            lblAddress.text! = j["Address"].stringValue
-            lblBranchCity.text! = j["BranchCity"].stringValue
-            lblZip.text! = j["ZipPostalCode"].stringValue
-            lblCountry.text! = j["Country"].stringValue
-            lblTaxNo1.text! = j["Taxno1"].stringValue
+            if j["Address"].stringValue == "" {
+                lblAddress.text! = "-"
+            } else {
+                lblAddress.text! = j["Address"].stringValue
+            }
             
+            if j["BranchCity"].stringValue == "" {
+                lblBranchCity.text! = "-"
+            } else {
+                lblBranchCity.text! = j["BranchCity"].stringValue
+            }
+            
+            if j["ZipPostalCode"].stringValue == "" {
+                lblZip.text! = "-"
+            } else {
+                lblZip.text! = j["ZipPostalCode"].stringValue
+            }
+            
+            if j["Country"].stringValue == "" {
+                lblCountry.text! = "-"
+            } else {
+                lblCountry.text! = j["Country"].stringValue
+            }
+            
+            if j["Taxno1"].stringValue == "" {
+                lblTaxNo1.text! = "-"
+            } else {
+                lblTaxNo1.text! = j["Taxno1"].stringValue
+            }
             
             if j["Contact_Person_Name"].stringValue == "" {
                 lblName.text! = "-"
@@ -137,7 +157,6 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
             } else {
                 lblPhNum.text! = j["PhoneNo"].stringValue
             }
-            
 
         }
     }

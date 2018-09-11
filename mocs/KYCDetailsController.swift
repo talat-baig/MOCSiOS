@@ -14,7 +14,7 @@ import SwiftyJSON
 import NotificationBannerSwift
 
 protocol onCPApprove: NSObjectProtocol {
-    func onOkClick() -> Void
+    func onOkCPClick() -> Void
 }
 
 
@@ -193,7 +193,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                                 alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
                                     (UIAlertAction) -> Void in
                                     if let d = self.okCPApprove {
-                                        d.onOkClick()
+                                        d.onOkCPClick()
                                     }
                                     
                                     if let navController = self.navigationController {

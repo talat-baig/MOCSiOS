@@ -58,9 +58,10 @@ class ROListCell: UITableViewCell {
         lblCompany.text = data?.company
         lblLocation.text = data?.location
         lblCommodity.text = data?.commodity
-        lblReqQty.text = data?.reqQty
-        lblRecvdQty.text = data?.rcvdQty
-        lblBalQty.text = data?.balQty
+//        print( String(format:"%.2f", Double(data?.reqQty)!) )
+        lblReqQty.text = String(format:"%.2f",Double(data?.reqQty ?? "0.0") ?? 0.0)
+        lblRecvdQty.text = String(format:"%.2f",Double(data?.rcvdQty ?? "0.0") ?? 0.0)
+        lblBalQty.text =  String(format:"%.2f",Double(data?.balQty ?? "0.0") ?? 0.0)
         lblBusinessUnit.text = data?.businessUnit
         lblRefId.text = data?.refId
         lblStatus.text = data?.roStatus

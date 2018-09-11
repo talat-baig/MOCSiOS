@@ -10,10 +10,8 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelegate , onCPApprove  {
-   
-    
-    
+class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelegate , onCPApprove  , onCPUpdate {
+  
     
     @IBOutlet weak var srchBar: UISearchBar!
     
@@ -144,6 +142,16 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         self.populateList()
     }
     
+    func onOkCPClick() {
+        self.populateList()
+    }
+    
+    func onCPUpdateClick() {
+        self.populateList()
+    }
+    
+    
+    
     func viewClaim(data:CPListData) {
         
         if internetStatus != .notReachable {
@@ -215,6 +223,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                     vc.cpResponse = primResponse
                     vc.relResponse = relResponse.result.value
                     vc.cpListData = data
+                    vc.cpBaseDel = self
                     
                     self.navigationController?.pushViewController(vc, animated: true)
                     

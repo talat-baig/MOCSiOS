@@ -95,9 +95,9 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         vwTillDateVal.layer.borderWidth = 1
         vwTillDateVal.layer.borderColor = UIColor.lightGray.cgColor
         
-        lblReqQty.text = whrData.reqQty
-        lblRcptQty.text = whrData.rcptQty
-        lblBalQty.text = whrData.balQty
+        lblReqQty.text =  String(format:"%.2f",Double(whrData.reqQty ) ?? 0.0)
+        lblRcptQty.text = String(format:"%.2f",Double(whrData.rcptQty ) ?? 0.0)
+        lblBalQty.text =  String(format:"%.2f",Double(whrData.balQty  ) ?? 0.0)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
@@ -115,7 +115,6 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
     }
     
     
@@ -161,7 +160,6 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
                     debugPrint(response.result.value as Any)
                     
                     let jsonResponse = JSON.init(parseJSON: response.result.value!)
-                    
                     print(jsonResponse)
                     
                     if jsonResponse["ServerMsg"].stringValue == "Success" {

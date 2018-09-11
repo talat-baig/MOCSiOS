@@ -8,9 +8,6 @@
 
 import UIKit
 
-
-
-
 protocol onCPListMoreListener: NSObjectProtocol {
     func onClick(optionMenu:UIViewController, sender : UIButton ) -> Void
 }
@@ -69,10 +66,20 @@ class CPCell: UITableViewCell {
             lblEmail.text! = data.email
         }
         
+        if data.email == "" {
+            lblContactType.text! = "-"
+        } else {
+            lblContactType.text! = data.contactType
+        }
         
-        lblContactType.text! = data.contactType
+        if data.zipPostalCode == "" {
+            lblPostalCode.text! = "-"
+        } else {
+            lblPostalCode.text! = data.zipPostalCode
+        }
+        
+        
         lblBranchCity.text! = data.branchCity
-        lblPostalCode.text! = data.zipPostalCode
         lblCountry.text! = data.country
         self.data = data
     }

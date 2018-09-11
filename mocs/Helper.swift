@@ -299,6 +299,22 @@ class Helper: UIView {
         return str! as String
     }
     
+    public static func encodeLocString(url: String) -> String {
+        
+        let newStr = url.replacingOccurrences(of: " ", with: "+")
+        
+        return newStr
+    }
+    
+    
+    public static func encodeWhiteSpaces(url: String) -> String {
+        
+        let newStr = url.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        return newStr
+    }
+    
+    
     public static func showNoInternetMessg() {
         Helper.showMessage(message: "Internet not reachable, Please Try Again")
     }

@@ -27,7 +27,6 @@ class RecordReceiptCell: UITableViewCell {
     
     @IBOutlet weak var btnMore: UIButton!
     
-    
     @IBOutlet weak var lblRcptDate: UILabel!
     
     @IBOutlet weak var lblDesc: UILabel!

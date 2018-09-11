@@ -90,8 +90,8 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
     @objc func populateList(){
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url: FilterViewController.getFilterString()), Session.authKey)
-            
+            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url:  FilterViewController.getFilterString()), Session.authKey)
+            print("RO URL", url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
