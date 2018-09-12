@@ -71,14 +71,11 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
         let jsonResponse = JSON(response!)
         for(_,j):(String,JSON) in jsonResponse {
             
-            
-            
             if j["BankName"].stringValue == "" {
                 lblBnkName.text! = "-"
             } else {
                 lblBnkName.text! = j["BankName"].stringValue
             }
-            
             
             lblAccName.text! = j["AccountName"].stringValue
             lblAccNum.text! = j["AccountNo"].stringValue
@@ -91,9 +88,27 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
             
             
             lblIfsc.text! = j["BankIFSCCode"].stringValue
-            lblSwiftCode.text! = j["SwiftCodeIBAN"].stringValue
-            lblSwift.text! = j["ISwift"].stringValue
-            lblBnkAddress.text! = j["BankAddress"].stringValue
+            
+            if j["SwiftCodeIBAN"].stringValue == "" {
+                lblSwiftCode.text! = "-"
+            } else {
+                lblSwiftCode.text! = j["SwiftCodeIBAN"].stringValue
+            }
+            
+            
+            if j["ISwift"].stringValue == "" {
+                lblSwift.text! = "-"
+            } else {
+                lblSwift.text! = j["ISwift"].stringValue
+            }
+            
+            
+            
+            if j["BankAddress"].stringValue == "" {
+                lblBnkAddress.text! = "-"
+            } else {
+                lblBnkAddress.text! = j["BankAddress"].stringValue
+            }
             
             
             if j["Comments"].stringValue == "" {

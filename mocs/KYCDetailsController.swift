@@ -9,29 +9,38 @@
 import UIKit
 import XLPagerTabStrip
 import DropDown
+import SwiftyDropbox
 import Alamofire
 import SwiftyJSON
 import NotificationBannerSwift
+import Floaty
+import AVFoundation
+
 
 protocol onCPApprove: NSObjectProtocol {
     func onOkCPClick() -> Void
 }
 
 
-class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate, customPopUpDelegate {
-    
+class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate, customPopUpDelegate , UIDocumentPickerDelegate {
     
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "KYC DETAILS")
     }
     
-    
     var cpData = CPListData()
     var kycResp : Data?
     
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
+    
+    var moduleName = String()
+    var imagePicker = UIImagePickerController()
+    var delegate:uploadFileDelegate?
+    var docFileViewer: UIDocumentInteractionController!
+    var fileInfoObj : FileInfo?
+    
     
     @IBOutlet weak var btnKYCDetails: UIButton!
     
@@ -43,9 +52,11 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     @IBOutlet weak var scrlVw: UIScrollView!
     
     weak var okCPApprove : onCPApprove?
-    
+    var newDate = String()
+    var docUrlStr = String()
+    var docFileName = String()
+
     @IBOutlet weak var stckVw: UIStackView!
-    
     
     @IBOutlet weak var btnProcess: UIButton!
     @IBOutlet weak var stckVwKYCRqd: UIStackView!
@@ -55,6 +66,9 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     @IBOutlet weak var btnSDNListChk: UIButton!
     
     @IBOutlet weak var btnAttachmnt: UIButton!
+    
+    var dbRequest : SwiftyDropbox.UploadRequest<Files.FileMetadataSerializer, Files.UploadErrorSerializer>?
+    
     
     let arrKYCReq = ["Yes", "No"]
     let arrKYCContctType = ["Trade", "Admin", "Trade&Admin"]
@@ -92,6 +106,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         
         btnAttachmnt.layer.cornerRadius = 5
         btnAttachmnt.layer.borderWidth = 1
+        btnAttachmnt.setTitleColor( UIColor.lightGray , for: .normal)
         btnAttachmnt.layer.borderColor = AppColor.lightGray.cgColor
         
         btnSDNListChk.layer.cornerRadius = 5
@@ -103,7 +118,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         btnKYCRequired.setTitle("Tap to Select", for: .normal)
         btnSDNListChk.setTitle("Tap to Select", for: .normal)
         
-        
         txtValidUntill.inputView = datePickerTool
         
         mySubVw.layer.cornerRadius = 2
@@ -111,13 +125,26 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         mySubVw.layer.borderColor =  AppColor.lightGray.cgColor
         
         
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MMM-yyyy"
+        newDate = formatter.string(from: date)
+        
         parseAndAssign()
+        
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 600 )
+    }
+    
     
     func parseAndAssign() {
         
+        var item = String()
         let jsonResponse = JSON(kycResp!)
-        for(_,j):(String,JSON) in jsonResponse {
+        for(_,j):(String, SwiftyJSON.JSON) in jsonResponse {
             
             if j["KYCContactType"].stringValue == "" {
                 btnKYCContctType.setTitle("Tap to Select" , for: .normal)
@@ -127,19 +154,28 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
             
             if j["KYCRequired"].stringValue == "" {
                 btnKYCRequired.setTitle("Tap to Select" , for: .normal)
+                item = "Tap to Select"
             } else {
                 btnKYCRequired.setTitle(j["KYCRequired"].stringValue , for: .normal)
+                item = j["KYCRequired"].stringValue
             }
             
-          
+        }
+        
+        enableDisableKYCBtn(item: item )
+        btnAttachmnt.isEnabled = false
+    }
+    
+    func enableDisableKYCBtn(item : String) {
+        
+        if item == "Yes" {
+            stckVw.isHidden = false
+        } else {
+            stckVw.isHidden = true
         }
     }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
+
+   
     @objc func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
@@ -165,14 +201,20 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     @IBAction func btnAddKYCDetails(_ sender: Any) {
         
         getKYCDetailsAndNavigate()
-        
     }
     
-    func approveOrDeclineCP( event : Int, data:CPListData, comment:String){
+    func approveOrDeclineCP( event : Int, cpData:CPListData, comment:String){
+        
+        
+        let kycReq = btnKYCRequired.titleLabel?.text
+        let sdnList = btnSDNListChk.titleLabel?.text
+
         
         if internetStatus != .notReachable {
+            
             let url = String.init(format: Constant.CP.CP_APPROVE, Session.authKey,
-                                  Helper.encodeURL(url: data.custId), event,(btnKYCContctType.titleLabel?.text)!, (btnKYCRequired.titleLabel?.text)!, data.refId )
+                                  Helper.encodeURL(url: cpData.custId), event,(btnKYCContctType.titleLabel?.text)!, (btnKYCRequired.titleLabel?.text)!, cpData.refId )
+            
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -189,23 +231,18 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                             
                             switch data!["ServerMsg"] as! String {
                             case "Success":
-                                let alert = UIAlertController(title: "Success", message: "Counterparty Successfully Approved", preferredStyle: .alert)
-                                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
-                                    (UIAlertAction) -> Void in
-                                    if let d = self.okCPApprove {
-                                        d.onOkCPClick()
-                                    }
-                                    
-                                    if let navController = self.navigationController {
-                                        navController.popViewController(animated: true)
-                                    }
-                                }))
-                                self.present(alert, animated: true, completion: nil)
+                                
+                                if kycReq == "Yes" && sdnList == "No" {
+                                    self.approveKYCForCP(data: cpData, fileName: self.docFileName , docRefId: self.newDate, url: self.docUrlStr )
+
+                                } else {
+                                    self.showSuccessAlert()
+                                }
                                 break
                                 
                             default:
                                 NotificationBanner(title: data!["ServerMsg"] as! String   ,style: .danger).show()
-
+                                
                                 break
                             }
                         }
@@ -221,9 +258,75 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     }
     
     
+    
+    func showSuccessAlert() {
+        
+        let alert = UIAlertController(title: "Success", message: "Counterparty Successfully Approved", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
+            (UIAlertAction) -> Void in
+            if let d = self.okCPApprove {
+                d.onOkCPClick()
+            }
+            
+            if let navController = self.navigationController {
+                navController.popViewController(animated: true)
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func approveKYCForCP(data : CPListData, fileName : String, docRefId : String, url : String) {
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.CP.CP_KYC_APPROVE, Session.authKey,
+                                  (btnKYCContctType.titleLabel?.text)!,(btnKYCRequired.titleLabel?.text)!, txtValidUntill.text!,(btnSDNListChk.titleLabel?.text)! , Helper.encodeURL(url: self.docUrlStr), 0 , cpData.refId, self.docFileName, Helper.encodeURL(url:cpData.cpName), newDate)
+            
+            print("kyc approve",url)
+            
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                
+                let jsonResponse = JSON(response.result.value!)
+                
+                if jsonResponse.dictionaryObject != nil {
+                    
+                    let data = jsonResponse.dictionaryObject
+                    
+                    if data != nil {
+                        
+                        if (data?.count)! > 0 {
+                            
+                            switch data!["ServerMsg"] as! String {
+                            case "Success":
+                                    self.showSuccessAlert()
+                                break
+                                
+                            default:
+                                NotificationBanner(title: data!["ServerMsg"] as! String ,style: .danger).show()
+                                
+                                break
+                            }
+                        }
+                    } else {
+                        
+                    }
+                }
+                
+            }))
+        } else {
+            
+        }
+    }
+    
+    
+    
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         if isApprove {
-            self.approveOrDeclineCP(event: 1, data: data as! CPListData, comment: text)
+            
+            self.approveOrDeclineCP(event: 1, cpData: data as! CPListData, comment: text)
             myView.removeFromSuperviewWithAnimate()
         } else {
             
@@ -231,7 +334,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                 Helper.showMessage(message: "Please Enter Comment")
                 return
             } else {
-                self.approveOrDeclineCP(event: 2, data: data as! CPListData , comment: text)
+                self.approveOrDeclineCP(event: 2, cpData: data as! CPListData , comment: text)
                 declView.removeFromSuperviewWithAnimate()
             }
         }
@@ -270,6 +373,24 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         
     }
     
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        if controller.documentPickerMode == UIDocumentPickerMode.import {
+            
+            let data = Helper.getDataFromFileUrl(fileUrl: url)
+            let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
+            myView.frame = (self.navigationController?.view.frame)!
+            myView.data = data
+            myView.extensn = url.pathExtension
+            let image = Helper.getImage(ext: url.pathExtension) ?? #imageLiteral(resourceName: "file.png")
+            myView.setImageToView(image: image )
+            myView.uploadDelegate = self
+            DispatchQueue.main.async {
+                self.navigationController?.view.addSubview(myView)
+            }
+        }
+    }
+    
     @IBAction func btnKYCContctTypeTapped(_ sender: Any) {
         
         let dropDown = DropDown()
@@ -282,11 +403,69 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     }
     
     
+    
+    @IBAction func btnAttachmntTapped(_ sender: Any) {
+        
+        
+        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.default)
+        {
+            UIAlertAction in
+            self.openCamera()
+        }
+        let gallaryAction = UIAlertAction(title: "Gallery", style: UIAlertActionStyle.default)
+        {
+            UIAlertAction in
+            self.openGallery()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel)
+        {
+            UIAlertAction in
+        }
+        
+        // Add the actions
+        imagePicker.delegate = self
+        alert.addAction(cameraAction)
+        alert.addAction(gallaryAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
     @IBAction func btnProcessTapped(_ sender: Any) {
         
         let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
         
+    
         let approveAction = UIAlertAction(title: "Approve", style: .default, handler: { (UIAlertAction) -> Void in
+            
+            
+            if self.btnKYCContctType.titleLabel?.text == "Tap to Select" {
+                Helper.showMessage(message: "Enter KYC Contact Type")
+                return
+            }
+            
+            
+            if self.btnKYCRequired.titleLabel?.text == "Tap to Select" {
+                Helper.showMessage(message: "Enter KYC Required")
+                return
+            }
+            
+            
+            if self.btnKYCRequired.titleLabel?.text == "Yes" {
+                
+                if self.txtValidUntill.text == "" {
+                    Helper.showMessage(message: "Enter KYC Valid Until")
+                    return
+                }
+                
+                if self.btnSDNListChk.titleLabel?.text == "Tap to Select" {
+                    Helper.showMessage(message: "Enter SDN List Check")
+                    return
+                }
+                
+            }
+            
             
             self.handleTap()
             self.myView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
@@ -317,22 +496,70 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         optionMenu.addAction(declineAction)
         optionMenu.addAction(cancelAction)
         
-        
-        if btnKYCContctType.titleLabel?.text == "Tap to Select" {
-            Helper.showMessage(message: "Enter KYC Contact Type")
-            return
-        }
-        
-        
-        if btnKYCRequired.titleLabel?.text == "Tap to Select" {
-            Helper.showMessage(message: "Enter KYC Required")
-            return
-        }
-        
-        
         self.present(optionMenu, animated: true, completion: nil)
+    }
+    
+    
+//    func addItemToServer(dModName : String, company: String, location: String, bUnit : String, docRefId : String = "" , docName: String, docDesc : String, docFilePath : String, compHandler : @escaping(Bool)->()) {
+//
+//        if internetStatus != .notReachable {
+//
+//            let url = String.init(format: Constant.DROPBOX.ADD_ITEM,
+//                                  Session.authKey,Helper.encodeURL(url: dModName), Helper.encodeURL(url: company), Helper.encodeURL(url:location),Helper.encodeURL(url: bUnit), docRefId,
+//                                  Helper.encodeURL(url: docName),
+//                                  Helper.encodeURL(url: docDesc), Helper.encodeURL(url:docFilePath))
+//            Alamofire.request(url).responseData(completionHandler: ({ response in
+//
+//                if Helper.isResponseValid(vc: self, response: response.result) {
+//                    compHandler(true)
+//                } else {
+//                    compHandler(false)
+//                }
+//            }))
+//        } else {
+//            compHandler(false)
+//            Helper.showNoInternetMessg()
+//        }
+//
+//    }
+    
+    
+    func uploadImageData( cpData : CPListData, fileInfo : FileInfo, comp : @escaping(Bool, String, String)-> ()) {
+        
+//        let date = Date()
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "dd-MMM-yyyy"
+//        let newDate = formatter.string(from: date)
         
         
+        let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "/" + "frmContactManager" + "/" + cpData.cpName + "/" + Constant.MODULES.CP + "/" +  "KYC Information" + "/" + self.newDate + "/" + fileInfo.fName + "." + fileInfo.fExtension)
+        
+        DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
+        dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
+            .response { response, error in
+                
+                
+                DispatchQueue.main.async() {
+                    if let response = response {
+                        
+                        print(response.pathDisplay)
+                        print(response.name)
+
+                        
+//                        self.addItemToServer(dModName: "frmContactManager", company: cpData.cpName , location:  Constant.MODULES.CP, bUnit: "KYC Information" , docRefId : newDate , docName: fileInfo.fName + "." + fileInfo.fExtension , docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
+//
+                        comp(true, response.pathDisplay ?? "" , response.name )
+//                        })
+
+                    } else if error != nil {
+                        comp(false, (error?.description)!, "")
+                        print(error?.description)
+                    }
+                }
+            }
+            .progress { progressData in
+                
+        }
     }
     
     
@@ -343,9 +570,11 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         dropDown.dataSource = arrKYCReq
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.btnKYCRequired.setTitle(item, for: .normal)
+            self?.enableDisableKYCBtn(item: item)
         }
         dropDown.show()
     }
+    
     
     @IBAction func btnSDNListChk(_ sender: Any) {
         
@@ -354,6 +583,8 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         dropDown.dataSource = arrKYCReq
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.btnSDNListChk.setTitle(item, for: .normal)
+            self?.btnAttachmnt.isEnabled = true
+            self?.btnAttachmnt.setTitleColor( UIColor.black , for: .normal)
         }
         dropDown.show()
     }
@@ -382,7 +613,80 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
 
 
 
-extension KYCDetailsController: UITextFieldDelegate {
+extension KYCDetailsController: UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,  uploadFileDelegate {
+    
+    func uploadFile(data: Data, fileName: String, ext: String, fileDesc: String) {
+        
+        self.view.makeToast("Your file upload is in progress, we'll notify when uploaded")
+        
+        let uploadFileData = FileInfo()
+        
+        uploadFileData.fData = data
+        uploadFileData.fName = fileName
+        uploadFileData.fDesc = fileDesc
+        uploadFileData.fExtension = ext
+        
+        self.view.showLoading()
+        self.uploadImageData(cpData: cpData, fileInfo : uploadFileData ,comp: { result, str1, str2  in
+            self.view.hideLoading()
+            
+            if result {
+                Helper.showVUMessage(message: "Attachment uploaded successfully", success: true)
+                self.btnAttachmnt.setTitle(str2, for: .normal)
+                self.docUrlStr = str1
+                self.docFileName = str2
+            } else {
+                self.dbRequest?.cancel()
+                return
+            }
+            
+        })
+    }
+    
+    
+    
+    
+    func openCamera(){
+        
+        self.imagePicker.delegate = self
+        self.imagePicker.allowsEditing = true
+        self.imagePicker.modalTransitionStyle = .crossDissolve
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+            switch authStatus {
+            case .authorized:
+                self.showCameraPicker()
+            case .denied:
+                self.alertPromptToAllowCameraAccessViaSettings()
+            case .notDetermined:
+                self.permissionPrimeCameraAccess()
+            default:
+                break
+            }
+        } else {
+            let alertController = UIAlertController(title: "Error", message: "Device has no camera", preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { (alert) in
+            })
+            alertController.addAction(defaultAction)
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    
+    
+    func openGallery(){
+        
+        let documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["public.text","com.apple.iwork.pages.pages", "public.data"], in: UIDocumentPickerMode.import)
+        documentPicker.delegate = self
+        
+        /// Set Document picker navigation bar text color
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor], for: .normal)
+        documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        self.present(documentPicker, animated: true, completion: nil)
+        
+    }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
@@ -403,8 +707,79 @@ extension KYCDetailsController: UITextFieldDelegate {
         return true
     }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        self.imagePicker.dismiss(animated: true, completion: { () -> Void in
+            self.view.showLoading()
+            if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                
+                let compressData = UIImageJPEGRepresentation(image, 0.5)
+                
+                let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
+                myView.frame = (self.navigationController?.view.frame)!
+                myView.data = compressData
+                myView.uploadDelegate = self
+                myView.setImageToView(image: image)
+                myView.extensn = "jpg"
+                self.navigationController?.view.addSubview(myView)
+                self.view.hideLoading()
+            }
+        })
+    }
     
     
+    func alertPromptToAllowCameraAccessViaSettings() {
+        let appName =  Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? ""
+        
+        let alert = UIAlertController(title: appName + " Would Like To Access the Camera", message: "Please grant permission to use the Camera", preferredStyle: .alert )
+        alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { alert in
+            if let appSettingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.open(appSettingsURL as URL, options: [:], completionHandler: nil)
+            }
+        })
+        
+        let declineAction = UIAlertAction(title: "Not Now", style: .cancel) { (alert) in
+        }
+        alert.addAction(declineAction)
+        present(alert, animated: true, completion: nil)
+    }
     
+    
+    func permissionPrimeCameraAccess() {
+        
+        let appName =  Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? ""
+        
+        let alert = UIAlertController( title: appName + " Would Like To Access the Camera", message: "Please grant permission to use the Camera", preferredStyle: .alert )
+        let allowAction = UIAlertAction(title: "Allow", style: .default, handler: { (alert) -> Void in
+            self.showCameraPicker()
+        })
+        alert.addAction(allowAction)
+        let declineAction = UIAlertAction(title: "Not Now", style: .cancel) { (alert) in
+        }
+        alert.addAction(declineAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func showCameraPicker() {
+        self.imagePicker.modalPresentationStyle = UIModalPresentationStyle.currentContext
+        self.imagePicker.delegate = self
+        self.imagePicker.allowsEditing = true
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+        present(self.imagePicker, animated: true, completion: nil)
+    }
     
 }
+
+extension KYCDetailsController: UIDocumentInteractionControllerDelegate {
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
+        UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor]
+        return self.navigationController!
+    }
+    
+    func documentInteractionControllerDidDismissOpenInMenu(_ controller: UIDocumentInteractionController) {
+        docFileViewer = nil
+    }
+}
+

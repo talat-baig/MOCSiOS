@@ -12,6 +12,9 @@
 		5706B8D720A8992000AF4228 /* FilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706B8D620A8992000AF4228 /* FilterHeaderView.swift */; };
 		571065F620FE1693006E7864 /* CargoInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571065F420FE1693006E7864 /* CargoInfoCell.swift */; };
 		571065F720FE1693006E7864 /* CargoInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 571065F520FE1693006E7864 /* CargoInfoCell.xib */; };
+		5712D9862148F7730083F8EF /* TravelRequest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5712D9852148F7730083F8EF /* TravelRequest.storyboard */; };
+		5712D9892148F7B00083F8EF /* TravelRequestForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5712D9882148F7B00083F8EF /* TravelRequestForm.swift */; };
+		5712D98B2148FD130083F8EF /* TravelRequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5712D98A2148FD130083F8EF /* TravelRequestController.swift */; };
 		571C1151210AF2A900FC3E12 /* AddNewRecordRcptVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571C1150210AF2A900FC3E12 /* AddNewRecordRcptVC.swift */; };
 		571DE8622135141000AE6B72 /* CPPrimaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571DE8612135141000AE6B72 /* CPPrimaryViewController.swift */; };
 		571DE8642135146600AE6B72 /* CounterpartyProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571DE8632135146500AE6B72 /* CounterpartyProfileController.swift */; };
@@ -243,6 +246,9 @@
 		5706B8D620A8992000AF4228 /* FilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterHeaderView.swift; sourceTree = "<group>"; };
 		571065F420FE1693006E7864 /* CargoInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CargoInfoCell.swift; sourceTree = "<group>"; };
 		571065F520FE1693006E7864 /* CargoInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CargoInfoCell.xib; sourceTree = "<group>"; };
+		5712D9852148F7730083F8EF /* TravelRequest.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TravelRequest.storyboard; sourceTree = "<group>"; };
+		5712D9882148F7B00083F8EF /* TravelRequestForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestForm.swift; sourceTree = "<group>"; };
+		5712D98A2148FD130083F8EF /* TravelRequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestController.swift; sourceTree = "<group>"; };
 		571C1150210AF2A900FC3E12 /* AddNewRecordRcptVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewRecordRcptVC.swift; sourceTree = "<group>"; };
 		571DE8612135141000AE6B72 /* CPPrimaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPPrimaryViewController.swift; sourceTree = "<group>"; };
 		571DE8632135146500AE6B72 /* CounterpartyProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CounterpartyProfileController.swift; sourceTree = "<group>"; };
@@ -486,6 +492,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5712D9872148F77F0083F8EF /* TRF */ = {
+			isa = PBXGroup;
+			children = (
+				5712D98A2148FD130083F8EF /* TravelRequestController.swift */,
+				5712D9852148F7730083F8EF /* TravelRequest.storyboard */,
+				5712D9882148F7B00083F8EF /* TravelRequestForm.swift */,
+			);
+			name = TRF;
+			sourceTree = "<group>";
+		};
 		572D104820DB888200966426 /* SideMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -916,6 +932,7 @@
 		B3AF6B852019A0650009950A /* Administrative */ = {
 			isa = PBXGroup;
 			children = (
+				5712D9872148F77F0083F8EF /* TRF */,
 				5758A60020D105D90064B69D /* TCR */,
 				5758A5FF20D105AF0064B69D /* ECR */,
 			);
@@ -1057,6 +1074,7 @@
 				57A0DED2208D9D6E0057FA08 /* EPRListView.xib in Resources */,
 				B31BE46C2013D04D00F55648 /* Assets.xcassets in Resources */,
 				57F03490207F815E00DE5056 /* TreeTableViewCell.xib in Resources */,
+				5712D9862148F7730083F8EF /* TravelRequest.storyboard in Resources */,
 				84D0C4E32052AC06000BED53 /* ARReport.storyboard in Resources */,
 				840C01BF20404D230012ED65 /* AttachmentCell.xib in Resources */,
 				5735F29720765AA000A0A640 /* SendEmailHeaderView.xib in Resources */,
@@ -1242,6 +1260,7 @@
 				577A81B320EF99D50006EF0B /* ROListCell.swift in Sources */,
 				84BDABAB2047DE5B00D0B617 /* DOProductData.swift in Sources */,
 				5786A8D620846BC100E24B4D /* TaskListCell.swift in Sources */,
+				5712D9892148F7B00083F8EF /* TravelRequestForm.swift in Sources */,
 				5724DBD22084BD0C00A27237 /* TaskDetails.swift in Sources */,
 				577A81B120EF97650006EF0B /* ROCarfoInfoVC.swift in Sources */,
 				84EC1B46203D901100F891B8 /* PCShipmentViewController.swift in Sources */,
@@ -1275,6 +1294,7 @@
 				B3AF6B892019A0C60009950A /* TravelClaimController.swift in Sources */,
 				57CCD9EC2071EEBD0045E505 /* TopHeaderView.swift in Sources */,
 				571DE878213576CB00AE6B72 /* TransactionDetailsController.swift in Sources */,
+				5712D98B2148FD130083F8EF /* TravelRequestController.swift in Sources */,
 				84EC1B44203D8FED00F891B8 /* PCProductViewController.swift in Sources */,
 				57E3674E206A5AD5000C7A5D /* ExpenseListData.swift in Sources */,
 				84D0C4E52052AC31000BED53 /* ARReportController.swift in Sources */,

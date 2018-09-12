@@ -15,7 +15,6 @@ class ContactPersonController: UIViewController , IndicatorInfoProvider {
         return IndicatorInfo(title: "CONTACT PERSON")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }

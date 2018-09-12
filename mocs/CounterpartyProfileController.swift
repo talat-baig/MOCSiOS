@@ -123,7 +123,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                         
-                    }else{
+                    } else {
                         self.refreshControl.endRefreshing()
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                     }
@@ -300,10 +300,12 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
     
     
     func onClick(optionMenu: UIViewController, sender: UIButton) {
+        self.handleTap()
          self.present(optionMenu, animated: true, completion: nil)
     }
     
     func onViewClick(data: CPListData) {
+        self.handleTap()
         viewClaim(data: data)
     }
     

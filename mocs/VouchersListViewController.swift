@@ -233,9 +233,6 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         Helper.showNoItemState(vc:self , messg: "List is Empty\nTry to load by tapping below button" , tb:tblVwVouchers,  action:#selector(getVouchersData))
     }
     
-    //    func cancelUploadReq() {
-    //        dbRequest?.cancel()
-    //    }
     
     func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
         
@@ -553,8 +550,6 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         guard let newUpload = newFile else {
             return
         }
-        
-        //   if GlobalVariables.shared.uploadQueue.count > 1 {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         self.uploadImageData(fileInfo : newUpload ,comp: { result,errmessg  in

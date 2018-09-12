@@ -67,6 +67,8 @@ struct Constant
         static let ARI = "Admin Receive Invoice";
         static let TRI = "Trade Receive Invoice";
         static let TASK_MANAGER = "Task Manager"
+        static let CP = "Counterparty Profile"
+
     }
     
     struct API {
@@ -466,8 +468,15 @@ struct Constant
         static let CP_APPROVE = "http://172.16.12.12/OCSWebApi/api/CPApproval/CheckCPApproved?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CusID=%@&Event=%d&KYCContactType=%@&KYCRequired=%@&REFID=%@"
         
         static let CP_MAIL = "http://172.16.12.12/OCSWebApi/api/CounterParty/SendCPMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&CstrID=%@"
+     
+        
+        static let CP_KYC_APPROVE = "http://172.16.12.12/OCSWebApi/api/CounterParty/AppproveKYCbyCP?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&KYCContactType=%@&KYCRequired=%@&KYCValidUntil=%@&ListCheck=%@&attachment=%@&status=%d&REFID=%@&docname=%@&compname=%@&DocumentReferenceNumber=%@"
+
+//        http://172.16.12.12/OCSWebApi/api/CounterParty/AppproveKYCbyCP?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=DA58F943-A1B5-45F5-AB99-D0B8106A&KYCContactType=Trade&KYCRequired=Yes&KYCValidUntil=2018-09-12&ListCheck=No&attachment=&status=0&REFID=9125&docname=&compname=My%20New%20Counterparty&DocumentReferenceNumber=12-Sep-2018
         
         
+        
+//        AppproveKYCbyCP(string api, string auth, string KYCContactType, string KYCRequired, string KYCValidUntil, string ListCheck, string attachment)
     }
     
     struct TRI {
@@ -516,8 +525,8 @@ struct Constant
         
         static let CP_LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-        // static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+         static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         
