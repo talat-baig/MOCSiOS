@@ -15,6 +15,8 @@
 		5712D9862148F7730083F8EF /* TravelRequest.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5712D9852148F7730083F8EF /* TravelRequest.storyboard */; };
 		5712D9892148F7B00083F8EF /* TravelRequestForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5712D9882148F7B00083F8EF /* TravelRequestForm.swift */; };
 		5712D98B2148FD130083F8EF /* TravelRequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5712D98A2148FD130083F8EF /* TravelRequestController.swift */; };
+		5712D98D214915A40083F8EF /* TravelRequestAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5712D98C214915A40083F8EF /* TravelRequestAdapter.swift */; };
+		5712D98F21491AD10083F8EF /* TravelRequestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5712D98E21491AD10083F8EF /* TravelRequestData.swift */; };
 		571C1151210AF2A900FC3E12 /* AddNewRecordRcptVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571C1150210AF2A900FC3E12 /* AddNewRecordRcptVC.swift */; };
 		571DE8622135141000AE6B72 /* CPPrimaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571DE8612135141000AE6B72 /* CPPrimaryViewController.swift */; };
 		571DE8642135146600AE6B72 /* CounterpartyProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571DE8632135146500AE6B72 /* CounterpartyProfileController.swift */; };
@@ -83,6 +85,11 @@
 		5746529720AC1AC50052AE2D /* CustomPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5746529620AC1AC50052AE2D /* CustomPopUpView.swift */; };
 		5746529920AC1AF80052AE2D /* CustomPopUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5746529820AC1AF80052AE2D /* CustomPopUpView.xib */; };
 		57480435211471DB00A87CDA /* RecordRcptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57480434211471DB00A87CDA /* RecordRcptData.swift */; };
+		575005E3214B815D0004A1CE /* ItineraryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575005E1214B815D0004A1CE /* ItineraryListCell.swift */; };
+		575005E4214B815D0004A1CE /* ItineraryListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 575005E2214B815D0004A1CE /* ItineraryListCell.xib */; };
+		575005E6214B8DF40004A1CE /* AddNewItineraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575005E5214B8DF40004A1CE /* AddNewItineraryVC.swift */; };
+		575005E8214BC9490004A1CE /* TermsCondistionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575005E7214BC9490004A1CE /* TermsCondistionsView.swift */; };
+		575005EA214BCCEF0004A1CE /* TermsCondistionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 575005E9214BCCEF0004A1CE /* TermsCondistionsView.xib */; };
 		57520328211968B6006718B0 /* RRcptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57520327211968B6006718B0 /* RRcptData.swift */; };
 		57531D5B2111C73400294EBD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 57531D5A2111C73300294EBD /* GoogleService-Info.plist */; };
 		5756B36A20907E5D006753E3 /* TCREPRListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756B36920907E5D006753E3 /* TCREPRListData.swift */; };
@@ -117,6 +124,9 @@
 		57CCD9F32071F0A20045E505 /* UploadFileCustomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57CCD9F22071F0A20045E505 /* UploadFileCustomView.xib */; };
 		57CE31D42080727B008319BA /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CE31D32080727B008319BA /* FilterCollectionViewCell.swift */; };
 		57DA86CC207C9D7C00B1F414 /* FilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DA86CB207C9D7C00B1F414 /* FilterData.swift */; };
+		57DB8C0721491DD00007D82A /* TRBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DB8C0621491DD00007D82A /* TRBaseViewController.swift */; };
+		57DB8C092149208A0007D82A /* TravelRequestAddEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DB8C082149208A0007D82A /* TravelRequestAddEditController.swift */; };
+		57DB8C0B214934870007D82A /* ItineraryListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DB8C0A214934870007D82A /* ItineraryListController.swift */; };
 		57E0254C21187F540048D49F /* WHRListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E0254B21187F540048D49F /* WHRListData.swift */; };
 		57E3673E2068C25F000C7A5D /* ExpenseListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3673D2068C25F000C7A5D /* ExpenseListViewController.swift */; };
 		57E367402068C27C000C7A5D /* VouchersListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E3673F2068C27C000C7A5D /* VouchersListViewController.swift */; };
@@ -249,6 +259,8 @@
 		5712D9852148F7730083F8EF /* TravelRequest.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TravelRequest.storyboard; sourceTree = "<group>"; };
 		5712D9882148F7B00083F8EF /* TravelRequestForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestForm.swift; sourceTree = "<group>"; };
 		5712D98A2148FD130083F8EF /* TravelRequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestController.swift; sourceTree = "<group>"; };
+		5712D98C214915A40083F8EF /* TravelRequestAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestAdapter.swift; sourceTree = "<group>"; };
+		5712D98E21491AD10083F8EF /* TravelRequestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestData.swift; sourceTree = "<group>"; };
 		571C1150210AF2A900FC3E12 /* AddNewRecordRcptVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewRecordRcptVC.swift; sourceTree = "<group>"; };
 		571DE8612135141000AE6B72 /* CPPrimaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPPrimaryViewController.swift; sourceTree = "<group>"; };
 		571DE8632135146500AE6B72 /* CounterpartyProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CounterpartyProfileController.swift; sourceTree = "<group>"; };
@@ -317,6 +329,11 @@
 		5746529620AC1AC50052AE2D /* CustomPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPopUpView.swift; sourceTree = "<group>"; };
 		5746529820AC1AF80052AE2D /* CustomPopUpView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomPopUpView.xib; sourceTree = "<group>"; };
 		57480434211471DB00A87CDA /* RecordRcptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordRcptData.swift; sourceTree = "<group>"; };
+		575005E1214B815D0004A1CE /* ItineraryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryListCell.swift; sourceTree = "<group>"; };
+		575005E2214B815D0004A1CE /* ItineraryListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ItineraryListCell.xib; sourceTree = "<group>"; };
+		575005E5214B8DF40004A1CE /* AddNewItineraryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewItineraryVC.swift; sourceTree = "<group>"; };
+		575005E7214BC9490004A1CE /* TermsCondistionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsCondistionsView.swift; sourceTree = "<group>"; };
+		575005E9214BCCEF0004A1CE /* TermsCondistionsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TermsCondistionsView.xib; sourceTree = "<group>"; };
 		57520327211968B6006718B0 /* RRcptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RRcptData.swift; sourceTree = "<group>"; };
 		57531D5A2111C73300294EBD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5756B36920907E5D006753E3 /* TCREPRListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCREPRListData.swift; sourceTree = "<group>"; };
@@ -351,6 +368,9 @@
 		57CCD9F22071F0A20045E505 /* UploadFileCustomView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadFileCustomView.xib; sourceTree = "<group>"; };
 		57CE31D32080727B008319BA /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		57DA86CB207C9D7C00B1F414 /* FilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterData.swift; sourceTree = "<group>"; };
+		57DB8C0621491DD00007D82A /* TRBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TRBaseViewController.swift; sourceTree = "<group>"; };
+		57DB8C082149208A0007D82A /* TravelRequestAddEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestAddEditController.swift; sourceTree = "<group>"; };
+		57DB8C0A214934870007D82A /* ItineraryListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryListController.swift; sourceTree = "<group>"; };
 		57E0254B21187F540048D49F /* WHRListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WHRListData.swift; sourceTree = "<group>"; };
 		57E3673D2068C25F000C7A5D /* ExpenseListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseListViewController.swift; sourceTree = "<group>"; };
 		57E3673F2068C27C000C7A5D /* VouchersListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VouchersListViewController.swift; sourceTree = "<group>"; };
@@ -495,8 +515,18 @@
 		5712D9872148F77F0083F8EF /* TRF */ = {
 			isa = PBXGroup;
 			children = (
-				5712D98A2148FD130083F8EF /* TravelRequestController.swift */,
+				575005E9214BCCEF0004A1CE /* TermsCondistionsView.xib */,
+				575005E7214BC9490004A1CE /* TermsCondistionsView.swift */,
+				575005E5214B8DF40004A1CE /* AddNewItineraryVC.swift */,
+				57DB8C0621491DD00007D82A /* TRBaseViewController.swift */,
+				57DB8C0A214934870007D82A /* ItineraryListController.swift */,
 				5712D9852148F7730083F8EF /* TravelRequest.storyboard */,
+				575005E1214B815D0004A1CE /* ItineraryListCell.swift */,
+				575005E2214B815D0004A1CE /* ItineraryListCell.xib */,
+				5712D98A2148FD130083F8EF /* TravelRequestController.swift */,
+				5712D98C214915A40083F8EF /* TravelRequestAdapter.swift */,
+				5712D98E21491AD10083F8EF /* TravelRequestData.swift */,
+				57DB8C082149208A0007D82A /* TravelRequestAddEditController.swift */,
 				5712D9882148F7B00083F8EF /* TravelRequestForm.swift */,
 			);
 			name = TRF;
@@ -1084,6 +1114,8 @@
 				841C966A2046A9350090E751 /* DeliveryOrder.storyboard in Resources */,
 				57A0DED8208DA22E0057FA08 /* EPRListCell.xib in Resources */,
 				5765DC2420846460002494E6 /* TaskManager.storyboard in Resources */,
+				575005EA214BCCEF0004A1CE /* TermsCondistionsView.xib in Resources */,
+				575005E4214B815D0004A1CE /* ItineraryListCell.xib in Resources */,
 				84279FAF205FA157006F7BEC /* ARList.xib in Resources */,
 				573642E42134029100664771 /* CounterpartyApproval.storyboard in Resources */,
 				5724DBCC2084A4C200A27237 /* TaskDetailsCell.xib in Resources */,
@@ -1214,6 +1246,7 @@
 				84214E682057CE6300A6588D /* DetailsController.swift in Sources */,
 				846F264F2058ECC700B3F873 /* TRIAllocationCell.swift in Sources */,
 				571DE866213514D400AE6B72 /* KYCViewController.swift in Sources */,
+				575005E3214B815D0004A1CE /* ItineraryListCell.swift in Sources */,
 				84D0C4D9205159D2000BED53 /* EPRPrimaryController.swift in Sources */,
 				5735F29520765A7F00A0A640 /* SendEmailHeaderView.swift in Sources */,
 				577A81AF20EF895E0006EF0B /* ROProductViewController.swift in Sources */,
@@ -1222,6 +1255,7 @@
 				571065F620FE1693006E7864 /* CargoInfoCell.swift in Sources */,
 				5735F2842075F61500A0A640 /* ARInstrumentController.swift in Sources */,
 				8443BFD3203AB93A00F09DE0 /* PurchaseContractController.swift in Sources */,
+				575005E6214B8DF40004A1CE /* AddNewItineraryVC.swift in Sources */,
 				5758A60820D12A7F0064B69D /* ECRExpenseListAdapter.swift in Sources */,
 				57E367442068C5A7000C7A5D /* BaseViewController.swift in Sources */,
 				84759F5C2044305A002F1D7C /* ContractCell.swift in Sources */,
@@ -1252,6 +1286,7 @@
 				571DE87E2135797A00AE6B72 /* InitiationViewController.swift in Sources */,
 				57CCD9F12071F04E0045E505 /* UploadFileCustomView.swift in Sources */,
 				571DE87C213576FA00AE6B72 /* FinancialInfoController.swift in Sources */,
+				57DB8C092149208A0007D82A /* TravelRequestAddEditController.swift in Sources */,
 				5724FB0420DCD8ED001860C6 /* ECRExpenseListData.swift in Sources */,
 				84D0C4C1204D44B0000BED53 /* ExpenseCell.swift in Sources */,
 				57E0254C21187F540048D49F /* WHRListData.swift in Sources */,
@@ -1287,6 +1322,7 @@
 				571C1151210AF2A900FC3E12 /* AddNewRecordRcptVC.swift in Sources */,
 				84BDABA72047C2EC00D0B617 /* DOProductController.swift in Sources */,
 				571DE876213576B200AE6B72 /* KYCPrimaryViewController.swift in Sources */,
+				5712D98D214915A40083F8EF /* TravelRequestAdapter.swift in Sources */,
 				571DE8802135799D00AE6B72 /* KYCApprovalController.swift in Sources */,
 				57B7D2EE2121B65B004D1202 /* EmployeeClaimData.swift in Sources */,
 				84D0C4BF204D2980000BED53 /* TCRPRimaryController.swift in Sources */,
@@ -1307,6 +1343,7 @@
 				849D49622032F2A80067BE21 /* TransitionManager.swift in Sources */,
 				5735F27F2074F0A800A0A640 /* ARCounterPartyCell.swift in Sources */,
 				842515722056931B00130073 /* ARIPrimaryController.swift in Sources */,
+				575005E8214BC9490004A1CE /* TermsCondistionsView.swift in Sources */,
 				5724DBCB2084A4C200A27237 /* TaskDetailsCell.swift in Sources */,
 				57A0DED7208DA22E0057FA08 /* EPRListCell.swift in Sources */,
 				84214E642057A97100A6588D /* EmployeeController.swift in Sources */,
@@ -1319,6 +1356,7 @@
 				846F26472058DAE600B3F873 /* TradeInvoiceController.swift in Sources */,
 				84E4BA0A206E5EE90006B3A9 /* HomeAdapter.swift in Sources */,
 				57F0348E207F815E00DE5056 /* TreeTableViewCell.swift in Sources */,
+				57DB8C0721491DD00007D82A /* TRBaseViewController.swift in Sources */,
 				571DE87021354FFA00AE6B72 /* CreditLimitController.swift in Sources */,
 				B3DB259820288EE700FA176D /* EmployeeData.swift in Sources */,
 				573DB4992089EFDD007056A1 /* CustomTRIApproveView.swift in Sources */,
@@ -1337,6 +1375,7 @@
 				84D0C4DF20515F3A000BED53 /* EPRPaymentController.swift in Sources */,
 				57CCD9ED2071EEBD0045E505 /* TravelClaimEditAddController.swift in Sources */,
 				571DE87A213576DF00AE6B72 /* LegalInfoController.swift in Sources */,
+				57DB8C0B214934870007D82A /* ItineraryListController.swift in Sources */,
 				5735F27A2074EF5700A0A640 /* ARCounterPartyController.swift in Sources */,
 				57772717210A02AC00AA31DA /* RecordReceiptCell.swift in Sources */,
 				5735F28D207606C900A0A640 /* ARInstrumentsData.swift in Sources */,
@@ -1381,6 +1420,7 @@
 				5758A60420D114E00064B69D /* ECRExpenseListVC.swift in Sources */,
 				572D105420DB88A500966426 /* LevelOneCell.swift in Sources */,
 				84BDABA92047C52700D0B617 /* DOLogisticsController.swift in Sources */,
+				5712D98F21491AD10083F8EF /* TravelRequestData.swift in Sources */,
 				57F0348B207F815E00DE5056 /* CompanyFilterCell.swift in Sources */,
 				840A9859203BF77800ACCA3F /* SideMenuController.swift in Sources */,
 				577659FA207B9AAC00643402 /* HomeDetailsController.swift in Sources */,

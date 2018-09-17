@@ -810,6 +810,8 @@ extension UIView{
     
     
 }
+
+
 extension String{
     mutating func removingRegexMatches(pattern:String,replaceWith:String = ""){
         do{

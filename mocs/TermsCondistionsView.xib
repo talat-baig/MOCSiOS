@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="TermsCondistionsView" customModule="mocs" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DKD-pT-QyJ">
+                    <rect key="frame" x="25" y="36" width="325" height="595"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0gL-H0-a4e">
+                            <rect key="frame" x="0.0" y="0.0" width="325" height="44"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Terms and Conditions" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kgE-IS-FEf">
+                                    <rect key="frame" x="79" y="8" width="167" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zKm-fG-hqH">
+                                    <rect key="frame" x="-11" y="36" width="336" height="2"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" red="0.0" green="0.4793452024" blue="0.99908632040000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="EaU-K9-PuH"/>
+                                <constraint firstItem="kgE-IS-FEf" firstAttribute="top" secondItem="0gL-H0-a4e" secondAttribute="top" constant="8" id="O5O-nw-8gH"/>
+                                <constraint firstItem="kgE-IS-FEf" firstAttribute="centerX" secondItem="0gL-H0-a4e" secondAttribute="centerX" id="czF-oE-YSu"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipsToBounds" value="YES"/>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Yjy-nG-kpg">
+                            <rect key="frame" x="8" y="52" width="309" height="476"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1. Approval must be sought on this form at least 3 days prior to departure." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MRw-DW-uCp">
+                                    <rect key="frame" x="0.0" y="0.0" width="309" height="33.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rzS-rW-vMl">
+                                    <rect key="frame" x="0.0" y="41.5" width="309" height="84"/>
+                                    <string key="text">2. Amendments to a travel request must be filed at least 24 Hrs prior to the date of travel on this form.  Department may be required to bear any additional costs incurred by the company as a result of late requests.</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXc-xc-TIw">
+                                    <rect key="frame" x="0.0" y="133.5" width="309" height="100.5"/>
+                                    <string key="text">3. If travel arrangements are requested, such is subject to the availability of seats and reasonable fares, room availabilities with partner hotels. Itineraries may be modified accordingly by Travel Admin in consultation with the traveller</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4. Approval requests do not constitute a claim for valid travel papers or reimbursement of costs against any party." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34A-E2-rdA">
+                                    <rect key="frame" x="0.0" y="242" width="309" height="50.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56e-Ky-MVj">
+                                    <rect key="frame" x="0.0" y="300.5" width="309" height="117"/>
+                                    <string key="text">5. Date modifications of issued tickets are entirely the responsibility of the traveller. Unless the Travel Admin is satisfied that good cause exists, Reporting manager will be responsible for the cost of any changes to, or a cancellation of, bookings made by the Travel Admin</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6. Travel expenses must be claimed within 15 days after completion of travel, otherwise the claim shall be void." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zmr-5t-Sew">
+                                    <rect key="frame" x="0.0" y="425.5" width="309" height="50.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="heH-vC-eb8">
+                            <rect key="frame" x="8" y="557" width="309" height="30"/>
+                            <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="fdo-U7-7US"/>
+                            </constraints>
+                            <state key="normal" title="OK">
+                                <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnOKTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="UyM-We-RDu"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="heH-vC-eb8" firstAttribute="leading" secondItem="DKD-pT-QyJ" secondAttribute="leading" constant="8" id="ImU-hp-Oub"/>
+                        <constraint firstItem="0gL-H0-a4e" firstAttribute="leading" secondItem="DKD-pT-QyJ" secondAttribute="leading" id="LOY-AX-KiG"/>
+                        <constraint firstAttribute="trailing" secondItem="Yjy-nG-kpg" secondAttribute="trailing" constant="8" id="SQP-Fa-22m"/>
+                        <constraint firstAttribute="trailing" secondItem="0gL-H0-a4e" secondAttribute="trailing" id="VUk-UA-ich"/>
+                        <constraint firstItem="0gL-H0-a4e" firstAttribute="top" secondItem="DKD-pT-QyJ" secondAttribute="top" id="cz6-5C-tLz"/>
+                        <constraint firstItem="Yjy-nG-kpg" firstAttribute="top" secondItem="0gL-H0-a4e" secondAttribute="bottom" constant="8" id="ofP-7H-O69"/>
+                        <constraint firstItem="Yjy-nG-kpg" firstAttribute="leading" secondItem="DKD-pT-QyJ" secondAttribute="leading" constant="8" id="qLk-Mc-Se9"/>
+                        <constraint firstAttribute="bottom" secondItem="heH-vC-eb8" secondAttribute="bottom" constant="8" id="rlz-7y-6Iy"/>
+                        <constraint firstAttribute="trailing" secondItem="heH-vC-eb8" secondAttribute="trailing" constant="8" id="xJM-pP-JaU"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="10"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="DKD-pT-QyJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="25" id="819-8E-Sfl"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="DKD-pT-QyJ" secondAttribute="bottom" constant="16" id="Cge-R5-ai0"/>
+                <constraint firstItem="DKD-pT-QyJ" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Lhl-MQ-G9L"/>
+                <constraint firstItem="DKD-pT-QyJ" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="PBL-4i-Vtv"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="DKD-pT-QyJ" secondAttribute="trailing" constant="25" id="Phq-TF-maM"/>
+                <constraint firstItem="DKD-pT-QyJ" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="R5d-iT-egF"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="136.5" y="70.5"/>
+        </view>
+    </objects>
+</document>

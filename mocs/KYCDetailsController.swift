@@ -363,7 +363,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                         vc.custId = self.cpData.custId
                         self.navigationController?.pushViewController(vc, animated: true)
                     } else {
-                        self.view.makeToast("No Data To Show")
+                        self.view.makeToast("No KYC Details Found")
                     }
                 }
             }))

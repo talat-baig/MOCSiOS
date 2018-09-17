@@ -44,8 +44,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
             Helper.showMessage(message: "Something went wrong!, Please try refreshing")
             return
         }
-        
-        
+
         populateList(response: respValue)
         
     }

@@ -46,11 +46,13 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     func setupTreeViewData() ->  [MenuDataObject] {
         
         let tcr_form = MenuDataObject(name: "1.1.1 Travel Claims Reimburstment (TCR) Form", storybdNAme: "TravelClaim", vcName: "TravelClaimController", imageName: #imageLiteral(resourceName: "home"))
+        
         let ecr_form = MenuDataObject(name: "1.1.2 Employee Claims Reimburstment (ECR) Form", storybdNAme: "EmployeeClaim", vcName: "EmployeeClaimController", imageName: #imageLiteral(resourceName: "task_tick"))
         
-        let trf_form = MenuDataObject(name: "1.1.3 Travel Request Form", storybdNAme: "TravelRequest", vcName: "TravelRequestForm", imageName: #imageLiteral(resourceName: "task_tick"))
+        let trf_form = MenuDataObject(name: "1.1.3 Travel Request Form", storybdNAme: "TravelRequest", vcName: "TravelRequestController", imageName: #imageLiteral(resourceName: "task_tick"))
 
         let form = MenuDataObject(name: "1.1 Forms" , children: [tcr_form, ecr_form, trf_form], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "document"))
+        
         let administrative = MenuDataObject(name: "Administrative", children: [form], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile") )
         
         
