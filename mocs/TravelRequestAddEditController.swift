@@ -23,9 +23,11 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
 
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var mySubVw: UIView!
+
     @IBOutlet weak var btnTermsConditions: UIButton!
     
+    @IBOutlet weak var scrlvw: UIScrollView!
     @IBOutlet var datePickerTool: UIView!
     
     @IBOutlet weak var btnSubmit: UIButton!
@@ -83,6 +85,12 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrlvw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 600 )
+    }
+    
     
     func imageWithImage(image:UIImage,scaledToSize newSize:CGSize)->UIImage {
         
