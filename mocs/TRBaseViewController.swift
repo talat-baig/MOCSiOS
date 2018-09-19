@@ -10,12 +10,23 @@ import UIKit
 import XLPagerTabStrip
 
 
+protocol onTRFUpdate {
+    func onTRFUpdateClick()
+}
+
+
 class TRBaseViewController: ButtonBarPagerTabStripViewController {
 
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
-    @IBOutlet weak var vwTopHeader: WC_HeaderView!
+    var trfData = TravelRequestData()
+    var itinryRespone : Data?
+    var trfReqNo : String = ""
+    var trfBaseDelegate: onTRFUpdate?
+    var isFromView : Bool = false
+    var response:Data?
 
+    @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     override func viewDidLoad() {
         
@@ -45,7 +56,7 @@ class TRBaseViewController: ButtonBarPagerTabStripViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = "Travel Request"
-        vwTopHeader.lblSubTitle.text = "123456"
+        vwTopHeader.lblSubTitle.text = trfReqNo
         self.navigationController?.isNavigationBarHidden = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
@@ -60,12 +71,27 @@ class TRBaseViewController: ButtonBarPagerTabStripViewController {
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var viewArray:[UIViewController] = []
 
-        let trAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelRequestAddEditController") as! TravelRequestAddEditController
        
+        
+        if isFromView {
+//            let tcNonEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelClaimNonEditController") as! TravelClaimNonEditController
+//            tcNonEditVC.response = response
+//            self.notifyChilds = tcNonEditVC
+//            viewArray.append(tcNonEditVC)
+        } else {
+            let trAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelRequestAddEditController") as! TravelRequestAddEditController
+            trAddEditVC.response = response
+            trAddEditVC.trvReqData = trfData
+//            trAddEditVC. = self
+            viewArray.append(trAddEditVC)
+        }
+
+        
+        
         let iternryVC = self.storyboard?.instantiateViewController(withIdentifier: "ItineraryListController") as! ItineraryListController
+         iternryVC.trfData = self.trfData
 
-
-        viewArray.append(trAddEditVC)
+//        viewArray.append(trAddEditVC)
         viewArray.append(iternryVC)
 
         

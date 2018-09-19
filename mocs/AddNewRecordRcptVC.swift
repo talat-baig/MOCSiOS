@@ -183,49 +183,7 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
                 })
         }
         
-        //                    if Helper.isResponseStringValid(vc: self, response: response.result) {
-        //
-        //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
-        //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-        //
-        //                            if let d = self.okSubmitDelegate {
-        //                                d.onOkClick()
-        //                            }
-        //                            self.navigationController?.popViewController(animated: true)
-        //                        }))
-        //                        self.present(success, animated: true, completion: nil)
-        //                    }
-        
-        //                    if response.result.value == "Success" {
-        //
-        //                        let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
-        //                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-        //
-        //                            if let d = self.okSubmitDelegate {
-        //                                d.onOkClick()
-        //                            }
-        //                            self.navigationController?.popViewController(animated: true)
-        //                        }))
-        //                        self.present(success, animated: true, completion: nil)
-        //                    } else if response.result.value == "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check" {
-        //
-        //                        let failure = UIAlertController(title: "", message: "Sorry you cannot Process this request, Since the receipt Qty is not matching with Quantity Received, please check", preferredStyle: .alert)
-        //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-        //
-        //
-        //                            self.navigationController?.popViewController(animated: true)
-        //                        }))
-        //                        self.present(failure, animated: true, completion: nil)
-        //                    } else {
-        //                        let failure = UIAlertController(title: "Oops", message: "Something went wrong! Unable to add Receipt", preferredStyle: .alert)
-        //                        failure.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
-        //
-        //                            self.navigationController?.popViewController(animated: true)
-        //                        }))
-        //                        self.present(failure, animated: true, completion: nil)
-        //                    }
-        
-        
+      
         
         
     }

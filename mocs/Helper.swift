@@ -151,6 +151,12 @@ class Helper: UIView {
     }
     
     
+    class func daysBetweenDates(startDate: Date, endDate: Date) -> Int {
+
+        let components =  Calendar.current.dateComponents([.day], from: startDate, to: endDate).day
+        return components!
+    }
+    
     public static func isPostResponseValid(vc: UIViewController, response : Result<String>, tv:UITableView? = nil)-> Bool{
         
         var isValid: Bool = false
@@ -590,6 +596,21 @@ class Helper: UIView {
         }
         return pData
     }
+    
+    
+    
+    public static func parseAndAssignCurrency() -> [String] {
+        
+        let jsonObj = JSON.init(parseJSON:Session.currency)
+        var currArr = [String]()
+        
+        for(_,j):(String,JSON) in jsonObj{
+            let newCurr = j["Currency"].stringValue
+            currArr.append(newCurr)
+        }
+        return currArr
+    }
+    
     
 }
 protocol Utility {

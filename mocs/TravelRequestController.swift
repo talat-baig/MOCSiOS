@@ -10,7 +10,9 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class TravelRequestController: UIViewController, UIGestureRecognizerDelegate {
+class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , onTRFUpdate , onTRFSubmit{
+    
+   
 
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -18,6 +20,11 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var srchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
+    
+    var arrayList:[TravelRequestData] = []
+    
+    var newArray : [TravelRequestData] = []
+    
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
 
@@ -43,15 +50,13 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate {
         vwTopHeader.lblTitle.text = "Travel Requests"
         vwTopHeader.lblSubTitle.isHidden = true
 
+        populateList()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    
-    @objc func populateList() {
-    }
     
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
@@ -66,21 +71,142 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate {
     @objc func handleTap() {
         self.view.endEditing(true)
     }
+    
+    func showLoading(){
+        self.view.showLoading()
+    }
+    
+    func hideLoading(){
+        self.view.hideLoading()
+    }
+    
+    @objc func populateList() {
+        
+        var data: [TravelRequestData] = []
+        
+        if internetStatus != .notReachable {
+            
+            self.showLoading()
+            let url:String = String.init(format: Constant.TRF.TRF_LIST, Session.authKey)
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+                if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView) {
+                    
+                    let jsonResponse = JSON(response.result.value!)
+                    let array = jsonResponse.arrayObject as! [[String:AnyObject]]
+                    if array.count > 0 {
+                        self.arrayList.removeAll()
+                        
+                        for(_,json):(String,JSON) in jsonResponse {
+                           
+                            let trfData = TravelRequestData()
+                            
+                            trfData.reqNo = json["RequestNo"].stringValue
+                            trfData.reqDate = json["RequestDate"].stringValue
+                            trfData.empName = json["EmployeeName"].stringValue
+                            trfData.empDept = json["Department"].stringValue
+                            trfData.empCode = json["EmployeeCode"].stringValue
 
+                            trfData.empDesgntn = json["Designation"].stringValue
+                            trfData.counter = json["Counter"].intValue
+                            trfData.reason = json["ReasonForTravel"].stringValue
+                            trfData.accmpnd = json["Accompanied"].stringValue
+                            trfData.requestor = json["Requestor"].stringValue
+                            trfData.currency = json["Currency"].stringValue
+                            trfData.trvelAdvnce = json["TravelAdvance"].stringValue
+                            trfData.status = json["Status1"].stringValue
+                            trfData.trfId = json["ID"].intValue
+                            trfData.reportMngr = json["ReportingManager"].stringValue
+
+                            if json["Approver"].stringValue == "" {
+                                trfData.approver = ""
+                            } else {
+                                trfData.approver  = json["Approver"].stringValue
+                            }
+                            
+                            if json["ApproverDate"].stringValue == "" {
+                                  trfData.approvdDate = ""
+                            } else {
+                                  trfData.approvdDate  = json["ApproverDate"].stringValue
+                            }
+                            data.append(trfData)
+                        }
+                        self.arrayList = data
+                        self.newArray = data
+                        self.tableView.tableFooterView = nil
+                        self.tableView.reloadData()
+                    }
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    func onTRFUpdateClick() {
+        populateList()
+    }
+    
+    @IBAction func btnAddRequestTapped(_ sender: Any) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TravelRequestAddEditController") as! TravelRequestAddEditController
+        vc.okTRFSubmit = self
+        self.navigationController!.pushViewController(vc, animated: true)
+        
+    }
+
+    func viewRequest(data: TravelRequestData,  isFromView: Bool) {
+    
+        getItirenaryData(trfData : data, isFromView: isFromView)
+    }
+    
+    func getItirenaryData(trfData :TravelRequestData, isFromView : Bool ) {
+        
+        if internetStatus != .notReachable {
+            let url = String.init(format: Constant.TRF.ITINERARY_LIST, Session.authKey,
+                                  trfData.trfId)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+
+            
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "TRBaseViewController") as! TRBaseViewController
+                    vc.trfData = trfData
+                    vc.isFromView = isFromView
+                    vc.trfBaseDelegate = self
+                    vc.trfReqNo = trfData.reqNo
+                    vc.itinryRespone = response.result.value
+                    self.navigationController!.pushViewController(vc, animated: true)
+            
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
+
+    func onOkClick() {
+        populateList()
+    }
+    
+    
 }
 
 extension TravelRequestController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-//        if  searchText.isEmpty {
-//            self.arrayList = newArray
-//        } else {
-//            let filteredArray = newArray.filter {
-//                $0.headRef.localizedCaseInsensitiveContains(searchText)
-//            }
-//            self.arrayList = filteredArray
-//        }
-//        tableView.reloadData()
+        if  searchText.isEmpty {
+            self.arrayList = newArray
+        } else {
+            let filteredArray = newArray.filter {
+                $0.reqNo.localizedCaseInsensitiveContains(searchText)
+            }
+            self.arrayList = filteredArray
+        }
+        tableView.reloadData()
     }
 }
 
@@ -104,15 +230,16 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
     
     func onEditClick(data: TravelRequestData) {
         
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TRBaseViewController") as! TRBaseViewController
+        viewRequest(data: data,  isFromView: false)
+
+//        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TRBaseViewController") as! TRBaseViewController
 //        vc.response = tcrResponse
 //        vc.isFromView = isFromView
 //        vc.tcrBaseDelegate = self
-//        vc.notifyChilds = self
 //        vc.title = tcrData.headRef
-//        vc.voucherResponse = response.result.value
+//        vc.itnryResponse = response.result.value
 //        vc.tcrData = tcrData
-        self.navigationController!.pushViewController(vc, animated: true)
+//        self.navigationController!.pushViewController(vc, animated: true)
         
     }
     
@@ -133,36 +260,53 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-//        if arrayList.count > 0 {
-//            tableView.backgroundView?.isHidden = true
-//            tableView.separatorStyle = .singleLine
-//        } else {
-//            tableView.backgroundView?.isHidden = false
-//            tableView.separatorStyle = .none
-//        }
-        return 2
+        if arrayList.count > 0 {
+            tableView.backgroundView?.isHidden = true
+            tableView.separatorStyle = .singleLine
+        } else {
+            tableView.backgroundView?.isHidden = false
+            tableView.separatorStyle = .none
+        }
+        return arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 305
+        return 240
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         handleTap()
    
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TRBaseViewController") as! TRBaseViewController
-       
-        self.navigationController!.pushViewController(vc, animated: true)
+        let data = arrayList[indexPath.row]
+ 
+        viewRequest(data: data , isFromView: false)
+
+        
+//        if (data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame){
+//            viewClaim(data: data, counter: data.counter , isFromView: false)
+//        } else {
+//            viewClaim(data: data, counter: data.counter , isFromView: true)
+//        }
+        
+//        if (data.headStatus.caseInsensitiveCompare("submitted") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved by finance") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved By manager")  == ComparisonResult.orderedSame) {
+//            self.view.makeToast("Claim already submitted, cannot be edited")
+//        }
+//
+//        if (data.headStatus.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
+//            self.view.makeToast("Claim has been deleted, cannot be edited")
+//        }
+        
         
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
+        let data = arrayList[indexPath.row]
         let view = tableView.dequeueReusableCell(withIdentifier: "TravelRequestAdapter") as! TravelRequestAdapter
         view.btnMore.tag = indexPath.row
-        view.setDataToView(data: nil)
+        view.setDataToView(data: data)
         view.delegate = self
         view.trvlReqItemClickListener = self
         return view
@@ -271,7 +415,7 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
 extension TravelRequestController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

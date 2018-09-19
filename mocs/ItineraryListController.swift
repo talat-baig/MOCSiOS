@@ -22,6 +22,7 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var tableView: UITableView!
 
     var arrayList:[JSON] = []
+    var trfData = TravelRequestData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +36,7 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider {
     @IBAction func btnAddItineraryTapped(_ sender: Any) {
         
         let addItrnyVC = self.storyboard?.instantiateViewController(withIdentifier: "AddNewItineraryVC") as! AddNewItineraryVC
+        addItrnyVC.trfData = self.trfData
         self.navigationController?.pushViewController(addItrnyVC, animated: true)
     }
 }
@@ -47,7 +49,7 @@ extension ItineraryListController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 217
+        return 180
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

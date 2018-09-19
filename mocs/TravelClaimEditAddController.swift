@@ -210,6 +210,10 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         scrlVw.contentSize.height = sizeOfContent
     }
     
+    @objc func handleTap() {
+        self.view.endEditing(true)
+    }
+    
     func checkSwitchValue() {
         
         if tcSwitchControl.isOn {
@@ -343,10 +347,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         }
     }
     
-    /// Handle user tap when keyboard is open
-    @objc func handleTap() {
-        self.view.endEditing(true)
-    }
+ 
     
     func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String,  counter : Int = 0 , eprStr : String ) {
         

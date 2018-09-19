@@ -566,14 +566,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         
         
         self.addOrEditClaim(ecrRefNo: ecrNo, claimType: claimType, paymntMethd: pymnt, ReqDate: reqDate, eprAdvanceVal: eprString , currency: currency, counter : (ecrDta.counter))
-        
-        
-        //        if eprString == "Open Advances" {
-        //            self.addOrEditClaim(ecrRefNo: ecrNo, claimType: claimType, paymntMethd: pymnt, ReqDate: reqDate, eprAdvanceVal: "", currency: currency, counter : (ecrDta?.counter)!)
-        //
-        //        } else {
-        //            self.addOrEditClaim(ecrRefNo: ecrNo, claimType: claimType, paymntMethd: pymnt, ReqDate: reqDate, eprAdvanceVal: "", currency: currency,counter : (ecrDta?.counter)!)
-        //        }
+       
     }
     
     

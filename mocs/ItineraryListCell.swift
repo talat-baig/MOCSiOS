@@ -13,9 +13,16 @@ class ItineraryListCell: UITableViewCell {
     
     @IBOutlet weak var vwOuter: UIView!
     
+    @IBOutlet weak var lblDest: UILabel!
     
+    @IBOutlet weak var lblDepDate: UILabel!
+    
+    @IBOutlet weak var lblRetDate: UILabel!
+
+    @IBOutlet weak var lblEstDays: UILabel!
     
     override func awakeFromNib() {
+        
         super.awakeFromNib()
 
         self.vwOuter.layer.borderWidth = 1

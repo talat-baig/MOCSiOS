@@ -25,6 +25,14 @@ class TravelRequestAdapter: UITableViewCell {
     @IBOutlet weak var btnMore: UIButton!
     @IBOutlet weak var outerVw: UIView!
     
+    
+    @IBOutlet weak var lblStatus: UILabel!
+    @IBOutlet weak var empName: UILabel!
+    @IBOutlet weak var empDept: UILabel!
+    @IBOutlet weak var reqDate: UILabel!
+    @IBOutlet weak var desgntn: UILabel!
+
+    
     weak var delegate:onMoreClickListener?
     
     weak var data:TravelRequestData!
@@ -48,6 +56,12 @@ class TravelRequestAdapter: UITableViewCell {
     
     func setDataToView(data: TravelRequestData?) {
 
+        lblRefNo.text = data?.reqNo
+        lblStatus.text = data?.status
+        empName.text = data?.empName
+        empDept.text = data?.empDept
+        reqDate.text = data?.reqDate
+        desgntn.text = data?.empDesgntn
         self.data = data
     }
  
@@ -57,7 +71,7 @@ class TravelRequestAdapter: UITableViewCell {
         
         let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.trvlReqItemClickListener?.responds(to: Selector(("onEditClick:"))) != nil){
-//                self.trvlReqItemClickListener?.onEditClick(data: self.data)
+                self.trvlReqItemClickListener?.onEditClick(data: self.data)
             }
         })
         

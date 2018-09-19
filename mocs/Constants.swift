@@ -27,7 +27,7 @@ struct AppColor {
     static let univPopUpBckgColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
     static let univVoucherCell = UIColor(red:69.0/255.0, green:138.0/255.0, blue:255.0/255.0, alpha:0.3)
     static let sideMenuGreen = UIColor(red: 26.0/255.0, green: 188.0/255.0, blue: 156.0/255.0, alpha: 1.0)
-    static let lightGray = UIColor(red: 209.0/255.0, green: 209.0/255.0, blue: 209.0/255.0, alpha: 1.0)
+    static let lightGray = UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
     static let lightestBlue = UIColor(red: 218.0/255.0, green: 231.0/255.0, blue: 254.0/255.0, alpha: 1.0)
     
     
@@ -354,6 +354,21 @@ struct Constant
         
         
         static let TCR_EPR_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
+        
+    }
+    
+    struct TRF {
+        
+        
+        static let TRF_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessTrip?key=33ddb2ee-59a5-428f-a0a5-7167859b8589&authe=%@&business"
+
+        static let TRF_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+
+        static let ITINERARY_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessItineryListingByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&BID=%d"
+
+        static let ITINERARY_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessItinery?addapikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&itinery"
+
+        
         
     }
     
