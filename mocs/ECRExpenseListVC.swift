@@ -131,7 +131,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         if internetStatus != .notReachable {
             var newData:[String] = []
             
-            let url = String.init(format: Constant.API.GET_ACCOUNT_CHARGE, Session.authKey,ecrData.claimTypeInInt)
+            let url = String.init(format: Constant.API.GET_ACCOUNT_CHARGE, Session.authKey,ecrData.claimTypeInInt, ecrData.headRef)
             
             self.view.showLoading()
             

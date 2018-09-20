@@ -12,6 +12,11 @@ import SwiftyJSON
 import NotificationBannerSwift
 
 
+protocol onItinryAddDelegate: NSObjectProtocol {
+    func onOkClick() -> Void
+}
+
+
 class AddNewItineraryVC: UIViewController {
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -22,7 +27,10 @@ class AddNewItineraryVC: UIViewController {
     
     var trfData = TravelRequestData()
     
+    var itnryListData : ItineraryListData?
+    
     @IBOutlet weak var datePicker: UIDatePicker!
+    
     @IBOutlet weak var scrlVw: UIScrollView!
     
     @IBOutlet weak var vwDestination: UIView!
@@ -33,8 +41,6 @@ class AddNewItineraryVC: UIViewController {
     
     @IBOutlet weak var vwEstdDays: UIView!
     
-    //    @IBOutlet weak var vwAccmpndBy: UIView!
-    
     @IBOutlet weak var txtFldDest: UITextField!
     
     @IBOutlet weak var txtFldDeptDate: UITextField!
@@ -43,11 +49,49 @@ class AddNewItineraryVC: UIViewController {
     
     @IBOutlet weak var txtEstdDays: UITextField!
     
-    
+    weak var okItinryAddDelegate : onItinryAddDelegate?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
+        
+        initialSetup()
+       
+        
+        if itnryListData != nil {
+            /// Edit
+            assignData()
+        } else {
+            /// Add
+//            setupDefaultValues()
+        }
+    }
+    
+    func assignData() {
+        
+        txtFldDest.text = itnryListData?.dest
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let newDepDate = Helper.convertToDate(dateString: (itnryListData?.depDate)!)
+        let newRetDate = Helper.convertToDate(dateString: (itnryListData?.retDate)!)
+
+        let modDepDate = dateFormatter.string(from: newDepDate)
+        let modRetDate = dateFormatter.string(from: newRetDate)
+
+        txtFldDeptDate.text = modDepDate
+        txtFldRetDate.text = modRetDate
+        
+//        txtFldDeptDate.text = itnryListData?.depDate
+        txtEstdDays.text = itnryListData?.estDays
+        
+    }
+    
+    func initialSetup() {
+    
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -97,7 +141,13 @@ class AddNewItineraryVC: UIViewController {
     }
     
     @IBAction func btnCancelTapped(_ sender: Any) {
+        
+        datePickerTool.isHidden = true
+        self.view.endEditing(true)
     }
+    
+    
+    
     
     @IBAction func btnSubmit(_ sender: Any) {
         
@@ -119,11 +169,26 @@ class AddNewItineraryVC: UIViewController {
         if self.internetStatus != .notReachable {
             
             self.view.showLoading()
+            var url = String()
+            var newRecord = [String : Any]()
+
             
-            let url = String.init(format: Constant.TRF.ITINERARY_ADD, Session.authKey, trfData.trfId )
-            print(url)
-            
-            let newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
+            if itnryListData == nil {
+                
+                 url = String.init(format: Constant.TRF.ITINERARY_ADD, Session.authKey, trfData.trfId )
+                 newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
+                
+            } else {
+                
+                guard let itinId = itnryListData?.ItinID else {
+                    Helper.showMessage(message: "Sorry! Unable to process")
+                    return
+                }
+                
+                url = String.init(format: Constant.TRF.ITINERARY_UPDATE, Session.authKey, itinId )
+                newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
+              
+            }
             
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
                 .responseString(completionHandler: {  response in
@@ -137,17 +202,14 @@ class AddNewItineraryVC: UIViewController {
                         let success = UIAlertController(title: "Success", message: "Itinerary Added Successfully", preferredStyle: .alert)
                         success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                             
-                            //                            if let d = self.okSubmitDelegate {
-                            //                                d.onOkClick()
-                            //                            }
-                            self.navigationController?.popToRootViewController(animated: true)
+                            if let d = self.okItinryAddDelegate {
+                                d.onOkClick()
+                            }
                         }))
-                        self.present(success, animated: true, completion: nil)
-                    } else if jsonResponse["ServerMsg"].stringValue == "Sorry you cannot Process this request, Receipt Qty is greater than the Received Quantity, please check" {
-                        
-                        NotificationBanner(title: "", subtitle: "Sorry you cannot Process this request, Receipt Qty is greater than the Received Quantity, please check", style: .danger).show()
-                        
-                    } else {
+
+                        self.navigationController?.popViewController(animated: true)
+
+                    }  else {
                         
                         NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
                     }

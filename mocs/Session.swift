@@ -17,6 +17,10 @@ class Session {
         static let COMPANY = "company"
         static let LOCATION = "location"
         static let DEPARTMENT = "department"
+        static let EMPCODE = "employeeCode"
+        static let DESIGNATION = "designation"
+        static let REPORTMNGR = "reportingManager"
+
         static let DBTOKEN = "dbtoken"
         static let CURRENCY = "currency"
         static let EXPCATEGORY = "category"
@@ -134,6 +138,34 @@ class Session {
         }
     }
     
+    public static var reportMngr: String{
+        get{
+            return UserDefaults.standard.object(forKey: Veriable.REPORTMNGR) as? String ?? ""
+        }
+        set(reportMngr){
+            UserDefaults.standard.set(reportMngr, forKey: Veriable.REPORTMNGR)
+        }
+    }
+    
+    
+    public static var designation: String{
+        get{
+            return UserDefaults.standard.object(forKey: Veriable.DESIGNATION) as? String ?? ""
+        }
+        set(designation){
+            UserDefaults.standard.set(designation, forKey: Veriable.DESIGNATION)
+        }
+    }
+    
+    
+    public static var empCode: String{
+        get{
+            return UserDefaults.standard.object(forKey: Veriable.EMPCODE) as? String ?? ""
+        }
+        set(empCode){
+            UserDefaults.standard.set(empCode, forKey: Veriable.EMPCODE)
+        }
+    }
     
 }
 

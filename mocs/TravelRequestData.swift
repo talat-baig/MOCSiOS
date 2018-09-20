@@ -42,6 +42,8 @@ class TravelRequestData: NSObject {
     
     var reportMngr : String = ""
     
+    var trvArrangmnt : String = ""
+    
     var trfId : Int = 0
 
 

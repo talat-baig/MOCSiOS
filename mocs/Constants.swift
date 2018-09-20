@@ -161,9 +161,9 @@ struct Constant
         
         static let ECR_UPDATE_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EmployeePaymentRequestItemsID=%@"
         
-        static let GET_ACCOUNT_CHARGE =  "http://172.16.12.12/OCSWebApi/api/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid="
+        static let GET_ACCOUNT_CHARGE =  "http://172.16.12.12/OCSWebApi/api/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid=%@"
         
-        static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid="
+        static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
         
         static let ECR_EPR_ADVANCES =  "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
@@ -361,14 +361,26 @@ struct Constant
         
         
         static let TRF_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessTrip?key=33ddb2ee-59a5-428f-a0a5-7167859b8589&authe=%@&business"
+        
+        static let TRF_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessTravelByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ID=%d&business"
 
+        static let TRF_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessTravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
+
+        static let TRF_SUBMIT = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/SubmitBusinessTravel?apisubmit=33ddb2ee-59a5-428f-a0a5-7167859b8589&authsubmit=%@&ID=%d"
+
+        
         static let TRF_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
 
         static let ITINERARY_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessItineryListingByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&BID=%d"
 
         static let ITINERARY_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessItinery?addapikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&itinery"
-
         
+        static let ITINERARY_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessItineryByID?apiupdate=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&itinID=%@&itinery"
+
+        static let ITINERARY_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessItinery?apideleteitinery=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdelete=%@&ID=%@"
+
+       
+
         
     }
     

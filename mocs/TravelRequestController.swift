@@ -119,7 +119,9 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
                             trfData.status = json["Status1"].stringValue
                             trfData.trfId = json["ID"].intValue
                             trfData.reportMngr = json["ReportingManager"].stringValue
+                            trfData.trvArrangmnt = json["TravelArrangement"].stringValue
 
+                            
                             if json["Approver"].stringValue == "" {
                                 trfData.approver = ""
                             } else {
@@ -164,6 +166,31 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
         getItirenaryData(trfData : data, isFromView: isFromView)
     }
     
+    func deleteRequest(data : TravelRequestData ) {
+        
+        if internetStatus != .notReachable {
+            showLoading()
+            let url = String.init(format: Constant.TRF.TRF_DELETE, Session.authKey, data.trfId)
+            print(url)
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                
+                self.view.hideLoading()
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Request Successfully deleted", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {(AlertAction) ->  Void in
+                        self.populateList()
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+            
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    
     func getItirenaryData(trfData :TravelRequestData, isFromView : Bool ) {
         
         if internetStatus != .notReachable {
@@ -172,7 +199,6 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-
             
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "TRBaseViewController") as! TRBaseViewController
                     vc.trfData = trfData
@@ -180,6 +206,7 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
                     vc.trfBaseDelegate = self
                     vc.trfReqNo = trfData.reqNo
                     vc.itinryRespone = response.result.value
+                
                     self.navigationController!.pushViewController(vc, animated: true)
             
             }))
@@ -215,17 +242,8 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
     
     
     func onViewClick(data: TravelRequestData) {
-       
-//        let vc = self.storyboard?.instantiateViewController(withIdentifier: "BaseViewController") as! BaseViewController
-//        vc.response = tcrResponse
-//        vc.isFromView = isFromView
-//        vc.tcrBaseDelegate = self
-//        vc.notifyChilds = self
-//        vc.title = tcrData.headRef
-//        vc.voucherResponse = response.result.value
-//        vc.tcrData = tcrData
-//        self.navigationController!.pushViewController(vc, animated: true)
         
+        viewRequest(data: data,  isFromView: true)
     }
     
     func onEditClick(data: TravelRequestData) {
@@ -245,11 +263,44 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
     
     func onDeleteClick(data: TravelRequestData) {
         
+        let alert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete Expense Item? Once you delete this, there is no way to un-delete", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "NO GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
+            self.deleteRequest(data : data )
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     func onSubmitClick(data: TravelRequestData) {
         
+        if self.internetStatus != .notReachable{
+            showLoading()
+            let url = String.init(format: Constant.TRF.TRF_SUBMIT, Session.authKey, data.trfId)
+            print("Submit TRF", url)
+            
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let success = UIAlertController(title: "Success", message: "Request has been Submitted Successfully", preferredStyle: .alert)
+                    success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(AlertAction) ->  Void in
+                        self.populateList()
+                    }))
+                    self.present(success, animated: true, completion: nil)
+                }
+                
+            })
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
+    
+   
+    
+
     
     func onEmailClick(data: TravelRequestData) {
         

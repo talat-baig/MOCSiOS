@@ -31,11 +31,14 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     let arrTravelType = ["Flight" , "Hotel", "Rental Car/ Taxi Service", "Travel Advance (if yes, then anticipated trip expenses)"]
     
     weak var okTRFSubmit : onTRFSubmit?
-
+    
     var response:Data?
-
+    
+    @IBAction func btnAddItinry(_ sender: Any) {
+    }
     weak var trvReqData : TravelRequestData!
-
+    
+    var reqNum = ""
     @IBOutlet weak var stckVw: UIStackView!
     @IBOutlet weak var lblReqNo: UILabel!
     @IBOutlet weak var lblEmpName: UILabel!
@@ -43,7 +46,7 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     @IBOutlet weak var lblEmpDesgn: UILabel!
     @IBOutlet weak var lblEmpDept: UILabel!
     @IBOutlet weak var lblRepMngr: UILabel!
-
+    
     @IBOutlet weak var lblFlight: UILabel!
     @IBOutlet weak var lblHotel: UILabel!
     @IBOutlet weak var lblRentCar: UILabel!
@@ -95,24 +98,22 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       initialSetup()
-        
+        initialSetup() // Initial UI setup
+        disableTnCBtn()  // Disable Terms n Conditions btn
+        assignEmpData() // Assign EMployee data from session to UI fields
         
         if trvReqData != nil {
             /// Edit
             vwTopHeader.isHidden = true
             stckVw.frame  = CGRect(x: 0, y: 20, width: self.view.frame.size.width, height: self.view.frame.size.height + 200)
             btnSubmit.setTitle("UPDATE",for: .normal)
-             assignDataToFields()
-            
+            assignDataToFields()
+
         } else {
             /// Add
-            
             disableTravelAdvVw()
-            disableTnCBtn()
             btnSubmit.setTitle("SAVE",for: .normal)
         }
-        
     }
     
     func initialSetup() {
@@ -170,21 +171,95 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     }
     
     
+    func assignEmpData() {
+        
+        lblEmpCode.text = Session.empCode
+        lblEmpDept.text = Session.department
+        lblEmpDesgn.text = Session.designation
+        lblEmpName.text = Session.user
+        lblRepMngr.text = Session.reportMngr
+        
+    }
+    
     func assignDataToFields() {
         
         
         lblReqNo.text = trvReqData.reqNo
-        txtReqDate.text = trvReqData.reqDate
-    
-        lblEmpCode.text = trvReqData.empCode
-        lblEmpDept.text = trvReqData.empDept
-        lblEmpDesgn.text = trvReqData.empDesgntn
-        lblEmpName.text = trvReqData.empName
+        
+      
+        let newReqDate = Helper.convertToDate(dateString: trvReqData.reqDate)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let modDate = dateFormatter.string(from: newReqDate)
+
+        
+        txtReqDate.text = modDate
+        
         txtVwReason.text = trvReqData.reason
         txtAccmpndBy.text = trvReqData.accmpnd
-        lblRepMngr.text = trvReqData.reportMngr
 
+        
+        let trvArrgnmntStr =  trvReqData.trvArrangmnt
+        
+        if trvArrgnmntStr != "" {
+            
+            let strArr = trvArrgnmntStr.components(separatedBy: ",")
+            
+            for str in strArr {
+                
+                switch str {
+                    
+                case "Flight" : isFlight = true
+                    break
+                case "Hotel" : isHotel = true
+                    break
+                case "Rental Car / Taxi Service":  isRentCar = true
+                    break
+                    
+                case "Travel Advance" : isTravlAdv = true
+                txtFldAmount.text = trvReqData.trvelAdvnce
+                btnCurrency.setTitle(trvReqData.currency, for: .normal)
+                
+                    break
+                    
+                default:
+                    break
+                }
+            }
+        }
+        
+        setupArrangmntBtns()
+        
+        if !isTravlAdv {
+            disableTravelAdvVw()
+        }
+        
     }
+    
+    func setupArrangmntBtns() {
+        
+        
+        if isFlight {
+            btnFlight.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
+        }
+        
+        if isHotel {
+            btnHotel.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
+        }
+        
+        
+        if isTravlAdv {
+            btnTravelAdv.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
+        }
+        
+        
+        if isRentCar {
+            btnRentCar.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
+        }
+        
+        
+    }
+    
     
     
     override func didReceiveMemoryWarning() {
@@ -194,7 +269,7 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     override func viewDidLayoutSubviews() {
         
         super.viewDidLayoutSubviews()
-        scrlvw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 1070 )
+        scrlvw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 1077 )
     }
     
     
@@ -384,6 +459,22 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     }
     
     
+    @IBAction func btnDone(_ sender: Any) {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        txtReqDate.text = dateFormatter.string(from: datePicker.date) as String
+        self.view.endEditing(true)
+    }
+    
+    
+    @IBAction func btnCancel(_ sender: Any) {
+        
+        datePickerTool.isHidden = true
+        self.view.endEditing(true)
+    }
+    
+    
     
     @IBAction func btnSubmitTapped(_ sender: Any) {
         
@@ -395,7 +486,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
         var newList = String()
         var amnt : String = ""
         var curr : String = ""
-
         
         
         self.handleTap()
@@ -428,7 +518,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
                 }
                 amnt = amt
                 
-                
                 guard let currncy = btnCurrency.titleLabel?.text, !currncy.isEmpty else {
                     Helper.showMessage(message: "Select Currency")
                     return
@@ -439,9 +528,7 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
                 arrList.append(travAdv)
             }
             
-            
             newList = arrList.joined(separator: ",")
-            
             print("newList",newList)
         } else {
             
@@ -449,9 +536,9 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
             
         }
         
-        self.addOrEditRequest(reqNo: "" , travArrngStr: newList, amt :  amnt , curr : curr , accmpndBy: txtAccmpndBy.text , reasonStr: txtVwReason.text)
+       
         
-        
+        self.addOrEditRequest(reqNo: reqNum , travArrngStr: newList, amt :  amnt , curr : curr , accmpndBy: txtAccmpndBy.text , reasonStr: txtVwReason.text)
         
         
         //        self.addOrEditExpense(tcrRefNo: tcrRefNo, expDate: date, expCat: category!, expSubCat: subCat!, expVendor: vendor, expPayment: payment!, expCurr: currency!, expAmt: amt, expComments: comm, tcrCounter: self.tcrCounter)
@@ -467,23 +554,23 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
             self.view.showLoading()
             var url = String()
             var newRecord = [String : Any]()
-
             
-            //            if eplData == nil  {
-            //                url = String.init(format: Constant.API.EXPENSE_ADD, Session.authKey, Helper.encodeURL(url: tcrRefNo), Helper.encodeURL(url:expDate),
-            //                                  Helper.encodeURL(url:expCat),
-            //                                  Helper.encodeURL(url:expSubCat.trimmingCharacters(in: .whitespacesAndNewlines)),
-            //                                  Helper.encodeURL(url:expVendor),
-            //                                  Helper.encodeURL(url:expPayment),
-            //                                  Helper.encodeURL(url:expCurr),
-            //                                  Helper.encodeURL(url:expAmt),
-            //                                  Helper.encodeURL(url:expComments),
-            //                                  tcrCounter)
-            //            } else {
-            url = String.init(format: Constant.TRF.TRF_ADD, Session.authKey)
             
-            newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
-
+            if reqNo == ""  {
+                
+                url = String.init(format: Constant.TRF.TRF_ADD, Session.authKey)
+                
+                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
+                
+                
+            } else {
+                
+                url = String.init(format: Constant.TRF.TRF_UPDATE, Session.authKey , trvReqData.trfId)
+                
+                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
+                
+            }
+            
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
                 .responseString(completionHandler: {  response in
                     self.view.hideLoading()
@@ -496,19 +583,18 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
                         
                         var messg = String()
                         
-//                        if self.ecrNo != "" {
-//                            messg = "Claim has been Updated Successfully"
-//                        } else {
+                        if self.reqNum != "" {
+                            messg = "Request has been Updated Successfully"
+                        } else {
                             messg = "Request has been Added Successfully"
-//                        }
-                        
+                        }
                         
                         let success = UIAlertController(title: "Success", message: messg, preferredStyle: .alert)
                         success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                             
-//                            if let d = self.okECRSubmit {
-//                                d.onOkClick()
-//                            }
+                            if let d = self.okTRFSubmit {
+                                d.onOkClick()
+                            }
                             self.navigationController?.popViewController(animated: true)
                         }))
                         self.present(success, animated: true, completion: nil)
@@ -619,7 +705,7 @@ extension TravelRequestAddEditController : UITextViewDelegate {
 extension TravelRequestAddEditController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

@@ -67,9 +67,17 @@ class ViewController: UIViewController {
                     Session.location = subjson["Location"].stringValue
                     Session.department = subjson["Department"].stringValue
                     Session.dbtoken = subjson["DBToken"].stringValue
+                    Session.empCode = subjson["EmployeeCode"].stringValue
+                    Session.reportMngr = subjson["ReportingManager"].stringValue
+                    Session.designation = subjson["Designation"].stringValue
+
+                    
                     self.getCurrency()
                     debugPrint(Session.authKey)
-                    
+                    debugPrint(Session.empCode)
+                    debugPrint(Session.reportMngr)
+                    debugPrint(Session.designation)
+
                     let storyBoard: UIStoryboard = UIStoryboard(name:"Home",bundle:nil)
                     let mainPage = storyBoard.instantiateViewController(withIdentifier: "rootController") as! RootViewController
                     

@@ -15,8 +15,8 @@ protocol onTRFUpdate {
 }
 
 
-class TRBaseViewController: ButtonBarPagerTabStripViewController {
-
+class TRBaseViewController: ButtonBarPagerTabStripViewController, onTRFSubmit {
+    
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
     var trfData = TravelRequestData()
@@ -25,7 +25,7 @@ class TRBaseViewController: ButtonBarPagerTabStripViewController {
     var trfBaseDelegate: onTRFUpdate?
     var isFromView : Bool = false
     var response:Data?
-
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     override func viewDidLoad() {
@@ -44,13 +44,13 @@ class TRBaseViewController: ButtonBarPagerTabStripViewController {
         settings.style.buttonBarMinimumInteritemSpacing = 0
         
         super.viewDidLoad()
-
+        
         changeCurrentIndexProgressive = { [weak self] (oldCell: ButtonBarViewCell?, newCell: ButtonBarViewCell?, progressPercentage: CGFloat, changeCurrentIndex: Bool, animated: Bool) -> Void in
             guard changeCurrentIndex == true else { return }
             oldCell?.label.textColor = .black
             newCell?.label.textColor = self?.purpleInspireColor
         }
-
+        
         vwTopHeader.delegate = self
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnLeft.isHidden = true
@@ -61,43 +61,47 @@ class TRBaseViewController: ButtonBarPagerTabStripViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    func onOkClick() {
+        if let d = self.trfBaseDelegate {
+            d.onTRFUpdateClick()
+        }
+    }
+    
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var viewArray:[UIViewController] = []
-
-       
+        
+        
         
         if isFromView {
-//            let tcNonEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelClaimNonEditController") as! TravelClaimNonEditController
-//            tcNonEditVC.response = response
-//            self.notifyChilds = tcNonEditVC
-//            viewArray.append(tcNonEditVC)
+            let tcNonEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelRequestNonEditVC") as! TravelRequestNonEditVC
+            tcNonEditVC.trfData = trfData
+            viewArray.append(tcNonEditVC)
         } else {
             let trAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelRequestAddEditController") as! TravelRequestAddEditController
             trAddEditVC.response = response
             trAddEditVC.trvReqData = trfData
-//            trAddEditVC. = self
+            trAddEditVC.reqNum = trfData.reqNo
+            trAddEditVC.okTRFSubmit = self
             viewArray.append(trAddEditVC)
         }
-
         
         
         let iternryVC = self.storyboard?.instantiateViewController(withIdentifier: "ItineraryListController") as! ItineraryListController
-         iternryVC.trfData = self.trfData
-
-//        viewArray.append(trAddEditVC)
+        iternryVC.trfData = self.trfData
+        iternryVC.itinryRes = self.itinryRespone
+        iternryVC.isFromView = isFromView
         viewArray.append(iternryVC)
-
+        
         
         return viewArray
     }
-
+    
 }
 
 

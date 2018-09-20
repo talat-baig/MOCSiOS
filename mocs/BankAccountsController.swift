@@ -55,8 +55,6 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var lblApprovedByDate: UILabel!
 
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         parseAndAssign()

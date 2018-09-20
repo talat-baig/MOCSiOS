@@ -215,7 +215,7 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         if internetStatus != .notReachable {
             var newData:[String] = []
 //            print("accntCharge : %@", accntChrg)
-            let url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, Helper.encodeURL(url: ecrData.claimType) , Helper.encodeURL(url: accntChrg))
+            let url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, Helper.encodeURL(url: ecrData.claimType) , Helper.encodeURL(url: accntChrg), self.ecrData.headRef)
 //            print("pymtn reason:",url)
             self.view.showLoading()
             
