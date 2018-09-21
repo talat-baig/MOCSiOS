@@ -50,22 +50,22 @@ class AddNewItineraryVC: UIViewController {
     @IBOutlet weak var txtEstdDays: UITextField!
     
     weak var okItinryAddDelegate : onItinryAddDelegate?
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        
         
         initialSetup()
-       
+        
         
         if itnryListData != nil {
             /// Edit
             assignData()
         } else {
             /// Add
-//            setupDefaultValues()
+            //            setupDefaultValues()
         }
     }
     
@@ -76,22 +76,30 @@ class AddNewItineraryVC: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        let newDepDate = Helper.convertToDate(dateString: (itnryListData?.depDate)!)
-        let newRetDate = Helper.convertToDate(dateString: (itnryListData?.retDate)!)
-
+        
+        guard let depDate = itnryListData?.depDate, !depDate.isEmpty else {
+            return
+        }
+        
+        guard let retDate = itnryListData?.retDate , !retDate.isEmpty else {
+            return
+        }
+        
+        let newDepDate = Helper.convertToDate(dateString: depDate)
+        let newRetDate = Helper.convertToDate(dateString: retDate)
+        
         let modDepDate = dateFormatter.string(from: newDepDate)
         let modRetDate = dateFormatter.string(from: newRetDate)
-
+        
         txtFldDeptDate.text = modDepDate
         txtFldRetDate.text = modRetDate
         
-//        txtFldDeptDate.text = itnryListData?.depDate
         txtEstdDays.text = itnryListData?.estDays
         
     }
     
     func initialSetup() {
-    
+        
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -171,12 +179,12 @@ class AddNewItineraryVC: UIViewController {
             self.view.showLoading()
             var url = String()
             var newRecord = [String : Any]()
-
+            
             
             if itnryListData == nil {
                 
-                 url = String.init(format: Constant.TRF.ITINERARY_ADD, Session.authKey, trfData.trfId )
-                 newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
+                url = String.init(format: Constant.TRF.ITINERARY_ADD, Session.authKey, trfData.trfId )
+                newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
                 
             } else {
                 
@@ -187,7 +195,7 @@ class AddNewItineraryVC: UIViewController {
                 
                 url = String.init(format: Constant.TRF.ITINERARY_UPDATE, Session.authKey, itinId )
                 newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
-              
+                
             }
             
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
@@ -199,16 +207,27 @@ class AddNewItineraryVC: UIViewController {
                     print(jsonResponse)
                     
                     if jsonResponse["ServerMsg"].stringValue == "Success" {
-                        let success = UIAlertController(title: "Success", message: "Itinerary Added Successfully", preferredStyle: .alert)
-                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+                        
+                        var messg = ""
+                        
+                        if self.itnryListData != nil {
+                            messg = "Itinerary Updated Successfully"
+                        } else {
+                            messg = "Itinerary Added Successfully"
+                        }
+                        let successAlrt = UIAlertController(title: "Success", message: messg , preferredStyle: .alert)
+                        
+                        successAlrt.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                             
                             if let d = self.okItinryAddDelegate {
                                 d.onOkClick()
                             }
+                            self.navigationController?.popViewController(animated: true)
+                            
                         }))
-
-                        self.navigationController?.popViewController(animated: true)
-
+                        
+                        self.present(successAlrt, animated: true, completion: nil)
+                        
                     }  else {
                         
                         NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
@@ -268,7 +287,6 @@ extension AddNewItineraryVC: UITextFieldDelegate {
                 let newStartDate = dateFormatter.date(from: startDte!)
                 datePicker.minimumDate = newStartDate
                 datePicker.maximumDate = Date.distantFuture
-                
                 
             } else {
                 

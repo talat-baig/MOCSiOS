@@ -177,7 +177,11 @@ class Helper: UIView {
                         case "Success":
                             isValid = true
                             break
+                            
+                            
                         default:
+                            isValid = false
+                            Helper.showMessage(message: data!["ServerMsg"] as! String , style: .danger)
                             break
                         }
                     } else {

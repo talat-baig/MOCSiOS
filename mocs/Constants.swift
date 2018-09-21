@@ -48,7 +48,8 @@ struct Constant
         static let PC = "Purchase Contract - Approval"
         static let RO = "Release Order - Approval"
         static let CP = "Counterparty - Approval"
-        
+        static let TR = "Travel Request - Approval"
+
         
     }
     
@@ -359,7 +360,6 @@ struct Constant
     
     struct TRF {
         
-        
         static let TRF_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessTrip?key=33ddb2ee-59a5-428f-a0a5-7167859b8589&authe=%@&business"
         
         static let TRF_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessTravelByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ID=%d&business"
@@ -368,7 +368,8 @@ struct Constant
 
         static let TRF_SUBMIT = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/SubmitBusinessTravel?apisubmit=33ddb2ee-59a5-428f-a0a5-7167859b8589&authsubmit=%@&ID=%d"
 
-        
+        static let TRF_SEND_EMAIL = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/BusinessTravelSendMail?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
+
         static let TRF_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
 
         static let ITINERARY_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessItineryListingByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&BID=%d"
@@ -378,10 +379,13 @@ struct Constant
         static let ITINERARY_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessItineryByID?apiupdate=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&itinID=%@&itinery"
 
         static let ITINERARY_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessItinery?apideleteitinery=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdelete=%@&ID=%@"
-
-       
-
         
+//        static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+
+        static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@"
+        
+        static let TRF_APPROVE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&Check=%d"
+    
     }
     
     struct EPR {
@@ -480,8 +484,6 @@ struct Constant
         
         static let LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
-        //        static let LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-        
         static let VIEW = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
         
         static let BANK_DETAILS = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyBankDetailsByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustID=%@"
@@ -498,9 +500,6 @@ struct Constant
      
         
         static let CP_KYC_APPROVE = "http://172.16.12.12/OCSWebApi/api/CounterParty/AppproveKYCbyCP?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&KYCContactType=%@&KYCRequired=%@&KYCValidUntil=%@&ListCheck=%@&attachment=%@&status=%d&REFID=%@&docname=%@&compname=%@&DocumentReferenceNumber=%@"
-
-//        http://172.16.12.12/OCSWebApi/api/CounterParty/AppproveKYCbyCP?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=DA58F943-A1B5-45F5-AB99-D0B8106A&KYCContactType=Trade&KYCRequired=Yes&KYCValidUntil=2018-09-12&ListCheck=No&attachment=&status=0&REFID=9125&docname=&compname=My%20New%20Counterparty&DocumentReferenceNumber=12-Sep-2018
-        
         
         
 //        AppproveKYCbyCP(string api, string auth, string KYCContactType, string KYCRequired, string KYCValidUntil, string ListCheck, string attachment)

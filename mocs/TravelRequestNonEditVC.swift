@@ -25,6 +25,12 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider {
     
     @IBOutlet weak var lblAccmpnd: UILabel!
     
+    @IBOutlet weak var lblReqBy: UILabel!
+    @IBOutlet weak var lblApprvdBy: UILabel!
+    @IBOutlet weak var lblApprvdByDate: UILabel!
+    @IBOutlet weak var lblReqByDate: UILabel!
+
+    
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "TRAVEL DETAILS")
     }
@@ -44,14 +50,56 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider {
         guard let trfDta = trfData else {
             return
         }
+       
+        lblEmpName.text! = Session.user
         
-        lblEmpName.text = trfDta.empName
-        lblEmpCode.text! = trfDta.empCode
-        lblDept.text! = trfDta.empDept
-        lblDesgntn.text! = trfDta.empDesgntn
-        lblTrvlArngmnt.text! = trfDta.trvArrangmnt
-        lblReason.text! = trfDta.reason
-        lblAccmpnd.text! = trfDta.accmpnd
+        if trfDta.trvArrangmnt == "" {
+           lblTrvlArngmnt.text! = "-"
+        } else {
+            lblTrvlArngmnt.text! = trfDta.trvArrangmnt
+        }
+        
+        if trfDta.reason == "" {
+            lblReason.text! = "-"
+        } else {
+            lblReason.text! = trfDta.reason
+        }
+        
+        if trfDta.accmpnd == "" {
+             lblAccmpnd.text! = "-"
+        } else {
+            lblAccmpnd.text! = trfDta.accmpnd
+        }
+        
+        lblEmpCode.text! = Session.empCode
+        lblDept.text! = Session.department
+        lblDesgntn.text! = Session.designation
+        
+       
+        if trfDta.approver == "" {
+            lblApprvdBy.text! = "-"
+        } else {
+            lblApprvdBy.text! = trfDta.approver
+        }
+        
+        if trfDta.requestor == "" {
+            lblReqBy.text! = "-"
+        } else {
+            lblReqBy.text! = trfDta.requestor
+        }
+        
+        if trfDta.reqDate == "" {
+            lblReqByDate.text! = "-"
+        } else {
+            lblReqByDate.text! = trfDta.reqDate
+        }
+        
+        if trfDta.approvdDate == "" {
+            lblApprvdByDate.text! = "-"
+        } else {
+            lblApprvdByDate.text! = trfDta.approvdDate
+        }
+        
         
     }
     

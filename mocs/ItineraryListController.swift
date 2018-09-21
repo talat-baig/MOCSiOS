@@ -108,18 +108,18 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider, onItinry
             if isFromView {
                 Helper.showNoItemState(vc:self , messg: "No Itinerary Item found" , tb:tableView)
             } else {
-                
+                debugPrint("No Itinerary Item found")
+                self.tableView.reloadData()
+
             }
         }
-        
-        
     }
     
     func onOkClick() {
         self.getItirenaryData()
     }
     
-    func deleteRequest(data : ItineraryListData) {
+    func deleteItinry(data : ItineraryListData) {
         
         if internetStatus != .notReachable {
             self.view.showLoading()
@@ -133,7 +133,10 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider, onItinry
                     
                     let alert = UIAlertController(title: "Success", message: "Itinerary Successfully deleted", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {(AlertAction) ->  Void in
-                        self.getItirenaryData()
+                        if let index = self.arrayList.index(where: {$0 === data}) {
+                            self.arrayList.remove(at: index)
+                        }
+                        self.tableView.reloadData()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -175,7 +178,7 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider, onItinry
         
         alert.addAction(UIAlertAction(title: "NO GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-            self.deleteRequest(data: data)
+            self.deleteItinry(data: data)
         }))
         
         self.present(alert, animated: true, completion: nil)
@@ -196,7 +199,7 @@ extension ItineraryListController : UITableViewDelegate, UITableViewDataSource {
   
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
        
-        if arrayList.count > 0{
+        if arrayList.count > 0 {
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
         }else{
@@ -220,6 +223,13 @@ extension ItineraryListController : UITableViewDelegate, UITableViewDataSource {
         views.itnryMenuDelegate = self
         views.itnryItemMenuDelegate = self
         views.selectionStyle = .none
+        
+        if isFromView {
+            views.btnMenu.isHidden = true
+        } else {
+            views.btnMenu.isHidden = false
+        }
+        
         return views
     }
     

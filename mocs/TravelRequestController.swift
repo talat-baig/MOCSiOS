@@ -239,26 +239,14 @@ extension TravelRequestController: UISearchBarDelegate {
 
 
 extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, onMoreClickListener, onTReqItemClickListener {
-    
-    
+ 
+   
     func onViewClick(data: TravelRequestData) {
-        
         viewRequest(data: data,  isFromView: true)
     }
     
     func onEditClick(data: TravelRequestData) {
-        
         viewRequest(data: data,  isFromView: false)
-
-//        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TRBaseViewController") as! TRBaseViewController
-//        vc.response = tcrResponse
-//        vc.isFromView = isFromView
-//        vc.tcrBaseDelegate = self
-//        vc.title = tcrData.headRef
-//        vc.itnryResponse = response.result.value
-//        vc.tcrData = tcrData
-//        self.navigationController!.pushViewController(vc, animated: true)
-        
     }
     
     func onDeleteClick(data: TravelRequestData) {
@@ -268,7 +256,6 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
             self.deleteRequest(data : data )
         }))
-        
         self.present(alert, animated: true, completion: nil)
         
     }
@@ -303,10 +290,36 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
 
     
     func onEmailClick(data: TravelRequestData) {
+        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
         
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
+            self.sendEmail(data: data)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
-    
+    func sendEmail(data:TravelRequestData){
+        
+        showLoading()
+        if internetStatus != .notReachable {
+            let url = String.init(format: Constant.TRF.TRF_SEND_EMAIL, Session.authKey,data.trfId )
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                let jsonResponse = JSON.init(parseJSON: response.result.value!)
+                
+                if jsonResponse["ServerMsg"].stringValue == "Success" {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Request has been Mailed Successfully", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+            })
+        }else{
+            Helper.showNoInternetMessg()
+        }
+    }
  
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -322,7 +335,7 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 240
+        return 230
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -331,22 +344,20 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
    
         let data = arrayList[indexPath.row]
  
-        viewRequest(data: data , isFromView: false)
+        
+        if (data.status.caseInsensitiveCompare("Saved") == ComparisonResult.orderedSame){
+            viewRequest(data: data, isFromView: false)
+        } else {
+            viewRequest(data: data , isFromView: true)
+        }
+        
+        if (data.status.caseInsensitiveCompare("Sent for Approval") == ComparisonResult.orderedSame) || (data.status.caseInsensitiveCompare("approved by manager") == ComparisonResult.orderedSame) || (data.status.caseInsensitiveCompare("approved By finance")  == ComparisonResult.orderedSame) {
+            self.view.makeToast("Request already submitted, cannot be edited")
+        }
 
-        
-//        if (data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame){
-//            viewClaim(data: data, counter: data.counter , isFromView: false)
-//        } else {
-//            viewClaim(data: data, counter: data.counter , isFromView: true)
-//        }
-        
-//        if (data.headStatus.caseInsensitiveCompare("submitted") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved by finance") == ComparisonResult.orderedSame) || (data.headStatus.caseInsensitiveCompare("approved By manager")  == ComparisonResult.orderedSame) {
-//            self.view.makeToast("Claim already submitted, cannot be edited")
-//        }
-//
-//        if (data.headStatus.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
-//            self.view.makeToast("Claim has been deleted, cannot be edited")
-//        }
+        if (data.status.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
+            self.view.makeToast("Request has been deleted, cannot be edited")
+        }
         
         
         
@@ -358,6 +369,7 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         let view = tableView.dequeueReusableCell(withIdentifier: "TravelRequestAdapter") as! TravelRequestAdapter
         view.btnMore.tag = indexPath.row
         view.setDataToView(data: data)
+        view.isFromApprov = false
         view.delegate = self
         view.trvlReqItemClickListener = self
         return view
@@ -379,87 +391,7 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         self.present(optionMenu, animated: true, completion: nil)
     }
     
-    
-    func onViewClick(data: TravelClaimData) {
-//        viewClaim(data: data ,isFromView: true)
-    }
-    
-//    func viewClaim(data:TravelClaimData, counter: Int = 0, isFromView : Bool){
-//        if internetStatus != .notReachable{
-//            let url = String.init(format: Constant.TCR.VIEW, Session.authKey,
-//                                  data.headRef,data.counter)
-//            self.view.showLoading()
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//
-//                    self.getVouchersDataAndNavigate(tcrData: data, isFromView: isFromView, tcrResponse: response.result.value)
-//                }
-//            }))
-//        } else {
-//            Helper.showNoInternetMessg()
-//        }
-//    }
-//
-    
-    
-//    func onEditClick(data: TravelClaimData) {
-//        viewClaim(data: data, counter:data.counter , isFromView: false)
-//    }
-//
-//    func onDeleteClick(data: TravelClaimData) {
-//        let alert = UIAlertController(title: "Delete Claim?", message: "Are you sure you want to delete this claim? After deleting you'll not be able to rollback", preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-//        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-//            self.deleteClaim(data: data)
-//        }))
-//        self.present(alert, animated: true, completion: nil)
-//    }
-//
-//    func onSubmitClick(data: TravelClaimData) {
-//
-//        let currentDate = Date()
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "dd MMM yyyy"
-//        dateFormatter.calendar = Calendar(identifier: .iso8601)
-//        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-//        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-//        let travelEndDate = dateFormatter.date(from: data.endDate)
-//
-//        if travelEndDate! > currentDate {
-//            Helper.showMessage(message: "Travel end date cannot be greater then current date")
-//            return
-//
-//        } else if data.totalAmount == "0.00" {
-//            Helper.showMessage(message: "Please add expense before submitting")
-//            return
-//
-//        } else {
-//
-//            let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this claim? After submitting you'll not be able to edit the claim", preferredStyle: .alert)
-//
-//            alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-//
-//            alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-//
-//                self.submitInvoice(data:data)
-//            }))
-//            self.present(alert, animated: true, completion: nil)
-//        }
-//
-//    }
-//
-//    func onEmailClick(data: TravelClaimData) {
-//
-//        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-//        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
-//            self.sendEmail(data: data)
-//        }))
-//        self.present(alert, animated: true, completion: nil)
-//    }
+  
 }
 
 

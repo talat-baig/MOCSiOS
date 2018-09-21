@@ -59,17 +59,7 @@ class ROPrimaryViewController: UIViewController, IndicatorInfoProvider {
         super.didReceiveMemoryWarning()
     }
     
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        
-//        let lastView : UIView! = mySubVw.subviews.last
-//        let height = lastView.frame.size.height
-//        let pos = lastView.frame.origin.y
-//        let sizeOfContent = height + pos + 100
-//        
-//        scrlVw.contentSize.height = sizeOfContent
-//    }
-    
+
     
     func parseAndAssign(){
         let jsonResponse = JSON(response)

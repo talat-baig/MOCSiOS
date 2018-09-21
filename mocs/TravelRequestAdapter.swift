@@ -10,43 +10,53 @@ import UIKit
 
 
 protocol onTReqItemClickListener: NSObjectProtocol {
+    
     func onViewClick(data:TravelRequestData) -> Void
     func onEditClick(data:TravelRequestData) -> Void
     func onDeleteClick(data:TravelRequestData) -> Void
     func onSubmitClick(data:TravelRequestData) -> Void
     func onEmailClick(data:TravelRequestData) -> Void
+
+}
+
+
+protocol onTRFApprovItemClickListener: NSObjectProtocol {
+    
+    func onViewClick(data:TravelRequestData) -> Void
+    func onApproveTRF(data:TravelRequestData) -> Void
+    func onDeclineTRF(data:TravelRequestData) -> Void
 }
 
 
 class TravelRequestAdapter: UITableViewCell {
 
-
     @IBOutlet weak var lblRefNo: UILabel!
     @IBOutlet weak var btnMore: UIButton!
     @IBOutlet weak var outerVw: UIView!
-    
     
     @IBOutlet weak var lblStatus: UILabel!
     @IBOutlet weak var empName: UILabel!
     @IBOutlet weak var empDept: UILabel!
     @IBOutlet weak var reqDate: UILabel!
     @IBOutlet weak var desgntn: UILabel!
-
+    @IBOutlet weak var reason: UILabel!
+    
+    @IBOutlet weak var lblEmpName: UILabel!
+    @IBOutlet weak var lblDept: UILabel!
+    @IBOutlet weak var lblReqDate: UILabel!
+    @IBOutlet weak var lblDesgntn: UILabel!
+    @IBOutlet weak var lblReason: UILabel!
     
     weak var delegate:onMoreClickListener?
-    
     weak var data:TravelRequestData!
+    weak var trfApprvListener :onTRFApprovItemClickListener!
 
     weak var trvlReqItemClickListener:onTReqItemClickListener?
 
+    var isFromApprov = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        outerVw.layer.shadowOpacity = 0.25
-        outerVw.layer.shadowOffset = CGSize(width: 0, height: 2)
-        outerVw.layer.shadowRadius = 1
-        outerVw.layer.shadowColor = UIColor.black.cgColor
         
     }
     
@@ -62,11 +72,52 @@ class TravelRequestAdapter: UITableViewCell {
         empDept.text = data?.empDept
         reqDate.text = data?.reqDate
         desgntn.text = data?.empDesgntn
+        reason.text = data?.reason
         self.data = data
+        
+        if isFromApprov {
+            
+            self.outerVw.layer.borderWidth = 1
+            self.outerVw.layer.borderColor = AppColor.universalHeaderColor.cgColor
+            
+//            lblDept.textColor = UIColor.black
+//            lblEmpName.textColor = UIColor.black
+//            lblReqDate.textColor = UIColor.black
+//            lblDesgntn.textColor = UIColor.black
+//            lblReason.textColor = UIColor.black
+            
+//            empDept.textColor = AppColor.universalHeaderColor
+//            empName.textColor = AppColor.universalHeaderColor
+//            reqDate.textColor = AppColor.universalHeaderColor
+//            reason.textColor = AppColor.universalHeaderColor
+//            desgntn.textColor = AppColor.universalHeaderColor
+            
+        } else {
+            
+            
+            outerVw.layer.shadowOpacity = 0.25
+            outerVw.layer.shadowOffset = CGSize(width: 0, height: 2)
+            outerVw.layer.shadowRadius = 1
+            outerVw.layer.shadowColor = UIColor.black.cgColor
+            
+//
+//            lblDept.textColor = AppColor.universalHeaderColor
+//            lblEmpName.textColor = AppColor.universalHeaderColor
+//            lblReqDate.textColor = AppColor.universalHeaderColor
+//            lblDesgntn.textColor = AppColor.universalHeaderColor
+//            lblReason.textColor = AppColor.universalHeaderColor
+//
+//            empDept.textColor =  UIColor.black
+//            empName.textColor =  UIColor.black
+//            reqDate.textColor =  UIColor.black
+//            reason.textColor = UIColor.black
+//            desgntn.textColor = UIColor.black
+        }
     }
  
     
     @IBAction func moreClick(_ sender: UIButton) {
+        
         let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
         
         let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
@@ -93,23 +144,61 @@ class TravelRequestAdapter: UITableViewCell {
             }
         })
         
+        
         let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.trvlReqItemClickListener?.responds(to: Selector(("onEmailClick:"))) != nil){
                 self.trvlReqItemClickListener?.onEmailClick(data: self.data)
             }
         })
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in
             
         })
         
-//        if data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame{
-            optionMenu.addAction(editAction)
-            optionMenu.addAction(deleteActon)
-            optionMenu.addAction(submitAction)
-//        }
-        optionMenu.addAction(viewAction)
-        optionMenu.addAction(emailAction)
-        optionMenu.addAction(cancelAction)
+        let cancelAction2 = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in
+            
+        })
+        
+        
+        
+        let viewAction2 = UIAlertAction(title: "View", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.trfApprvListener?.responds(to: Selector(("onViewClick:"))) != nil){
+                self.trfApprvListener?.onViewClick(data: self.data)
+            }
+        })
+        
+        let approvAction = UIAlertAction(title: "Approve", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.trfApprvListener?.responds(to: Selector(("onApproveTRF:"))) != nil){
+                self.trfApprvListener?.onApproveTRF(data: self.data)
+            }
+        })
+        
+        let declAction = UIAlertAction(title: "Decline", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.trfApprvListener?.responds(to: Selector(("onDeclineTRF:"))) != nil){
+                self.trfApprvListener?.onDeclineTRF(data: self.data)
+            }
+        })
+        
+        
+        if isFromApprov {
+
+            optionMenu.addAction(approvAction)
+            optionMenu.addAction(declAction)
+            optionMenu.addAction(viewAction2)
+            optionMenu.addAction(cancelAction2)
+            
+        } else {
+            
+            if data.status.caseInsensitiveCompare("saved") == ComparisonResult.orderedSame{
+                optionMenu.addAction(editAction)
+                optionMenu.addAction(deleteActon)
+                optionMenu.addAction(submitAction)
+            }
+            optionMenu.addAction(viewAction)
+            optionMenu.addAction(emailAction)
+            optionMenu.addAction(cancelAction)
+        }
+        
         
         if ((delegate?.responds(to: Selector(("onClick:")))) != nil){
             delegate?.onClick(optionMenu: optionMenu , sender: sender)

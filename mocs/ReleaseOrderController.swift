@@ -21,7 +21,6 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
     
     var newArray : [ROData] = []
     
-    
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -86,7 +85,6 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         self.populateList()
     }
     
-    //Helper.encodeURL(url: "35+Ivory Coast+06,35+Ivory Coast+05"),"D7BE635C-FACA-44FF-A3F1-E1E0CC8E
     @objc func populateList(){
         if internetStatus != .notReachable {
             
