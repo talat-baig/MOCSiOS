@@ -100,6 +100,12 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider {
             lblApprvdByDate.text! = trfDta.approvdDate
         }
         
+        if trfDta.reportMngr == "" {
+            lblReportMngr.text! = "-"
+        } else {
+            lblReportMngr.text! = trfDta.reportMngr
+        }
+        
         
     }
     

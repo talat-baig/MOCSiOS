@@ -11,8 +11,6 @@ import Alamofire
 import SwiftyJSON
 
 class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , onTRFUpdate , onTRFSubmit{
-    
-   
 
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -25,9 +23,7 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
     
     var newArray : [TravelRequestData] = []
     
-    
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -285,8 +281,6 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         }
     }
     
-   
-    
 
     
     func onEmailClick(data: TravelRequestData) {
@@ -368,13 +362,12 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         let data = arrayList[indexPath.row]
         let view = tableView.dequeueReusableCell(withIdentifier: "TravelRequestAdapter") as! TravelRequestAdapter
         view.btnMore.tag = indexPath.row
-        view.setDataToView(data: data)
+        view.setDataToView(data: data, isFromApprove : false)
         view.isFromApprov = false
         view.delegate = self
         view.trvlReqItemClickListener = self
         return view
     }
-    
     
     
     func onClick(optionMenu: UIViewController, sender: UIButton) {

@@ -16,7 +16,6 @@ protocol onTReqItemClickListener: NSObjectProtocol {
     func onDeleteClick(data:TravelRequestData) -> Void
     func onSubmitClick(data:TravelRequestData) -> Void
     func onEmailClick(data:TravelRequestData) -> Void
-
 }
 
 
@@ -29,7 +28,7 @@ protocol onTRFApprovItemClickListener: NSObjectProtocol {
 
 
 class TravelRequestAdapter: UITableViewCell {
-
+    
     @IBOutlet weak var lblRefNo: UILabel!
     @IBOutlet weak var btnMore: UIButton!
     @IBOutlet weak var outerVw: UIView!
@@ -50,22 +49,20 @@ class TravelRequestAdapter: UITableViewCell {
     weak var delegate:onMoreClickListener?
     weak var data:TravelRequestData!
     weak var trfApprvListener :onTRFApprovItemClickListener!
-
     weak var trvlReqItemClickListener:onTReqItemClickListener?
-
     var isFromApprov = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        print("awakerfromnib")
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-    func setDataToView(data: TravelRequestData?) {
-
+    func setDataToView(data: TravelRequestData?, isFromApprove : Bool) {
+        
         lblRefNo.text = data?.reqNo
         lblStatus.text = data?.status
         empName.text = data?.empName
@@ -75,22 +72,35 @@ class TravelRequestAdapter: UITableViewCell {
         reason.text = data?.reason
         self.data = data
         
-        if isFromApprov {
+        if isFromApprove {
             
             self.outerVw.layer.borderWidth = 1
             self.outerVw.layer.borderColor = AppColor.universalHeaderColor.cgColor
             
-//            lblDept.textColor = UIColor.black
-//            lblEmpName.textColor = UIColor.black
-//            lblReqDate.textColor = UIColor.black
-//            lblDesgntn.textColor = UIColor.black
-//            lblReason.textColor = UIColor.black
+            lblDept.textColor = UIColor.black
+            lblEmpName.textColor = UIColor.black
+            lblReqDate.textColor = UIColor.black
+            lblDesgntn.textColor = UIColor.black
+            lblReason.textColor = UIColor.black
             
-//            empDept.textColor = AppColor.universalHeaderColor
-//            empName.textColor = AppColor.universalHeaderColor
-//            reqDate.textColor = AppColor.universalHeaderColor
-//            reason.textColor = AppColor.universalHeaderColor
-//            desgntn.textColor = AppColor.universalHeaderColor
+            lblDept.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+            lblEmpName.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+            lblReqDate.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+            lblDesgntn.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+            lblReason.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+
+            empDept.textColor = AppColor.universalHeaderColor
+            empName.textColor = AppColor.universalHeaderColor
+            reqDate.textColor = AppColor.universalHeaderColor
+            reason.textColor = AppColor.universalHeaderColor
+            desgntn.textColor = AppColor.universalHeaderColor
+            
+            empDept.font =  UIFont.systemFont(ofSize: 15, weight: .bold)
+            empName.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+            reqDate.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+            reason.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+            desgntn.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+            
             
         } else {
             
@@ -100,21 +110,32 @@ class TravelRequestAdapter: UITableViewCell {
             outerVw.layer.shadowRadius = 1
             outerVw.layer.shadowColor = UIColor.black.cgColor
             
-//
-//            lblDept.textColor = AppColor.universalHeaderColor
-//            lblEmpName.textColor = AppColor.universalHeaderColor
-//            lblReqDate.textColor = AppColor.universalHeaderColor
-//            lblDesgntn.textColor = AppColor.universalHeaderColor
-//            lblReason.textColor = AppColor.universalHeaderColor
-//
-//            empDept.textColor =  UIColor.black
-//            empName.textColor =  UIColor.black
-//            reqDate.textColor =  UIColor.black
-//            reason.textColor = UIColor.black
-//            desgntn.textColor = UIColor.black
+            lblDept.textColor = AppColor.scrollVwColor
+            lblEmpName.textColor = AppColor.scrollVwColor
+            lblReqDate.textColor = AppColor.scrollVwColor
+            lblDesgntn.textColor = AppColor.scrollVwColor
+            lblReason.textColor = AppColor.scrollVwColor
+            
+            lblDept.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+            lblEmpName.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+            lblReqDate.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+            lblDesgntn.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+            lblReason.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+            
+            empDept.textColor =  UIColor.black
+            empName.textColor =  UIColor.black
+            reqDate.textColor =  UIColor.black
+            reason.textColor = UIColor.black
+            desgntn.textColor = UIColor.black
+            
+            empDept.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+            empName.font =  UIFont.systemFont(ofSize: 15, weight: .semibold)
+            reqDate.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+            reason.font =  UIFont.systemFont(ofSize: 15, weight: .semibold)
+            desgntn.font =  UIFont.systemFont(ofSize: 15, weight: .semibold)
         }
     }
- 
+    
     
     @IBAction func moreClick(_ sender: UIButton) {
         
@@ -160,7 +181,6 @@ class TravelRequestAdapter: UITableViewCell {
         })
         
         
-        
         let viewAction2 = UIAlertAction(title: "View", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.trfApprvListener?.responds(to: Selector(("onViewClick:"))) != nil){
                 self.trfApprvListener?.onViewClick(data: self.data)
@@ -181,7 +201,7 @@ class TravelRequestAdapter: UITableViewCell {
         
         
         if isFromApprov {
-
+            
             optionMenu.addAction(approvAction)
             optionMenu.addAction(declAction)
             optionMenu.addAction(viewAction2)

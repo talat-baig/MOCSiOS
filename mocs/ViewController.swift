@@ -71,7 +71,6 @@ class ViewController: UIViewController {
                     Session.reportMngr = subjson["ReportingManager"].stringValue
                     Session.designation = subjson["Designation"].stringValue
 
-                    
                     self.getCurrency()
                     debugPrint(Session.authKey)
                     debugPrint(Session.empCode)

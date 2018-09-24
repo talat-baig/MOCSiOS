@@ -436,66 +436,7 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
             Helper.showNoInternetMessg()
         }
     }
-    
-    
-    
-    //    func onEditClick(data: TravelClaimData) {
-    ////        viewClaim(data: data, counter:data.counter , isFromView: false)
-    //    }
-    //
-    //    func onDeleteClick(data: TravelClaimData) {
-    //        let alert = UIAlertController(title: "Delete Claim?", message: "Are you sure you want to delete this claim? After deleting you'll not be able to rollback", preferredStyle: .alert)
-    //
-    //        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-    //        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-    ////            self.deleteClaim(data: data)
-    //        }))
-    //        self.present(alert, animated: true, completion: nil)
-    //    }
-    //
-    //    func onSubmitClick(data: TravelClaimData) {
-    //
-    //        let currentDate = Date()
-    //        let dateFormatter = DateFormatter()
-    //        dateFormatter.dateFormat = "dd MMM yyyy"
-    //        dateFormatter.calendar = Calendar(identifier: .iso8601)
-    //        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-    //        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-    //        let travelEndDate = dateFormatter.date(from: data.endDate)
-    //
-    //        if travelEndDate! > currentDate {
-    //            Helper.showMessage(message: "Travel end date cannot be greater then current date")
-    //            return
-    //
-    //        } else if data.totalAmount == "0.00" {
-    //            Helper.showMessage(message: "Please add expense before submitting")
-    //            return
-    //
-    //        } else {
-    //
-    //            let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this claim? After submitting you'll not be able to edit the claim", preferredStyle: .alert)
-    //
-    //            alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-    //
-    //            alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-    //
-    ////                self.submitInvoice(data:data)
-    //            }))
-    //            self.present(alert, animated: true, completion: nil)
-    //        }
-    //
-    //    }
-    //
-    //    func onEmailClick(data: TravelClaimData) {
-    //
-    //        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
-    //
-    //        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
-    //        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
-    ////            self.sendEmail(data: data)
-    //        }))
-    //        self.present(alert, animated: true, completion: nil)
-    //    }
+
 }
 
 extension EmployeeClaimController: WC_HeaderViewDelegate {

@@ -29,7 +29,8 @@ struct AppColor {
     static let sideMenuGreen = UIColor(red: 26.0/255.0, green: 188.0/255.0, blue: 156.0/255.0, alpha: 1.0)
     static let lightGray = UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
     static let lightestBlue = UIColor(red: 218.0/255.0, green: 231.0/255.0, blue: 254.0/255.0, alpha: 1.0)
-    
+    static let scrollVwColor = UIColor(red: 92.0/255.0, green: 94.0/255.0, blue: 102.0/255.0, alpha: 1.0)
+
     
 }
 

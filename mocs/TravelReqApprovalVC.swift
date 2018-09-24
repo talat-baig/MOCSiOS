@@ -243,7 +243,7 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 240
+        return 230
     }
     
     
@@ -252,11 +252,14 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
         let data = arrayList[indexPath.row]
         let view = tableView.dequeueReusableCell(withIdentifier: "cell") as! TravelRequestAdapter
         view.btnMore.tag = indexPath.row
-        view.setDataToView(data: data)
+        
+        view.setDataToView(data: data, isFromApprove : true)
         view.isFromApprov = true
         view.delegate = self
         view.trfApprvListener = self
         return view
+        
+      
     }
     
 }
