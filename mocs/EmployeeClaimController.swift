@@ -264,6 +264,12 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
     
     func onSubmitClick(data: EmployeeClaimData) {
         
+        if data.reqAmount == "0" {
+            Helper.showMessage(message: "Please add payment before submitting")
+            return
+            
+        }
+        
         let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this claim? After submitting you'll not be able to edit the claim", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))

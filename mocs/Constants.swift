@@ -49,7 +49,7 @@ struct Constant
         static let RO = "Release Order - Approval"
         static let CP = "Counterparty - Approval"
         static let TR = "Travel Request - Approval"
-
+        
         
     }
     
@@ -69,7 +69,7 @@ struct Constant
         static let TRI = "Trade Receive Invoice";
         static let TASK_MANAGER = "Task Manager"
         static let CP = "Counterparty Profile"
-
+        
     }
     
     struct API {
@@ -162,6 +162,8 @@ struct Constant
         
         static let ECR_UPDATE_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EmployeePaymentRequestItemsID=%@"
         
+        static let ECR_DELETE_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/DeleteExpenseItem?delapiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&delauthid=%@&EmployeePaymentRequestItemsID=%@"
+        
         static let GET_ACCOUNT_CHARGE =  "http://172.16.12.12/OCSWebApi/api/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid=%@"
         
         static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
@@ -169,8 +171,6 @@ struct Constant
         static let ECR_EPR_ADVANCES =  "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
         
-        
-        //        https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey=739f9e13-e618-4214-9ffb-d1040609f5c2&AuthId=CAD1266B-90CD-408D-8039-98BF38A0
     }
     
     struct AR {
@@ -363,29 +363,29 @@ struct Constant
         static let TRF_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessTrip?key=33ddb2ee-59a5-428f-a0a5-7167859b8589&authe=%@&business"
         
         static let TRF_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessTravelByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ID=%d&business"
-
+        
         static let TRF_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessTravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
-
+        
         static let TRF_SUBMIT = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/SubmitBusinessTravel?apisubmit=33ddb2ee-59a5-428f-a0a5-7167859b8589&authsubmit=%@&ID=%d"
-
+        
         static let TRF_SEND_EMAIL = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/BusinessTravelSendMail?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
-
+        
         static let TRF_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
-
+        
         static let ITINERARY_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessItineryListingByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&BID=%d"
-
+        
         static let ITINERARY_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessItinery?addapikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&itinery"
         
         static let ITINERARY_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessItineryByID?apiupdate=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&itinID=%@&itinery"
-
+        
         static let ITINERARY_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessItinery?apideleteitinery=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdelete=%@&ID=%@"
         
-//        static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-
+        //        static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        
         static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@"
         
         static let TRF_APPROVE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&Check=%d"
-    
+        
     }
     
     struct EPR {
@@ -497,12 +497,12 @@ struct Constant
         static let CP_APPROVE = "http://172.16.12.12/OCSWebApi/api/CPApproval/CheckCPApproved?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CusID=%@&Event=%d&KYCContactType=%@&KYCRequired=%@&REFID=%@"
         
         static let CP_MAIL = "http://172.16.12.12/OCSWebApi/api/CounterParty/SendCPMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&CstrID=%@"
-     
+        
         
         static let CP_KYC_APPROVE = "http://172.16.12.12/OCSWebApi/api/CounterParty/AppproveKYCbyCP?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&KYCContactType=%@&KYCRequired=%@&KYCValidUntil=%@&ListCheck=%@&attachment=%@&status=%d&REFID=%@&docname=%@&compname=%@&DocumentReferenceNumber=%@"
         
         
-//        AppproveKYCbyCP(string api, string auth, string KYCContactType, string KYCRequired, string KYCValidUntil, string ListCheck, string attachment)
+        //        AppproveKYCbyCP(string api, string auth, string KYCContactType, string KYCRequired, string KYCValidUntil, string ListCheck, string attachment)
     }
     
     struct TRI {
@@ -551,8 +551,8 @@ struct Constant
         
         static let CP_LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-         static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-//        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+        //        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

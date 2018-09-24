@@ -73,7 +73,7 @@ class ECRExpenseListAdapter: UITableViewCell {
             })
             let deleteAction = UIAlertAction(title: "Delete", style: .default, handler: { (UIAlertAction) -> Void in
                 if (self.ecrExpMenuTapDelegate?.responds(to: Selector(("onDeleteClick:"))) != nil){
-//                    self.ecrExpMenuTapDelegate?.onDeleteClick(data: self.data!)
+                    self.ecrExpMenuTapDelegate?.onDeleteClick(data: self.data)
                 }
             })
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in
@@ -81,7 +81,7 @@ class ECRExpenseListAdapter: UITableViewCell {
             })
             
             optionMenu.addAction(editAction)
-//            optionMenu.addAction(deleteAction)
+            optionMenu.addAction(deleteAction)
             optionMenu.addAction(cancelAction)
             
             delegate!.onClick(optionMenu: optionMenu, sender : sender)

@@ -60,7 +60,6 @@ class FinancialInfoController: UIViewController , IndicatorInfoProvider {
                 lblAssetsInPoss.text! = j["CPAssetsPossession"].stringValue
             }
             
-            
             if j["CPFinancialsAvailable"].stringValue == "" {
                 lblFinancialsAvbl.text! = "-"
             } else {
@@ -78,7 +77,6 @@ class FinancialInfoController: UIViewController , IndicatorInfoProvider {
             } else {
                 lblOwnExp.text! = j["CPOwnExperinceTrack"].stringValue
             }
-            
             
             if j["CPNegativeInformation"].stringValue == "" {
                 lblNegInfo.text! = "-"

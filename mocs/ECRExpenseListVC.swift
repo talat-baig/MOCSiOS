@@ -63,7 +63,6 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     }
     
     
-    
     func populateList(response : Data) {
         
         var data: [ECRExpenseListData] = []
@@ -109,8 +108,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     @objc func getECRExpenseData() {
         
         if internetStatus != .notReachable {
-            let url = String.init(format: Constant.API.ECR_PAYMENT_LIST, Session.authKey,
-                                  ecrData.headRef, ecrData.counter)
+            let url = String.init(format: Constant.API.ECR_PAYMENT_LIST, Session.authKey,  ecrData.headRef, ecrData.counter )
             self.view.showLoading()
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -137,7 +135,6 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-       
                 
                 if Helper.isResponseValid(vc: self, response: response.result){
                     
@@ -180,6 +177,15 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     
     func onDeleteClick(data: ECRExpenseListData) {
         
+        let alert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete Payment Item? Once you delete this, there is no way to un-delete", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "NO GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
+            self.deleteExpense(data : data )
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
     func onClick(optionMenu: UIViewController, sender: UIButton) {
@@ -199,6 +205,31 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
     func onOkClick() {
         self.getECRExpenseData()
     }
+    
+    func deleteExpense(data : ECRExpenseListData) {
+        if internetStatus != .notReachable {
+            self.view.showLoading()
+            let url = String.init(format: Constant.API.ECR_DELETE_PAYMENT, Session.authKey, data.eprItemsId)
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                
+                self.view.hideLoading()
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Payment Successfully deleted", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {(AlertAction) ->  Void in
+                        if let index = self.arrayList.index(where: {$0 === data}) {
+                            self.arrayList.remove(at: index)
+                        }
+                        self.tableView.reloadData()
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
+    
     
 }
 
@@ -234,16 +265,8 @@ extension ECRExpenseListVC: UITableViewDataSource {
         } else {
             view.btnMenu.isHidden = false
         }
-        
         view.setDataToView(data: data)
-        //
-        //        if isFromView {
-        //            view.btnMenu.isHidden = true
-        //        } else {
-        //            view.btnMenu.isHidden = false
-        //        }
         view.delegate = self
-        //        view.btnMenu.tag = indexPath.row
         view.ecrExpMenuTapDelegate = self
         return view
     }
