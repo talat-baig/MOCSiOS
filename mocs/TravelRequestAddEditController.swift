@@ -238,7 +238,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     
     func setupArrangmntBtns() {
         
-        
         if isFlight {
             btnFlight.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
         }
@@ -247,16 +246,13 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
             btnHotel.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
         }
         
-        
         if isTravlAdv {
             btnTravelAdv.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
         }
         
-        
         if isRentCar {
             btnRentCar.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
         }
-        
         
     }
     
@@ -284,11 +280,12 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     
     
     @IBAction func btnTermsCondTapped(_ sender: Any) {
+        
+        self.handleTap()
         let tcView = Bundle.main.loadNibNamed("TermsCondistionsView", owner: nil, options: nil)![0] as! TermsCondistionsView
         DispatchQueue.main.async {
             self.navigationController?.view.addMySubview(tcView)
         }
-        
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -324,7 +321,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
         dateFormatter.dateFormat = "yyyy-MM-dd"
         txtReqDate.text = dateFormatter.string(from: datePicker.date) as String
         self.view.endEditing(true)
-        
     }
     
     @IBAction func btnCancelTapped(sender:UIButton){
@@ -522,6 +518,7 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
                     Helper.showMessage(message: "Select Currency")
                     return
                 }
+                
                 curr = currncy
                 
                 travAdv = "Travel Advance"
@@ -533,7 +530,7 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
         } else {
             
             Helper.showMessage(message: "Please Select Needed Travel Arrangement")
-            
+            return
         }
         
        
@@ -541,7 +538,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
         self.addOrEditRequest(reqNo: reqNum , travArrngStr: newList, amt :  amnt , curr : curr , accmpndBy: txtAccmpndBy.text , reasonStr: txtVwReason.text)
         
         
-        //        self.addOrEditExpense(tcrRefNo: tcrRefNo, expDate: date, expCat: category!, expSubCat: subCat!, expVendor: vendor, expPayment: payment!, expCurr: currency!, expAmt: amt, expComments: comm, tcrCounter: self.tcrCounter)
         
     }
     

@@ -346,18 +346,26 @@ class Helper: UIView {
         }
     }
     
-    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isARReport : Bool = false, action:Selector){
+    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, action:Selector){
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
         
+        
         if isARReport {
             emptyView.message = "No AR Data for the current\nTry by changing filter"
+        } else if isTrvReq {
+            emptyView.message = "No Travel Request Data found \nTry by again by relaoding"
         } else {
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
         
-        emptyView.buttonText = "CHANGE FILTER"
+        
+        if isTrvReq {
+            emptyView.buttonText = "RELOAD"
+        } else {
+            emptyView.buttonText = "CHANGE FILTER"
+        }
         emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
         tb.tableFooterView = emptyView
         emptyView.translatesAutoresizingMaskIntoConstraints = false

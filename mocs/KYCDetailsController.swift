@@ -324,8 +324,16 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
+     
+        var commnt = ""
+        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
+            commnt = ""
+        } else {
+            commnt = text
+        }
+
+        
         if isApprove {
-            
             self.approveOrDeclineCP(event: 1, cpData: data as! CPListData, comment: text)
             myView.removeFromSuperviewWithAnimate()
         } else {
@@ -445,12 +453,10 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                 return
             }
             
-            
             if self.btnKYCRequired.titleLabel?.text == "Tap to Select" {
                 Helper.showMessage(message: "Enter KYC Required")
                 return
             }
-            
             
             if self.btnKYCRequired.titleLabel?.text == "Yes" {
                 
@@ -463,9 +469,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                     Helper.showMessage(message: "Enter SDN List Check")
                     return
                 }
-                
             }
-            
             
             self.handleTap()
             self.myView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
@@ -475,7 +479,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
             self.myView.isApprove = true
             self.view.addMySubview(self.myView)
         })
-        
         
         let declineAction = UIAlertAction(title: "Decline", style: .default, handler: { (UIAlertAction) -> Void in
             
@@ -488,10 +491,8 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
             self.view.addMySubview( self.declView)
         })
         
-        
         let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (UIAlertAction) -> Void in
         })
-        
         optionMenu.addAction(approveAction)
         optionMenu.addAction(declineAction)
         optionMenu.addAction(cancelAction)
@@ -499,38 +500,10 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         self.present(optionMenu, animated: true, completion: nil)
     }
     
-    
-//    func addItemToServer(dModName : String, company: String, location: String, bUnit : String, docRefId : String = "" , docName: String, docDesc : String, docFilePath : String, compHandler : @escaping(Bool)->()) {
-//
-//        if internetStatus != .notReachable {
-//
-//            let url = String.init(format: Constant.DROPBOX.ADD_ITEM,
-//                                  Session.authKey,Helper.encodeURL(url: dModName), Helper.encodeURL(url: company), Helper.encodeURL(url:location),Helper.encodeURL(url: bUnit), docRefId,
-//                                  Helper.encodeURL(url: docName),
-//                                  Helper.encodeURL(url: docDesc), Helper.encodeURL(url:docFilePath))
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//
-//                if Helper.isResponseValid(vc: self, response: response.result) {
-//                    compHandler(true)
-//                } else {
-//                    compHandler(false)
-//                }
-//            }))
-//        } else {
-//            compHandler(false)
-//            Helper.showNoInternetMessg()
-//        }
-//
-//    }
-    
+
     
     func uploadImageData( cpData : CPListData, fileInfo : FileInfo, comp : @escaping(Bool, String, String)-> ()) {
-        
-//        let date = Date()
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "dd-MMM-yyyy"
-//        let newDate = formatter.string(from: date)
-        
+
         
         let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "/" + "frmContactManager" + "/" + cpData.cpName + "/" + Constant.MODULES.CP + "/" +  "KYC Information" + "/" + self.newDate + "/" + fileInfo.fName + "." + fileInfo.fExtension)
         
@@ -541,16 +514,11 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                 
                 DispatchQueue.main.async() {
                     if let response = response {
-                        
                         print(response.pathDisplay)
                         print(response.name)
-
-                        
-//                        self.addItemToServer(dModName: "frmContactManager", company: cpData.cpName , location:  Constant.MODULES.CP, bUnit: "KYC Information" , docRefId : newDate , docName: fileInfo.fName + "." + fileInfo.fExtension , docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
-//
+                    
                         comp(true, response.pathDisplay ?? "" , response.name )
-//                        })
-
+                        
                     } else if error != nil {
                         comp(false, (error?.description)!, "")
                         print(error?.description)
@@ -558,7 +526,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                 }
             }
             .progress { progressData in
-                
         }
     }
     
@@ -608,7 +575,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         self.view.endEditing(true)
     }
     
-    
 }
 
 
@@ -639,10 +605,8 @@ extension KYCDetailsController: UITextFieldDelegate, UIImagePickerControllerDele
                 self.dbRequest?.cancel()
                 return
             }
-            
         })
     }
-    
     
     
     

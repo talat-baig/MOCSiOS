@@ -14,7 +14,7 @@ import NotificationBannerSwift
 class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, customPopUpDelegate {
     
     
-
+    
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -24,20 +24,20 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     var newArray : [TravelRequestData] = []
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
-
+    
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         srchBar.delegate = self
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
-
+        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.isNavigationBarHidden = true
         
@@ -52,7 +52,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         
         populateList()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -79,8 +79,9 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                     
                     let jsonResponse = JSON(response.result.value!)
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
+                    self.arrayList.removeAll()
+                    
                     if array.count > 0 {
-                        self.arrayList.removeAll()
                         
                         for(_,json):(String,JSON) in jsonResponse {
                             
@@ -89,6 +90,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                             trfData.reqNo = json["RequestNo"].stringValue
                             trfData.reqDate = json["RequestDate"].stringValue
                             trfData.empName = json["EmployeeName"].stringValue
+                            
                             trfData.empDept = json["Department"].stringValue
                             trfData.empCode = json["EmployeeCode"].stringValue
                             
@@ -120,8 +122,13 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                         self.arrayList = data
                         self.newArray = data
                         self.tableView.tableFooterView = nil
-                        self.tableView.reloadData()
+                        //                        self.tableView.reloadData()
+                    } else {
+                        
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, isTrvReq: true, isARReport: false, action: #selector(self.populateList))
+                        
                     }
+                    self.tableView.reloadData()
                 }
             }))
         } else {
@@ -129,7 +136,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
             Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             self.refreshControl.endRefreshing()
         }
-
+        
     }
     
     
@@ -143,7 +150,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-               
+                
                 let vc = UIStoryboard(name: "TravelRequest", bundle: nil).instantiateViewController(withIdentifier: "TRBaseViewController") as! TRBaseViewController
                 vc.trfData = trfData
                 vc.isFromView = isFromView
@@ -155,13 +162,20 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
             Helper.showNoInternetMessg()
         }
     }
-
+    
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
+        var commnt = ""
+        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
+            commnt = ""
+        } else {
+            commnt = text
+        }
+        
         if isApprove {
             
-            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: text)
+            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: commnt)
             myView.removeFromSuperviewWithAnimate()
         } else {
             
@@ -169,18 +183,17 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                 Helper.showMessage(message: "Please Enter Comment")
                 return
             } else {
-                self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: text)
+                self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: commnt)
                 declView.removeFromSuperviewWithAnimate()
             }
         }
-    
     }
     
     func approveOrDeclineTRF( event : Int, trData:TravelRequestData, comment:String) {
         
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.TRF.TRF_APPROVE, Session.authKey, trData.trfId, event)
+            let url = String.init(format: Constant.TRF.TRF_APPROVE, Session.authKey, trData.trfId, event, comment)
             self.view.showLoading()
             Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 
@@ -194,7 +207,6 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                     }
                 }
             })
-            
         } else {
             
         }
@@ -210,7 +222,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
             self.populateList()
-
+            
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -228,7 +240,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
 }
 
 extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
-
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -259,7 +271,7 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
         view.trfApprvListener = self
         return view
         
-      
+        
     }
     
 }
@@ -303,15 +315,15 @@ extension TravelReqApprovalVC : onMoreClickListener , onTRFApprovItemClickListen
 extension TravelReqApprovalVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-//        if  searchText.isEmpty {
-//            self.arrayList = newArray
-//        } else {
-////            let filteredArray =   newArray.filter {
-////                $0.refId.localizedCaseInsensitiveContains(searchText)
-////            }
-//            self.arrayList = filteredArray
-//        }
-//        tableView.reloadData()
+        //        if  searchText.isEmpty {
+        //            self.arrayList = newArray
+        //        } else {
+        ////            let filteredArray =   newArray.filter {
+        ////                $0.refId.localizedCaseInsensitiveContains(searchText)
+        ////            }
+        //            self.arrayList = filteredArray
+        //        }
+        //        tableView.reloadData()
     }
 }
 

@@ -19,6 +19,7 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
     
     @IBOutlet weak var tableView: UITableView!
     
+    
     var arrayList:[TravelRequestData] = []
     
     var newArray : [TravelRequestData] = []
@@ -247,7 +248,7 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
     
     func onDeleteClick(data: TravelRequestData) {
         
-        let alert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete Expense Item? Once you delete this, there is no way to un-delete", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete Travel Request Item? Once you delete this, there is no way to un-delete", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
             self.deleteRequest(data : data )
@@ -345,7 +346,7 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
             viewRequest(data: data , isFromView: true)
         }
         
-        if (data.status.caseInsensitiveCompare("Sent for Approval") == ComparisonResult.orderedSame) || (data.status.caseInsensitiveCompare("approved by manager") == ComparisonResult.orderedSame) || (data.status.caseInsensitiveCompare("approved By finance")  == ComparisonResult.orderedSame) {
+        if (data.status.caseInsensitiveCompare("Sent for Approval") == ComparisonResult.orderedSame) || (data.status.caseInsensitiveCompare("approved") == ComparisonResult.orderedSame) || (data.status.caseInsensitiveCompare("declined")  == ComparisonResult.orderedSame) {
             self.view.makeToast("Request already submitted, cannot be edited")
         }
 

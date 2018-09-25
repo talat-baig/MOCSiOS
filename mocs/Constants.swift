@@ -31,7 +31,8 @@ struct AppColor {
     static let lightestBlue = UIColor(red: 218.0/255.0, green: 231.0/255.0, blue: 254.0/255.0, alpha: 1.0)
     static let scrollVwColor = UIColor(red: 92.0/255.0, green: 94.0/255.0, blue: 102.0/255.0, alpha: 1.0)
 
-    
+    static let grayColor = UIColor(red: 154.0/255.0, green: 154.0/255.0, blue: 154.0/255.0, alpha: 1.0)
+
 }
 
 
@@ -381,11 +382,9 @@ struct Constant
         
         static let ITINERARY_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessItinery?apideleteitinery=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdelete=%@&ID=%@"
         
-        //        static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-        
         static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@"
         
-        static let TRF_APPROVE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&Check=%d"
+        static let TRF_APPROVE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&check=%d&Reason=%@"
         
     }
     

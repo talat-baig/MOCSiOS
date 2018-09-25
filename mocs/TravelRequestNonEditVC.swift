@@ -51,7 +51,13 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider {
             return
         }
        
-        lblEmpName.text! = Session.user
+//        lblEmpName.text! = trfDta.empName
+        
+        if trfDta.empName == "" {
+            lblEmpName.text! = "-"
+        } else {
+            lblEmpName.text! = trfDta.empName
+        }
         
         if trfDta.trvArrangmnt == "" {
            lblTrvlArngmnt.text! = "-"
@@ -71,10 +77,13 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider {
             lblAccmpnd.text! = trfDta.accmpnd
         }
         
-        lblEmpCode.text! = Session.empCode
-        lblDept.text! = Session.department
-        lblDesgntn.text! = Session.designation
+//        lblEmpCode.text! = Session.empCode
+//        lblDept.text! = Session.department
+//        lblDesgntn.text! = Session.designation
         
+        lblEmpCode.text! = trfDta.empCode
+        lblDept.text! = trfDta.empDept
+        lblDesgntn.text! = trfDta.empDesgntn
        
         if trfDta.approver == "" {
             lblApprvdBy.text! = "-"

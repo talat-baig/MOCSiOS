@@ -36,8 +36,6 @@ class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
 
     override func viewDidAppear(_ animated: Bool) {
         
-//        tableView.register(UINib.init(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "cell")
-//        showEmptyState()
         tableView.reloadData()
     }
     

@@ -51,6 +51,9 @@ class TravelRequestAdapter: UITableViewCell {
     weak var trfApprvListener :onTRFApprovItemClickListener!
     weak var trvlReqItemClickListener:onTReqItemClickListener?
     var isFromApprov = false
+        
+    @IBOutlet weak var vw1: UIView!
+    @IBOutlet weak var vw2: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -101,6 +104,8 @@ class TravelRequestAdapter: UITableViewCell {
             reason.font = UIFont.systemFont(ofSize: 15, weight: .bold)
             desgntn.font = UIFont.systemFont(ofSize: 15, weight: .bold)
             
+            vw1.isHidden = true
+            vw2.backgroundColor = AppColor.grayColor
             
         } else {
             
@@ -133,6 +138,10 @@ class TravelRequestAdapter: UITableViewCell {
             reqDate.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
             reason.font =  UIFont.systemFont(ofSize: 15, weight: .semibold)
             desgntn.font =  UIFont.systemFont(ofSize: 15, weight: .semibold)
+            
+            vw1.isHidden = false
+            vw2.backgroundColor = AppColor.scrollVwColor
+
         }
     }
     
@@ -164,7 +173,6 @@ class TravelRequestAdapter: UITableViewCell {
                 self.trvlReqItemClickListener?.onViewClick(data: self.data)
             }
         })
-        
         
         let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.trvlReqItemClickListener?.responds(to: Selector(("onEmailClick:"))) != nil){
@@ -209,7 +217,8 @@ class TravelRequestAdapter: UITableViewCell {
             
         } else {
             
-            if data.status.caseInsensitiveCompare("saved") == ComparisonResult.orderedSame{
+            if data.status.caseInsensitiveCompare("saved") == ComparisonResult.orderedSame {
+                
                 optionMenu.addAction(editAction)
                 optionMenu.addAction(deleteActon)
                 optionMenu.addAction(submitAction)

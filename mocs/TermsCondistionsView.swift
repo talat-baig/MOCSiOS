@@ -11,16 +11,12 @@ import UIKit
 class TermsCondistionsView: UIView {
 
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.backgroundColor = AppColor.univPopUpBckgColor
-
-        
     }
     
     @IBAction func btnOKTapped(_ sender: Any) {
       self.removeFromSuperview()
-        
     }
 }
