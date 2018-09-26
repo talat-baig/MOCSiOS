@@ -65,7 +65,7 @@ class AddNewItineraryVC: UIViewController {
             assignData()
         } else {
             /// Add
-            //            setupDefaultValues()
+            // setupDefaultValues()
         }
     }
     
@@ -75,7 +75,6 @@ class AddNewItineraryVC: UIViewController {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        
         
         guard let depDate = itnryListData?.depDate, !depDate.isEmpty else {
             return

@@ -14,7 +14,6 @@ import NotificationBannerSwift
 class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, customPopUpDelegate {
     
     
-    
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
