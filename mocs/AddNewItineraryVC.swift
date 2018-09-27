@@ -154,8 +154,6 @@ class AddNewItineraryVC: UIViewController {
     }
     
     
-    
-    
     @IBAction func btnSubmit(_ sender: Any) {
         
         guard let dest = txtFldDest.text, !dest.isEmpty else {
@@ -183,7 +181,7 @@ class AddNewItineraryVC: UIViewController {
             if itnryListData == nil {
                 
                 url = String.init(format: Constant.TRF.ITINERARY_ADD, Session.authKey, trfData.trfId )
-                newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
+//                newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
                 
             } else {
                 
@@ -193,9 +191,12 @@ class AddNewItineraryVC: UIViewController {
                 }
                 
                 url = String.init(format: Constant.TRF.ITINERARY_UPDATE, Session.authKey, itinId )
-                newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
+//                newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
                 
             }
+            
+            newRecord = ["Destination": dest, "DepartureDate": depDate, "ReturnDate": retDate] as [String : Any]
+
             
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
                 .responseString(completionHandler: {  response in

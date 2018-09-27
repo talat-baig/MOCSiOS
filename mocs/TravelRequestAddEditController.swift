@@ -14,7 +14,6 @@ import DropDown
 import NotificationBannerSwift
 
 
-
 protocol onTRFSubmit: NSObjectProtocol {
     func onOkClick() -> Void
 }
@@ -483,7 +482,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
         var amnt : String = ""
         var curr : String = ""
         
-        
         self.handleTap()
         
         arrList.removeAll()
@@ -498,7 +496,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
             if isHotel {
                 hotel = lblHotel.text!
                 arrList.append(hotel)
-                
             }
             
             if isRentCar {
@@ -556,16 +553,20 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
                 
                 url = String.init(format: Constant.TRF.TRF_ADD, Session.authKey)
                 
-                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
+//                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
                 
                 
             } else {
                 
                 url = String.init(format: Constant.TRF.TRF_UPDATE, Session.authKey , trvReqData.trfId)
                 
-                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
+//                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
                 
             }
+            
+            
+            newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
+
             
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
                 .responseString(completionHandler: {  response in

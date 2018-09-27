@@ -8,10 +8,21 @@
 
 struct ApiKey {
     // LIVE
-    //        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+//            static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
     static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+}
+
+struct ApiUrl {
+    
+    // LIVE
+//    static let URL = ApiUrl.URL + ""
+    
+    // UAT
+    static let URL = "http://172.16.12.12/OCSWebApi/api"
+
+    
 }
 
 
@@ -144,31 +155,31 @@ struct Constant
         
         static let EXPENSE_DELETE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFDTCREI?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&ExpenseId=%@&TEXCounter=%d"
         
-        static let ECR_LIST = "http://172.16.12.12/OCSWebApi/api/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
-        static let ECR_ADD = "http://172.16.12.12/OCSWebApi/api/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
-        
-        
-        static let ECR_UPDATE =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
-        
-        static let ECR_DELETE = "http://172.16.12.12/OCSWebApi/api/ECR/DeleteECR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EmployeePaymentRequestMainID=%@"
-        
-        static let ECR_SUBMIT = "http://172.16.12.12/OCSWebApi/api/ECR/SubmitDraftedECR?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EPRMainReferenceID=%@&chktype=%d&EmployeePaymentRequestMainID=%@&EprRefIDCounter=%d"
-        
-        static let ECR_SEND_EMAIL = "http://172.16.12.12/OCSWebApi/api/ECR/SendECRMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&emailid=%@&EmployeePaymentRequestMainID=%@&EPRMainReferenceID=%@&EprRefIDCounter=%d"
+        static let ECR_ADD = ApiUrl.URL + "/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
         
         
-        static let ECR_PAYMENT_LIST =  "http://172.16.12.12/OCSWebApi/api/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&count=%d"
+        static let ECR_UPDATE =  ApiUrl.URL + "/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
         
-        static let ECR_ADD_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/AddExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+        static let ECR_DELETE = ApiUrl.URL + "/ECR/DeleteECR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EmployeePaymentRequestMainID=%@"
         
-        static let ECR_UPDATE_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/UpdateExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EmployeePaymentRequestItemsID=%@"
+        static let ECR_SUBMIT = ApiUrl.URL + "/ECR/SubmitDraftedECR?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&EPRMainReferenceID=%@&chktype=%d&EmployeePaymentRequestMainID=%@&EprRefIDCounter=%d"
         
-        static let ECR_DELETE_PAYMENT =  "http://172.16.12.12/OCSWebApi/api/ECR/DeleteExpenseItem?delapiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&delauthid=%@&EmployeePaymentRequestItemsID=%@"
+        static let ECR_SEND_EMAIL = ApiUrl.URL + "/ECR/SendECRMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&emailid=%@&EmployeePaymentRequestMainID=%@&EPRMainReferenceID=%@&EprRefIDCounter=%d"
         
-        static let GET_ACCOUNT_CHARGE =  "http://172.16.12.12/OCSWebApi/api/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid=%@"
         
-        static let GET_PAYMENT_REASON =  "http://172.16.12.12/OCSWebApi/api/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
+        static let ECR_PAYMENT_LIST =  ApiUrl.URL + "/ECR/GetExpenselist?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&count=%d"
+        
+        static let ECR_ADD_PAYMENT =  ApiUrl.URL + "/ECR/AddExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&counter=%d"
+        
+        static let ECR_UPDATE_PAYMENT =  ApiUrl.URL + "/ECR/UpdateExpense?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EmployeePaymentRequestItemsID=%@"
+        
+        static let ECR_DELETE_PAYMENT =  ApiUrl.URL + "/ECR/DeleteExpenseItem?delapiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&delauthid=%@&EmployeePaymentRequestItemsID=%@"
+        
+        static let GET_ACCOUNT_CHARGE =  ApiUrl.URL + "/ECR/GetPaymentReason?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%d&referenceid=%@"
+        
+        static let GET_PAYMENT_REASON =  ApiUrl.URL + "/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
         
         static let ECR_EPR_ADVANCES =  "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
@@ -362,29 +373,29 @@ struct Constant
     
     struct TRF {
         
-        static let TRF_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessTrip?key=33ddb2ee-59a5-428f-a0a5-7167859b8589&authe=%@&business"
+        static let TRF_ADD = ApiUrl.URL + "/BusinessTravel/AddBusinessTrip?key=33ddb2ee-59a5-428f-a0a5-7167859b8589&authe=%@&business"
         
-        static let TRF_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessTravelByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ID=%d&business"
+        static let TRF_UPDATE = ApiUrl.URL + "/BusinessTravel/UpdateBusinessTravelByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ID=%d&business"
         
-        static let TRF_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessTravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
+        static let TRF_DELETE = ApiUrl.URL + "/BusinessTravel/DeleteBusinessTravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
         
-        static let TRF_SUBMIT = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/SubmitBusinessTravel?apisubmit=33ddb2ee-59a5-428f-a0a5-7167859b8589&authsubmit=%@&ID=%d"
+        static let TRF_SUBMIT = ApiUrl.URL + "/BusinessTravel/SubmitBusinessTravel?apisubmit=33ddb2ee-59a5-428f-a0a5-7167859b8589&authsubmit=%@&ID=%d"
         
-        static let TRF_SEND_EMAIL = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/BusinessTravelSendMail?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
+        static let TRF_SEND_EMAIL = ApiUrl.URL + "/BusinessTravel/BusinessTravelSendMail?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d"
         
-        static let TRF_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+        static let TRF_LIST = ApiUrl.URL + "/BusinessTravel/GetBusinessTravelListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
         
-        static let ITINERARY_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessItineryListingByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&BID=%d"
+        static let ITINERARY_LIST = ApiUrl.URL + "/BusinessTravel/GetBusinessItineryListingByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&BID=%d"
         
-        static let ITINERARY_ADD = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/AddBusinessItinery?addapikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&itinery"
+        static let ITINERARY_ADD = ApiUrl.URL + "/BusinessTravel/AddBusinessItinery?addapikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&itinery"
         
-        static let ITINERARY_UPDATE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/UpdateBusinessItineryByID?apiupdate=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&itinID=%@&itinery"
+        static let ITINERARY_UPDATE = ApiUrl.URL + "/BusinessTravel/UpdateBusinessItineryByID?apiupdate=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&itinID=%@&itinery"
         
-        static let ITINERARY_DELETE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/DeleteBusinessItinery?apideleteitinery=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdelete=%@&ID=%@"
+        static let ITINERARY_DELETE = ApiUrl.URL + "/BusinessTravel/DeleteBusinessItinery?apideleteitinery=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdelete=%@&ID=%@"
         
-        static let TRF_APPROVAL_LIST = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@"
+        static let TRF_APPROVAL_LIST = ApiUrl.URL + "/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@"
         
-        static let TRF_APPROVE = "http://172.16.12.12/OCSWebApi/api/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&check=%d&Reason=%@"
+        static let TRF_APPROVE = ApiUrl.URL + "/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&check=%d&Reason=%@"
         
     }
     
@@ -421,10 +432,6 @@ struct Constant
          - 3: Comment
          */
         static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_EPRMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&EPRRefNo=%@&Comments=%@"
-        
-        
-        
-        
         
     }
     
@@ -463,43 +470,43 @@ struct Constant
     
     struct RO {
         
-        //        http://172.16.12.12/OCSWebApi/api/
-        static let LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
+        //        http://ocsmis.phoenixgroup.net/MOCS_API/api/
+        static let LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
         
-        static let VIEW = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"
+        static let VIEW = ApiUrl.URL + "/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"
         
-        static let CARGO_DETAILS = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByRO?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&reference=%@&authid=%@"
+        static let CARGO_DETAILS = ApiUrl.URL + "/RequestOrder/GetCargoinfoByRO?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&reference=%@&authid=%@"
         
-        static let RRCPT_LIST = "http://172.16.12.12/OCSWebApi/api/RequestOrder/GetCargoinfoByWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&guid=%@"
+        static let RRCPT_LIST = ApiUrl.URL + "/RequestOrder/GetCargoinfoByWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&guid=%@"
         
-        static let ADD_RECEIPT = "http://172.16.12.12/OCSWebApi/api/RequestOrder/SaveROtoWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@"
+        static let ADD_RECEIPT = ApiUrl.URL + "/RequestOrder/SaveROtoWHR?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@"
         
-        static let EMAIL_RO = "http://172.16.12.12/OCSWebApi/api/RequestOrder/ROMailSend?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@&referenceid=%@"
+        static let EMAIL_RO = ApiUrl.URL + "/RequestOrder/ROMailSend?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&emailid=%@&referenceid=%@"
     }
     
     
     struct CP {
         
-        //        http://172.16.12.12/OCSWebApi/api/
+        //        http://ocsmis.phoenixgroup.net/MOCS_API/api/
         
-        static let LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        static let LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
-        static let VIEW = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
+        static let VIEW = ApiUrl.URL + "/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
         
-        static let BANK_DETAILS = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyBankDetailsByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustID=%@"
+        static let BANK_DETAILS = ApiUrl.URL + "/CounterParty/GetCounterPartyBankDetailsByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustID=%@"
         
-        static let REL_DETAILS = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyRelationByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CuID=%@"
+        static let REL_DETAILS = ApiUrl.URL + "/CounterParty/GetCounterPartyRelationByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CuID=%@"
         
-        static let CP_ATTACHMENT = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
+        static let CP_ATTACHMENT = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-        static let CP_KYC_DETAILS = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetCounterPartyKYC?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomerID=%@"
+        static let CP_KYC_DETAILS = ApiUrl.URL + "/CounterParty/GetCounterPartyKYC?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomerID=%@"
         
-        static let CP_APPROVE = "http://172.16.12.12/OCSWebApi/api/CPApproval/CheckCPApproved?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CusID=%@&Event=%d&KYCContactType=%@&KYCRequired=%@&REFID=%@"
+        static let CP_APPROVE = ApiUrl.URL + "/CPApproval/CheckCPApproved?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CusID=%@&Event=%d&KYCContactType=%@&KYCRequired=%@&REFID=%@"
         
-        static let CP_MAIL = "http://172.16.12.12/OCSWebApi/api/CounterParty/SendCPMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&CstrID=%@"
+        static let CP_MAIL = ApiUrl.URL + "/CounterParty/SendCPMail?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&CstrID=%@"
         
         
-        static let CP_KYC_APPROVE = "http://172.16.12.12/OCSWebApi/api/CounterParty/AppproveKYCbyCP?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&KYCContactType=%@&KYCRequired=%@&KYCValidUntil=%@&ListCheck=%@&attachment=%@&status=%d&REFID=%@&docname=%@&compname=%@&DocumentReferenceNumber=%@"
+        static let CP_KYC_APPROVE = ApiUrl.URL + "/CounterParty/AppproveKYCbyCP?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&KYCContactType=%@&KYCRequired=%@&KYCValidUntil=%@&ListCheck=%@&attachment=%@&status=%d&REFID=%@&docname=%@&compname=%@&DocumentReferenceNumber=%@"
         
         
         //        AppproveKYCbyCP(string api, string auth, string KYCContactType, string KYCRequired, string KYCValidUntil, string ListCheck, string attachment)
@@ -549,7 +556,7 @@ struct Constant
         static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_LDI?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&DocumentReferenceID=%@"
         
         
-        static let CP_LIST = "http://172.16.12.12/OCSWebApi/api/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
+        static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
         static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
         //        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"

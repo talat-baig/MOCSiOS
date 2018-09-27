@@ -28,7 +28,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var selectedItem : MenuDataObject?
     var helpDocViewer: UIDocumentInteractionController!
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request" , "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request" , "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report"]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -51,7 +51,10 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
         let trf_form = MenuDataObject(name: "1.1.3 Travel Request Form", storybdNAme: "TravelRequest", vcName: "TravelRequestController", imageName: #imageLiteral(resourceName: "task_tick"))
 
-        let form = MenuDataObject(name: "1.1 Forms" , children: [tcr_form, ecr_form, trf_form], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "document"))
+        let trvl_tkct = MenuDataObject(name: "1.1.4 Travel Ticket", storybdNAme: "TravelTicket", vcName: "TravelTicketController", imageName: #imageLiteral(resourceName: "task_tick"))
+
+        
+        let form = MenuDataObject(name: "1.1 Forms" , children: [tcr_form, ecr_form, trf_form, trvl_tkct], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "document"))
         
         let administrative = MenuDataObject(name: "Administrative", children: [form], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile") )
         

@@ -275,7 +275,6 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
                     }))
                     self.present(success, animated: true, completion: nil)
                 }
-                
             })
         } else {
             Helper.showNoInternetMessg()
@@ -338,7 +337,6 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         handleTap()
    
         let data = arrayList[indexPath.row]
- 
         
         if (data.status.caseInsensitiveCompare("Saved") == ComparisonResult.orderedSame){
             viewRequest(data: data, isFromView: false)
@@ -353,8 +351,6 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         if (data.status.caseInsensitiveCompare("deleted") == ComparisonResult.orderedSame){
             self.view.makeToast("Request has been deleted, cannot be edited")
         }
-        
-        
         
     }
     
