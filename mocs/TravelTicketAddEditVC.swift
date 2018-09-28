@@ -30,9 +30,8 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     @IBOutlet weak var mySubVw: UIView!
     @IBOutlet weak var btnTrvllerName: UIButton!
     
-    @IBOutlet weak var btnDept: UIButton!
-    
     @IBOutlet weak var swtchGuest: UISwitch!
+    
     @IBOutlet weak var swtchPurpose: UISwitch!
     
     @IBOutlet weak var swtchTrvlType: UISwitch!
@@ -74,17 +73,16 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         
         let ttAddEditVC = self.parent as! TTBaseViewController
         ttAddEditVC.saveTTAddEditReference(vc: self)
-        // Do any additional setup after loading the view.
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         self.view.endEditing(true)
-        
     }
     
     
@@ -121,6 +119,12 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         Helper.addBordersToView(view: vwPurpose)
         
         
+        btnCompany.contentHorizontalAlignment = .left
+        btnTrvllerName.contentHorizontalAlignment = .left
+        txtDept.textAlignment = .left
+        btnTrvlClass.contentHorizontalAlignment = .left
+        btnTrvlMode.contentHorizontalAlignment = .left
+        
         swtchGuest.addTarget(self, action: #selector(guestType(mySwitch:)), for: UIControlEvents.valueChanged)
         swtchPurpose.addTarget(self, action: #selector(purposeType(mySwitch:)), for: UIControlEvents.valueChanged)
         swtchTrvlType.addTarget(self, action: #selector(trvType(mySwitch:)), for: UIControlEvents.valueChanged)
@@ -154,13 +158,14 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        let lastView : UIView! = mySubVw.subviews.last
-        let height = lastView.frame.size.height
-        let pos = lastView.frame.origin.y
-        let sizeOfContent = height + pos + 100
-        print(sizeOfContent)
-        scrlVw.contentSize.height = sizeOfContent
+        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 800 )
+
+//        let lastView : UIView! = mySubVw.subviews.last
+//        let height = lastView.frame.size.height
+//        let pos = lastView.frame.origin.y
+//        let sizeOfContent = height + pos + 100
+//        print(sizeOfContent)
+//        scrlVw.contentSize.height = sizeOfContent
     }
     
     

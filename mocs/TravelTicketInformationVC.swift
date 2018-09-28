@@ -110,17 +110,21 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
 //        btnCurrncy.layer.borderWidth = 0.5
 //        btnCurrncy.layer.borderColor = AppColor.lightGray.cgColor
 //
-        btnAdvances.layer.cornerRadius = 3
-        btnAdvances.layer.borderWidth = 0.5
-        btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
+//        btnAdvances.layer.cornerRadius = 3
+//        btnAdvances.layer.borderWidth = 1
+//        btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
         
-        
-//        swtchTrvlType.addTarget(self, action: #selector(trvType(mySwitch:)), for: UIControlEvents.valueChanged)
+        switchAdvance.isOn = false
+        checkSwitchState(mySwitchState:  switchAdvance.isOn )
+
+        switchAdvance.addTarget(self, action: #selector(isAdvance(mySwitch:)), for: UIControlEvents.valueChanged)
         
         
     }
     
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.view.endEditing(true)
+    }
     
     @objc func keyboardWillShow(notification: NSNotification) {
         
@@ -156,14 +160,37 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 1350 )
+        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 1320 )
     }
     
     @IBAction func btnNextTapped(_ sender: Any) {
         
-        
+        let home = self.parent as! TTBaseViewController
+     //   home.deptStr = txtDept.text!
+        home.moveToViewController(at: 2, animated: true)
     }
     
+    
+    @objc func isAdvance(mySwitch: UISwitch) {
+       
+        checkSwitchState(mySwitchState:  mySwitch.isOn )
+    }
+
+
+    func checkSwitchState( mySwitchState : Bool ) {
+        
+        if mySwitchState {
+            btnAdvances.isEnabled = true
+            btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
+            btnAdvances.layer.borderWidth = 1
+            
+        } else {
+            btnAdvances.isEnabled = false
+            btnAdvances.layer.borderColor = AppColor.lightGray.cgColor
+            btnAdvances.layer.borderWidth = 0.5
+            
+        }
+    }
 }
 
 

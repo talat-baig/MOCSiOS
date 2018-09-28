@@ -92,13 +92,17 @@ extension TravelTicketController: UISearchBarDelegate {
 
 extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , onMoreClickListener, onTTItemClickListener {
     
-    func onViewClick(data: TravelTicketData) {
+    func onViewClick() {
         
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
+        vc.isFromView = true
+        self.navigationController!.pushViewController(vc, animated: true)
     }
     
     func onEditClick() {
         
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
+        vc.isFromView = false
         self.navigationController!.pushViewController(vc, animated: true)
     }
     
@@ -126,7 +130,7 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
-
+        vc.isFromView = false
         self.navigationController!.pushViewController(vc, animated: true)
 
     }

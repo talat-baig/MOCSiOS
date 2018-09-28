@@ -52,8 +52,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
             
             if self?.deptStr == "" {
                 
-
-                
                 
 
             }
@@ -64,12 +62,17 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
         vwTopHeader.delegate = self
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnLeft.isHidden = true
-        vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Travel Ticket"
         vwTopHeader.lblSubTitle.text = "TT12345678"
         
-        vwTopHeader.btnRight.setTitleColor(UIColor.white, for: .normal)
-        vwTopHeader.btnRight.setTitle("Submit", for: .normal)
+        if isFromView {
+            vwTopHeader.btnRight.isHidden = true
+        } else {
+            vwTopHeader.btnRight.setTitleColor(UIColor.white, for: .normal)
+            vwTopHeader.btnRight.isHidden = false
+            vwTopHeader.btnRight.setTitle("SUBMIT", for: .normal)
+        }
+        
         vwTopHeader.btnRight.setImage(nil, for: .normal)
         
         self.navigationController?.isNavigationBarHidden = true
@@ -87,20 +90,48 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var viewArray:[UIViewController] = []
         
-//        if isFromView {
-//        } else {
-//        }
+        if isFromView {
+          
+            let ttPrimNonEdit = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketNonEditVC") as! TravelTicketNonEditVC
+            viewArray.append(ttPrimNonEdit)
+            
+            let ttcktNonEdit = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketNonEditInfoVC") as! TravelTicketNonEditInfoVC
+            viewArray.append(ttcktNonEdit)
+            
+            let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
+            ttItinry.isFromView = self.isFromView
+            viewArray.append(ttItinry)
+
+             let attachment = UIStoryboard(name: "PurchaseContract", bundle: nil).instantiateViewController(withIdentifier: "PCAttachmentViewController") as! PCAttachmentViewController
+            viewArray.append(attachment)
+
+            
+        } else {
+            let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
+            viewArray.append(ttAddEditVC)
+            
+            let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
+            viewArray.append(ttInfo)
+            
+            let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
+            ttItinry.isFromView = self.isFromView
+            viewArray.append(ttItinry)
+            
+            let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
+            viewArray.append(ttVoucher)
+        }
         
-        let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
-        viewArray.append(ttAddEditVC)
-        
-        let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
-        viewArray.append(ttInfo)
-        
-        let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
-        viewArray.append(ttItinry)
-        
-        
+//        let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
+//        viewArray.append(ttAddEditVC)
+//
+//        let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
+//        viewArray.append(ttInfo)
+//
+//        let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
+//        viewArray.append(ttItinry)
+//
+//        let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
+//        viewArray.append(ttVoucher)
         
         
         return viewArray
@@ -113,19 +144,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
  
     
     func processInfo() {
-        
-//        let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
-//
-//
-//        let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
-
-        
-//        guard let comm = txtFldComments.text, !comm.isEmpty else {
-//            Helper.showMessage(message: "Please enter Comment")
-//            return
-//        }
-//
-        
+   
         
         guard let compny = self.trvticktAddEditVC?.btnCompany.titleLabel?.text else {
             return

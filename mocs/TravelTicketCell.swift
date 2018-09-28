@@ -11,7 +11,7 @@ import UIKit
 
 protocol onTTItemClickListener: NSObjectProtocol {
     
-    func onViewClick(data:TravelTicketData) -> Void
+    func onViewClick() -> Void
     func onEditClick() -> Void
     func onDeleteClick(data:TravelTicketData) -> Void
     func onSubmitClick(data:TravelTicketData) -> Void
@@ -73,7 +73,7 @@ class TravelTicketCell: UITableViewCell {
         
         let viewAction = UIAlertAction(title: "View", style: .default, handler: { (alert:UIAlertAction!)-> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onViewClick:"))) != nil){
-//                self.ttReqClickListnr?.onViewClick(data: self.data)
+                self.ttReqClickListnr?.onViewClick()
             }
         })
         

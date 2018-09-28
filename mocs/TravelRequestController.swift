@@ -163,6 +163,34 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
         getItirenaryData(trfData : data, isFromView: isFromView)
     }
     
+    func submitRequest(data : TravelRequestData) {
+    
+        if self.internetStatus != .notReachable{
+            showLoading()
+            let url = String.init(format: Constant.TRF.TRF_SUBMIT, Session.authKey, data.trfId)
+            print("Submit TRF", url)
+            
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let success = UIAlertController(title: "Success", message: "Request has been Submitted Successfully", preferredStyle: .alert)
+                    success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(AlertAction) ->  Void in
+                        self.populateList()
+                    }))
+                    self.present(success, animated: true, completion: nil)
+                }
+            })
+        } else {
+            Helper.showNoInternetMessg()
+        }
+        
+    }
+    
+    
+    
+    
     func deleteRequest(data : TravelRequestData ) {
         
         if internetStatus != .notReachable {
@@ -259,26 +287,19 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
     
     func onSubmitClick(data: TravelRequestData) {
         
-        if self.internetStatus != .notReachable{
-            showLoading()
-            let url = String.init(format: Constant.TRF.TRF_SUBMIT, Session.authKey, data.trfId)
-            print("Submit TRF", url)
+        
+        
+        let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this Request? After submitting you'll not be able to edit the Request", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
             
-            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
-                self.view.hideLoading()
-                
-                if Helper.isPostResponseValid(vc: self, response: response.result) {
-                    
-                    let success = UIAlertController(title: "Success", message: "Request has been Submitted Successfully", preferredStyle: .alert)
-                    success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(AlertAction) ->  Void in
-                        self.populateList()
-                    }))
-                    self.present(success, animated: true, completion: nil)
-                }
-            })
-        } else {
-            Helper.showNoInternetMessg()
-        }
+            self.submitRequest(data:data)
+        }))
+        self.present(alert, animated: true, completion: nil)
+        
+ 
     }
     
 
