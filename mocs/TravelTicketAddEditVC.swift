@@ -335,10 +335,10 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
                             }
                         }
                     } else {
-                        
+                        self?.chooseTraveller.dataSource = []
+                        self?.btnTrvllerName.setTitle("-", for: .normal)
                     }
                 })
-                
             }
             
         }
@@ -397,9 +397,11 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
                             data.fullName = j["FullName"].stringValue
                             newArry.append(data)
                         }
+                        self.arrTravlrData = newArry
+                        comp(true)
+                    } else {
+                         comp(false)
                     }
-                    self.arrTravlrData = newArry
-                    comp(true)
                 } else {
                     comp(false)
                 }
