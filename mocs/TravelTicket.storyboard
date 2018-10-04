@@ -75,13 +75,13 @@
                                                                             </constraints>
                                                                         </view>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baJ-f8-1uw">
-                                                                            <rect key="frame" x="0.0" y="8" width="355" height="23"/>
+                                                                            <rect key="frame" x="0.0" y="8" width="355" height="39"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                                             <color key="textColor" red="0.98338128120000001" green="1" blue="0.97984085310000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="749" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1RA-00-CWZ">
-                                                                            <rect key="frame" x="0.0" y="31" width="355" height="16"/>
+                                                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="749" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1RA-00-CWZ">
+                                                                            <rect key="frame" x="0.0" y="47" width="355" height="0.0"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" red="1" green="0.9857744799" blue="0.93949513600000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
@@ -359,8 +359,16 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="btnMore" destination="fbE-vE-DPb" id="aWB-CQ-03w"/>
+                                            <outlet property="lblCompName" destination="jUV-kx-GQo" id="RAA-nx-dff"/>
+                                            <outlet property="lblDept" destination="r2L-fW-dvG" id="6gL-I6-vOK"/>
+                                            <outlet property="lblGuest" destination="GxC-Sm-yo2" id="0WG-Rg-ENF"/>
+                                            <outlet property="lblMode" destination="It9-gF-Axm" id="vlY-CY-JLH"/>
+                                            <outlet property="lblPurpose" destination="rrl-t8-bWE" id="Vww-Gn-z3g"/>
                                             <outlet property="lblRefNum" destination="baJ-f8-1uw" id="3Yf-yc-QPV"/>
                                             <outlet property="lblStatus" destination="1RA-00-CWZ" id="Zeb-HS-7Pq"/>
+                                            <outlet property="lblTicktCost" destination="pS2-uq-5if" id="UX7-gA-ekQ"/>
+                                            <outlet property="lblTrvlType" destination="kAi-Xr-CTH" id="rn0-mT-sdI"/>
+                                            <outlet property="lblTrvlrName" destination="qME-8j-ijw" id="9hT-Uv-zy8"/>
                                             <outlet property="outerVw" destination="0ee-do-6dd" id="hjF-HC-TYx"/>
                                         </connections>
                                     </tableViewCell>
@@ -788,6 +796,9 @@
                                                                                                 <state key="normal" title="-">
                                                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                 </state>
+                                                                                                <connections>
+                                                                                                    <action selector="btnTravelModeTapped:" destination="cbb-al-1P9" eventType="touchUpInside" id="D2V-5q-FaI"/>
+                                                                                                </connections>
                                                                                             </button>
                                                                                         </subviews>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -844,6 +855,9 @@
                                                                                                 <state key="normal" title="-">
                                                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                 </state>
+                                                                                                <connections>
+                                                                                                    <action selector="btnTravelClassTapped:" destination="cbb-al-1P9" eventType="touchUpInside" id="8Jm-IF-8xb"/>
+                                                                                                </connections>
                                                                                             </button>
                                                                                         </subviews>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -900,6 +914,9 @@
                                                                                                 <state key="normal" title="-">
                                                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                 </state>
+                                                                                                <connections>
+                                                                                                    <action selector="btnDebitAcNameTapped:" destination="cbb-al-1P9" eventType="touchUpInside" id="tRy-vB-PE2"/>
+                                                                                                </connections>
                                                                                             </button>
                                                                                         </subviews>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -998,6 +1015,7 @@
                         <outlet property="txtDept" destination="SNT-3a-BWz" id="MhL-j4-dbr"/>
                         <outlet property="vwDebtAcNme" destination="2NC-MU-JzT" id="hjW-0J-4Q5"/>
                         <outlet property="vwDept" destination="L9d-VY-gxG" id="yxz-rN-0MG"/>
+                        <outlet property="vwGuest" destination="tCY-1t-X76" id="oMM-TA-sKm"/>
                         <outlet property="vwPurpose" destination="Snl-zg-3Kt" id="O2I-Gv-r7g"/>
                         <outlet property="vwTopHeader" destination="s7f-xo-45X" id="ZGm-0H-KX7"/>
                         <outlet property="vwTrvType" destination="1D7-y7-2pC" id="xuF-8p-XwM"/>
@@ -1213,6 +1231,9 @@
                                                                                                 <state key="normal" title="-">
                                                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                 </state>
+                                                                                                <connections>
+                                                                                                    <action selector="btnCarrierTapped:" destination="j0v-kq-a1d" eventType="touchUpInside" id="n52-lq-T5o"/>
+                                                                                                </connections>
                                                                                             </button>
                                                                                         </subviews>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1260,6 +1281,9 @@
                                                                                         <nil key="textColor"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                         <textInputTraits key="textInputTraits"/>
+                                                                                        <connections>
+                                                                                            <outlet property="delegate" destination="j0v-kq-a1d" id="7o3-r4-ZQc"/>
+                                                                                        </connections>
                                                                                     </textField>
                                                                                 </subviews>
                                                                             </stackView>
@@ -1298,6 +1322,9 @@
                                                                                                 <nil key="textColor"/>
                                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                                 <textInputTraits key="textInputTraits"/>
+                                                                                                <connections>
+                                                                                                    <outlet property="delegate" destination="j0v-kq-a1d" id="DMy-zv-IwQ"/>
+                                                                                                </connections>
                                                                                             </textField>
                                                                                         </subviews>
                                                                                     </stackView>
@@ -1333,6 +1360,9 @@
                                                                                                 <nil key="textColor"/>
                                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                                 <textInputTraits key="textInputTraits"/>
+                                                                                                <connections>
+                                                                                                    <outlet property="delegate" destination="j0v-kq-a1d" id="zgu-vL-tLE"/>
+                                                                                                </connections>
                                                                                             </textField>
                                                                                         </subviews>
                                                                                     </stackView>
@@ -1373,6 +1403,9 @@
                                                                                                 <nil key="textColor"/>
                                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                                 <textInputTraits key="textInputTraits"/>
+                                                                                                <connections>
+                                                                                                    <outlet property="delegate" destination="j0v-kq-a1d" id="pjQ-0A-gOT"/>
+                                                                                                </connections>
                                                                                             </textField>
                                                                                         </subviews>
                                                                                     </stackView>
@@ -1411,6 +1444,9 @@
                                                                                                         <nil key="textColor"/>
                                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                                         <textInputTraits key="textInputTraits"/>
+                                                                                                        <connections>
+                                                                                                            <outlet property="delegate" destination="j0v-kq-a1d" id="1Y6-fg-Qjm"/>
+                                                                                                        </connections>
                                                                                                     </textField>
                                                                                                 </subviews>
                                                                                             </stackView>
@@ -1432,6 +1468,9 @@
                                                                                                             <constraint firstAttribute="height" constant="35" id="g7t-rM-DD7"/>
                                                                                                         </constraints>
                                                                                                         <state key="normal" title="-"/>
+                                                                                                        <connections>
+                                                                                                            <action selector="btnCurrencyTapped:" destination="j0v-kq-a1d" eventType="touchUpInside" id="SHM-c3-3G6"/>
+                                                                                                        </connections>
                                                                                                     </button>
                                                                                                 </subviews>
                                                                                             </stackView>
@@ -1471,6 +1510,9 @@
                                                                                         <nil key="textColor"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                         <textInputTraits key="textInputTraits"/>
+                                                                                        <connections>
+                                                                                            <outlet property="delegate" destination="j0v-kq-a1d" id="1FF-3h-IIk"/>
+                                                                                        </connections>
                                                                                     </textField>
                                                                                 </subviews>
                                                                             </stackView>
@@ -1515,6 +1557,9 @@
                                                                                                 <state key="normal">
                                                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                 </state>
+                                                                                                <connections>
+                                                                                                    <action selector="btnTrvlAgentTapped:" destination="j0v-kq-a1d" eventType="touchUpInside" id="3xc-bd-qtv"/>
+                                                                                                </connections>
                                                                                             </button>
                                                                                         </subviews>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1562,6 +1607,9 @@
                                                                                         <nil key="textColor"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                         <textInputTraits key="textInputTraits"/>
+                                                                                        <connections>
+                                                                                            <outlet property="delegate" destination="j0v-kq-a1d" id="zwx-Vb-IM9"/>
+                                                                                        </connections>
                                                                                     </textField>
                                                                                 </subviews>
                                                                             </stackView>
@@ -1778,6 +1826,7 @@
                         <outlet property="btnCurrncy" destination="0QT-Ec-qvu" id="73A-hT-fgN"/>
                         <outlet property="btnNext" destination="49F-mC-Y1j" id="BXM-LG-fT9"/>
                         <outlet property="btnTrvlAgent" destination="Uhy-pV-XNb" id="Nbh-1k-0iQ"/>
+                        <outlet property="innerStckVw" destination="osW-jN-MPr" id="lga-5Y-ij4"/>
                         <outlet property="mySubVw" destination="BK5-b7-lhS" id="fhI-qW-7hv"/>
                         <outlet property="scrlVw" destination="R3B-Jv-VMR" id="mn4-Ld-Wa5"/>
                         <outlet property="stckVw" destination="gAf-34-cJl" id="F6G-xp-5ED"/>

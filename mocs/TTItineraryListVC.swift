@@ -106,6 +106,9 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         //        }
     }
     
+    
+    
+    
 }
 
 

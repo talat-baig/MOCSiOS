@@ -12,7 +12,7 @@ import UIKit
 protocol onTTItemClickListener: NSObjectProtocol {
     
     func onViewClick() -> Void
-    func onEditClick() -> Void
+    func onEditClick(data : TravelTicketData) -> Void
     func onDeleteClick(data:TravelTicketData) -> Void
     func onSubmitClick(data:TravelTicketData) -> Void
     func onEmailClick(data:TravelTicketData) -> Void
@@ -26,27 +26,47 @@ class TravelTicketCell: UITableViewCell {
     @IBOutlet weak var btnMore: UIButton!
     @IBOutlet weak var outerVw: UIView!
     
+    @IBOutlet weak var lblTrvlrName: UILabel!
+    @IBOutlet weak var lblDept: UILabel!
+    @IBOutlet weak var lblCompName: UILabel!
+    @IBOutlet weak var lblGuest: UILabel!
+    @IBOutlet weak var lblTrvlType: UILabel!
+    @IBOutlet weak var lblPurpose: UILabel!
+    @IBOutlet weak var lblMode: UILabel!
+    @IBOutlet weak var lblTicktCost: UILabel!
+    
+    
     weak var ttReqClickListnr:onTTItemClickListener?
     weak var data:TravelTicketData!
     weak var delegate:onMoreClickListener?
-
-
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        
         outerVw.layer.shadowOpacity = 0.25
         outerVw.layer.shadowOffset = CGSize(width: 0, height: 2)
         outerVw.layer.shadowRadius = 1
         outerVw.layer.shadowColor = UIColor.black.cgColor
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
-    func setDataToView(data: TravelTicketData? ) {
+    
+    func setDataToView(data: TravelTicketData ) {
         
-      self.data = data
+        lblRefNum.text = data.trvlrRefNum
+        lblTrvlrName.text = data.trvlrName
+        lblDept.text = data.trvlrDept
+        lblCompName.text = data.tCompName
+        lblGuest.text = data.guest
+        lblTrvlType.text = data.trvlrType
+        lblPurpose.text = data.trvlrPurpose
+        lblMode.text = data.trvlrMode
+        lblTicktCost.text = data.ticktCost + " " + data.tCurrency
+        self.data = data
+
     }
     
     @IBAction func moreClick(_ sender: UIButton) {
@@ -55,19 +75,19 @@ class TravelTicketCell: UITableViewCell {
         
         let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onEditClick:"))) != nil){
-                self.ttReqClickListnr?.onEditClick()
+                self.ttReqClickListnr?.onEditClick(data: self.data)
             }
         })
         
         let deleteActon = UIAlertAction(title: "Delete", style: .default, handler: { (UIAlertAction)-> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onDeleteClick:"))) != nil){
-//                self.ttReqClickListnr?.onDeleteClick(data: self.data)
+                //                self.ttReqClickListnr?.onDeleteClick(data: self.data)
             }
         })
         
         let submitAction = UIAlertAction(title: "Submit", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onSubmitClick:"))) != nil){
-//                self.ttReqClickListnr?.onSubmitClick(data: self.data)
+                //                self.ttReqClickListnr?.onSubmitClick(data: self.data)
             }
         })
         
@@ -79,7 +99,7 @@ class TravelTicketCell: UITableViewCell {
         
         let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onEmailClick:"))) != nil){
-//                self.ttReqClickListnr?.onEmailClick(data: self.data)
+                //                self.ttReqClickListnr?.onEmailClick(data: self.data)
             }
         })
         

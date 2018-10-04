@@ -27,6 +27,8 @@ class Session {
         static let EXPSUBCATEGORY = "subcategory"
         static let NEWS = "news"
         static let FILTERLIST = "filterlist"
+        static let COMPANIES = "companylist"
+
     }
     
     public static var login: Bool{
@@ -164,6 +166,15 @@ class Session {
         }
         set(empCode){
             UserDefaults.standard.set(empCode, forKey: Veriable.EMPCODE)
+        }
+    }
+    
+    public static var companies: String {
+        get{
+            return UserDefaults.standard.string(forKey: Veriable.COMPANIES) ?? ""
+        }
+        set(currency){
+            UserDefaults.standard.set(currency, forKey: Veriable.COMPANIES)
         }
     }
     

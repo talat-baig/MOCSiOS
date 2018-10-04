@@ -18,6 +18,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
     var response:Data?
     var deptStr = ""
     
+    var companiesResponse : Data?
     
     var trvticktAddEditVC : TravelTicketAddEditVC?
     var ttInfo : TravelTicketInformationVC?
@@ -108,6 +109,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
             
         } else {
             let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
+            ttAddEditVC.compResponse = self.companiesResponse
             viewArray.append(ttAddEditVC)
             
             let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
@@ -142,6 +144,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
         super.didReceiveMemoryWarning()
     }
  
+    
+    
     
     func processInfo() {
    

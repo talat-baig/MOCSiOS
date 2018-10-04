@@ -10,7 +10,6 @@ import UIKit
 
 class ItineraryListData: NSObject {
 
-    
     var ItinID : String = ""
     var itID : String = ""
     var bID : String = ""

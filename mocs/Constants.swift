@@ -8,20 +8,20 @@
 
 struct ApiKey {
     // LIVE
-//            static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+//    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+        static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-//    static let URL = ApiUrl.URL + ""
+//    static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-    static let URL = "http://172.16.12.12/OCSWebApi/api"
-
+        static let URL = "http://172.16.12.12/OCSWebApi/api"
+    
     
 }
 
@@ -41,9 +41,9 @@ struct AppColor {
     static let lightGray = UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
     static let lightestBlue = UIColor(red: 218.0/255.0, green: 231.0/255.0, blue: 254.0/255.0, alpha: 1.0)
     static let scrollVwColor = UIColor(red: 92.0/255.0, green: 94.0/255.0, blue: 102.0/255.0, alpha: 1.0)
-
+    
     static let grayColor = UIColor(red: 154.0/255.0, green: 154.0/255.0, blue: 154.0/255.0, alpha: 1.0)
-
+    
 }
 
 
@@ -399,6 +399,38 @@ struct Constant
         
     }
     
+    
+    
+    struct TT {
+        
+        static let TT_GET_LIST = ApiUrl.URL + "/TravelTickets/GetTravelTicketListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+        
+        
+        static let TT_GET_COMPANY_LIST = ApiUrl.URL + "/TravelTickets/LoadCompanyList?apicomlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&comlistauth=%@&refid=%@"
+
+        static let TT_GET_CURRNECY_LIST = ApiUrl.URL + "/TravelTickets/LoadCurrencyList?apicurlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&curlistauth=%@&refid=%@"
+
+        static let TT_GET_TRAVELLER_LIST = ApiUrl.URL + "/TravelTickets/LoadTravellerDetails?apitravellist=33ddb2ee-59a5-428f-a0a5-7167859b8589&travellistauth=%@&CompID=%d"
+
+        
+        
+        
+        
+//        LoadTravellerDetails(string apitravellist, string travellistauth, int CompID
+//        
+//        FillReportingManager(string apifillmanager, string authfillmanager, string login
+//        LoadTravellerDetails(string apitravellist, string travellistauth
+    
+        
+//        LoadCompanyList(string apicomlist, string comlistauth, string refid
+        
+//        static let TRF_UPDATE = ApiUrl.URL + "/BusinessTravel/UpdateBusinessTravelByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ID=%d&business"
+        
+        
+    }
+    
+    
+    
     struct EPR {
         
         /**
@@ -559,7 +591,7 @@ struct Constant
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
         static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-        //        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

@@ -21,6 +21,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     @IBOutlet weak var stckVw: UIStackView!
     @IBOutlet weak var scrlVw: UIScrollView!
     
+    @IBOutlet weak var innerStckVw: UIStackView!
     @IBOutlet weak var mySubVw: UIView!
     
     @IBOutlet weak var btnNext: UIButton!
@@ -191,6 +192,17 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
             
         }
     }
+    
+    
+    @IBAction func btnCarrierTapped(_ sender: Any) {
+    }
+    
+    @IBAction func btnCurrencyTapped(_ sender: Any) {
+    }
+    
+    @IBAction func btnTrvlAgentTapped(_ sender: Any) {
+    }
+    
 }
 
 

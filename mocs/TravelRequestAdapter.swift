@@ -67,7 +67,12 @@ class TravelRequestAdapter: UITableViewCell {
     func setDataToView(data: TravelRequestData?, isFromApprove : Bool) {
         
         lblRefNo.text = data?.reqNo
-        lblStatus.text = data?.status
+        
+        guard let status = data?.status else {
+            return
+        }
+        
+        lblStatus.text = "(" + status  + ")"
         empName.text = data?.empName
         empDept.text = data?.empDept
         reqDate.text = data?.reqDate

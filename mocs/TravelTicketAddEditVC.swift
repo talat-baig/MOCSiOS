@@ -10,6 +10,8 @@ import UIKit
 import XLPagerTabStrip
 import NotificationCenter
 import DropDown
+import SwiftyJSON
+import Alamofire
 
 class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGestureRecognizerDelegate {
     
@@ -17,9 +19,12 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     
     var arrCompany = ["Technogen IT Services","Phoenix Global Trade Solutions","Phoenix Global DMCC"]
     var arrTrvlrName = ["Talat","Ravi","Hardik"]
-    //    var arrDept = ["Talat","Ravi","Hardik"]
     
+    var compResponse : Data?
+    var arrCompData : [GroupCompany] = []
+    var arrTravlrData : [TravellerData] = []
     
+    let chooseTraveller = DropDown()
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var scrlVw: UIScrollView!
@@ -49,6 +54,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     @IBOutlet weak var vwTrvlClass: UIView!
     @IBOutlet weak var vwDebtAcNme: UIView!
     
+    @IBOutlet weak var vwGuest: UIView!
     @IBOutlet weak var lblTrvType: UILabel!
     
     @IBOutlet weak var lblPurpse: UILabel!
@@ -73,12 +79,14 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         
         let ttAddEditVC = self.parent as! TTBaseViewController
         ttAddEditVC.saveTTAddEditReference(vc: self)
-
+        
+        parseAndAssignCompaniesData()
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -129,9 +137,75 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         swtchPurpose.addTarget(self, action: #selector(purposeType(mySwitch:)), for: UIControlEvents.valueChanged)
         swtchTrvlType.addTarget(self, action: #selector(trvType(mySwitch:)), for: UIControlEvents.valueChanged)
         
+        //        parseAndAssignCompaniesData()
         
     }
     
+    func parseAndAssignCompaniesData(){
+        
+        var arrCompData: [GroupCompany] = []
+        
+        let responseJson = JSON(compResponse!)
+        for(_,j):(String,JSON) in responseJson {
+            
+            let data = GroupCompany()
+            
+            data.compName = j["GroupCompanyName"].stringValue
+            
+            data.compCity = j["GroupCompanyCity"].stringValue
+            
+            data.compCode = j["GroupCompanyCode"].intValue
+            
+            data.baseCurr = j["GroupCompanyBaseCurrency"].stringValue
+            
+            print( j["GroupCompanyName"].stringValue)
+            
+            if j["Delegation"] == JSON.null {
+                data.delegation = false
+            } else {
+                data.delegation = true
+            }
+            
+            arrCompData.append(data)
+            self.arrCompData = arrCompData
+        }
+        
+    }
+    
+    //
+    //    func parseAndAssignTravellerData(){
+    //
+    //        var arrTrvlDta: [TravellerData] = []
+    //
+    //        let responseJson = JSON(compResponse!)
+    //        for(_,j):(String,JSON) in responseJson {
+    //
+    //            let data = TravellerData()
+    //
+    //            data.compName = j["GroupCompanyName"].stringValue
+    //
+    //            data.compCity = j["GroupCompanyCity"].stringValue
+    //
+    //            data.compCode = j["GroupCompanyCode"].intValue
+    //
+    //            data.baseCurr = j["GroupCompanyBaseCurrency"].stringValue
+    //
+    //            print( j["GroupCompanyName"].stringValue)
+    //
+    //            if j["Delegation"] == JSON.null {
+    //                data.delegation = false
+    //            } else {
+    //                data.delegation = true
+    //            }
+    //
+    //            arrCompData.append(data)
+    //            self.arrCompData = arrCompData
+    //        }
+    //
+    //    }
+    //
+    //
+    //
     
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -159,13 +233,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 800 )
-
-//        let lastView : UIView! = mySubVw.subviews.last
-//        let height = lastView.frame.size.height
-//        let pos = lastView.frame.origin.y
-//        let sizeOfContent = height + pos + 100
-//        print(sizeOfContent)
-//        scrlVw.contentSize.height = sizeOfContent
+        
     }
     
     
@@ -210,26 +278,169 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     
     
     @IBAction func btnCompanyTapped(_ sender: Any) {
+        
         let dropDown = DropDown()
         dropDown.anchorView = btnCompany
-        dropDown.dataSource = arrCompany
+        
+        let arrComp = self.arrCompData.map { $0.compName }
+        dropDown.dataSource = arrComp
+        
         dropDown.selectionAction = { [weak self] (index, item) in
+            
             self?.btnCompany.setTitle(item, for: .normal)
+            
+            if !(self?.isCompanyDelegated(item: item))! {
+                
+                self?.swtchGuest.isOn = false
+                self?.swtchGuest.isEnabled = false
+                self?.swtchGuest.isUserInteractionEnabled = false
+                
+                self?.btnTrvllerName.setTitle("-", for: .normal)
+                self?.btnTrvllerName.isEnabled = false
+                self?.txtDept.isUserInteractionEnabled = false
+                
+            } else {
+                
+                self?.swtchGuest.isEnabled = true
+                self?.swtchGuest.isUserInteractionEnabled = true
+                
+                self?.btnTrvllerName.isEnabled = true
+                self?.txtDept.isUserInteractionEnabled = true
+                
+                guard let ccode = self?.getCompanyCode(item: item) else {
+                    return
+                }
+                self?.getTravllerList(compId: ccode, comp:  { result  in
+                    
+                    if result {
+                        
+                        if (self?.arrTravlrData.count)! > 0 {
+                            print(index)
+                            
+                            let arrTrvlr = self?.arrTravlrData.map { $0.fullName  }
+                            
+                            guard let newArr = arrTrvlr else {
+                                return
+                            }
+                            
+                            
+                            if newArr.count > 0 {
+                                self?.chooseTraveller.dataSource = newArr
+                                self?.btnTrvllerName.setTitle(newArr.first, for: .normal)
+                                
+                            } else {
+                                self?.chooseTraveller.dataSource = []
+                                self?.btnTrvllerName.setTitle("-", for: .normal)
+                                
+                            }
+                        }
+                    } else {
+                        
+                    }
+                })
+                
+            }
+            
         }
         dropDown.show()
-        
     }
+    
+    
+    func isCompanyDelegated(item : String) -> Bool {
+        
+        let compnyObject = self.arrCompData.filter{ $0.compName == item }.first
+        
+        guard let compDelegated = compnyObject?.delegation else {
+            return false
+        }
+        return compDelegated
+    }
+    
+    func getCompanyCode(item : String) -> Int {
+        
+        let compnyObject = self.arrCompData.filter{ $0.compName == item }.first
+        
+        guard let compCode = compnyObject?.compCode else {
+            return 0
+        }
+        return compCode
+    }
+    
+    func getTravllerList(compId : Int, comp : @escaping(Bool) -> ()) {
+        
+        var newArry : [TravellerData] = []
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.TT.TT_GET_TRAVELLER_LIST, Session.authKey, compId)
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result) {
+                    
+                    let jsonResponse = JSON(response.result.value!);
+                    let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
+                    
+                    newArry.removeAll()
+                    
+                    if jsonArray.count > 0 {
+                        
+                        for(_,j):(String,JSON) in jsonResponse {
+                            
+                            let data = TravellerData()
+                            data.compId = j["CompanyId"].intValue
+                            data.refId = j["RefID"].stringValue
+                            data.dept = j["Department"].stringValue
+                            data.empId = j["EMPID"].stringValue
+                            data.loginId = j["LoginID"].stringValue
+                            data.fullName = j["FullName"].stringValue
+                            newArry.append(data)
+                        }
+                    }
+                    self.arrTravlrData = newArry
+                    comp(true)
+                } else {
+                    comp(false)
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+            comp(false)
+        }
+    }
+    
     
     @IBAction func btnTrvlrNameTapped(_ sender: Any) {
         
-        let dropDown = DropDown()
-        dropDown.anchorView = btnTrvllerName
-        dropDown.dataSource = arrTrvlrName
-        dropDown.selectionAction = { [weak self] (index, item) in
+        chooseTraveller.anchorView = btnTrvllerName
+        chooseTraveller.selectionAction = { [weak self] (index, item) in
             self?.btnTrvllerName.setTitle(item, for: .normal)
         }
-        dropDown.show()
+        chooseTraveller.show()
     }
+    
+    
+    
+    @IBAction func btnTravelModeTapped(_ sender: Any) {
+        
+        
+    }
+    
+    
+    @IBAction func btnTravelClassTapped(_ sender: Any) {
+        
+        
+    }
+    
+    
+    @IBAction func btnDebitAcNameTapped(_ sender: Any) {
+        
+        
+    }
+    
+    
+    
     
 }
 

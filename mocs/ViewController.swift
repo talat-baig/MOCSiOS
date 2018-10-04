@@ -51,7 +51,6 @@ class ViewController: UIViewController {
         Alamofire.request(url).responseData(completionHandler: ({ response in
             self.view.hideLoading()
             
-            
             if Helper.isResponseValid(vc: self, response: response.result){
                 
                 //index -> Index of Array
