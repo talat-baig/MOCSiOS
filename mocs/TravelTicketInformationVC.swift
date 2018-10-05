@@ -13,7 +13,7 @@ import Alamofire
 import DropDown
 
 class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGestureRecognizerDelegate{
-
+   
    
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -56,6 +56,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     @IBOutlet weak var vwApprvdBy: UIView!
     @IBOutlet weak var vwCommnts: UIView!
     
+    var repMngr : String = ""
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "TICKET INFORMATION")
@@ -69,7 +70,13 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     override func viewDidAppear(_ animated: Bool) {
         let ttBaseVC = self.parent as? TTBaseViewController
         ttBaseVC?.saveTTInfoReference(vc: self)
+        btnApprovedBy.setTitle(ttBaseVC?.repMngr, for: .normal)
+
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+    }
+    
     
     func initalSetup() {
         
@@ -106,21 +113,10 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         Helper.addBordersToView(view: vwInvoice)
         Helper.addBordersToView(view: vwCommnts)
 
-        
-//        btnCurrncy.layer.cornerRadius = 3
-//        btnCurrncy.layer.borderWidth = 0.5
-//        btnCurrncy.layer.borderColor = AppColor.lightGray.cgColor
-//
-//        btnAdvances.layer.cornerRadius = 3
-//        btnAdvances.layer.borderWidth = 1
-//        btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
-        
         switchAdvance.isOn = false
         checkSwitchState(mySwitchState:  switchAdvance.isOn )
 
         switchAdvance.addTarget(self, action: #selector(isAdvance(mySwitch:)), for: UIControlEvents.valueChanged)
-        
-        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -167,7 +163,6 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     @IBAction func btnNextTapped(_ sender: Any) {
         
         let home = self.parent as! TTBaseViewController
-     //   home.deptStr = txtDept.text!
         home.moveToViewController(at: 2, animated: true)
     }
     
@@ -203,6 +198,12 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     @IBAction func btnTrvlAgentTapped(_ sender: Any) {
     }
     
+    
+    func passRepMngrFromBase(repMgr: String) {
+        self.repMngr = repMgr
+    }
+    
+
 }
 
 

@@ -9,7 +9,13 @@
 import UIKit
 import  XLPagerTabStrip
 
-class TTBaseViewController: ButtonBarPagerTabStripViewController {
+//
+//protocol passRepMngrBaseDelegate: NSObjectProtocol {
+//    func passRepMngrFromBase(repMgr : String) -> Void
+//}
+
+
+class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDelegate {
     
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
@@ -17,13 +23,13 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
     var isFromView : Bool = false
     var response:Data?
     var deptStr = ""
+    var repMngr = ""
     
     var companiesResponse : Data?
     
     var trvticktAddEditVC : TravelTicketAddEditVC?
     var ttInfo : TravelTicketInformationVC?
-
-    
+//    var repMngrBaseDelegate : passRepMngrBaseDelegate?
     
     override func viewDidLoad() {
         
@@ -49,7 +55,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
             newCell?.label.textColor = self?.purpleInspireColor
             
             self?.buttonBarView.allowsSelection = true
-
             
             if self?.deptStr == "" {
                 
@@ -88,6 +93,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
         self.ttInfo = vc
     }
     
+    
+    
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var viewArray:[UIViewController] = []
         
@@ -110,9 +117,12 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
         } else {
             let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
             ttAddEditVC.compResponse = self.companiesResponse
+            ttAddEditVC.repMngrDelegate = self
             viewArray.append(ttAddEditVC)
             
             let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
+//            ttInfo.repMngr = self.repMngr
+//            self.repMngrBaseDelegate = ttInfo
             viewArray.append(ttInfo)
             
             let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
@@ -122,19 +132,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
             let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
             viewArray.append(ttVoucher)
         }
-        
-//        let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
-//        viewArray.append(ttAddEditVC)
-//
-//        let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
-//        viewArray.append(ttInfo)
-//
-//        let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
-//        viewArray.append(ttItinry)
-//
-//        let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
-//        viewArray.append(ttVoucher)
-        
+
         
         return viewArray
     }
@@ -144,12 +142,13 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
         super.didReceiveMemoryWarning()
     }
  
+    func getRepMngrFromChild(repMgr : String) {
     
-    
+        self.repMngr = repMgr
+    }
     
     func processInfo() {
    
-        
         guard let compny = self.trvticktAddEditVC?.btnCompany.titleLabel?.text else {
             return
         }
@@ -170,7 +169,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
             return
         }
         
-        
         guard let ticktNum = self.trvticktAddEditVC?.txtDept.text, !ticktNum.isEmpty else {
             self.moveToViewController(at: 0, animated: true)
             Helper.showMessage(message: "Please enter Department")
@@ -188,7 +186,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController {
             return
         }
         
-       
         //
         //        if ttInfo.btnTrvlAgent.titleLabel?.text == "" {
         //            Helper.showMessage(message: "Please enter Traveller Agent")

@@ -405,26 +405,15 @@ struct Constant
         
         static let TT_GET_LIST = ApiUrl.URL + "/TravelTickets/GetTravelTicketListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
         
-        
         static let TT_GET_COMPANY_LIST = ApiUrl.URL + "/TravelTickets/LoadCompanyList?apicomlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&comlistauth=%@&refid=%@"
 
         static let TT_GET_CURRNECY_LIST = ApiUrl.URL + "/TravelTickets/LoadCurrencyList?apicurlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&curlistauth=%@&refid=%@"
 
         static let TT_GET_TRAVELLER_LIST = ApiUrl.URL + "/TravelTickets/LoadTravellerDetails?apitravellist=33ddb2ee-59a5-428f-a0a5-7167859b8589&travellistauth=%@&CompID=%d"
+        
+        static let TT_GET_REPORTING_MNGR = ApiUrl.URL + "/TravelTickets/FillReportingManager?apifillmanager=33ddb2ee-59a5-428f-a0a5-7167859b8589&authfillmanager=%@&login=%@"
 
         
-        
-        
-        
-//        LoadTravellerDetails(string apitravellist, string travellistauth, int CompID
-//        
-//        FillReportingManager(string apifillmanager, string authfillmanager, string login
-//        LoadTravellerDetails(string apitravellist, string travellistauth
-    
-        
-//        LoadCompanyList(string apicomlist, string comlistauth, string refid
-        
-//        static let TRF_UPDATE = ApiUrl.URL + "/BusinessTravel/UpdateBusinessTravelByID?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ID=%d&business"
         
         
     }
