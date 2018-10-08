@@ -14,6 +14,8 @@ class GroupCompany: NSObject {
     var compCode : Int = 0
     var compCity : String = ""
     var baseCurr : String = ""
+    var debitACName : String = ""
+
     var delegation : Bool = false
     
 }

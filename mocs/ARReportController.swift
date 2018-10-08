@@ -82,7 +82,7 @@ class ARReportController: UIViewController , filterViewDelegate{
             Alamofire.request(url1).responseData(completionHandler: ({ response in
                 group.leave()
                 if Helper.isResponseValid(vc: self, response: response.result){
-//                    isRespOverallValid = true
+
                     var jsonResponse = JSON(response.result.value!)
                     
                     if  (jsonResponse.arrayObject?.isEmpty)! {

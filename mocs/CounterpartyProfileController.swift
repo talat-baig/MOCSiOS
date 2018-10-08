@@ -353,41 +353,7 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
         cell.cpOptionItemDelegate = self
         return cell;
     }
-    
-//    func onViewClick(data: AnyObject) {
-//
-//        viewClaim(data: data as! CPListData)
-//    }
-//
-//    func onMailClick(data: AnyObject) {
-//
-//    }
-//
-//    func onApproveClick(data: AnyObject) {
-//
-//        self.handleTap()
-//
-//        myView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
-//        myView.setDataToCustomView(title: "Approve?", description: "Are you sure you want to approve this Counterparty? You can't revert once approved", leftButton: "GO BACK", rightButton: "APPROVE",isTxtVwHidden: false, isApprove: true)
-//        myView.data = data
-//        myView.cpvDelegate = self
-//        myView.isApprove = true
-//        self.view.addMySubview(myView)
-//
-//    }
-//
-//    func onDeclineClick(data: AnyObject) {
-//
-//        declView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
-//        declView.setDataToCustomView(title: "Decline?", description: "Are you sure you want to decline this Counterparty? You can't revert once declined", leftButton: "GO BACK", rightButton: "DECLINE", isTxtVwHidden: false, isApprove:  false)
-//        declView.data = data
-//        declView.isApprove = false
-//        declView.cpvDelegate = self
-//        self.view.addMySubview(declView)
-//
-//    }
-    
-    
+   
     
 }
 

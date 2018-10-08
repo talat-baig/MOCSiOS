@@ -399,8 +399,37 @@ struct Constant
         
     }
     
+    /*
+    http://172.16.12.12/OCSWebApi/api/TravelTickets/GetTravelTicketListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid
     
+    use get method
     
+    LoadCompanyList(string apicomlist, string comlistauth, string refid
+    
+    LoadCurrencyList(string apicurlist, string curlistauth
+    
+    LoadTravelAgent(string apiagentlist, string agentlistauth
+    
+    LoadCarrier(string apicarrierlist, string carrierlistauth
+    
+    LoadReportingManager(string apimanagerlist, string managerlistauth
+    
+    LoadDebitName(string apidebitlist, string debitlistauth
+    
+    LoadTravellerDetails(string apitravellist, string travellistauth
+    
+    LoadCity(string apicitylist, string citylistauth
+    
+    LoadEPR(string apiEPRlist, string EPRlistauth, string empid
+    
+    for all abofe use get method
+    
+    DeleteTravelTicket(string deltraapi, string deltraauth, int travellerID
+    
+    DeleteTravelItinery(string itiapi, string authiti, int ID
+    
+    and for post
+    */
     struct TT {
         
         static let TT_GET_LIST = ApiUrl.URL + "/TravelTickets/GetTravelTicketListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
@@ -413,9 +442,18 @@ struct Constant
         
         static let TT_GET_REPORTING_MNGR = ApiUrl.URL + "/TravelTickets/FillReportingManager?apifillmanager=33ddb2ee-59a5-428f-a0a5-7167859b8589&authfillmanager=%@&login=%@"
 
+        static let TT_GET_TRAVEL_MODES = ApiUrl.URL + "/TravelTickets/LoadTravelModes?apimodelist=33ddb2ee-59a5-428f-a0a5-7167859b8589&modelistauth=%@"
         
+        static let TT_GET_DEBIT_AC = ApiUrl.URL + "/TravelTickets/LoadDebitName?apidebitlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&debitlistauth=%@"
+
+        static let TT_GET_CARRIER_LIST = ApiUrl.URL + "/TravelTickets/LoadCarrier?apicarrierlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&carrierlistauth=%@"
         
-        
+        static let TT_GET_CURRENCY_LIST = ApiUrl.URL + "/TravelTickets/LoadCurrencyList?apicurlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&curlistauth=%@"
+
+        static let TT_GET_TRAVEL_AGENT = ApiUrl.URL + "/TravelTickets/LoadTravelAgent?apiagentlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&agentlistauth=%@"
+
+        static let TT_GET_EPR_LIST = ApiUrl.URL + "/TravelTickets/LoadEPR?apiEPRlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&EPRlistauth=%@&empid=%@"
+
     }
     
     

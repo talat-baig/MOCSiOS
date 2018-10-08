@@ -15,7 +15,7 @@ import Alamofire
 
 
 protocol getRepMngrDelegate: NSObjectProtocol {
-    func getRepMngrFromChild(repMgr : String) -> Void
+    func getRepMngrFromChild(repMgr : String, empId : String) -> Void
 }
 
 
@@ -24,10 +24,21 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     var ttData = TTData()
     
     var compResponse : Data?
+    var debitAcResponse : Data?
+    var trvlModeResposne : Data?
+    
+    
     var arrCompData : [GroupCompany] = []
     var arrTravlrData : [TravellerData] = []
+    var arrDebitAcList : [String] = []
+    var arrTravlType : [TravelModeType] = []
+    
+    
     
     let chooseTraveller = DropDown()
+    let chooseBClass = DropDown()
+    let chooseDebitAc = DropDown()
+    
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var scrlVw: UIScrollView!
@@ -72,7 +83,20 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     @IBOutlet weak var stckVw: UIStackView!
     
     @IBOutlet weak var txtDept: UITextField!
-
+    
+    @IBOutlet weak var txtDebitAcName: UITextField!
+    
+    @IBOutlet weak var vwDebtAcName: UIView!
+    
+    
+    @IBOutlet weak var txtTravelMode: UITextField!
+    
+    @IBOutlet weak var txtTrvlClass: UITextField!
+    var canEditTravellrName : Bool = false
+    
+    var canEditDebitAc : Bool = false
+    
+    
     var repMngrDelegate : getRepMngrDelegate?
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -87,10 +111,14 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         let ttBase = self.parent as! TTBaseViewController
         ttBase.saveTTAddEditReference(vc: self)
         txtDept.isUserInteractionEnabled = false
-
+        
         parseAndAssignCompaniesData()
+        parseAndAssignDebitAc()
         
-        
+        self.arrTravlType = parseAndAssignTravelModeData()
+        //add
+        swtchPurpose.isOn = false
+        checkPurposeSwitch()
     }
     
     override func didReceiveMemoryWarning() {
@@ -151,38 +179,72 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     func parseAndAssignCompaniesData(){
         
         var arrCompData: [GroupCompany] = []
-        
         let responseJson = JSON(compResponse!)
+        
         for(_,j):(String,JSON) in responseJson {
             
             let data = GroupCompany()
-            
             data.compName = j["GroupCompanyName"].stringValue
-            
             data.compCity = j["GroupCompanyCity"].stringValue
-            
+            data.debitACName = j["DebitACName"].stringValue
             data.compCode = j["GroupCompanyCode"].intValue
-            
             data.baseCurr = j["GroupCompanyBaseCurrency"].stringValue
-            
-            print( j["GroupCompanyName"].stringValue)
             
             if j["Delegation"] == JSON.null {
                 data.delegation = false
             } else {
                 data.delegation = true
             }
-            
             arrCompData.append(data)
-
+            
         }
         
         self.arrCompData = arrCompData
         btnCompany.setTitle(self.arrCompData[0].compName, for: .normal)
         self.checkCompanyCodeAndGetTravellerData(compCode: self.arrCompData[0].compCode)
+        
     }
     
-   
+    
+    
+    func parseAndAssignDebitAc() {
+        
+        var arrAcName: [String] = []
+        let responseJson = JSON(debitAcResponse!)
+        
+        for(_,j):(String,JSON) in responseJson{
+            let newCurr = j["GroupCompany"].stringValue
+            arrAcName.append(newCurr)
+        }
+        self.arrDebitAcList = arrAcName
+    }
+    
+    
+    func parseAndAssignTravelModeData() -> [TravelModeType] {
+        
+        var trvlModeType = [TravelModeType]()
+        
+        let jsonObj = JSON(trvlModeResposne)
+        
+        for(_,j):(String,JSON) in jsonObj {
+            let trvlType = TravelModeType()
+            trvlType.mode = j["Mode"].stringValue
+            
+            let jsonTrvlClassObj = j["TravelClasses"].arrayValue
+            
+            for item in jsonTrvlClassObj {
+                
+                let bClassName = item["BussinessClassName"].stringValue
+                
+                print(bClassName)
+                trvlType.classes.append(bClassName)
+            }
+            trvlModeType.append(trvlType)
+        }
+        return trvlModeType
+    }
+    
+    
     
     @objc func keyboardWillShow(notification: NSNotification) {
         
@@ -208,8 +270,8 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 800 )
-        
+        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 840 )
+        print(scrlVw.contentSize)
     }
     
     
@@ -227,16 +289,37 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     }
     
     @objc func guestType(mySwitch: UISwitch) {
+        
         if mySwitch.isOn {
+            //       *     btnTrvllerName.setTitle("", for: .normal)
+            self.txtFldTrvlName.text = ""
+            checkCompanyCodeAndGetTravellerData(compCode: 0)
+            
         } else {
+            guard let compnyTitle = btnCompany.titleLabel?.text else {
+                return
+            }
+            let ccode = getCompanyCode(item: compnyTitle)
+            checkCompanyCodeAndGetTravellerData(compCode: ccode)
         }
     }
     
     @objc func purposeType(mySwitch: UISwitch) {
+        
         if mySwitch.isOn {
             lblPurpse.text = "Personal"
+            self.canEditDebitAc = true  // textfld editing is enabled
+            if txtDebitAcName.text != "" {
+                txtDebitAcName.text = ""
+            }
+            //            vwDebtAcName.isHidden = true
+            //            txtDebitAcName.isHidden  = false
         } else {
             lblPurpse.text = "Official"
+            self.canEditDebitAc = false  // textfld editing is enabled
+            self.view.endEditing(true)
+            //            vwDebtAcName.isHidden = false
+            //            txtDebitAcName.isHidden  = true
         }
     }
     
@@ -261,23 +344,32 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             
             self?.btnCompany.setTitle(item, for: .normal)
             
+            if (self?.swtchGuest.isOn)! {
+                self?.guestType(mySwitch: (self?.swtchGuest)!)
+                return
+            }
+            // check if company is delegated
             if !(self?.isCompanyDelegated(item: item))! {
                 
                 self?.swtchGuest.isOn = false
                 self?.swtchGuest.isEnabled = false
                 self?.swtchGuest.isUserInteractionEnabled = false
                 
-                self?.btnTrvllerName.setTitle("-", for: .normal)
-                self?.btnTrvllerName.isEnabled = false
-                self?.txtDept.text = ""
+                if (self?.swtchGuest.isOn)! {
+                    self?.swtchGuest.isOn = false
+                }
                 
+                self?.txtFldTrvlName.text = ""
+                self?.canEditTravellrName = false
+                self?.txtFldTrvlName.isEnabled = false
+                self?.txtDept.text = ""
                 
             } else {
                 
                 self?.swtchGuest.isEnabled = true
                 self?.swtchGuest.isUserInteractionEnabled = true
-                
-                self?.btnTrvllerName.isEnabled = true
+                //                self?.canEditTravellrName = false
+                self?.txtFldTrvlName.isEnabled = true
                 
                 guard let ccode = self?.getCompanyCode(item: item) else {
                     return
@@ -294,8 +386,6 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         self.getTravllerList(compId: compCode, comp:  { result  in
             
             if result {
-                self.txtFldTrvlName.isHidden = true
-                self.vwTravName.isHidden = false
                 
                 if (self.arrTravlrData.count) > 0 {
                     
@@ -303,30 +393,33 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
                     
                     if arrTrvlr.count > 0 {
                         self.chooseTraveller.dataSource = arrTrvlr
-                        self.btnTrvllerName.setTitle(arrTrvlr.first, for: .normal) // Trvlr Name
+                        
+                        self.txtFldTrvlName.text = arrTrvlr.first
                         self.txtDept.text = self.arrTravlrData[0].dept // Dept
-                        self.getReportingMngr(loginId: self.arrTravlrData[0].loginId, comp: { res, repMngr  in
+                        self.canEditTravellrName = false //textfld editing is disabled
+                        self.view.endEditing(true)
+                        self.getReportingMngr(loginId: self.arrTravlrData[0].loginId ,comp: { res, repMngr  in
                             
                             if let d = self.repMngrDelegate {
-                                d.getRepMngrFromChild(repMgr: repMngr)
+                                d.getRepMngrFromChild(repMgr: repMngr, empId : self.arrTravlrData[0].empId)
                             }
-
+                            
                         }) // Reporting Mngr
                     } else {
                         self.chooseTraveller.dataSource = []
-                        self.txtFldTrvlName.isHidden = false
+                        self.txtFldTrvlName.text = ""
+                        self.canEditTravellrName = true  // textfld editing is enabled
                         self.txtDept.text = ""
-                        self.vwTravName.isHidden = true
                     }
                 }
             } else {
                 self.chooseTraveller.dataSource = []
-                self.txtFldTrvlName.isHidden = false
                 self.txtDept.text = ""
-                self.vwTravName.isHidden = true
+                self.txtFldTrvlName.text = ""
+                self.canEditTravellrName = true  // textfld editing is enabled
                 
                 if let d = self.repMngrDelegate {
-                    d.getRepMngrFromChild(repMgr: "")
+                    d.getRepMngrFromChild(repMgr: "", empId: "" )
                 }
             }
         })
@@ -348,14 +441,13 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     func getCompanyCode(item : String) -> Int {
         
         let compnyObject = self.arrCompData.filter{ $0.compName == item }.first
-        
         guard let compCode = compnyObject?.compCode else {
             return 0
         }
         return compCode
     }
     
-
+    
     func getTravllerList(compId : Int, comp : @escaping(Bool) -> ()) {
         
         var newArry : [TravellerData] = []
@@ -402,7 +494,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         }
     }
     
-    func getReportingMngr(loginId : String, comp : @escaping (Bool,String) -> ()){
+    func getReportingMngr(loginId : String,  comp : @escaping (Bool,String) -> ()){
         
         var repMngr = ""
         if internetStatus != .notReachable {
@@ -417,12 +509,12 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
                     let jsonResponse = JSON(response.result.value)
                     
                     for(_,j):(String,JSON) in jsonResponse{
-                         repMngr = j["ReportingManagerName"].stringValue
+                        repMngr = j["ReportingManagerName"].stringValue
                     }
                     
-                    comp(true,repMngr)
+                    comp(true,repMngr )
                 } else {
-                    comp(false,repMngr)
+                    comp(false,repMngr )
                 }
             }))
         } else {
@@ -431,32 +523,11 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         }
     }
     
-    @IBAction func btnTrvlrNameTapped(_ sender: Any) {
-        
-        chooseTraveller.anchorView = btnTrvllerName
-        chooseTraveller.selectionAction = { [weak self] (index, item) in
-            self?.btnTrvllerName.setTitle(item, for: .normal)
-            let dept = self?.arrTravlrData[index].dept
-            self?.txtDept.text = dept
-            
-            var loginId = ""
-            
-            if let loginID = self?.arrTravlrData[index].loginId  {
-                loginId = loginID
-            }
-            
-            self?.getReportingMngr(loginId: loginId, comp: { res, repMngr  in
-              
-                if let d = self?.repMngrDelegate {
-                    d.getRepMngrFromChild(repMgr: repMngr)
-                }
-                
-            })
-            
-        }
-        chooseTraveller.show()
-    }
     
+    
+    func checkPurposeSwitch() {
+        self.purposeType(mySwitch: swtchPurpose)
+    }
     
     
     @IBAction func btnTravelModeTapped(_ sender: Any) {
@@ -473,11 +544,79 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     
     @IBAction func btnDebitAcNameTapped(_ sender: Any) {
         
-        
+        //        let dropDown = DropDown()
+        //        dropDown.anchorView = btnDebtAcNo
+        //        dropDown.dataSource = self.arrDebitAcList
+        //        dropDown.selectionAction = { [weak self] (index, item) in
+        //            self?.btnDebtAcNo.setTitle(item, for: .normal)
+        //        }
+        //        dropDown.show()
     }
     
+    func addDropDownToTrvlModeTxtFld() {
+        
+        let chooseTrvlMode = DropDown()
+        chooseTrvlMode.anchorView = txtTravelMode
+        chooseTrvlMode.dataSource = self.arrTravlType.map { $0.mode }
+        
+        chooseTrvlMode.selectionAction = { [weak self] (index, item) in
+            self?.txtTravelMode.text = item
+            self?.chooseBClass.dataSource = (self?.arrTravlType[index].classes)!
+            self?.txtTrvlClass.text = self?.arrTravlType[index].classes.first
+        }
+        chooseTrvlMode.show()
+    }
     
+    func addDropDownToTrvlClass() {
+        
+        chooseBClass.anchorView = txtTrvlClass
+        chooseBClass.selectionAction = { [weak self] (index, item) in
+            self?.txtTrvlClass.text = item
+            
+        }
+        chooseBClass.show()
+    }
     
+    func addDropDownToDebitAc() {
+        
+        chooseDebitAc.anchorView = txtDebitAcName
+        chooseDebitAc.dataSource = self.arrDebitAcList
+        chooseDebitAc.selectionAction = { [weak self] (index, item) in
+            self?.txtDebitAcName.text = item
+        }
+        chooseDebitAc.show()
+    }
+    
+    func addDropDownToTrvlTxtFld() {
+        
+        chooseTraveller.anchorView = txtFldTrvlName
+        chooseTraveller.selectionAction = { [weak self] (index, item) in
+            
+            self?.txtFldTrvlName.text = item
+            
+            let dept = self?.arrTravlrData[index].dept
+            self?.txtDept.text = dept
+            
+            var loginId = ""
+            var empId = ""
+            
+            if let loginID = self?.arrTravlrData[index].loginId  {
+                loginId = loginID
+            }
+            
+            if let empID = self?.arrTravlrData[index].empId  {
+                empId = empID
+            }
+            
+            self?.getReportingMngr(loginId: loginId , comp: { res, repMngr  in
+                
+                if let d = self?.repMngrDelegate {
+                    d.getRepMngrFromChild(repMgr: repMngr, empId : empId)
+                }
+            })
+        }
+        chooseTraveller.show()
+    }
     
 }
 
@@ -487,6 +626,65 @@ extension TravelTicketAddEditVC: UITextFieldDelegate {
         self.handleTap()
         return true
     }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        
+        var val : Bool = true
+        
+        switch textField {
+            
+        case txtFldTrvlName :
+            
+            if self.canEditTravellrName {
+                val = true
+            } else {
+                self.addDropDownToTrvlTxtFld()
+                val = false
+            }
+            
+        case txtTravelMode :
+            self.addDropDownToTrvlModeTxtFld()
+            val = false
+            
+        case txtTrvlClass :
+            
+            if txtTravelMode.text != "" {
+                self.addDropDownToTrvlClass()
+            } else {
+                Helper.showMessage(message: "Please Enter Travel Mode")
+            }
+            val = false
+            
+        case txtDebitAcName :
+            
+            if self.canEditDebitAc {
+                val = true
+            } else {
+                self.addDropDownToDebitAc()
+                val = false
+            }
+            
+        default : break
+            
+        }
+        return val
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        var val : Bool = true
+        if textField == txtFldTrvlName {
+            
+            if self.canEditTravellrName {
+                
+                val = true
+            } else {
+                val = false
+            }
+        }
+        return val
+    }
+    
 }
 
 extension TravelTicketAddEditVC: WC_HeaderViewDelegate {

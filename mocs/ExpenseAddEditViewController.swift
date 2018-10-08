@@ -218,7 +218,7 @@ class ExpenseAddEditViewController: UIViewController , UIGestureRecognizerDelega
         
         let jsonObj = JSON.init(parseJSON:expCatResponse)
         
-        for(_,j):(String,JSON) in jsonObj{
+        for(_,j):(String,JSON) in jsonObj {
             let expType = ExpenseType()
             expType.category = j["Expense Category"].stringValue
             

@@ -16,7 +16,6 @@ class KYCPrimaryViewController: UIViewController, IndicatorInfoProvider {
         return IndicatorInfo(title: "PRIMARY INFORMATION")
     }
     
-    
     var response : Data?
     
     @IBOutlet weak var lblCompName: UILabel!

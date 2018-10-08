@@ -268,45 +268,137 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
             Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             self.refreshControl.endRefreshing()
         }
-        
-        
     }
     
     
-    func getCompanyListAndNavigate(refId : String) {
+//    func getDebitAcDetails() -> [String] {
+//
+//        var grpComp : [String] = []
+//
+//        if internetStatus != .notReachable {
+//
+//            let url = String.init(format: Constant.TT.TT_GET_DEBIT_AC, Session.authKey)
+//            self.view.showLoading()
+//            grpComp.removeAll()
+//
+//            Alamofire.request(url).responseData(completionHandler: ({ response in
+//                self.view.hideLoading()
+//                if Helper.isResponseValid(vc: self, response: response.result){
+//                    let jsonObj = JSON(response.result.value!)
+//
+////                    for(_,j):(String,JSON) in jsonObj{
+////                        let newCurr = j["GroupCompany"].stringValue
+////                        grpComp.append(newCurr)
+////                    }
+//                }
+//            }))
+//        } else {
+//            Helper.showNoInternetMessg()
+//        }
+//        return grpComp
+//    }
+    
+    
+    
+    func getTTDataAndNavigate(refId : String) {
         
-//        if Session.companies == "" {
-        
-            if internetStatus != .notReachable {
-                
-                let url = String.init(format: Constant.TT.TT_GET_COMPANY_LIST, Session.authKey,refId)
-                self.view.showLoading()
-                Alamofire.request(url).responseData(completionHandler: ({ response in
-                    self.view.hideLoading()
-                    if Helper.isResponseValid(vc: self, response: response.result) {
-                        
-                        let ttBaseVC = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
-                        ttBaseVC.companiesResponse = response.result.value
-                        self.navigationController?.pushViewController(ttBaseVC, animated: true)
-                        
-                    }
-                }))
-            } else {
+        var companiesResponse : Data?
+        var debitAcResponse : Data?
+        var trvlModeResponse : Data?
+        var carrierResponse : Data?
+        var currResponse : Data?
+        var trvlAgentResponse : Data?
 
-//                let ttBaseVC = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
-//                ttBaseVC.companiesResponse = Session.companies
-//                self.navigationController?.pushViewController(ttBaseVC, animated: true)
+        if internetStatus != .notReachable {
+
+//            var isCompResValid = true
+//            var isDebitResValid = true
+            
+            let group = DispatchGroup()
+            self.view.showLoading()
+            group.enter()
+            
+            let url1 = String.init(format: Constant.TT.TT_GET_COMPANY_LIST, Session.authKey,refId)
+            self.view.showLoading()
+            Alamofire.request(url1).responseData(completionHandler: ({ response in
+               group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result) {
+                    companiesResponse = response.result.value
+                }
+            }))
+            
+            group.enter()
+            let url2 = String.init(format: Constant.TT.TT_GET_DEBIT_AC, Session.authKey)
+            
+            Alamofire.request(url2).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    debitAcResponse = response.result.value
+                }
+            }))
+            
+            group.enter()
+            let url3 = String.init(format: Constant.TT.TT_GET_TRAVEL_MODES, Session.authKey)
+            
+            Alamofire.request(url3).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    trvlModeResponse = response.result.value
+                }
+            }))
+            
+            group.enter()
+            let url4 = String.init(format: Constant.TT.TT_GET_CARRIER_LIST, Session.authKey)
+            
+            Alamofire.request(url4).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    carrierResponse = response.result.value
+                }
+            }))
+            
+            group.enter()
+            let url5 = String.init(format: Constant.TT.TT_GET_CURRENCY_LIST, Session.authKey)
+            
+            Alamofire.request(url5).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    currResponse = response.result.value
+                }
+            }))
+            
+            group.enter()
+            let url6 = String.init(format: Constant.TT.TT_GET_TRAVEL_AGENT, Session.authKey)
+            
+            Alamofire.request(url6).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    trvlAgentResponse = response.result.value
+                }
+            }))
+            
+            group.notify(queue: .main) {
+                self.view.hideLoading()
                 
+                let ttBaseVC = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
+                ttBaseVC.companiesResponse = companiesResponse
+                ttBaseVC.debitAcResponse = debitAcResponse
+                ttBaseVC.trvlModeResposne = trvlModeResponse
+                ttBaseVC.carrierResponse = carrierResponse
+                ttBaseVC.currResponse = currResponse
+                ttBaseVC.trvlAgentResponse = trvlAgentResponse
+
+                self.navigationController?.pushViewController(ttBaseVC, animated: true)
+            }
+        } else {
+            Helper.showNoInternetMessg()
         }
     }
-                
     
-   
     
     @IBAction func btnAddNewTicketTapped(_ sender: Any) {
         
-        getCompanyListAndNavigate(refId: "" )
-       
+        getTTDataAndNavigate(refId: "" )
     }
     
 }
@@ -338,7 +430,7 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
     
     func onEditClick(data : TravelTicketData) {
         
-        getCompanyListAndNavigate(refId : data.trvlrRefNum)
+        getTTDataAndNavigate(refId : data.trvlrRefNum)
     }
     
     func onDeleteClick(data: TravelTicketData) {
@@ -370,11 +462,6 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-//        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
-//        vc.isFromView = false
-//        getCompanyListAndNavigate(data :  arrayList[indexPath.row].trvlrRefNum)
-//        self.navigationController!.pushViewController(vc, animated: true)
         
     }
     

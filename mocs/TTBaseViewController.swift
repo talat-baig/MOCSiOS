@@ -16,20 +16,28 @@ import  XLPagerTabStrip
 
 
 class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDelegate {
+ 
     
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
+    
+    var empID : String = ""
     var isFromView : Bool = false
     var response:Data?
     var deptStr = ""
     var repMngr = ""
     
     var companiesResponse : Data?
+    var debitAcResponse : Data?
+    var trvlModeResposne : Data?
+    var carrierResponse : Data?
+    var currResponse : Data?
+    var trvlAgentResponse : Data?
     
     var trvticktAddEditVC : TravelTicketAddEditVC?
     var ttInfo : TravelTicketInformationVC?
-//    var repMngrBaseDelegate : passRepMngrBaseDelegate?
+    //    var repMngrBaseDelegate : passRepMngrBaseDelegate?
     
     override func viewDidLoad() {
         
@@ -59,9 +67,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             if self?.deptStr == "" {
                 
                 
-
             }
-
+            
         }
         
         
@@ -99,7 +106,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         var viewArray:[UIViewController] = []
         
         if isFromView {
-          
+            
             let ttPrimNonEdit = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketNonEditVC") as! TravelTicketNonEditVC
             viewArray.append(ttPrimNonEdit)
             
@@ -109,20 +116,26 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
             ttItinry.isFromView = self.isFromView
             viewArray.append(ttItinry)
-
-             let attachment = UIStoryboard(name: "PurchaseContract", bundle: nil).instantiateViewController(withIdentifier: "PCAttachmentViewController") as! PCAttachmentViewController
+            
+            let attachment = UIStoryboard(name: "PurchaseContract", bundle: nil).instantiateViewController(withIdentifier: "PCAttachmentViewController") as! PCAttachmentViewController
             viewArray.append(attachment)
-
+            
             
         } else {
             let ttAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketAddEditVC") as! TravelTicketAddEditVC
             ttAddEditVC.compResponse = self.companiesResponse
+            ttAddEditVC.debitAcResponse = self.debitAcResponse
+            ttAddEditVC.trvlModeResposne = self.trvlModeResposne
+            
             ttAddEditVC.repMngrDelegate = self
             viewArray.append(ttAddEditVC)
             
             let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
-//            ttInfo.repMngr = self.repMngr
-//            self.repMngrBaseDelegate = ttInfo
+            ttInfo.carrierResponse = self.carrierResponse
+            ttInfo.currResponse = self.currResponse
+            ttInfo.trvlAgentResponse = self.trvlAgentResponse
+
+            
             viewArray.append(ttInfo)
             
             let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
@@ -132,7 +145,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
             viewArray.append(ttVoucher)
         }
-
+        
         
         return viewArray
     }
@@ -141,14 +154,20 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
- 
-    func getRepMngrFromChild(repMgr : String) {
     
+//    func getRepMngrFromChild(repMgr : String) {
+//
+//        self.repMngr = repMgr
+//    }
+    
+    func getRepMngrFromChild(repMgr: String, empId: String) {
         self.repMngr = repMgr
+        self.empID = empId
     }
     
+    
     func processInfo() {
-   
+        
         guard let compny = self.trvticktAddEditVC?.btnCompany.titleLabel?.text else {
             return
         }
@@ -186,15 +205,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             return
         }
         
-        //
-        //        if ttInfo.btnTrvlAgent.titleLabel?.text == "" {
-        //            Helper.showMessage(message: "Please enter Traveller Agent")
-        //            return
-        //        }
-        //
-        
-        //
-        
+       
     }
 }
 
@@ -210,7 +221,7 @@ extension TTBaseViewController: WC_HeaderViewDelegate {
     }
     
     func topMenuRightButtonTapped(sender: Any) {
-
+        
         self.processInfo()
     }
     

@@ -12,5 +12,4 @@ class ExpenseType {
     
     var category = String()
     var subCategory = [String]()
-    
 }
