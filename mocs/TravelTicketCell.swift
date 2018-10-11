@@ -60,7 +60,14 @@ class TravelTicketCell: UITableViewCell {
         lblTrvlrName.text = data.trvlrName
         lblDept.text = data.trvlrDept
         lblCompName.text = data.tCompName
-        lblGuest.text = data.guest
+//        lblGuest.text = data.guest
+        
+        if data.guest == 0 {
+            lblGuest.text = "Guest"
+        } else {
+            lblGuest.text = "Employee"
+        }
+        
         lblTrvlType.text = data.trvlrType
         lblPurpose.text = data.trvlrPurpose
         lblMode.text = data.trvlrMode

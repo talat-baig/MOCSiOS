@@ -18,7 +18,7 @@ class TravelTicketData: NSObject {
     
     var tCompLoc : String = ""
     
-    var guest : String = ""
+    var guest : Int = 1
     
     var trvlrName : String = ""
     
@@ -75,6 +75,8 @@ class TravelTicketData: NSObject {
     var tAddedDate: String = ""
     
     var status : String = ""
+    
+//    var eprNum : String = ""
 
 }
 

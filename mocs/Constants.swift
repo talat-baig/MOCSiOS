@@ -82,7 +82,8 @@ struct Constant
         static let TRI = "Trade Receive Invoice";
         static let TASK_MANAGER = "Task Manager"
         static let CP = "Counterparty Profile"
-        
+        static let TT = "Travel Ticket"
+
     }
     
     struct API {
@@ -429,6 +430,72 @@ struct Constant
     DeleteTravelItinery(string itiapi, string authiti, int ID
     
     and for post
+     
+     RefID
+     TravellerID
+     TravellerCompanyName
+     TravellerCompanyCode
+     TravellerCompanyLocation
+     Guest
+     TravellerName
+     TravellerDepartment
+     TravellerReferenceNo
+     TravellerPurpose
+     TravellerType
+     TravellerMode
+     TravellerClass
+     TravellerDebitACName
+     TravellerCarrier
+     TravellerTicketNo
+     TravellerTicketIssue
+     TravellerTicketExpire
+     TravellerTicketPNRNo
+     TravellerTicketCost
+     TravellerTicketCurrency
+     TravellerTicketStatus
+     TravellerTravelAgent
+     TravellerInvoiceNo
+     TravellerAdvancePaidStatus
+     TravellerRemarks
+     TravellerAPRNo
+     TravellerApprovedBy
+     TravellerACPostingStatus
+     TravellerPostedBy
+     TravellerPostingDate
+     TravellerVoucherNo
+     TravellerCounter
+     Addedby
+     Addedbysysdt
+     Modifiedby
+     Modifiedsysdt
+     Cancelledby
+     Cancelledsysdt
+     Status
+     
+     
+     parameters for itinery ->
+     
+    // TravelItineraryStatus    TravelItineraryRefundStatus
+    // Unused    Current Satus
+     
+     
+     TravelItineraryID - 0 (add)
+     TravelTravellerReferenceNo
+     TravelItineraryDepartureCity
+     TravelItineraryArrivalCity
+     TravelItineraryDate
+     TravelItineraryStatus
+     TravelItineraryRefundStatus
+     Addedby
+     Addedbysysdt
+     Modifiedby
+     Modifiedsysdt
+     Cancelledby
+     Cancelledsysdt
+     Status  - 0
+     FlightNumber
+     ITATcode
+     DepartureTime
     */
     struct TT {
         
@@ -453,6 +520,25 @@ struct Constant
         static let TT_GET_TRAVEL_AGENT = ApiUrl.URL + "/TravelTickets/LoadTravelAgent?apiagentlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&agentlistauth=%@"
 
         static let TT_GET_EPR_LIST = ApiUrl.URL + "/TravelTickets/LoadEPR?apiEPRlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&EPRlistauth=%@&empid=%@"
+        
+        static let TT_GET_REP_MNGR_LIST = ApiUrl.URL + "/TravelTickets/LoadReportingManager?apimanagerlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&managerlistauth=%@"
+
+        static let TT_GET_ITINRY_LIST = ApiUrl.URL + "/TravelTickets/GetTravelItineryListing?apikeyitilist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authitiid=%@&travelref=%@"
+
+        static let TT_DELETE_ITINRY = ApiUrl.URL + "/TravelTickets/DeleteTravelItinery?itiapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authiti=%@&ID=%@"
+
+        static let TT_GET_CITY_LIST = ApiUrl.URL + "/TravelTickets/LoadCity?apicitylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&citylistauth=%@"
+        
+        static let TT_ADD_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/AddTravelTicket?addapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&addauth=%@&TravelTicket"
+
+        static let TT_DELETE_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/DeleteTravelTicket?deltraapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&deltraauth=%@&travellerID=%@"
+
+        
+        
+        
+//        AddTravelTicket(string addapi, string addauth, TravelTicket travel)
+        
+        
 
     }
     

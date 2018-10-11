@@ -536,6 +536,14 @@ class Helper: UIView {
         return newStr
     }
     
+    public static func convertToDateFormat2(dateString: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let serverDate: Date = dateFormatter.date(from: dateString)! // according to date format your date string
+        return serverDate
+    }
+    
+    
     public static func convertToDate(dateString: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MMM-yyyy"
@@ -623,6 +631,16 @@ class Helper: UIView {
         return currArr
     }
     
+    public static func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
     
 }
 protocol Utility {

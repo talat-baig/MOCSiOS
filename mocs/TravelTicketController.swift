@@ -102,7 +102,15 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                             
                             ttData.tCompLoc = json["TravellerCompanyLocation"].stringValue
                             
-                            ttData.guest = json["Guest1"].stringValue
+//                            ttData.guest = json["Guest1"].stringValue
+                            
+                            if json["Guest1"].stringValue == "Guest" {
+                              
+                                ttData.guest = 0
+                            } else {
+                               
+                                ttData.guest = 1
+                            }
                             
                             ttData.trvlrName = json["TravellerName"].stringValue
                             
@@ -195,13 +203,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                             } else {
                                 ttData.invoiceNum  = json["TravellerInvoiceNo"].stringValue
                             }
-                            
-//                            if json["ApproverDate"].boolValue == "" {
-//                                ttData.trvlAdvance = ""
-//                            } else {
-//                                ttData.trvlAdvance  = json["ApproverDate"].stringValue
-//                            }
-                            
+
                             if json["TravellerRemarks"].stringValue == "" {
                                 ttData.trvlComments = ""
                             } else {
@@ -220,21 +222,6 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                                 ttData.approvdBy  = json["TravellerApprovedBy"].stringValue
                             }
                          
-                            
-//                            if json["ApproverDate"].stringValue == "" {
-//                                ttData.voucherNum = ""
-//                            } else {
-//                                ttData.voucherNum  = json["ApproverDate"].stringValue
-//                            }
-//
-                            
-//                            if json["ApproverDate"].stringValue == "" {
-//                                ttData.trvlrCounter = ""
-//                            } else {
-//                                ttData.trvlrCounter  = json["ApproverDate"].stringValue
-//                            }
-//
-                           
                             if json["Addedby"].stringValue == "" {
                                 ttData.tAddedBy = ""
                             } else {
@@ -252,6 +239,13 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                             } else {
                                 ttData.status  = json["Status"].stringValue
                             }
+                            
+                            if json["TravellerAdvancePaidStatus"].stringValue == "True" {
+                                ttData.trvlAdvance = true
+                            } else {
+                                ttData.trvlAdvance = false
+                            }
+                            
                             
                             
                             data.append(ttData)
@@ -271,36 +265,8 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
     }
     
     
-//    func getDebitAcDetails() -> [String] {
-//
-//        var grpComp : [String] = []
-//
-//        if internetStatus != .notReachable {
-//
-//            let url = String.init(format: Constant.TT.TT_GET_DEBIT_AC, Session.authKey)
-//            self.view.showLoading()
-//            grpComp.removeAll()
-//
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//                    let jsonObj = JSON(response.result.value!)
-//
-////                    for(_,j):(String,JSON) in jsonObj{
-////                        let newCurr = j["GroupCompany"].stringValue
-////                        grpComp.append(newCurr)
-////                    }
-//                }
-//            }))
-//        } else {
-//            Helper.showNoInternetMessg()
-//        }
-//        return grpComp
-//    }
     
-    
-    
-    func getTTDataAndNavigate(refId : String) {
+    func getTTDataAndNavigate(data : TravelTicketData) {
         
         var companiesResponse : Data?
         var debitAcResponse : Data?
@@ -308,17 +274,17 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
         var carrierResponse : Data?
         var currResponse : Data?
         var trvlAgentResponse : Data?
+        var repMngrResponse : Data?
+        var itinryResponse : Data?
 
+        
         if internetStatus != .notReachable {
-
-//            var isCompResValid = true
-//            var isDebitResValid = true
             
             let group = DispatchGroup()
             self.view.showLoading()
             group.enter()
             
-            let url1 = String.init(format: Constant.TT.TT_GET_COMPANY_LIST, Session.authKey,refId)
+            let url1 = String.init(format: Constant.TT.TT_GET_COMPANY_LIST, Session.authKey,data.trvlrRefNum)
             self.view.showLoading()
             Alamofire.request(url1).responseData(completionHandler: ({ response in
                group.leave()
@@ -377,6 +343,27 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                 }
             }))
             
+            group.enter()
+            let url7 = String.init(format: Constant.TT.TT_GET_REP_MNGR_LIST, Session.authKey)
+            
+            Alamofire.request(url7).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    repMngrResponse = response.result.value
+                }
+            }))
+            
+            group.enter()
+            let url8 = String.init(format: Constant.TT.TT_GET_ITINRY_LIST, Session.authKey,data.trvlrRefNum)
+            
+            Alamofire.request(url8).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    itinryResponse = response.result.value
+                }
+            }))
+            
+            
             group.notify(queue: .main) {
                 self.view.hideLoading()
                 
@@ -387,7 +374,11 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                 ttBaseVC.carrierResponse = carrierResponse
                 ttBaseVC.currResponse = currResponse
                 ttBaseVC.trvlAgentResponse = trvlAgentResponse
-
+                ttBaseVC.repMngrResponse = repMngrResponse
+                ttBaseVC.itinryResponse = itinryResponse
+                ttBaseVC.trvlTcktData = data
+                
+                
                 self.navigationController?.pushViewController(ttBaseVC, animated: true)
             }
         } else {
@@ -398,7 +389,9 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
     
     @IBAction func btnAddNewTicketTapped(_ sender: Any) {
         
-        getTTDataAndNavigate(refId: "" )
+        let myData = TravelTicketData()
+        
+        getTTDataAndNavigate(data: myData )
     }
     
 }
@@ -407,15 +400,15 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
 extension TravelTicketController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        //        if  searchText.isEmpty {
-        //            self.arrayList = newArray
-        //        } else {
-        //            let filteredArray = newArray.filter {
-        //                $0.headRef.localizedCaseInsensitiveContains(searchText)
-        //            }
-        //            self.arrayList = filteredArray
-        //        }
-        //        tableView.reloadData()
+//                if  searchText.isEmpty {
+//                    self.arrayList = newArray
+//                } else {
+//                    let filteredArray = newArray.filter {
+//                        $0.headRef.localizedCaseInsensitiveContains(searchText)
+//                    }
+//                    self.arrayList = filteredArray
+//                }
+//                tableView.reloadData()
     }
 }
 
@@ -430,7 +423,7 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
     
     func onEditClick(data : TravelTicketData) {
         
-        getTTDataAndNavigate(refId : data.trvlrRefNum)
+        getTTDataAndNavigate(data : data)
     }
     
     func onDeleteClick(data: TravelTicketData) {

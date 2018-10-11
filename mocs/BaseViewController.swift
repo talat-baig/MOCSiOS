@@ -116,8 +116,6 @@ class BaseViewController: ButtonBarPagerTabStripViewController, onTCRSubmit, UC_
         tcVouchersVC.moduleName = Constant.MODULES.TCR
         tcVouchersVC.vouchResponse = voucherResponse
         tcVouchersVC.ucNotifyDelegate = self
-//        self.notifyChilds = tcVouchersVC
-//        self.cancelReqDel = tcVouchersVC
         
         viewArray.append(tcExpenseVC)
         viewArray.append(tcVouchersVC)

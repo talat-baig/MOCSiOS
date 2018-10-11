@@ -157,7 +157,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
         let modDate = dateFormatter.string(from: currentDate)
         txtReqDate.text = modDate
         
-        
         arrCurrency = Helper.parseAndAssignCurrency()
         
         btnCurrency.layer.cornerRadius = 3
@@ -182,16 +181,13 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     
     func assignDataToFields() {
         
-        
         lblReqNo.text = trvReqData.reqNo
-        
       
         let newReqDate = Helper.convertToDate(dateString: trvReqData.reqDate)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let modDate = dateFormatter.string(from: newReqDate)
 
-        
         txtReqDate.text = modDate
         
         txtVwReason.text = trvReqData.reason
@@ -252,9 +248,7 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
         if isRentCar {
             btnRentCar.setImage(#imageLiteral(resourceName: "checked_black"), for: .normal)
         }
-        
     }
-    
     
     
     override func didReceiveMemoryWarning() {
@@ -548,26 +542,14 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
             var url = String()
             var newRecord = [String : Any]()
             
-            
             if reqNo == ""  {
-                
                 url = String.init(format: Constant.TRF.TRF_ADD, Session.authKey)
-                
-//                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
-                
-                
             } else {
-                
                 url = String.init(format: Constant.TRF.TRF_UPDATE, Session.authKey , trvReqData.trfId)
-                
-//                newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
-                
             }
-            
             
             newRecord = ["ReasonForTravel": reasonStr , "Accompanied": accmpndBy, "TravelArrangement": travArrngStr, "TravelAdvance": amt , "Currency" : curr ] as [String : Any]
 
-            
             Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
                 .responseString(completionHandler: {  response in
                     self.view.hideLoading()
@@ -576,7 +558,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
                     let jsonResponse = JSON.init(parseJSON: response.result.value!)
                     
                     if jsonResponse["ServerMsg"].stringValue == "Success" {
-                        
                         
                         var messg = String()
                         
@@ -604,8 +585,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
             Helper.showNoInternetMessg()
         }
     }
-    
-    
     
 }
 

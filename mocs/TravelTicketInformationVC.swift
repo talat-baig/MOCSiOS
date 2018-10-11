@@ -12,21 +12,33 @@ import SwiftyJSON
 import Alamofire
 import DropDown
 
-class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGestureRecognizerDelegate{
+
+protocol getDatesDelegate: NSObjectProtocol {
+    func getDatesFromTicketInfo(bookDate : String, expdate : String) -> Void
+}
+
+class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGestureRecognizerDelegate , notifyChilds_UC {
     
     var carrierResponse : Data?
     var currResponse : Data?
     var trvlAgentResponse : Data?
-
+    var repMngrResponse : Data?
+    
     var arrCarrier : [String] = []
     var arrCurrency : [String] = []
     var arrTrvlAgent : [String] = []
     var arrEPRList : [TravelTicktEPR] = []
+    var arrRepMngr : [ReportingManager] = []
 
     var empId : String = ""
     
     var startDate = Date()
     var endDate = Date()
+    var isRepMngrSelected = false
+    
+    var ticktsDateDelegate : getDatesDelegate?
+    
+    weak var trvTcktData : TravelTicketData!
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
@@ -68,6 +80,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     @IBOutlet weak var vwApprvdBy: UIView!
     @IBOutlet weak var vwCommnts: UIView!
     
+    @IBOutlet weak var vwSelectEPR: UIView!
     @IBOutlet weak var txtCarrier: UITextField!
     
     @IBOutlet weak var txtCurrency: UITextField!
@@ -79,6 +92,11 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     
     weak var currentTxtFld: UITextField? = nil
     
+    @IBOutlet weak var txtEprAmtCurrncy: UITextField!
+    
+    
+    @IBOutlet weak var txtApprvdBy: UITextField!
+    
     var repMngr : String = ""
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -88,21 +106,105 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         super.viewDidLoad()
         
         initalSetup()
+        
+        if trvTcktData != nil {
+            /// Edit
+            assignDataToFields()
+
+        } else {
+            /// Add
+            switchAdvance.isOn = false
+            checkSwitchState(mySwitchState:  switchAdvance.isOn )
+        }
+        
+        txtTrvlStatus.isEnabled = false
     }
     
+    
+    
+    func assignDataToFields() {
+        
+        txtCarrier.text = trvTcktData.carrier
+        txtTicktNo.text = trvTcktData.ticktNum
+        
+        let issueDateStr = trvTcktData.issueDate
+        let expDateStr = trvTcktData.expiryDate
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let newDate1  = dateFormatter.date(from: issueDateStr)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let issueDate = dateFormatter.string(from:newDate1!)
+        txtBookingDate.text = issueDate
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let newDate2  = dateFormatter2.date(from: expDateStr)
+        dateFormatter2.dateFormat = "yyyy-MM-dd"
+        let expDate = dateFormatter2.string(from:newDate2!)
+    
+        txtExpiryDate.text = expDate
+
+        
+        guard let booking = txtBookingDate.text else {
+            return
+        }
+        
+        guard let expiry = txtExpiryDate.text else {
+            return
+        }
+        
+//        if self.isTrvlStatusValid(expiry: expiry) {
+//            txtTrvlStatus.text = "Valid"
+//        } else {
+//            txtTrvlStatus.text = "Expired"
+//        }
+        
+        if let d = self.ticktsDateDelegate {
+            d.getDatesFromTicketInfo(bookDate: booking, expdate: expiry )
+        }
+        
+        
+        txtTicktPnrNo.text = trvTcktData.ticktPNRNum
+        txtTicktCost.text = trvTcktData.ticktCost
+        txtCurrency.text = trvTcktData.tCurrency
+        
+        txtTrvlStatus.text = trvTcktData.ticktStatus
+        
+        txtTrvlAgent.text = trvTcktData.agent
+        txtInvoiceNo.text = trvTcktData.invoiceNum
+        txtComments.text = trvTcktData.trvlComments
+
+        switchAdvance.isOn = trvTcktData.trvlAdvance
+        checkSwitchState(mySwitchState: trvTcktData.trvlAdvance)
+
+        
+        if trvTcktData.trvlAprNum == "" {
+             btnAdvances.setTitle("Select EPR No.", for: .normal)
+        } else {
+             btnAdvances.setTitle(trvTcktData.trvlAprNum, for: .normal)
+        }
+   
+        isRepMngrSelected = true
+        txtApprvdBy.text = trvTcktData.approvdBy
+        
+    }
+    
+    
     override func viewDidAppear(_ animated: Bool) {
+        
         let ttBaseVC = self.parent as? TTBaseViewController
         ttBaseVC?.saveTTInfoReference(vc: self)
-        btnApprovedBy.setTitle(ttBaseVC?.repMngr, for: .normal)
+        
+        if !isRepMngrSelected {
+            txtApprvdBy.text = ttBaseVC?.repMngr
+        }
         
         guard let newEmpId = ttBaseVC?.empID else {
             return
         }
         self.empId = newEmpId
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
     }
     
     
@@ -140,10 +242,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         Helper.addBordersToView(view: vwPNRNo)
         Helper.addBordersToView(view: vwInvoice)
         Helper.addBordersToView(view: vwCommnts)
-        
-        switchAdvance.isOn = false
-        checkSwitchState(mySwitchState:  switchAdvance.isOn )
-        
+                
         switchAdvance.addTarget(self, action: #selector(isAdvance(mySwitch:)), for: UIControlEvents.valueChanged)
         
         txtBookingDate.inputView = datePickerTool
@@ -152,6 +251,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         parseAndAssignCarrierList()
         parseAndAssignCurrencyList()
         parseAndAssignAgentList()
+        parseAndAssignRepMngrList()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -185,7 +285,9 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         self.view.endEditing(true)
     }
     
-    
+    func notifyChild(messg: String, success: Bool) {
+        
+    }
     
     @IBAction func btnDoneTapped(_ sender: Any) {
         
@@ -198,8 +300,28 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         }
         
         if currentTxtFld == txtExpiryDate {
+           
             txtExpiryDate.text = dateFormatter.string(from: datePicker.date) as String
             endDate = datePicker.date
+            
+            
+            guard let booking = txtBookingDate.text else {
+                return
+            }
+            
+            guard let expiry = txtExpiryDate.text else {
+                return
+            }
+            
+            if self.isTrvlStatusValid(expiry: expiry) {
+                txtTrvlStatus.text = "Valid"
+            } else {
+                txtTrvlStatus.text = "Expired"
+            }
+            
+            if let d = self.ticktsDateDelegate {
+                d.getDatesFromTicketInfo(bookDate: booking, expdate: expiry )
+            }
         }
         
         self.view.endEditing(true)
@@ -248,6 +370,22 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         self.arrTrvlAgent = arrAgent
     }
     
+    func parseAndAssignRepMngrList() {
+        
+        var arrRepMngr: [ReportingManager] = []
+        let responseJson = JSON(repMngrResponse!)
+        
+        for(_,j):(String,JSON) in responseJson {
+            
+            let newItem = ReportingManager()
+            
+             newItem.repMngrName = j["ReportingManagerName"].stringValue
+             newItem.repMngrId = j["ReportingManager"].stringValue
+
+            arrRepMngr.append(newItem)
+        }
+        self.arrRepMngr = arrRepMngr
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -255,7 +393,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 1320 )
+        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 1520 )
     }
     
     @IBAction func btnNextTapped(_ sender: Any) {
@@ -276,12 +414,12 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
             btnAdvances.isEnabled = true
             btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
             btnAdvances.layer.borderWidth = 1
-            
-            
         } else {
             btnAdvances.isEnabled = false
             btnAdvances.layer.borderColor = AppColor.lightGray.cgColor
             btnAdvances.layer.borderWidth = 0.5
+            btnAdvances.setTitle("Select EPR No.", for: .normal)
+            self.txtEprAmtCurrncy.text = ""
         }
     }
     
@@ -308,13 +446,14 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
                         for(_,j):(String,JSON) in jsonRes {
                             
                             let newObj = TravelTicktEPR()
-                            newObj.eprMainId = j["EmployeePaymentRequestMainID"].stringValue
+//                            newObj.eprMainId = j["EmployeePaymentRequestMainID"].stringValue
                             newObj.eprRefId = j["EPRMainReferenceID"].stringValue
-                            newObj.eprAmt = j["EPRMainReferenceID"].stringValue
-                            newObj.eprCurr = j["EPRMainReferenceID"].stringValue
-
+                            newObj.eprAmt = j["EPRitemsAmount"].stringValue
+                            newObj.eprCurr = j["Currency"].stringValue
+                            
                             newArr.append(newObj)
                         }
+                        
                     }
                     comp(true, newArr)
                 } else {
@@ -349,6 +488,8 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
                     chooseEpr.dataSource = arrEprVal.map {$0.eprRefId}
                     chooseEpr.selectionAction = { [weak self] (index, item) in
                         self?.btnAdvances.setTitle(item, for: .normal)
+
+                        self?.txtEprAmtCurrncy.text = arrEprVal[index].eprAmt  + " " +  arrEprVal[index].eprCurr
                     }
                     chooseEpr.show()
                 } else {
@@ -357,6 +498,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
             }
         })
     }
+    
     
     func addDropDwnToCarrierTxtFld() {
         
@@ -380,6 +522,18 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         chooseCurr.show()
     }
     
+    func addDropDwnToRepMngrTxtFld() {
+        
+        let chooseApprvdBy = DropDown()
+        chooseApprvdBy.anchorView = txtApprvdBy
+        chooseApprvdBy.dataSource = self.arrRepMngr.map { $0.repMngrName }
+        chooseApprvdBy.selectionAction = { [weak self] (index, item) in
+            self?.txtApprvdBy.text = item
+            self?.isRepMngrSelected = true
+        }
+        chooseApprvdBy.show()
+    }
+    
     func addDropDwnToTrvlAgntTxtFld() {
         
         let chooseAgnt = DropDown()
@@ -391,11 +545,29 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         chooseAgnt.show()
     }
     
-//    func passRepMngrFromBase(repMgr: String) {
-//        self.repMngr = repMgr
-//    }
-//
-    
+    func isTrvlStatusValid(expiry : String ) -> Bool {
+        
+        let expiryDate = Helper.convertToDateFormat2(dateString: expiry)
+        let currntDate = Date()
+
+        var val = false
+        
+        switch expiryDate.compare(currntDate) {
+       
+        case .orderedAscending:
+            print("expiryDate is earlier than currntDate")
+            val = false
+            
+        case .orderedSame:
+            print("The two dates are the same")
+            val = true
+            
+        case .orderedDescending:
+            print("expiryDate is later than currntDate")
+            val = true
+        }
+        return val
+    }
     
 }
 
@@ -409,7 +581,6 @@ extension TravelTicketInformationVC: UITextFieldDelegate , UITextViewDelegate {
         return true
     }
     
-    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         
         var val : Bool = true
@@ -421,6 +592,8 @@ extension TravelTicketInformationVC: UITextFieldDelegate , UITextViewDelegate {
         case txtBookingDate :
             
             datePickerTool.isHidden = false
+            datePicker.maximumDate = Date.distantFuture
+            datePicker.minimumDate = Date.distantPast
             val = true
             
         case txtExpiryDate :
@@ -459,22 +632,36 @@ extension TravelTicketInformationVC: UITextFieldDelegate , UITextViewDelegate {
             self.addDropDwnToCurrencyTxtFld()
             val = false
             
+        case txtApprvdBy :
+            self.addDropDwnToRepMngrTxtFld()
+            val = false
+            
         case txtTicktPnrNo, txtTicktCost :
             let scrollPoint:CGPoint = CGPoint(x:0, y:  vwTicktNo.frame.origin.y + 20  )
             scrlVw!.setContentOffset(scrollPoint, animated: true)
             
-        case txtTrvlStatus :
-           
-            if txtCarrier.text != "" && txtTicktNo.text != "" && (txtTicktCost.text != nil) && txtBookingDate.text != "" && txtExpiryDate.text != "" && txtTicktCost.text != "" {
-                txtTrvlStatus.text = "Valid"
-                val = false
-            }
-           
+//        case txtTrvlStatus :
             
+//            if txtCarrier.text != "" && txtTicktNo.text != "" && txtBookingDate.text != "" && txtExpiryDate.text != "" && txtTicktCost.text != "" && txtCurrency.text != "" {
+//
+//                if isTrvlStatusValid() {
+//                    txtTrvlStatus.text = "Valid"
+//                } else {
+//
+//                }
+//                val = false
+//            }
         default : break
-            
         }
         return val
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+       
+        if textView ==  txtComments {
+            let scrollPoint:CGPoint = CGPoint(x:0, y:  vwSelectEPR.frame.origin.y + 60  )
+            scrlVw!.setContentOffset(scrollPoint, animated: true)
+        }
     }
     
 }

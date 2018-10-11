@@ -186,24 +186,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         }
     }
     
-    
-    //    func getImage(ext : String) -> UIImage? {
-    //
-    //        var selectedImg = UIImage()
-    //
-    //        switch ext {
-    //        case "pdf": selectedImg = #imageLiteral(resourceName: "pdf")
-    //            break
-    //        case "png", "JPG" , "jpg":  selectedImg = #imageLiteral(resourceName: "imageIcon")
-    //            break
-    //        case "txt", "xlsx", ".docx" , ".rtf" : selectedImg = #imageLiteral(resourceName: "file")
-    //            break
-    //        default:
-    //            break
-    //        }
-    //        return selectedImg
-    //    }
-    //
+   
     func getDataFromFile(file : FBFile) -> Data? {
         
         var pData = Data()
@@ -216,23 +199,9 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         
     }
     
-    //    func getDataFromFileUrl(fileUrl: URL) -> Data? {
-    //
-    //        var pData = Data()
-    //        do {
-    //            let fileData = try Data.init(contentsOf: fileUrl)
-    //            pData = fileData
-    //        } catch {
-    //            print(error)
-    //        }
-    //        return pData
-    //    }
-    
-    
     func showEmptyState(){
         Helper.showNoItemState(vc:self , messg: "List is Empty\nTry to load by tapping below button" , tb:tblVwVouchers,  action:#selector(getVouchersData))
     }
-    
     
     func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
         
@@ -245,9 +214,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
         dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
             .response { response, error in
-                //                print(response?.description)
-                //                print(error?.description)
-                
+              
                 DispatchQueue.main.async() {
                     if let response = response {
                         self.addItemToServer(dModName: Constant.MODULES.TCR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
@@ -483,6 +450,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                 data.addDate = j["AddedByUser"].stringValue
                 data.addedUser = j["AddedDate"].stringValue
                 self.arrayList.append(data)
+              
             }
             self.tblVwVouchers.tableFooterView = nil
             self.tblVwVouchers.reloadData()

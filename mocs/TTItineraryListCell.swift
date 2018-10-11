@@ -1,46 +1,44 @@
 //
-//  ItineraryListCell.swift
+//  TTItineraryListCell.swift
 //  mocs
 //
-//  Created by Talat Baig on 9/14/18.
+//  Created by Talat Baig on 10/9/18.
 //  Copyright © 2018 Rv. All rights reserved.
 //
 
 import UIKit
 
 
-protocol onItineraryOptionClickListener: NSObjectProtocol {
+protocol onTTItineraryOptionClickListener: NSObjectProtocol {
     
     func onCancelClick() -> Void
-    func onDeleteClick(data : ItineraryListData) -> Void
-    func onEditClick(data : ItineraryListData) -> Void
+    func onDeleteClick(data : TTItineraryListData) -> Void
+    func onEditClick(data : TTItineraryListData) -> Void
     
 }
 
-
-class ItineraryListCell: UITableViewCell {
+class TTItineraryListCell: UITableViewCell {
     
     
     @IBOutlet weak var vwOuter: UIView!
     
-    @IBOutlet weak var lblDest: UILabel!
+    @IBOutlet weak var lblDepCity: UILabel!
     
-    @IBOutlet weak var lblDepDate: UILabel!
+    @IBOutlet weak var lblArrvCity: UILabel!
+
+    @IBOutlet weak var lblDate: UILabel!
     
-    @IBOutlet weak var lblRetDate: UILabel!
+    @IBOutlet weak var lblHeaderDate: UILabel!
+    @IBOutlet weak var lblDepTime: UILabel!
     
-    @IBOutlet weak var lblItinryDate: UILabel!
-    @IBOutlet weak var lblEstDays: UILabel!
+    @IBOutlet weak var lbltrvlStatus: UILabel!
     
     weak var itnryMenuDelegate : onMoreClickListener?
-    weak var itnryItemMenuDelegate : onItineraryOptionClickListener?
+    weak var itnryItemMenuDelegate : onTTItineraryOptionClickListener?
     
-    weak var data: ItineraryListData!
-
+    weak var data: TTItineraryListData!
     
     @IBOutlet weak var btnMenu: UIButton!
-    
-    @IBOutlet weak var lblDate: UILabel!
     
     override func awakeFromNib() {
         
@@ -55,13 +53,14 @@ class ItineraryListCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setdataToView(data : ItineraryListData) {
+    func setdataToView(data : TTItineraryListData) {
         
-        lblDest.text = data.dest
-        lblDepDate.text = data.depDate
-        lblRetDate.text = data.retDate
-        lblEstDays.text = data.estDays
-        lblDate.text = data.createdDate
+        lblDepCity.text = data.destCity
+        lblArrvCity.text = data.arrvlCity
+        lblDate.text = data.depDate
+        lblDepTime.text = data.depTime
+        lbltrvlStatus.text = data.trvlStatus
+        lblHeaderDate.text = data.depDate
         self.data = data
     }
     
@@ -93,13 +92,11 @@ class ItineraryListCell: UITableViewCell {
             }
         })
         optionMenu.addAction(cancelAction)
-
+        
         
         if ((itnryMenuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
             itnryMenuDelegate?.onClick(optionMenu: optionMenu , sender: sender)
         }
-        
-        
         
     }
     

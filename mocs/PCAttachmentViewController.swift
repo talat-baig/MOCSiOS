@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 import SwiftyDropbox
 
-class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
+class PCAttachmentViewController: UIViewController, IndicatorInfoProvider, notifyChilds_UC {
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "ATTACHMENT")
     }
@@ -158,6 +158,10 @@ class PCAttachmentViewController: UIViewController, IndicatorInfoProvider {
                 
             })
         }
+    }
+    
+    func notifyChild(messg: String, success: Bool) {
+        
     }
 }
 extension PCAttachmentViewController: UITableViewDelegate, UITableViewDataSource{

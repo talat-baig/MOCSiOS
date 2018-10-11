@@ -10,7 +10,8 @@ import UIKit
 import XLPagerTabStrip
 import SwiftyJSON
 
-class TravelTicketNonEditInfoVC: UIViewController, IndicatorInfoProvider {
+class TravelTicketNonEditInfoVC: UIViewController, IndicatorInfoProvider , notifyChilds_UC {
+  
 
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -50,6 +51,9 @@ class TravelTicketNonEditInfoVC: UIViewController, IndicatorInfoProvider {
         // Dispose of any resources that can be recreated.
     }
     
-
+    func notifyChild(messg: String, success: Bool) {
+        
+    }
+    
 
 }
