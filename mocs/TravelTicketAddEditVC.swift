@@ -177,7 +177,6 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         txtTrvlClass.text = ttData.trvlrClass
         txtDebitAcName.text = ttData.debitACName
         
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -374,12 +373,13 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             self.guest = "Guest"
             self.txtFldTrvlName.text = ""
             checkCompanyCodeAndGetTravellerData(compCode: 0)
+//            txtDept.text = "NA"
             
         } else {            
             guard let compnyTitle = txtCompny.text else {
                 return
             }
-             self.guest = "Employee"
+            self.guest = "Employee"
             let ccode = getCompanyCode(item: compnyTitle)
             checkCompanyCodeAndGetTravellerData(compCode: ccode)
         }
@@ -621,36 +621,10 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         }
     }
     
-    
-    
     func checkPurposeSwitch() {
         self.purposeType(mySwitch: swtchPurpose)
     }
-    //
-    //
-    //    @IBAction func btnTravelModeTapped(_ sender: Any) {
-    //
-    //
-    //    }
-    //
-    //
-    //    @IBAction func btnTravelClassTapped(_ sender: Any) {
-    //
-    //
-    //    }
-    //
-    
-    //    @IBAction func btnDebitAcNameTapped(_ sender: Any) {
-    //
-    //        //        let dropDown = DropDown()
-    //        //        dropDown.anchorView = btnDebtAcNo
-    //        //        dropDown.dataSource = self.arrDebitAcList
-    //        //        dropDown.selectionAction = { [weak self] (index, item) in
-    //        //            self?.btnDebtAcNo.setTitle(item, for: .normal)
-    //        //        }
-    //        //        dropDown.show()
-    //    }
-    //
+
     func addDropDownToTrvlModeTxtFld() {
         
         let chooseTrvlMode = DropDown()

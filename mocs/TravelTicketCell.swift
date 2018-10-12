@@ -57,7 +57,15 @@ class TravelTicketCell: UITableViewCell {
         
         lblRefNum.text = data.trvlrRefNum
         lblTrvlrName.text = data.trvlrName
-        lblDept.text = data.trvlrDept
+        
+        if data.trvlrDept == "" {
+            lblDept.text! = "-"
+        } else {
+            lblDept.text! = data.trvlrDept
+        }
+        
+//        lblDept.text = data.trvlrDept
+        
         lblCompName.text = data.tCompName
 //        lblGuest.text = data.guest
         

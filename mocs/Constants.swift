@@ -525,7 +525,7 @@ struct Constant
 
         static let TT_GET_ITINRY_LIST = ApiUrl.URL + "/TravelTickets/GetTravelItineryListing?apikeyitilist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authitiid=%@&travelref=%@"
 
-        static let TT_DELETE_ITINRY = ApiUrl.URL + "/TravelTickets/DeleteTravelItinery?itiapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authiti=%@&ID=%@"
+        static let TT_DELETE_ITINRY = ApiUrl.URL + "/TravelTickets/DeleteTravelItinery?itiapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authiti=%@&ID=%d"
 
         static let TT_GET_CITY_LIST = ApiUrl.URL + "/TravelTickets/LoadCity?apicitylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&citylistauth=%@"
         

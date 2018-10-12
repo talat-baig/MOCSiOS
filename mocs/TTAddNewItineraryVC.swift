@@ -14,6 +14,7 @@ import SwiftyJSON
 
 protocol onTTItinryAddDelegate: NSObjectProtocol {
     func onOkClick(itnryObj : TTItineraryListData) -> Void
+    func onOkEditClick(itnryObj : TTItineraryListData, index : Int) -> Void
 }
 
 class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
@@ -24,7 +25,7 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
     var retDate : String = ""
     
     var arrTravelStatus : [String] = ["Used","Unused"]
-    
+    var index = 0
     weak var ttItnry : TTItineraryListData?
     weak var okTTItnryAddDel : onTTItinryAddDelegate?
 
@@ -217,20 +218,40 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
         newItinry.flightNo = txtFlightNum.text!
         newItinry.destCity = depCity
         newItinry.arrvlCity = arrCity
-        newItinry.depDate = depDate
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let newDate1  = dateFormatter.date(from: depDate)
+        dateFormatter.dateFormat = "dd-MMM-yyyy"
+        let newDepDate = dateFormatter.string(from:newDate1!)
+      
+        
+        newItinry.depDate = newDepDate
         newItinry.itatCode = txtITATCode.text!
         newItinry.depTime = txtDepTime.text!
         newItinry.trvlStatus = txtTrvlStatus.text!
         
-        let mssg = "Itinerary Added Succesfully"
+        var messg = String()
         
-        let successAlrt = UIAlertController(title: "Success", message: mssg , preferredStyle: .alert)
+        if ttItnry != nil {
+            messg = "Itinerary Updated Succesfully"
+        } else {
+            messg = "Itinerary Added Succesfully"
+        }
+        
+        let successAlrt = UIAlertController(title: "Success", message: messg , preferredStyle: .alert)
         
         successAlrt.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
             
             if let d = self.okTTItnryAddDel {
-                d.onOkClick(itnryObj : newItinry)
+                
+                if self.ttItnry != nil {
+                    d.onOkEditClick(itnryObj: newItinry, index:self.index )
+                } else {
+                    d.onOkClick(itnryObj : newItinry)
+                }
             }
+            
             self.navigationController?.popViewController(animated: true)
         }))
         self.present(successAlrt, animated: true, completion: nil)

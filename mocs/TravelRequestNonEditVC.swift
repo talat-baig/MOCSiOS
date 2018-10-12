@@ -14,7 +14,6 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider {
     
     var trfData: TravelRequestData?
     
-    
     @IBOutlet weak var lblEmpName: UILabel!
     @IBOutlet weak var lblEmpCode: UILabel!
     @IBOutlet weak var lblDept: UILabel!

@@ -14,21 +14,18 @@ import Alamofire
 import SwiftyJSON
 
 class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate , onTTItinryAddDelegate, onTTItineraryOptionClickListener, notifyChilds_UC, onMoreClickListener {
-    
+
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "ITINERARY DETAILS")
     }
     
-    
     weak var ttData : TravelTicketData?
     var arrayList : [TTItineraryListData] = []
     var bookDate = String()
     var expryDate = String()
-    
     var itinryResponse : Data?
     var isFromView : Bool = false
-//    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     @IBOutlet weak var btnAddItinry: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -37,7 +34,6 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "TTItineraryListCell", bundle: nil), forCellReuseIdentifier: "cell")
-//        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getItirenaryData))
         
         if isFromView {
             btnAddItinry.isHidden = true
@@ -111,7 +107,6 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
             print(url)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-//                self.refreshControl.endRefreshing()
                 
                 self.populateList(response : response.result.value!)
             }))
@@ -198,6 +193,13 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         
     }
     
+    func onOkEditClick(itnryObj: TTItineraryListData, index: Int) {
+        
+        self.arrayList[index] = itnryObj
+        self.tableView.reloadData()
+    }
+    
+    
     func onDeleteClick(data: TTItineraryListData) {
         
         let alert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete Itinerary Item?", preferredStyle: .alert)
@@ -212,24 +214,20 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
                     self.arrayList.remove(at: index)
                 }
                 self.tableView.reloadData()
-                
             }
         }))
-        
         self.present(alert, animated: true, completion: nil)
-        
-        
     }
     
-    func onEditClick(data: TTItineraryListData) {
+    func onEditClick(data: TTItineraryListData, index : Int) {
         
         let addItrnyVC = self.storyboard?.instantiateViewController(withIdentifier: "TTAddNewItineraryVC") as! TTAddNewItineraryVC
         addItrnyVC.retDate = expryDate
         addItrnyVC.depDate = bookDate
         addItrnyVC.ttItnry = data
+        addItrnyVC.index = index
         addItrnyVC.okTTItnryAddDel = self
         self.navigationController?.pushViewController(addItrnyVC, animated: true)
-        
     }
     
     func onClick(optionMenu: UIViewController, sender: UIButton) {
@@ -240,7 +238,6 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             if let presentation = optionMenu.popoverPresentationController {
                 presentation.sourceView = cell.btnMenu
-                
             }
         }
         self.present(optionMenu, animated: true, completion: nil)

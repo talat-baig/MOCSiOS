@@ -98,7 +98,6 @@ class TRBaseViewController: ButtonBarPagerTabStripViewController, onTRFSubmit {
         iternryVC.isFromView = isFromView
         viewArray.append(iternryVC)
         
-        
         return viewArray
     }
     

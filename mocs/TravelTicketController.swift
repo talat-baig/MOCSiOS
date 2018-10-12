@@ -11,7 +11,9 @@ import Alamofire
 import SwiftyJSON
 
 
-class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
+class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, onTTSubmit {
+    
+    
     
     var arrayList: [TravelTicketData] = []
     
@@ -274,6 +276,11 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
     }
     
     
+    func onTTSubmitClick() {
+        
+        self.populateList()
+    }
+    
     
     func getTTDataAndNavigate(data : TravelTicketData, isFromView : Bool) {
         
@@ -398,7 +405,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                 ttBaseVC.itinryResponse = itinryResponse
                 ttBaseVC.voucherResponse = voucherResponse
                 ttBaseVC.isFromView = isFromView
-
+                ttBaseVC.ttSubmitDelgte = self
                 ttBaseVC.trvlTcktData = data
                 
                 

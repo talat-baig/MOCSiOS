@@ -13,7 +13,7 @@ protocol onTTItineraryOptionClickListener: NSObjectProtocol {
     
     func onCancelClick() -> Void
     func onDeleteClick(data : TTItineraryListData) -> Void
-    func onEditClick(data : TTItineraryListData) -> Void
+    func onEditClick(data: TTItineraryListData, index : Int) -> Void
     
 }
 
@@ -71,7 +71,7 @@ class TTItineraryListCell: UITableViewCell {
         
         let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.itnryItemMenuDelegate?.responds(to: Selector(("onEditClick"))) != nil){
-                self.itnryItemMenuDelegate?.onEditClick(data: self.data)
+                self.itnryItemMenuDelegate?.onEditClick(data: self.data, index: sender.tag)
             }
         })
         

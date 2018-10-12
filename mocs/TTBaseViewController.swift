@@ -11,10 +11,13 @@ import  XLPagerTabStrip
 
 import Alamofire
 import SwiftyJSON
+import NotificationBannerSwift
+
+protocol onTTSubmit {
+    func onTTSubmitClick()
+}
 
 class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDelegate, getDatesDelegate, UCTT_NotifyComplete {
-    
-    
     
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
@@ -37,7 +40,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     var trvlVoucher : [TTVoucher] = []
     
     var notifyChilds : notifyChilds_UC?
-    
+    var ttSubmitDelgte: onTTSubmit?
+
     weak var trvlTcktData : TravelTicketData!
     
     var companiesResponse : Data?
@@ -162,12 +166,11 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             ttInfo.ticktsDateDelegate = self
             self.notifyChilds = ttInfo
             viewArray.append(ttInfo)
-            
         }
+        
         let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
         ttItinry.isFromView = self.isFromView
         self.notifyChilds = ttItinry
-        //            ttItinry.ticktsDateDelegate = self
         ttItinry.itinryResponse = self.itinryResponse
         viewArray.append(ttItinry)
         
@@ -218,13 +221,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             
             self.view.showLoading()
             var url = String()
-            //            var newRecord = [String : Any]()
-            
-            //            if reqNo == ""  {
-            //                url = String.init(format: Constant.TRF.TRF_ADD, Session.authKey)
-            //            } else {
+           
             url = String.init(format: Constant.TT.TT_ADD_TRAVELTICKET, Session.authKey)
-            //            }
             
             Alamofire.request(url, method: .post, parameters: trvlTicket, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 
@@ -236,24 +234,25 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
                 if jsonResponse["ServerMsg"].stringValue == "Success" {
                     
                     var messg = String()
-                    //                        if self.reqNum != "" {
-                    //                            messg = "Request has been Updated Successfully"
-                    //                        } else {
-                    //                            messg = "Request has been Added Successfully"
-                    //                        }
                     
-                    let success = UIAlertController(title: "Success", message: "", preferredStyle: .alert)
+                    if self.trvlTcktData != nil {
+                        messg = "Ticket has been Updated Successfully"
+                    } else {
+                        messg = "Ticket has been Submitted Successfully"
+                    }
+                    
+                    let success = UIAlertController(title: "Success", message: messg, preferredStyle: .alert)
                     success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                         
-                        //                            if let d = self.okTRFSubmit {
-                        //                                d.onOkClick()
-                        //                            }
+                        if let d = self.ttSubmitDelgte {
+                            d.onTTSubmitClick()
+                        }
                         self.navigationController?.popViewController(animated: true)
                     }))
                     self.present(success, animated: true, completion: nil)
                 }  else {
                     
-                    //                        NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
+                    NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
                 }
             })
         } else {
@@ -436,15 +435,10 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         }
         
         
-        
-        
         let trvlTicktObj = TravelTicket(refId: trvlTcktData != nil ? "": trvlrRefId , trvlrId: trvlTcktData != nil ? trvlTcktData.trvlrId : 0 , compName: compny, compCode: compCode != nil ? compCode!: 0 , compLoc: compLoc != nil ? compLoc!: "" , guest: trvlTcktData != nil ? trvlTcktData.guest :  swtchGuest.isOn ? 0 : 1, trvlrName: trvlrName, trvlrDept: dept, trvlrRefNum: trvlTcktData != nil ? trvlTcktData.trvlrRefNum :  "", trvlPurpose: trvlPurpose, trvlType: trvlType, trvlMode: trvlMode, trvlClass: trvlClass, trvlDebitAc: debtAc, trvlCarrier: carrier, trvlTicktNum: ticktNum, trvlTIssue: bookDate, trvlTExpiry: expDate, trvlPNRNum: tPNRNo , trvlCost: amt, trvlCurrncy: currncy, trvlTicktStatus: trvlTcktStatus, trvlInvoiceNum: invNum, trvlAgent: agent, trvlAdvance: isAdvnce, trvlComments: commnts, trvlEPRNum: eprVal != "Select EPR No." ? eprVal : "" , trvlApprovedBy: apprvdByCode, trvlPostingStatus: "", trvlPostedBy: "", trvlPostindDate: "", trvlVoucherNum: "" , trvlCounter: trvlTcktData != nil ? trvlTcktData.trvlrCounter : "" , trvlItinry: trvlItinry, trvVoucher: trvlVoucher)
         
         
-        //        let trvTicktObj = TravelTicket(refId: <#T##String#>, trvlrId: <#T##String#>, compName: <#T##String#>, compCode: <#T##Int#>, compLoc: <#T##String#>, guest: <#T##Int#>, trvlrName: <#T##String#>, trvlrDept: <#T##String#>, trvlrRefNum: <#T##String#>, trvlPurpose: <#T##String#>, trvlType: <#T##String#>, trvlMode: <#T##String#>, trvlClass: <#T##String#>, trvlDebitAc: <#T##String#>, trvlCarrier: <#T##String#>, trvlTicktNum: <#T##String#>, trvlTIssue: <#T##String#>, trvlTExpiry: <#T##String#>, trvlPNRNum: <#T##String#>, trvlCost: <#T##String#>, trvlCurrncy: <#T##String#>, trvlTicktStatus: <#T##String#>, trvlInvoiceNum: <#T##String#>, trvlAgent: <#T##String#>, trvlAdvance: <#T##String#>, trvlComments: <#T##String#>, trvlEPRNum: <#T##String#>, trvlApprovedBy: <#T##String#>, trvlPostingStatus: <#T##String#>, trvlPostedBy: <#T##String#>, trvlPostindDate: <#T##String#>, trvlVoucherNum: <#T##String#>, trvlCounter: <#T##String#>, trvlItinry: <#T##[TTItinerary]#>, trvVoucher: <#T##[TTVoucher]#>)
-        
-        
-        
+       
         
         var newDict: [String: Any]?
         let jsonEncoder = JSONEncoder()
@@ -459,26 +453,28 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             
             newDict = Helper.convertToDictionary(text: jsonStr)
             //            print(newDict)
-            
         }
         catch {
         }
         
         
+        var messg = ""
+        var titleMsg = ""
         
+        if trvlTcktData != nil {
+            titleMsg = "Update Ticket Info?"
+            messg = "Are you sure you want to Update this Ticket?"
+        } else {
+            messg = "Are you sure you want to Submit this Ticket?"
+            titleMsg = "Submit Ticket Info?"
+        }
         
-        let alert = UIAlertController(title: "Submit Ticket Info?", message: "Are you sure you want to submit this Ticket?", preferredStyle: .alert)
+        let alert = UIAlertController(title: titleMsg , message: messg , preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
             self.submitTicketInfo(trvlTicket: newDict)
         }))
         self.present(alert, animated: true, completion: nil)
-        
-        
-        
-        //        let newStr =  {"TravellerACPostingStatus":"","TravellerPurpose":"Personal","TravellerVoucherNo":"","TravellerTravelAgent":"Adisa Travel","TravellerInvoiceNo":"122323","TravellerCounter":"","RefID":"","TravellerRemarks":"Test","TravellerDepartment":"P&S - Business Management","TravellerTicketStatus":"Valid","TravellerTicketCost":"500","TravellerAPRNo":"","TravellerCarrier":"Thai Airways","TravellerType":"Domestic","trvlMode":"Air","TravellerPostingDate":"","TravellerCompanyLocation":"Russia","TravellerName":"Abhay Kumar","TravellerAdvancePaidStatus":"false","TravellerTicketPNRNo":"122323","TravellerTicketIssue":"2018-10-11","TravellerClass":"Business Class","TravelItinery":[{"Addedbysysdt":"","TravelItineraryArrivalCity":"BKK","TravelItineraryDepartureCity":"BBI","Modifiedby":"","TravelTravellerReferenceNo":"","TravelItineraryStatus":"Unused","FlightNumber":"456HTY","DepartureTime":"12:41","TravelItineraryDate":"2018-10-11","ITATcode":"","TravelItineraryID":"","TravelItineraryRefundStatus":"Current Satus","Addedby":"","Modifiedsysdt":"","Cancelledby":"","Cancelledsysdt":"","Status":""}],"TravellerCompanyCode":57,"TravellerApprovedBy":"Keshaw Kumar","TravellerID":"","TravellerPostedBy":"","TravellerTicketExpire":"2018-10-14","Guest":"Employee","TravellerReferenceNo":"","TravellerTicketNo":"12233t","TravellerDebitACName":"","TravellerTicketCurrency":"AED","TravellerCompanyName":"Agrosindikat OOO"}
-        
-        
         
     }
     
