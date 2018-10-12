@@ -25,8 +25,6 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -69,6 +67,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
     func hideLoading(){
         self.view.hideLoading()
     }
+
     
     @objc func populateList() {
         
@@ -94,7 +93,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                             
                             let ttData = TravelTicketData()
 
-                            ttData.trvlrId = json["TravellerID"].stringValue
+                            ttData.trvlrId = json["TravellerID"].intValue
                             
                             ttData.tCompName = json["TravellerCompanyName"].stringValue
                             
@@ -216,10 +215,22 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                                 ttData.trvlAprNum  = json["TravellerAPRNo"].stringValue
                             }
                             
-                            if json["TravellerApprovedBy"].stringValue == "" {
+                            if json["APR"].stringValue == "" {
+                                ttData.trvlAprAmt = ""
+                            } else {
+                                ttData.trvlAprAmt  = json["APR"].stringValue
+                            }
+                            
+                            if json["Currency"].stringValue == "" {
+                                ttData.trvlAprCurr = ""
+                            } else {
+                                ttData.trvlAprCurr  = json["Currency"].stringValue
+                            }
+                            
+                            if json["Manager"].stringValue == "" {
                                 ttData.approvdBy = ""
                             } else {
-                                ttData.approvdBy  = json["TravellerApprovedBy"].stringValue
+                                ttData.approvdBy  = json["Manager"].stringValue
                             }
                          
                             if json["Addedby"].stringValue == "" {
@@ -246,8 +257,6 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                                 ttData.trvlAdvance = false
                             }
                             
-                            
-                            
                             data.append(ttData)
                         }
                         self.arrayList = data
@@ -266,7 +275,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
     
     
     
-    func getTTDataAndNavigate(data : TravelTicketData) {
+    func getTTDataAndNavigate(data : TravelTicketData, isFromView : Bool) {
         
         var companiesResponse : Data?
         var debitAcResponse : Data?
@@ -276,7 +285,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
         var trvlAgentResponse : Data?
         var repMngrResponse : Data?
         var itinryResponse : Data?
-
+        var voucherResponse : Data?
         
         if internetStatus != .notReachable {
             
@@ -364,6 +373,17 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
             }))
             
             
+            group.enter()
+            
+            let url9 = String.init(format: Constant.DROPBOX.LIST,Session.authKey, Helper.encodeURL(url: Constant.MODULES.TCR), Helper.encodeURL(url: data.trvlrRefNum))
+            
+            Alamofire.request(url9).responseData(completionHandler: ({ response in
+                group.leave()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    voucherResponse = response.result.value
+                }
+            }))
+            
             group.notify(queue: .main) {
                 self.view.hideLoading()
                 
@@ -376,6 +396,9 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
                 ttBaseVC.trvlAgentResponse = trvlAgentResponse
                 ttBaseVC.repMngrResponse = repMngrResponse
                 ttBaseVC.itinryResponse = itinryResponse
+                ttBaseVC.voucherResponse = voucherResponse
+                ttBaseVC.isFromView = isFromView
+
                 ttBaseVC.trvlTcktData = data
                 
                 
@@ -391,7 +414,57 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
         
         let myData = TravelTicketData()
         
-        getTTDataAndNavigate(data: myData )
+        getTTDataAndNavigate(data: myData, isFromView: false )
+    }
+    
+    
+    func sendEmail(data:TravelTicketData){
+        
+        showLoading()
+        if internetStatus != .notReachable {
+            let url = String.init(format: Constant.TT.TT_MAIL_TRAVELTICKET, Session.authKey,data.trvlrRefNum, data.trvlrId )
+            
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                self.view.hideLoading()
+                
+                let jsonResponse = JSON.init(parseJSON: response.result.value!)
+                
+                if jsonResponse["ServerMsg"].stringValue == "Success" {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Ticket has been Mailed Successfully", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        }else{
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    
+    func deleteTicket(data : TravelTicketData) {
+        
+        if internetStatus != .notReachable {
+            showLoading()
+            let url = String.init(format: Constant.TT.TT_DELETE_TRAVELTICKET, Session.authKey, data.trvlrId)
+            print(url)
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                
+                self.view.hideLoading()
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Request Successfully deleted", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {(AlertAction) ->  Void in
+                        self.populateList()
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+            
+        } else {
+            Helper.showNoInternetMessg()
+        }
+        
     }
     
 }
@@ -400,42 +473,52 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate {
 extension TravelTicketController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-//                if  searchText.isEmpty {
-//                    self.arrayList = newArray
-//                } else {
-//                    let filteredArray = newArray.filter {
-//                        $0.headRef.localizedCaseInsensitiveContains(searchText)
-//                    }
-//                    self.arrayList = filteredArray
-//                }
-//                tableView.reloadData()
+                if  searchText.isEmpty {
+                    self.arrayList = newArray
+                } else {
+                    let filteredArray = newArray.filter {
+                        $0.trvlrRefNum.localizedCaseInsensitiveContains(searchText)
+                    }
+                    self.arrayList = filteredArray
+                }
+                tableView.reloadData()
     }
 }
 
 extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , onMoreClickListener, onTTItemClickListener {
     
-    func onViewClick() {
+    func onViewClick(data : TravelTicketData) {
         
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TTBaseViewController") as! TTBaseViewController
-        vc.isFromView = true
-        self.navigationController!.pushViewController(vc, animated: true)
+        getTTDataAndNavigate(data : data , isFromView : true)
+
     }
     
     func onEditClick(data : TravelTicketData) {
         
-        getTTDataAndNavigate(data : data)
+        getTTDataAndNavigate(data : data , isFromView : false)
     }
     
     func onDeleteClick(data: TravelTicketData) {
-        
+     
+        let alert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete Travel Ticket? Once you delete this, there is no way to un-delete", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "NO GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
+            self.deleteTicket(data : data )
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
-    func onSubmitClick(data: TravelTicketData) {
-        
-    }
+    
     
     func onEmailClick(data: TravelTicketData) {
         
+        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
+        alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
+            self.sendEmail(data: data)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

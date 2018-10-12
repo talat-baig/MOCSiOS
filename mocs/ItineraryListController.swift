@@ -13,8 +13,6 @@ import Alamofire
 import DropDown
 
 class ItineraryListController: UIViewController, IndicatorInfoProvider, onItinryAddDelegate, onItineraryOptionClickListener, onMoreClickListener {
-
-
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "ITINERARY DETAILS")
@@ -66,9 +64,9 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider, onItinry
             self.view.showLoading()
             print(url)
             Alamofire.request(url).responseData(completionHandler: ({ response in
+                
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
-
                 self.populateList(response : response.result.value!)
             }))
         } else {
@@ -79,7 +77,6 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider, onItinry
     func populateList(response : Data) {
         
         var data: [ItineraryListData] = []
-        
         let pJson = JSON(response)
         let arr = pJson.arrayObject as! [[String:AnyObject]]
         
@@ -104,13 +101,11 @@ class ItineraryListController: UIViewController, IndicatorInfoProvider, onItinry
             self.arrayList = data
             self.tableView.reloadData()
         } else {
-            
             if isFromView {
                 Helper.showNoItemState(vc:self , messg: "No Itinerary Item found" , tb:tableView)
             } else {
                 debugPrint("No Itinerary Item found")
                 self.tableView.reloadData()
-
             }
         }
     }
@@ -232,10 +227,6 @@ extension ItineraryListController : UITableViewDelegate, UITableViewDataSource {
         
         return views
     }
-    
-    
-    
-    
     
 }
 

@@ -131,7 +131,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         let expDateStr = trvTcktData.expiryDate
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        dateFormatter.dateFormat = "dd-MMM-yyyy"
         let newDate1  = dateFormatter.date(from: issueDateStr)
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -139,13 +139,12 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         txtBookingDate.text = issueDate
         
         let dateFormatter2 = DateFormatter()
-        dateFormatter2.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        dateFormatter2.dateFormat = "dd-MMM-yyyy"
         let newDate2  = dateFormatter2.date(from: expDateStr)
         dateFormatter2.dateFormat = "yyyy-MM-dd"
         let expDate = dateFormatter2.string(from:newDate2!)
     
         txtExpiryDate.text = expDate
-
         
         guard let booking = txtBookingDate.text else {
             return
@@ -154,17 +153,10 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         guard let expiry = txtExpiryDate.text else {
             return
         }
-        
-//        if self.isTrvlStatusValid(expiry: expiry) {
-//            txtTrvlStatus.text = "Valid"
-//        } else {
-//            txtTrvlStatus.text = "Expired"
-//        }
-        
+
         if let d = self.ticktsDateDelegate {
             d.getDatesFromTicketInfo(bookDate: booking, expdate: expiry )
         }
-        
         
         txtTicktPnrNo.text = trvTcktData.ticktPNRNum
         txtTicktCost.text = trvTcktData.ticktCost
@@ -178,7 +170,6 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
 
         switchAdvance.isOn = trvTcktData.trvlAdvance
         checkSwitchState(mySwitchState: trvTcktData.trvlAdvance)
-
         
         if trvTcktData.trvlAprNum == "" {
              btnAdvances.setTitle("Select EPR No.", for: .normal)
@@ -188,7 +179,6 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
    
         isRepMngrSelected = true
         txtApprvdBy.text = trvTcktData.approvdBy
-        
     }
     
     
@@ -639,18 +629,7 @@ extension TravelTicketInformationVC: UITextFieldDelegate , UITextViewDelegate {
         case txtTicktPnrNo, txtTicktCost :
             let scrollPoint:CGPoint = CGPoint(x:0, y:  vwTicktNo.frame.origin.y + 20  )
             scrlVw!.setContentOffset(scrollPoint, animated: true)
-            
-//        case txtTrvlStatus :
-            
-//            if txtCarrier.text != "" && txtTicktNo.text != "" && txtBookingDate.text != "" && txtExpiryDate.text != "" && txtTicktCost.text != "" && txtCurrency.text != "" {
-//
-//                if isTrvlStatusValid() {
-//                    txtTrvlStatus.text = "Valid"
-//                } else {
-//
-//                }
-//                val = false
-//            }
+          
         default : break
         }
         return val

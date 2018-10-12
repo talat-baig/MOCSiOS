@@ -10,7 +10,7 @@ import UIKit
 
 class TTItineraryListData: NSObject {
 
-    var ItinID : String = ""
+    var ItinID : Int = 0
     var trvRefNum : String = ""
     var destCity : String = ""
     var arrvlCity : String = ""

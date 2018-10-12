@@ -578,7 +578,7 @@ class Helper: UIView {
         return newPath
     }
     
-    public static func getOCSFriendlyaPath(path:String) -> String{
+    public static func getOCSFriendlyaPath(path:String) -> String {
         if path.contains(Constant.DROPBOX.DROPBOX_BASE_PATH){
             return path.replacingOccurrences(of: Constant.DROPBOX.DROPBOX_BASE_PATH, with: "")
         }

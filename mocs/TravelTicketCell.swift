@@ -11,10 +11,9 @@ import UIKit
 
 protocol onTTItemClickListener: NSObjectProtocol {
     
-    func onViewClick() -> Void
+    func onViewClick(data : TravelTicketData) -> Void
     func onEditClick(data : TravelTicketData) -> Void
     func onDeleteClick(data:TravelTicketData) -> Void
-    func onSubmitClick(data:TravelTicketData) -> Void
     func onEmailClick(data:TravelTicketData) -> Void
 }
 
@@ -22,7 +21,6 @@ protocol onTTItemClickListener: NSObjectProtocol {
 class TravelTicketCell: UITableViewCell {
     
     @IBOutlet weak var lblRefNum: UILabel!
-    @IBOutlet weak var lblStatus: UILabel!
     @IBOutlet weak var btnMore: UIButton!
     @IBOutlet weak var outerVw: UIView!
     
@@ -35,6 +33,7 @@ class TravelTicketCell: UITableViewCell {
     @IBOutlet weak var lblMode: UILabel!
     @IBOutlet weak var lblTicktCost: UILabel!
     
+    @IBOutlet weak var lblStatus: UILabel!
     
     weak var ttReqClickListnr:onTTItemClickListener?
     weak var data:TravelTicketData!
@@ -72,6 +71,7 @@ class TravelTicketCell: UITableViewCell {
         lblPurpose.text = data.trvlrPurpose
         lblMode.text = data.trvlrMode
         lblTicktCost.text = data.ticktCost + " " + data.tCurrency
+        lblStatus.text = data.status
         self.data = data
 
     }
@@ -88,25 +88,20 @@ class TravelTicketCell: UITableViewCell {
         
         let deleteActon = UIAlertAction(title: "Delete", style: .default, handler: { (UIAlertAction)-> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onDeleteClick:"))) != nil){
-                //                self.ttReqClickListnr?.onDeleteClick(data: self.data)
+                  self.ttReqClickListnr?.onDeleteClick(data: self.data)
             }
         })
-        
-        let submitAction = UIAlertAction(title: "Submit", style: .default, handler: { (UIAlertAction) -> Void in
-            if (self.ttReqClickListnr?.responds(to: Selector(("onSubmitClick:"))) != nil){
-                //                self.ttReqClickListnr?.onSubmitClick(data: self.data)
-            }
-        })
+   
         
         let viewAction = UIAlertAction(title: "View", style: .default, handler: { (alert:UIAlertAction!)-> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onViewClick:"))) != nil){
-                self.ttReqClickListnr?.onViewClick()
+                self.ttReqClickListnr?.onViewClick(data: self.data)
             }
         })
         
         let emailAction = UIAlertAction(title: "Email", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.ttReqClickListnr?.responds(to: Selector(("onEmailClick:"))) != nil){
-                //                self.ttReqClickListnr?.onEmailClick(data: self.data)
+                self.ttReqClickListnr?.onEmailClick(data: self.data)
             }
         })
         
@@ -116,7 +111,7 @@ class TravelTicketCell: UITableViewCell {
         
         optionMenu.addAction(editAction)
         optionMenu.addAction(deleteActon)
-        optionMenu.addAction(submitAction)
+//        optionMenu.addAction(submitAction)
         optionMenu.addAction(viewAction)
         optionMenu.addAction(emailAction)
         optionMenu.addAction(cancelAction)

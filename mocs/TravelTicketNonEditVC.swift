@@ -18,6 +18,8 @@ class TravelTicketNonEditVC: UIViewController, IndicatorInfoProvider {
         return IndicatorInfo(title: "PRIMARY INFORMATION")
     }
     
+    weak var ttData : TravelTicketData!
+
     
     @IBOutlet weak var lblCompnyName: UILabel!
     
@@ -37,12 +39,25 @@ class TravelTicketNonEditVC: UIViewController, IndicatorInfoProvider {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        assginDateToFields()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-   
-
+    
+    func assginDateToFields() {
+        
+        lblCompnyName.text = ttData.tCompName
+        lblDept.text = ttData.trvlrDept
+        lblTrvlerName.text = ttData.trvlrName
+        lblPurpose.text = ttData.trvlrPurpose
+        lblTrvlType.text = ttData.trvlrType
+        lblTrvlClass.text = ttData.trvlrClass
+        lblTrvlMode.text = ttData.trvlrMode
+        lblDebtAcName.text = ttData.debitACName
+    }
+    
 }

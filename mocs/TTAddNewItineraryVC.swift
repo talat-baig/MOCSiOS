@@ -123,7 +123,16 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
         txtFlightNum.text = ttItnry?.flightNo
         txtDestCity.text = ttItnry?.destCity
         txtArrvCity.text = ttItnry?.arrvlCity
-        txtDate.text = ttItnry?.depDate
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MMM-yyyy"
+        let newDate1  = dateFormatter.date(from: (ttItnry?.depDate)!)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let issueDate = dateFormatter.string(from:newDate1!)
+        txtDate.text = issueDate
+        
+//        txtDate.text = ttItnry?.depDate
+        
         txtDepTime.text = ttItnry?.depTime
         txtITATCode.text = ttItnry?.itatCode
         txtTrvlStatus.text = ttItnry?.trvlStatus

@@ -46,7 +46,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     var docFileViewer: UIDocumentInteractionController!
     
-    var refreshControl: UIRefreshControl = UIRefreshControl()
+//    var refreshControl: UIRefreshControl = UIRefreshControl()
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -57,7 +57,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVouchersData))
+//        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVouchersData))
         
         let floaty = Floaty()
         
@@ -118,7 +118,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         } else {
             floaty.isHidden = false
             showEmptyState()
-            tableView.addSubview(refreshControl)
+//            tableView.addSubview(refreshControl)
         }
         self.uf_delegate = self
         
@@ -157,6 +157,8 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             for(_,j):(String,SwiftyJSON.JSON) in jsonResponse {
                 
                 let data = VoucherData()
+                
+                
                 data.documentID = j["DocumentID"].stringValue
                 data.moduleName = j["DocumentModuleName"].stringValue
                 data.companyName = j["DocumentCompanyName"].stringValue
@@ -199,10 +201,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     @objc func getVouchersData() {
         
-        let ttBase = self.parent as! TTBaseViewController
-        let loc = ttBase.compLoc
-        let code = ttBase.compCode
-
         
         guard let docRefId = self.trvTcktData?.trvlrRefNum else {
             return
@@ -222,7 +220,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-                self.refreshControl.endRefreshing()
+//                self.refreshControl.endRefreshing()
                 if Helper.isResponseValid(vc: self, response: response.result){
                     self.populateList(response: response.result.value)
                 }
@@ -232,9 +230,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         }
     }
 
-    
-    
-    
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         if controller.documentPickerMode == UIDocumentPickerMode.import {
@@ -307,19 +302,28 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         
     }
     
+    
+    
     func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
         
+        let ttBase = self.parent as! TTBaseViewController
+        let code = ttBase.compCode
+        let cName = ttBase.compName
+        let cLoc = ttBase.compLoc
+
         GlobalVariables.shared.isUploadingSomething = true
         
         guard let docRefId = self.trvTcktData?.trvlrRefNum else {
             return
         }
         
+        
+        let compStr =  String(format: "%@ (%d)", cName, code )
+        
 //         \Travel Ticket\Phoenix Global Trade Solutions Private Limited (51)\NA\NA\TT17-51-0449-0001\RoutineLog - PHOENIXGLOBAL - Spasare - NKshirsagar.txt
         
-//        let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "/" + Constant.MODULES.TT + "/" + Session.company + "/" + Session.location + "/"  + Session.user + "/" + docRefId + "/" + fileInfo.fName + "." + fileInfo.fExtension)
+        let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "/" + Constant.MODULES.TT + "/" + compStr + "/" + "NA" + "/" + "NA" + "/" + docRefId + "/" + fileInfo.fName + "." + fileInfo.fExtension)
         
-        let path = ""
         DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
         dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
             .response { response, error in
@@ -327,10 +331,35 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                 
                 DispatchQueue.main.async() {
                     if let response = response {
-                        self.addItemToServer(dModName: Constant.MODULES.EPRECR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
-                            
-                            comp(result, "")
-                        })
+                        
+                        guard let path = response.pathDisplay else {
+                            Helper.showMessage(message: "Unable to upload file.")
+                            return
+                        }
+                        let newPath = Helper.getOCSFriendlyaPath(path: path)
+
+                        
+                        let newVoucher = VoucherData()
+                        newVoucher.documentID = ""
+                        newVoucher.documentName = fileInfo.fName
+                        newVoucher.documentDesc = fileInfo.fDesc
+                        newVoucher.documentPath = newPath
+                        newVoucher.companyName = cName
+                        newVoucher.location = ""
+                        newVoucher.businessUnit = ""
+                        newVoucher.documentCategory = ""
+                        newVoucher.documentType = ""
+                        newVoucher.moduleName = Constant.MODULES.TT
+                        
+                        self.arrayList.append(newVoucher)
+                        
+                      
+
+                        //                        self.addItemToServer(dModName: Constant.MODULES.EPRECR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
+//
+//                            comp(result, "")
+//                        })
+                         comp(true, "")
                     } else if error != nil {
                         comp(false, (error?.description)!)
                     }
@@ -409,12 +438,10 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                 }
                 
                 GlobalVariables.shared.uploadQueue.removeAll()
-                self.getVouchersData()
+                self.tableView.reloadData()
+//                self.getVouchersData()
             }
-            
-            
         })
-        
     }
     
     func permissionPrimeCameraAccess() {
@@ -552,9 +579,8 @@ extension TTVoucherListVC: UIImagePickerControllerDelegate, UINavigationControll
         self.imagePicker.dismiss(animated: true, completion: { () -> Void in
             self.view.showLoading()
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                //                let imgData = UIImagePNGRepresentation(image)
-                let compressData = UIImageJPEGRepresentation(image, 0.5) //max value is 1.0 and minimum is 0.0
-                //                let compressedImage = UIImage(data: compressData!)
+
+                let compressData = UIImageJPEGRepresentation(image, 0.5) //max value is 1.0 and
                 
                 let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
                 myView.frame = (self.navigationController?.view.frame)!

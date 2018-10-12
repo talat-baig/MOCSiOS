@@ -91,6 +91,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         
         if isFromView {
             vwTopHeader.btnRight.isHidden = true
+            vwTopHeader.lblSubTitle.text = trvlTcktData.trvlrRefNum
+
         } else {
             vwTopHeader.btnRight.setTitleColor(UIColor.white, for: .normal)
             vwTopHeader.btnRight.isHidden = false
@@ -133,9 +135,11 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         if isFromView {
             
             let ttPrimNonEdit = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketNonEditVC") as! TravelTicketNonEditVC
+            ttPrimNonEdit.ttData = self.trvlTcktData
             viewArray.append(ttPrimNonEdit)
             
             let ttcktNonEdit = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketNonEditInfoVC") as! TravelTicketNonEditInfoVC
+            ttcktNonEdit.ttData = self.trvlTcktData
             self.notifyChilds = ttcktNonEdit
             viewArray.append(ttcktNonEdit)
             
@@ -159,21 +163,22 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             self.notifyChilds = ttInfo
             viewArray.append(ttInfo)
             
-            let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
-            ttItinry.isFromView = self.isFromView
-            self.notifyChilds = ttItinry
-            //            ttItinry.ticktsDateDelegate = self
-            ttItinry.itinryResponse = self.itinryResponse
-            viewArray.append(ttItinry)
-            
-            let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
-            ttVoucher.trvTcktData = self.trvlTcktData
-            ttVoucher.isFromView = isFromView
-            ttVoucher.vouchResponse = self.voucherResponse
-            ttVoucher.moduleName = Constant.MODULES.TT
-            ttVoucher.ucTTNotifyDelegte = self
-            viewArray.append(ttVoucher)
         }
+        let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
+        ttItinry.isFromView = self.isFromView
+        self.notifyChilds = ttItinry
+        //            ttItinry.ticktsDateDelegate = self
+        ttItinry.itinryResponse = self.itinryResponse
+        viewArray.append(ttItinry)
+        
+        let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
+        ttVoucher.trvTcktData = self.trvlTcktData
+        ttVoucher.isFromView = isFromView
+        ttVoucher.vouchResponse = self.voucherResponse
+        ttVoucher.moduleName = Constant.MODULES.TT
+        ttVoucher.ucTTNotifyDelegte = self
+        viewArray.append(ttVoucher)
+        
         return viewArray
     }
     
@@ -433,7 +438,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         
         
         
-        let trvlTicktObj = TravelTicket(refId: trvlTcktData != nil ? "": trvlrRefId , trvlrId: trvlTcktData != nil ? trvlTcktData.trvlrId : "", compName: compny, compCode: compCode != nil ? compCode!: 0 , compLoc: compLoc != nil ? compLoc!: "" , guest: trvlTcktData != nil ? trvlTcktData.guest :  swtchGuest.isOn ? 0 : 1, trvlrName: trvlrName, trvlrDept: dept, trvlrRefNum: trvlTcktData != nil ? trvlTcktData.trvlrRefNum :  "", trvlPurpose: trvlPurpose, trvlType: trvlType, trvlMode: trvlMode, trvlClass: trvlClass, trvlDebitAc: debtAc, trvlCarrier: carrier, trvlTicktNum: ticktNum, trvlTIssue: bookDate, trvlTExpiry: expDate, trvlPNRNum: tPNRNo , trvlCost: amt, trvlCurrncy: currncy, trvlTicktStatus: trvlTcktStatus, trvlInvoiceNum: invNum, trvlAgent: agent, trvlAdvance: isAdvnce, trvlComments: commnts, trvlEPRNum: eprVal != "Select EPR No." ? eprVal : "" , trvlApprovedBy: apprvdByCode, trvlPostingStatus: "", trvlPostedBy: "", trvlPostindDate: "", trvlVoucherNum: "" , trvlCounter: trvlTcktData != nil ? trvlTcktData.trvlrCounter : "" , trvlItinry: trvlItinry, trvVoucher: trvlVoucher)
+        let trvlTicktObj = TravelTicket(refId: trvlTcktData != nil ? "": trvlrRefId , trvlrId: trvlTcktData != nil ? trvlTcktData.trvlrId : 0 , compName: compny, compCode: compCode != nil ? compCode!: 0 , compLoc: compLoc != nil ? compLoc!: "" , guest: trvlTcktData != nil ? trvlTcktData.guest :  swtchGuest.isOn ? 0 : 1, trvlrName: trvlrName, trvlrDept: dept, trvlrRefNum: trvlTcktData != nil ? trvlTcktData.trvlrRefNum :  "", trvlPurpose: trvlPurpose, trvlType: trvlType, trvlMode: trvlMode, trvlClass: trvlClass, trvlDebitAc: debtAc, trvlCarrier: carrier, trvlTicktNum: ticktNum, trvlTIssue: bookDate, trvlTExpiry: expDate, trvlPNRNum: tPNRNo , trvlCost: amt, trvlCurrncy: currncy, trvlTicktStatus: trvlTcktStatus, trvlInvoiceNum: invNum, trvlAgent: agent, trvlAdvance: isAdvnce, trvlComments: commnts, trvlEPRNum: eprVal != "Select EPR No." ? eprVal : "" , trvlApprovedBy: apprvdByCode, trvlPostingStatus: "", trvlPostedBy: "", trvlPostindDate: "", trvlVoucherNum: "" , trvlCounter: trvlTcktData != nil ? trvlTcktData.trvlrCounter : "" , trvlItinry: trvlItinry, trvVoucher: trvlVoucher)
         
         
         //        let trvTicktObj = TravelTicket(refId: <#T##String#>, trvlrId: <#T##String#>, compName: <#T##String#>, compCode: <#T##Int#>, compLoc: <#T##String#>, guest: <#T##Int#>, trvlrName: <#T##String#>, trvlrDept: <#T##String#>, trvlrRefNum: <#T##String#>, trvlPurpose: <#T##String#>, trvlType: <#T##String#>, trvlMode: <#T##String#>, trvlClass: <#T##String#>, trvlDebitAc: <#T##String#>, trvlCarrier: <#T##String#>, trvlTicktNum: <#T##String#>, trvlTIssue: <#T##String#>, trvlTExpiry: <#T##String#>, trvlPNRNum: <#T##String#>, trvlCost: <#T##String#>, trvlCurrncy: <#T##String#>, trvlTicktStatus: <#T##String#>, trvlInvoiceNum: <#T##String#>, trvlAgent: <#T##String#>, trvlAdvance: <#T##String#>, trvlComments: <#T##String#>, trvlEPRNum: <#T##String#>, trvlApprovedBy: <#T##String#>, trvlPostingStatus: <#T##String#>, trvlPostedBy: <#T##String#>, trvlPostindDate: <#T##String#>, trvlVoucherNum: <#T##String#>, trvlCounter: <#T##String#>, trvlItinry: <#T##[TTItinerary]#>, trvVoucher: <#T##[TTVoucher]#>)

@@ -533,12 +533,7 @@ struct Constant
 
         static let TT_DELETE_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/DeleteTravelTicket?deltraapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&deltraauth=%@&travellerID=%@"
 
-        
-        
-        
-//        AddTravelTicket(string addapi, string addauth, TravelTicket travel)
-        
-        
+        static let TT_MAIL_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/MailTravelTicket?mailapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authmail=%@&refID=%@&travellerid=%d"
 
     }
     

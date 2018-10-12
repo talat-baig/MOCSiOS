@@ -28,7 +28,7 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
     
     var itinryResponse : Data?
     var isFromView : Bool = false
-    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+//    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     @IBOutlet weak var btnAddItinry: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -37,14 +37,14 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         super.viewDidLoad()
         
         tableView.register(UINib(nibName: "TTItineraryListCell", bundle: nil), forCellReuseIdentifier: "cell")
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getItirenaryData))
+//        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getItirenaryData))
         
         if isFromView {
             btnAddItinry.isHidden = true
             
         } else {
             btnAddItinry.isHidden = false
-            tableView.addSubview(refreshControl)
+//            tableView.addSubview(refreshControl)
         }
         
         guard let respValue = itinryResponse else {
@@ -95,8 +95,9 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         
         if internetStatus != .notReachable {
             
-            
             var url = String()
+            
+            
             
             if ttData?.trvlrRefNum != nil {
                 url = String.init(format: Constant.TT.TT_GET_ITINRY_LIST, Session.authKey,
@@ -110,7 +111,7 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
             print(url)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-                self.refreshControl.endRefreshing()
+//                self.refreshControl.endRefreshing()
                 
                 self.populateList(response : response.result.value!)
             }))
@@ -167,9 +168,9 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
             for(_,k):(String,JSON) in pJson {
                 let itinryData = TTItineraryListData()
                 
-                itinryData.ItinID = k["TravelItineraryID"].stringValue
+                itinryData.ItinID = k["TravelItineraryID"].intValue
                 itinryData.arrvlCity = k["TravelItineraryArrivalCity"].stringValue
-                itinryData.depTime = k[""].stringValue
+                itinryData.depTime = k["DepartureTime"].stringValue
                 itinryData.depDate = k["TravelItineraryDate"].stringValue
                 itinryData.destCity = k["TravelItineraryDepartureCity"].stringValue
                 itinryData.flightNo = k["DepartureDate"].stringValue
@@ -203,7 +204,7 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         
         alert.addAction(UIAlertAction(title: "NO GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
-            if data.ItinID != "" {
+            if data.ItinID != 0 {
                 self.deleteItnry(data: data)
             } else {
                 

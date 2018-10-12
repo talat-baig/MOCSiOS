@@ -10,8 +10,10 @@ import UIKit
 
 class TravelTicketData: NSObject {
 
-    var trvlrId : String = ""
+    var trvlrId : Int = 0
     
+    var loginId : String = ""
+
     var tCompName : String = ""
 
     var tCompCode : String = ""
@@ -62,6 +64,10 @@ class TravelTicketData: NSObject {
     
     var trvlAprNum : String = ""
     
+    var trvlAprAmt : String = ""
+    
+    var trvlAprCurr : String = ""
+
     var approvdBy : String = ""
     
     var acPostingStatus : String = ""

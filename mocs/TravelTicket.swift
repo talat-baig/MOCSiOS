@@ -13,7 +13,7 @@ import Foundation
 struct TravelTicket: Codable {
     
     var refId : String = ""
-    var trvlrId : String = ""
+    var trvlrId : Int = 0  //Change to Int for Update
     var compName : String = ""
     var compCode : Int = 0
     var compLoc : String = ""
@@ -95,7 +95,7 @@ struct TravelTicket: Codable {
 
 struct TTItinerary : Codable {
     
-    var itinryId : String = ""
+    var itinryId : Int = 0  // Change to Int for Update
     var trvlRefNum : String = ""
     var depCity : String = ""
     var arrvlCity : String = ""
