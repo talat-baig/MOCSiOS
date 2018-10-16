@@ -19,6 +19,7 @@ protocol onTTSubmit {
 
 class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDelegate, getDatesDelegate, UCTT_NotifyComplete {
     
+    
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -58,7 +59,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     var trvticktAddEditVC : TravelTicketAddEditVC?
     var ttInfo : TravelTicketInformationVC?
     var ttItinryListVC : TTItineraryListVC?
-    
+    var ttVouchrListVC : TTVoucherListVC?
     
     override func viewDidLoad() {
         
@@ -132,6 +133,17 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         self.ttItinryListVC = vc
     }
     
+    func saveVocuherListRef(vc: TTVoucherListVC){
+        self.ttVouchrListVC = vc
+    }
+    
+    
+    
+    
+    func getCompDetailsFromChild(compCode: Int, loc: String, compName: String) {
+        
+    }
+    
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var viewArray:[UIViewController] = []
@@ -196,11 +208,11 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         super.didReceiveMemoryWarning()
     }
     
-    func getCompDetailsFromChild(compCode: Int, loc: String, compName: String) {
-        self.compCode = compCode
-        self.compLoc = loc
-        self.compName = compName
-    }
+//    func getCompDetailsFromChild(compCode: Int, loc: String, compName: String) {
+//        self.compCode = compCode
+//        self.compLoc = loc
+//        self.compName = compName
+//    }
     
     
     func getRepMngrFromChild(repMgr: String, empId: String) {
@@ -210,7 +222,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     
     
     func getDatesFromTicketInfo(bookDate: String, expdate: String) {
-        
         self.bookDateStr = bookDate
         self.expiryDateStr = expdate
     }
@@ -268,9 +279,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             return
         }
         
-        let compCode = self.trvticktAddEditVC?.arrCompData.filter{ $0.compName == compny }.first?.compCode
-        
-        let compLoc = self.trvticktAddEditVC?.arrCompData.filter{ $0.compName == compny }.first?.compCity
+        let compCode = self.getCompanyCode(item: compny)
+        let compLoc = self.getCompanyLoc(item: compny)
         
         guard let swtchGuest = self.trvticktAddEditVC?.swtchGuest else {
             return
@@ -307,7 +317,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             Helper.showMessage(message: "Please enter Travel Class")
             return
         }
-        
         
         guard let debtAc = self.trvticktAddEditVC?.txtDebitAcName.text else {
             return
@@ -384,6 +393,12 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             return
         }
         
+        let addDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let newDate = formatter.string(from: addDate)
+       
+        
         let apprvdByCode =  self.getRepMngrCode(item: apprvdBy)
         
         var isAdvnce = "false"
@@ -422,23 +437,65 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
                 newItem.depCity = item.destCity
                 newItem.arrvlCity = item.arrvlCity
                 newItem.depTime = item.depTime
-                newItem.itinryDate = item.depDate
+                let itinDate = item.depDate
+                
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd-MMM-yyyy"
+                let newDate1  = dateFormatter.date(from: itinDate)
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let newDepDate = dateFormatter.string(from:newDate1!)
+                newItem.itinryDate = newDepDate
+                
                 newItem.flightNum = item.flightNo
                 newItem.itatCode = item.itatCode
                 newItem.tItinryStatus = item.trvlStatus
                 newItem.itinryRefundStatus = "Current Satus"
-                
+                newItem.itinryAddedBy = newDate
+                newItem.itinryModifDate = newDate
+                newItem.itinryCanceldDate = newDate
                 newItrnyArry.append(newItem)
             }
-            
             self.trvlItinry = newItrnyArry
         }
         
+        guard let ttVoucherArry = self.ttVouchrListVC?.arrayList else {
+            return
+        }
         
-        let trvlTicktObj = TravelTicket(refId: trvlTcktData != nil ? "": trvlrRefId , trvlrId: trvlTcktData != nil ? trvlTcktData.trvlrId : 0 , compName: compny, compCode: compCode != nil ? compCode!: 0 , compLoc: compLoc != nil ? compLoc!: "" , guest: trvlTcktData != nil ? trvlTcktData.guest :  swtchGuest.isOn ? 0 : 1, trvlrName: trvlrName, trvlrDept: dept, trvlrRefNum: trvlTcktData != nil ? trvlTcktData.trvlrRefNum :  "", trvlPurpose: trvlPurpose, trvlType: trvlType, trvlMode: trvlMode, trvlClass: trvlClass, trvlDebitAc: debtAc, trvlCarrier: carrier, trvlTicktNum: ticktNum, trvlTIssue: bookDate, trvlTExpiry: expDate, trvlPNRNum: tPNRNo , trvlCost: amt, trvlCurrncy: currncy, trvlTicktStatus: trvlTcktStatus, trvlInvoiceNum: invNum, trvlAgent: agent, trvlAdvance: isAdvnce, trvlComments: commnts, trvlEPRNum: eprVal != "Select EPR No." ? eprVal : "" , trvlApprovedBy: apprvdByCode, trvlPostingStatus: "", trvlPostedBy: "", trvlPostindDate: "", trvlVoucherNum: "" , trvlCounter: trvlTcktData != nil ? trvlTcktData.trvlrCounter : "" , trvlItinry: trvlItinry, trvVoucher: trvlVoucher)
+        if ttVoucherArry.count > 0 {
+            
+            var newVouchrArry : [TTVoucher] = []
+            
+            for item in ttVoucherArry {
+                
+                var newItem = TTVoucher()
+                
+//                newItem.docId = item.documentID
+                newItem.docName = item.documentName
+                newItem.docDesc = item.documentDesc
+                newItem.docBU = item.businessUnit
+                newItem.docLoc = item.location
+                newItem.docPath = item.documentPath
+                newItem.docType = item.documentType
+                newItem.docCategry = item.documentCategory
+                newItem.docModName = item.moduleName
+                newItem.addedDate = item.addDate
+                
+                let addDate = Date()
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+                let newDate = formatter.string(from: addDate)
+                
+                newItem.cancelldDate = newDate
+                newVouchrArry.append(newItem)
+            }
+            self.trvlVoucher = newVouchrArry
+        }
         
         
-       
+        let trvlTicktObj = TravelTicket(refId: trvlTcktData != nil ? "": trvlrRefId , trvlrId: trvlTcktData != nil ? trvlTcktData.trvlrId : 0 , compName: compny, compCode: String(format : "%d", compCode) , compLoc: compLoc , guest: trvlTcktData != nil ? trvlTcktData.guest :  swtchGuest.isOn ? 1 : 0, trvlrName: trvlrName, trvlrDept: dept, trvlrRefNum: trvlTcktData != nil ? trvlTcktData.trvlrRefNum :  "", trvlPurpose: trvlPurpose, trvlType: trvlType, trvlMode: trvlMode, trvlClass: trvlClass, trvlDebitAc: debtAc, trvlCarrier: carrier, trvlTicktNum: ticktNum, trvlTIssue: bookDate, trvlTExpiry: expDate, trvlPNRNum: tPNRNo , trvlCost: amt, trvlCurrncy: currncy, trvlTicktStatus: trvlTcktStatus, trvlInvoiceNum: invNum, trvlAgent: agent, trvlAdvance: isAdvnce, trvlComments: commnts, trvlEPRNum: eprVal != "Select EPR No." ? eprVal : "" , trvlApprovedBy: apprvdByCode, trvlPostingStatus: "", trvlPostedBy: "", trvlPostindDate: newDate, trvlVoucherNum: "" , trvlCounter: trvlTcktData != nil ? trvlTcktData.trvlrCounter : "" , trvlItinry: trvlItinry, trvVoucher: trvlVoucher)
+        
         
         var newDict: [String: Any]?
         let jsonEncoder = JSONEncoder()
@@ -449,14 +506,13 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             guard let jsonStr = jsonString else {
                 return
             }
-            print("JSON String : " + jsonStr)
             
+            print("JSON String : " + jsonStr)
             newDict = Helper.convertToDictionary(text: jsonStr)
             //            print(newDict)
         }
         catch {
         }
-        
         
         var messg = ""
         var titleMsg = ""
@@ -475,7 +531,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             self.submitTicketInfo(trvlTicket: newDict)
         }))
         self.present(alert, animated: true, completion: nil)
-        
     }
     
     
@@ -494,6 +549,27 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         }
         return repMngCode
     }
+    
+    
+    func getCompanyCode(item : String) -> Int {
+        
+        let compnyObject = self.trvticktAddEditVC?.arrCompData.filter{ $0.compName == item }.first
+        guard let compCode = compnyObject?.compCode else {
+            return 0
+        }
+        return compCode
+    }
+    
+    
+    func getCompanyLoc(item : String) -> String {
+        
+        let compnyObject = self.trvticktAddEditVC?.arrCompData.filter{ $0.compName == item }.first
+        guard let compCity = compnyObject?.compCity else {
+            return ""
+        }
+        return compCity
+    }
+    
 }
 
 

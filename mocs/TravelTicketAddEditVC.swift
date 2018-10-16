@@ -113,9 +113,16 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         ttBase.saveTTAddEditReference(vc: self)
         txtDept.isUserInteractionEnabled = false
         
+//        let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
+////        ttInfo.loadViewIfNeeded()
+//        ttBase.saveTTInfoReference(vc: ttInfo)
+////        ttInfo.loadViewIfNeeded()
+        
+        
         self.arrTravlType = parseAndAssignTravelModeData()
         
         parseAndAssignDebitAc()
+        parseAndAssignCompaniesData()
         
         if ttData != nil {
             /// Edit
@@ -132,7 +139,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             swtchPurpose.isOn = false
             checkPurposeSwitch()
             
-            parseAndAssignCompaniesData()
+//            parseAndAssignCompaniesData()
             
             swtchGuest.isEnabled = true
             swtchTrvlType.isEnabled = false
@@ -141,6 +148,9 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             txtFldTrvlName.isEnabled = true
             txtTravelMode.isEnabled = true
             swtchTrvlType.isEnabled = true
+            
+            txtCompny.text = self.arrCompData[0].compName
+            self.checkCompanyCodeAndGetTravellerData(compCode: self.arrCompData[0].compCode)
         }
     }
     
@@ -167,7 +177,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         
         lblPurpse.text = ttData.trvlrPurpose
         
-        if ttData.guest == 0 {
+        if ttData.guest == 1 {
             swtchGuest.isOn = true
         } else {
             swtchGuest.isOn = false
@@ -277,8 +287,8 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         
         self.arrCompData = arrCompData
 
-        txtCompny.text = self.arrCompData[0].compName
-        self.checkCompanyCodeAndGetTravellerData(compCode: self.arrCompData[0].compCode)
+//        txtCompny.text = self.arrCompData[0].compName
+//        self.checkCompanyCodeAndGetTravellerData(compCode: self.arrCompData[0].compCode)
         
     }
     
@@ -529,7 +539,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     
     func getCompanyLoc(item : String) -> String {
         
-        let compnyObject = self.arrCompData.filter{ $0.compName == item }.first
+        let compnyObject = self.arrCompData.filter{ $0.compCity == item }.first
         guard let compCity = compnyObject?.compCity else {
             return ""
         }

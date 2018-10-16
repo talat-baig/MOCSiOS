@@ -215,6 +215,14 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
             return
         }
         
+        
+        if ttItnry != nil {
+            newItinry.ItinID = (ttItnry?.ItinID)!
+        } else {
+            newItinry.ItinID = 0
+        }
+        
+        
         newItinry.flightNo = txtFlightNum.text!
         newItinry.destCity = depCity
         newItinry.arrvlCity = arrCity

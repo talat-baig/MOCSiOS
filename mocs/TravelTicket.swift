@@ -15,7 +15,7 @@ struct TravelTicket: Codable {
     var refId : String = ""
     var trvlrId : Int = 0  //Change to Int for Update
     var compName : String = ""
-    var compCode : Int = 0
+    var compCode : String = ""
     var compLoc : String = ""
     var guest : Int = 0
     var trvlrName : String = ""
@@ -42,7 +42,7 @@ struct TravelTicket: Codable {
     var trvlApprovedBy : String = "" // EmpID
     var trvlPostingStatus : String = ""
     var trvlPostedBy : String = ""
-    var trvlPostindDate : String = "2018-10-12"
+    var trvlPostindDate : String = ""
     var trvlVoucherNum : String = ""
     var trvlCounter : String = ""
     var trvlItinry : [TTItinerary] = []
@@ -103,11 +103,11 @@ struct TTItinerary : Codable {
     var tItinryStatus : String = ""
     var itinryRefundStatus : String = ""
     var itinryAddedBy : String = ""
-    var itinryAddedDate : String = "2018-10-12"
+    var itinryAddedDate : String = ""
     var itinryModifBy : String = ""
-    var itinryModifDate : String = "2018-10-12"
+    var itinryModifDate : String = ""
     var itinryCanceldBy : String = ""
-    var itinryCanceldDate : String = "2018-10-12"
+    var itinryCanceldDate : String = ""
     var status : String = ""
     var flightNum : String = ""
     var itatCode : String = ""
@@ -140,7 +140,7 @@ struct TTItinerary : Codable {
 
 struct TTVoucher : Codable {
     
-    var docId : String = ""
+//    var docId : String = ""
     var docModName : String = ""
     var docCompName : String = ""
     var docLoc : String = ""
@@ -160,7 +160,7 @@ struct TTVoucher : Codable {
     
     enum CodingKeys : String, CodingKey {
         
-        case docId = "DocumentID"
+//        case docId = "DocumentID"
         case docModName = "DocumentModuleName"
         case docCompName = "DocumentCompanyName"
         case docLoc = "DocumentLocation"

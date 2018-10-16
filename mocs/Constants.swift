@@ -193,7 +193,10 @@ struct Constant
          - 1: AuthID
          - 2: Filter
          */
-        static let OVERALL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSAROverall?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+//        static let OVERALL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSAROverall?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        
+        static let OVERALL = "http://172.16.12.12/OCSWebApi/api/AR/GetARReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+
         
         /**
          *ARI Chart*
@@ -216,6 +219,11 @@ struct Constant
         static let INSTRUMENTS = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBUCI?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@&Company=%@&Location=%@&BV=%@&Counterparty=%@"
         
         static let SEND_EMAIL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCPEmails?apiKey="+ApiKey.KEY+"&AuthId=%@&InvoiceNos=%@&EmailIds=%@"
+        
+//
+//        GetARReport(string apikeylist, string authid, string filter)
+//
+////        http://172.16.12.12/OCSWebApi/api/AR/GetARReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=96657BD8-0A8A-4188-BA76-4C9BBCB9&filter=25+Dubai+06
         
     }
     
@@ -400,103 +408,6 @@ struct Constant
         
     }
     
-    /*
-    http://172.16.12.12/OCSWebApi/api/TravelTickets/GetTravelTicketListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid
-    
-    use get method
-    
-    LoadCompanyList(string apicomlist, string comlistauth, string refid
-    
-    LoadCurrencyList(string apicurlist, string curlistauth
-    
-    LoadTravelAgent(string apiagentlist, string agentlistauth
-    
-    LoadCarrier(string apicarrierlist, string carrierlistauth
-    
-    LoadReportingManager(string apimanagerlist, string managerlistauth
-    
-    LoadDebitName(string apidebitlist, string debitlistauth
-    
-    LoadTravellerDetails(string apitravellist, string travellistauth
-    
-    LoadCity(string apicitylist, string citylistauth
-    
-    LoadEPR(string apiEPRlist, string EPRlistauth, string empid
-    
-    for all abofe use get method
-    
-    DeleteTravelTicket(string deltraapi, string deltraauth, int travellerID
-    
-    DeleteTravelItinery(string itiapi, string authiti, int ID
-    
-    and for post
-     
-     RefID
-     TravellerID
-     TravellerCompanyName
-     TravellerCompanyCode
-     TravellerCompanyLocation
-     Guest
-     TravellerName
-     TravellerDepartment
-     TravellerReferenceNo
-     TravellerPurpose
-     TravellerType
-     TravellerMode
-     TravellerClass
-     TravellerDebitACName
-     TravellerCarrier
-     TravellerTicketNo
-     TravellerTicketIssue
-     TravellerTicketExpire
-     TravellerTicketPNRNo
-     TravellerTicketCost
-     TravellerTicketCurrency
-     TravellerTicketStatus
-     TravellerTravelAgent
-     TravellerInvoiceNo
-     TravellerAdvancePaidStatus
-     TravellerRemarks
-     TravellerAPRNo
-     TravellerApprovedBy
-     TravellerACPostingStatus
-     TravellerPostedBy
-     TravellerPostingDate
-     TravellerVoucherNo
-     TravellerCounter
-     Addedby
-     Addedbysysdt
-     Modifiedby
-     Modifiedsysdt
-     Cancelledby
-     Cancelledsysdt
-     Status
-     
-     
-     parameters for itinery ->
-     
-    // TravelItineraryStatus    TravelItineraryRefundStatus
-    // Unused    Current Satus
-     
-     
-     TravelItineraryID - 0 (add)
-     TravelTravellerReferenceNo
-     TravelItineraryDepartureCity
-     TravelItineraryArrivalCity
-     TravelItineraryDate
-     TravelItineraryStatus
-     TravelItineraryRefundStatus
-     Addedby
-     Addedbysysdt
-     Modifiedby
-     Modifiedsysdt
-     Cancelledby
-     Cancelledsysdt
-     Status  - 0
-     FlightNumber
-     ITATcode
-     DepartureTime
-    */
     struct TT {
         
         static let TT_GET_LIST = ApiUrl.URL + "/TravelTickets/GetTravelTicketListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
@@ -535,8 +446,9 @@ struct Constant
 
         static let TT_MAIL_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/MailTravelTicket?mailapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authmail=%@&refID=%@&travellerid=%d"
 
+        static let TT_VOUCHER = ApiUrl.URL + "/TravelTickets/DeleteTravelItineryVoucher?voapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authvo=%@&docID=%@"
+
     }
-    
     
     
     struct EPR {

@@ -67,7 +67,7 @@ class ARReportController: UIViewController , filterViewDelegate{
     
     
     @objc func fetchAllARData() {
-//        print(FilterViewController.getFilterString())
+
         if internetStatus != .notReachable {
             var isRespOverallValid = true
             var isRespARListValid = true

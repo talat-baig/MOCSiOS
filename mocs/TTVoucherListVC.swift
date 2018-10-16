@@ -23,7 +23,7 @@ protocol UCTT_NotifyComplete {
 
 
 class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPickerDelegate {
-
+    
     var arrayList:[VoucherData] = []
     
     var moduleName = String()
@@ -46,7 +46,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     var docFileViewer: UIDocumentInteractionController!
     
-//    var refreshControl: UIRefreshControl = UIRefreshControl()
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -56,8 +55,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVouchersData))
         
         let floaty = Floaty()
         
@@ -72,7 +69,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             self.imagePicker.delegate = self
             self.imagePicker.allowsEditing = true
             self.imagePicker.modalTransitionStyle = .crossDissolve
-            
             
             if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                 let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
@@ -118,17 +114,23 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         } else {
             floaty.isHidden = false
             showEmptyState()
-//            tableView.addSubview(refreshControl)
         }
+        
         self.uf_delegate = self
-        
-        
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
-        
         tableView.register(UINib.init(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        let ttBaseVC = self.parent as? TTBaseViewController
+        ttBaseVC?.saveVocuherListRef(vc: self)
+        
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -151,13 +153,11 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         let array = jsonResponse.arrayObject as! [[String:AnyObject]]
         
         if array.count > 0 {
-            
             self.arrayList.removeAll()
             
             for(_,j):(String,SwiftyJSON.JSON) in jsonResponse {
                 
                 let data = VoucherData()
-                
                 
                 data.documentID = j["DocumentID"].stringValue
                 data.moduleName = j["DocumentModuleName"].stringValue
@@ -208,19 +208,17 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         
         if internetStatus != .notReachable {
             
-//            \Travel Ticket\Phoenix Global Trade Solutions Private Limited (51)\NA\NA\TT17-51-0449-0001\RoutineLog - PHOENIXGLOBAL - Spasare - NKshirsagar.txt
+            //            \Travel Ticket\Phoenix Global Trade Solutions Private Limited (51)\NA\NA\TT17-51-0449-0001\RoutineLog - PHOENIXGLOBAL - Spasare - NKshirsagar.txt
             
-        
-             let url =  String.init(format: Constant.DROPBOX.LIST,
+            let url =  String.init(format: Constant.DROPBOX.LIST,
                                    Session.authKey,
                                    Helper.encodeURL(url: self.moduleName),
                                    docRefId)
             
-            
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-//                self.refreshControl.endRefreshing()
+                //                self.refreshControl.endRefreshing()
                 if Helper.isResponseValid(vc: self, response: response.result){
                     self.populateList(response: response.result.value)
                 }
@@ -229,7 +227,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             Helper.showNoInternetMessg()
         }
     }
-
+    
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         if controller.documentPickerMode == UIDocumentPickerMode.import {
@@ -265,43 +263,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     }
     
     
-    func addRowWithCell(fileInfo : FileInfo) {
-        
-        let newVoucherData = VoucherData()
-        
-        newVoucherData.documentName = fileInfo.fName
-        newVoucherData.documentDesc = fileInfo.fDesc
-        newVoucherData.isFileDownloaded = false
-        newVoucherData.isFileUploading = true
-        
-        self.arrayList.append(newVoucherData)
-        
-        let indx = self.arrayList.endIndex
-        
-        let newFileInfo = FileInfo()
-        newFileInfo.fData = fileInfo.fData
-        newFileInfo.fName = fileInfo.fName
-        newFileInfo.fDesc = fileInfo.fDesc
-        newFileInfo.fExtension = fileInfo.fExtension
-        newFileInfo.fUploadState = fileInfo.fUploadState
-        newFileInfo.notifInfo.notifIdentifier = IndexPath(row:indx - 1, section: 0)
-        newFileInfo.notifInfo.notifName = "UploadVoucher"
-        
-        let fIndx = GlobalVariables.shared.uploadQueue.index(where: {$0.fName == fileInfo.fName})
-        GlobalVariables.shared.uploadQueue[fIndx!] = newFileInfo
-        //---
-        for new in GlobalVariables.shared.uploadQueue {
-            debugPrint(new.fName)
-            debugPrint(new.notifInfo.notifName)
-        }
-        
-        ///
-        self.tableView.tableFooterView = nil
-        self.tableView.reloadData()
-        self.uploadFilesFromQueue()
-        
-    }
-    
     
     
     func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
@@ -310,7 +271,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         let code = ttBase.compCode
         let cName = ttBase.compName
         let cLoc = ttBase.compLoc
-
+        
         GlobalVariables.shared.isUploadingSomething = true
         
         guard let docRefId = self.trvTcktData?.trvlrRefNum else {
@@ -320,7 +281,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         
         let compStr =  String(format: "%@ (%d)", cName, code )
         
-//         \Travel Ticket\Phoenix Global Trade Solutions Private Limited (51)\NA\NA\TT17-51-0449-0001\RoutineLog - PHOENIXGLOBAL - Spasare - NKshirsagar.txt
+        //         \Travel Ticket\Phoenix Global Trade Solutions Private Limited (51)\NA\NA\TT17-51-0449-0001\RoutineLog - PHOENIXGLOBAL - Spasare - NKshirsagar.txt
         
         let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "/" + Constant.MODULES.TT + "/" + compStr + "/" + "NA" + "/" + "NA" + "/" + docRefId + "/" + fileInfo.fName + "." + fileInfo.fExtension)
         
@@ -333,11 +294,11 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                     if let response = response {
                         
                         guard let path = response.pathDisplay else {
+                            comp(false,"")
                             Helper.showMessage(message: "Unable to upload file.")
                             return
                         }
                         let newPath = Helper.getOCSFriendlyaPath(path: path)
-
                         
                         let newVoucher = VoucherData()
                         newVoucher.documentID = ""
@@ -345,21 +306,22 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                         newVoucher.documentDesc = fileInfo.fDesc
                         newVoucher.documentPath = newPath
                         newVoucher.companyName = cName
-                        newVoucher.location = ""
-                        newVoucher.businessUnit = ""
+                        newVoucher.location = "NA"
+                        newVoucher.businessUnit = "NA"
                         newVoucher.documentCategory = ""
                         newVoucher.documentType = ""
                         newVoucher.moduleName = Constant.MODULES.TT
                         
+                        let addDate = Date()
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "yyyy-MM-dd"
+                        let newDate = formatter.string(from: addDate)
+                        
+                        newVoucher.addDate = newDate
                         self.arrayList.append(newVoucher)
                         
-                      
-
-                        //                        self.addItemToServer(dModName: Constant.MODULES.EPRECR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
-//
-//                            comp(result, "")
-//                        })
-                         comp(true, "")
+                        // add item to server
+                        comp(true, "")
                     } else if error != nil {
                         comp(false, (error?.description)!)
                     }
@@ -367,82 +329,10 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             }
             .progress { progressData in
                 
-                self.updateCellProgressvalue(selectedIndexPath: fileInfo.notifInfo.notifIdentifier, withProgress: Float(progressData.fractionCompleted))
-        }
-    }
-    
-    func updateCellProgressvalue(selectedIndexPath: IndexPath, withProgress: Float) {
-        
-        if let cell = self.tableView.cellForRow(at: selectedIndexPath) as?  AttachmentCell {
-            
-            cell.updateProgressAtindexpath(indexPath: selectedIndexPath, progress: withProgress)
         }
     }
     
     
-    func uploadFilesFromQueue() {
-        
-        if GlobalVariables.shared.isUploadingSomething {
-            return
-        }
-        
-        let newFile = GlobalVariables.shared.uploadQueue.filter({ $0.fUploadState == false }).first
-        
-        self.fileInfoObj = newFile
-        
-        guard let newUpload = newFile else {
-            return
-        }
-        
-        //   if GlobalVariables.shared.uploadQueue.count > 1 {
-        
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        self.uploadImageData(fileInfo : newUpload ,comp: { result,errmessg  in
-            
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            
-            GlobalVariables.shared.isUploadingSomething = false
-            GlobalVariables.shared.uploadQueue.filter({ $0.fUploadState == false }).first?.fUploadState = true
-            
-            self.uploadFilesFromQueue()
-            
-            if result {
-                
-            } else {
-                
-                if let d = self.ucTTNotifyDelegte {
-                    
-                    if errmessg.debugDescription.contains("conflict") {
-                        d.notifyUCVouchers(messg: "Unable to Upload. File with this name already exists. Please enter different name.", success: false)
-                    } else {
-                        d.notifyUCVouchers(messg: "Sorry! Unable to Upload Voucher. Please try Again", success: false)
-                    }
-                    self.getVouchersData()
-                }
-                self.dbRequest?.cancel()
-                return
-            }
-            
-            let allUploadedFiles = GlobalVariables.shared.uploadQueue.filter({ $0.fUploadState == true })
-            
-            if allUploadedFiles.count == GlobalVariables.shared.uploadQueue.count {
-                
-                if allUploadedFiles.count > 1 {
-                    if let d = self.ucTTNotifyDelegte {
-                        d.notifyUCVouchers(messg: "Vouchers uploaded successfully", success: true)
-                    }
-                } else {
-                    if let d = self.ucTTNotifyDelegte {
-                        d.notifyUCVouchers(messg: "Voucher uploaded successfully", success:  true)
-                    }
-                }
-                
-                GlobalVariables.shared.uploadQueue.removeAll()
-                self.tableView.reloadData()
-//                self.getVouchersData()
-            }
-        })
-    }
     
     func permissionPrimeCameraAccess() {
         
@@ -460,32 +350,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     }
     
     
-    func addItemToServer(dModName : String, company: String, location: String, bUnit : String, docRefId : String, docName: String, docDesc : String, docFilePath : String, compHandler : @escaping(Bool)->()) {
-        
-        if internetStatus != .notReachable {
-            
-            let url = String.init(format: Constant.DROPBOX.ADD_ITEM,
-                                  Session.authKey,Helper.encodeURL(url: dModName), Helper.encodeURL(url: company), Helper.encodeURL(url:location),Helper.encodeURL(url: bUnit), docRefId,
-                                  Helper.encodeURL(url: docName),
-                                  Helper.encodeURL(url: docDesc), Helper.encodeURL(url:docFilePath))
-            //            self.view.showLoading()
-            //            UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            Alamofire.request(url).responseData(completionHandler: ({ response in
-                //                self.view.hideLoading()
-                //                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                //                GlobalVariables.shared.isUploadingSomething = false
-                if Helper.isResponseValid(vc: self, response: response.result) {
-                    compHandler(true)
-                } else {
-                    compHandler(false)
-                }
-            }))
-        } else {
-            compHandler(false)
-            Helper.showNoInternetMessg()
-        }
-        
-    }
     
     func deleteItemFromServer(docId : String, comp : @escaping(Bool) -> ()){
         
@@ -505,7 +369,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             comp(false)
             Helper.showNoInternetMessg()
         }
-        
     }
     
     func downloadFile( path : String, fileName : String, comp : @escaping(Bool) -> ()) {
@@ -534,33 +397,61 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                     comp(true)
                 }
         }
-        
     }
     
-    @objc func deleteFileTapped(sender:UIButton) {
+    
+    func deleteVoucher(docId : String) {
         
-        let buttonRow = sender.tag
-        
-        if GlobalVariables.shared.isUploadingSomething {
-            self.view.makeToast("File uploading is in progress, Please wait..")
-            return
-        }
-        
-        let deleteAlert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete the voucher?", preferredStyle: .alert)
-        let yesAction = UIAlertAction(title: "YES", style: .default, handler: { (action) -> Void in
+        if internetStatus != .notReachable {
+            self.view.showLoading()
             
-            self.deleteItemFromServer(docId: self.arrayList[buttonRow].documentID, comp: { (result) in
-                if result {
-                    self.arrayList.remove(at: buttonRow)
+            let url = String.init(format: Constant.TT.TT_VOUCHER, Session.authKey, docId)
+            
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                
+                self.view.hideLoading()
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    self.view.makeToast("File Deleted")
+                    
+                    if let index = self.arrayList.index(where: {$0.documentID == docId}) {
+                        self.arrayList.remove(at: index)
+                    }
                     self.tableView.reloadData()
                     if self.arrayList.count == 0 {
                         print("Zeroooooooo")
                         self.showEmptyState()
                     }
-                } else {
-                    Helper.showMessage(message: "No Internet Available, Please check your connection")
                 }
             })
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    
+    
+    @objc func deleteFileTapped(sender:UIButton) {
+        
+        let buttonRow = sender.tag
+        let vouchrItem = self.arrayList[buttonRow]
+        
+        let deleteAlert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete the voucher?", preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: "YES", style: .default, handler: { (action) -> Void in
+            
+            if vouchrItem.documentID != "" {
+                self.deleteVoucher(docId : vouchrItem.documentID)
+            } else {
+                
+                // remove item at index
+                self.arrayList.remove(at: buttonRow)
+                self.tableView.reloadData()
+                if self.arrayList.count == 0 {
+                    print("Zeroooooooo")
+                    self.showEmptyState()
+                }
+            }
+            
+          
         })
         
         let cancel = UIAlertAction(title: "GO BACK", style: .destructive, handler: { (action) -> Void in })
@@ -573,13 +464,18 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
 }
 
 
-extension TTVoucherListVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+
+
+
+
+extension TTVoucherListVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         self.imagePicker.dismiss(animated: true, completion: { () -> Void in
             self.view.showLoading()
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-
+                
                 let compressData = UIImageJPEGRepresentation(image, 0.5) //max value is 1.0 and
                 
                 let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
@@ -599,22 +495,28 @@ extension TTVoucherListVC: UIImagePickerControllerDelegate, UINavigationControll
 
 extension TTVoucherListVC: UITableViewDataSource, UITableViewDelegate , uploadFileDelegate {
     
-    
-    
     func uploadFile(data: Data, fileName: String, ext: String, fileDesc: String) {
         
-        self.view.makeToast("Your file upload is in progress, we'll notify when uploaded")
+        self.view.makeToast("Your file upload is in progress..")
+        self.view.showLoading()
         
         let uploadFileData = FileInfo()
-        
         uploadFileData.fData = data
         uploadFileData.fName = fileName
         uploadFileData.fDesc = fileDesc
         uploadFileData.fExtension = ext
         
-        GlobalVariables.shared.uploadQueue.append(uploadFileData)
-        
-        self.addRowWithCell(fileInfo : uploadFileData)
+        self.uploadImageData(fileInfo: uploadFileData,  comp: {result,str  in
+            self.view.hideLoading()
+            if result {
+                self.view.makeToast("File Uploaded successfully")
+                
+                self.tableView.tableFooterView = nil
+                self.tableView.reloadData()
+            } else {
+                self.view.makeToast("Sorry! Unable to Upload file")
+            }
+        })
     }
     
     
@@ -634,8 +536,9 @@ extension TTVoucherListVC: UITableViewDataSource, UITableViewDelegate , uploadFi
         return arrayList.count
     }
     
-   
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let newVoucher = arrayList[indexPath.row]
         
         let cellView = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentCell
@@ -649,24 +552,10 @@ extension TTVoucherListVC: UITableViewDataSource, UITableViewDelegate , uploadFi
             cellView.fileDesc.text = newVoucher.documentDesc
         }
         
-        
-        if newVoucher.isFileUploading {
-            cellView.progressBar.isHidden = false
-            cellView.progressBar.progress = 0.0
-            
+        if isFromView {
             cellView.btnDelete.isHidden = true
-            cellView.contentView.backgroundColor = AppColor.univVoucherCell
-            
         } else {
-            cellView.progressBar.isHidden = true
-            cellView.contentView.backgroundColor = UIColor.clear
-            
-            
-            if isFromView {
-                cellView.btnDelete.isHidden = true
-            } else {
-                cellView.btnDelete.isHidden = false
-            }
+            cellView.btnDelete.isHidden = false
         }
         
         if !Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension)  {
@@ -677,10 +566,8 @@ extension TTVoucherListVC: UITableViewDataSource, UITableViewDelegate , uploadFi
             cellView.btnStatus.setImage(#imageLiteral(resourceName: "view"), for: .normal)
         }
         
-        
         cellView.btnStatus.tag = indexPath.row
         cellView.btnDelete.tag = indexPath.row
-        
         cellView.btnDelete.addTarget(self, action: #selector(self.deleteFileTapped(sender:)), for: UIControlEvents.touchUpInside)
         
         return cellView
@@ -688,11 +575,6 @@ extension TTVoucherListVC: UITableViewDataSource, UITableViewDelegate , uploadFi
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if GlobalVariables.shared.isUploadingSomething {
-            self.view.makeToast("File uploading is in progress, Please wait..")
-            return
-        }
         
         if Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension) {
             

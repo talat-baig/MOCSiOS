@@ -57,7 +57,12 @@ class TravelTicketNonEditVC: UIViewController, IndicatorInfoProvider {
         lblTrvlType.text = ttData.trvlrType
         lblTrvlClass.text = ttData.trvlrClass
         lblTrvlMode.text = ttData.trvlrMode
-        lblDebtAcName.text = ttData.debitACName
+//        lblDebtAcName.text = ttData.debitACName
+        if ttData.debitACName == "" {
+            lblDebtAcName.text! = "-"
+        } else {
+            lblDebtAcName.text! = ttData.debitACName
+        }
     }
     
 }
