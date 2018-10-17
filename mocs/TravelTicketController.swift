@@ -550,6 +550,8 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
         
         if (data.status.caseInsensitiveCompare("Cancelled") == ComparisonResult.orderedSame){
             getTTDataAndNavigate(data : data , isFromView : true)
+            self.view.makeToast("Ticket is cancelled, cannot be edited")
+
         } else {
             getTTDataAndNavigate(data : data , isFromView : false)
         }

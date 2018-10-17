@@ -99,7 +99,7 @@ class TravelTicketNonEditInfoVC: UIViewController, IndicatorInfoProvider , notif
         if ttData.ticktCost == "" {
             lblTcktCost.text! = "-"
         } else {
-            lblTcktCost.text! = ttData.ticktCost
+            lblTcktCost.text! = ttData.ticktCost + " " + ttData.tCurrency
         }
         
 
@@ -132,7 +132,6 @@ class TravelTicketNonEditInfoVC: UIViewController, IndicatorInfoProvider , notif
             lblAdvance.text! = "-"
         } else {
             lblAdvance.text! =  ttData.trvlAprAmt != "0" ?  ttData.trvlAprAmt + " " + ttData.trvlAprCurr : "-"
-            
         }
         
         if ttData.trvlComments == "" {

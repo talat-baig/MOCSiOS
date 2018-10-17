@@ -296,7 +296,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
                     startDate = datePicker.date
                 } else {
                     // dont assign booking date value
-                    Helper.showMessage(message: "Please Select Booking/Issue date properly")
+                    Helper.showMessage(message: "Please Select Booking/Issue date properly. Booking date could not be greater than expiry date")
                 }
             } else { // assign date value to booking date txtfld
             txtBookingDate.text = dateFormatter.string(from: datePicker.date) as String
