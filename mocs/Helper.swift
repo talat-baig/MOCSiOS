@@ -539,6 +539,9 @@ class Helper: UIView {
     public static func convertToDateFormat2(dateString: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone =  TimeZone(abbreviation: "GMT+0:00")
         let serverDate: Date = dateFormatter.date(from: dateString)! // according to date format your date string
         return serverDate
     }

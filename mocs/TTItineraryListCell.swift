@@ -33,6 +33,8 @@ class TTItineraryListCell: UITableViewCell {
     
     @IBOutlet weak var lbltrvlStatus: UILabel!
     
+    @IBOutlet weak var lblRefundStatus: UILabel!
+    
     weak var itnryMenuDelegate : onMoreClickListener?
     weak var itnryItemMenuDelegate : onTTItineraryOptionClickListener?
     
@@ -58,9 +60,18 @@ class TTItineraryListCell: UITableViewCell {
         lblDepCity.text = data.destCity
         lblArrvCity.text = data.arrvlCity
         lblDate.text = data.depDate
-        lblDepTime.text = data.depTime
+        
+        
+        if data.depTime == "" {
+            lblDepTime.text! = "-"
+        } else {
+            lblDepTime.text! = data.depTime
+        }
+        
+//        lblDepTime.text = data.depTime
         lbltrvlStatus.text = data.trvlStatus
         lblHeaderDate.text = data.depDate
+        lblRefundStatus.text = data.refundStatus
         self.data = data
     }
     

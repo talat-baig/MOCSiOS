@@ -64,10 +64,7 @@ class TravelTicketCell: UITableViewCell {
             lblDept.text! = data.trvlrDept
         }
         
-//        lblDept.text = data.trvlrDept
-        
         lblCompName.text = data.tCompName
-//        lblGuest.text = data.guest
         
         if data.guest == 0 {
             lblGuest.text = "Guest"
@@ -117,12 +114,24 @@ class TravelTicketCell: UITableViewCell {
         })
         
         
-        optionMenu.addAction(editAction)
-        optionMenu.addAction(deleteActon)
-//        optionMenu.addAction(submitAction)
+//        optionMenu.addAction(editAction)
+//        optionMenu.addAction(deleteActon)
+//        optionMenu.addAction(viewAction)
+//        optionMenu.addAction(emailAction)
+//        optionMenu.addAction(cancelAction)
+        
+        
+        if (data.status.caseInsensitiveCompare("Cancelled") == ComparisonResult.orderedSame){
+
+        } else {
+            optionMenu.addAction(editAction)
+            optionMenu.addAction(deleteActon)
+        }
+        
         optionMenu.addAction(viewAction)
         optionMenu.addAction(emailAction)
         optionMenu.addAction(cancelAction)
+
         
         if ((delegate?.responds(to: Selector(("onClick:")))) != nil){
             delegate?.onClick(optionMenu: optionMenu , sender: sender)

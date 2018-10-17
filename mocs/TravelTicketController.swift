@@ -69,7 +69,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
     func hideLoading(){
         self.view.hideLoading()
     }
-
+    
     
     @objc func populateList() {
         
@@ -94,7 +94,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                         for(_,json):(String,JSON) in jsonResponse {
                             
                             let ttData = TravelTicketData()
-
+                            
                             ttData.trvlrId = json["TravellerID"].intValue
                             
                             ttData.tCompName = json["TravellerCompanyName"].stringValue
@@ -103,13 +103,13 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                             
                             ttData.tCompLoc = json["TravellerCompanyLocation"].stringValue
                             
-//                            ttData.guest = json["Guest1"].stringValue
+                            //                            ttData.guest = json["Guest1"].stringValue
                             
                             if json["Guest1"].stringValue == "Guest" {
-                              
+                                
                                 ttData.guest = 0
                             } else {
-                               
+                                
                                 ttData.guest = 1
                             }
                             
@@ -118,7 +118,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                             ttData.trvlrDept = json["TravellerDepartment"].stringValue
                             
                             ttData.trvlrRefNum = json["TravellerReferenceNo"].stringValue
-
+                            
                             
                             if json["TravellerPurpose"].stringValue == "" {
                                 ttData.trvlrPurpose = ""
@@ -166,7 +166,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                             
                             ttData.issueDate = json["TravellerTicketIssue"].stringValue
                             ttData.expiryDate = json["TravellerTicketExpire"].stringValue
-
+                            
                             
                             if json["TravellerTicketPNRNo"].stringValue == "" {
                                 ttData.ticktPNRNum = ""
@@ -204,7 +204,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                             } else {
                                 ttData.invoiceNum  = json["TravellerInvoiceNo"].stringValue
                             }
-
+                            
                             if json["TravellerRemarks"].stringValue == "" {
                                 ttData.trvlComments = ""
                             } else {
@@ -234,7 +234,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                             } else {
                                 ttData.approvdBy  = json["Manager"].stringValue
                             }
-                         
+                            
                             if json["Addedby"].stringValue == "" {
                                 ttData.tAddedBy = ""
                             } else {
@@ -253,7 +253,8 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                                 ttData.status  = json["Status"].stringValue
                             }
                             
-                            if json["TravellerAdvancePaidStatus"].stringValue == "True" {
+                            if json["TravellerAdvancePaidStatus"].stringValue.caseInsensitiveCompare("True") == ComparisonResult.orderedSame {
+                                
                                 ttData.trvlAdvance = true
                             } else {
                                 ttData.trvlAdvance = false
@@ -303,7 +304,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
             let url1 = String.init(format: Constant.TT.TT_GET_COMPANY_LIST, Session.authKey,data.trvlrRefNum)
             self.view.showLoading()
             Alamofire.request(url1).responseData(completionHandler: ({ response in
-               group.leave()
+                group.leave()
                 if Helper.isResponseValid(vc: self, response: response.result) {
                     companiesResponse = response.result.value
                 }
@@ -408,7 +409,6 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                 ttBaseVC.ttSubmitDelgte = self
                 ttBaseVC.trvlTcktData = data
                 
-                
                 self.navigationController?.pushViewController(ttBaseVC, animated: true)
             }
         } else {
@@ -420,7 +420,6 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
     @IBAction func btnAddNewTicketTapped(_ sender: Any) {
         
         let myData = TravelTicketData()
-        
         getTTDataAndNavigate(data: myData, isFromView: false )
     }
     
@@ -460,7 +459,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
                 self.view.hideLoading()
                 if Helper.isPostResponseValid(vc: self, response: response.result) {
                     
-                    let alert = UIAlertController(title: "Success", message: "Request Successfully deleted", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Success", message: "Ticket successfully deleted", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {(AlertAction) ->  Void in
                         self.populateList()
                     }))
@@ -480,15 +479,15 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
 extension TravelTicketController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-                if  searchText.isEmpty {
-                    self.arrayList = newArray
-                } else {
-                    let filteredArray = newArray.filter {
-                        $0.trvlrRefNum.localizedCaseInsensitiveContains(searchText)
-                    }
-                    self.arrayList = filteredArray
-                }
-                tableView.reloadData()
+        if  searchText.isEmpty {
+            self.arrayList = newArray
+        } else {
+            let filteredArray = newArray.filter {
+                $0.trvlrRefNum.localizedCaseInsensitiveContains(searchText)
+            }
+            self.arrayList = filteredArray
+        }
+        tableView.reloadData()
     }
 }
 
@@ -497,7 +496,7 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
     func onViewClick(data : TravelTicketData) {
         
         getTTDataAndNavigate(data : data , isFromView : true)
-
+        
     }
     
     func onEditClick(data : TravelTicketData) {
@@ -506,7 +505,7 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
     }
     
     func onDeleteClick(data: TravelTicketData) {
-     
+        
         let alert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete Travel Ticket? Once you delete this, there is no way to un-delete", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "NO GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
@@ -546,6 +545,14 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        handleTap()
+        let data = arrayList[indexPath.row]
+        
+        if (data.status.caseInsensitiveCompare("Cancelled") == ComparisonResult.orderedSame){
+            getTTDataAndNavigate(data : data , isFromView : true)
+        } else {
+            getTTDataAndNavigate(data : data , isFromView : false)
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -557,6 +564,14 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
         view.delegate = self
         view.ttReqClickListnr = self
         return view
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
+    {
+        if (touch.view?.isDescendant(of: tableView))! {
+            return false
+        }
+        return true
     }
     
     func onClick(optionMenu: UIViewController, sender: UIButton) {

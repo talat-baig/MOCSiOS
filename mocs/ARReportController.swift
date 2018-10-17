@@ -88,7 +88,6 @@ class ARReportController: UIViewController , filterViewDelegate{
                     if  (jsonResponse.arrayObject?.isEmpty)! {
                         isRespOverallValid = false
                         Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                        
                         return
                     } else {
                          isRespOverallValid = true

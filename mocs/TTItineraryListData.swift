@@ -19,4 +19,6 @@ class TTItineraryListData: NSObject {
     var trvlStatus : String = ""
     var flightNo : String = ""
     var itatCode : String = ""
+    var refundStatus : String = ""
+
 }

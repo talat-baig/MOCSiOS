@@ -53,8 +53,9 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
         let ttBaseVC = self.parent as? TTBaseViewController
-        ttBaseVC?.saveTTItnryReference(vc: self)
+//        ttBaseVC?.saveTTItnryReference(vc: self)
         
         guard let baseBookDte = ttBaseVC?.bookDateStr else {
             return
@@ -92,8 +93,6 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         if internetStatus != .notReachable {
             
             var url = String()
-            
-            
             
             if ttData?.trvlrRefNum != nil {
                 url = String.init(format: Constant.TT.TT_GET_ITINRY_LIST, Session.authKey,
@@ -168,11 +167,12 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
                 itinryData.depTime = k["DepartureTime"].stringValue
                 itinryData.depDate = k["TravelItineraryDate"].stringValue
                 itinryData.destCity = k["TravelItineraryDepartureCity"].stringValue
-                itinryData.flightNo = k["DepartureDate"].stringValue
+                itinryData.flightNo = k["FlightNumber"].stringValue
                 itinryData.itatCode = k["ITATcode"].stringValue
                 itinryData.trvlStatus = k["TravelItineraryStatus"].stringValue
                 itinryData.trvRefNum = k["TravelTravellerReferenceNo"].stringValue
-                
+                itinryData.refundStatus = k["TravelItineraryRefundStatus"].stringValue
+
                 data.append(itinryData)
             }
             self.arrayList = data

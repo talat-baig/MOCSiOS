@@ -29,7 +29,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     var arrTrvlAgent : [String] = []
     var arrEPRList : [TravelTicktEPR] = []
     var arrRepMngr : [ReportingManager] = []
-
+    
     var empId : String = ""
     
     var startDate = Date()
@@ -110,7 +110,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         if trvTcktData != nil {
             /// Edit
             assignDataToFields()
-
+            
         } else {
             /// Add
             switchAdvance.isOn = false
@@ -143,7 +143,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         let newDate2  = dateFormatter2.date(from: expDateStr)
         dateFormatter2.dateFormat = "yyyy-MM-dd"
         let expDate = dateFormatter2.string(from:newDate2!)
-    
+        
         txtExpiryDate.text = expDate
         
         guard let booking = txtBookingDate.text else {
@@ -153,7 +153,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         guard let expiry = txtExpiryDate.text else {
             return
         }
-
+        
         if let d = self.ticktsDateDelegate {
             d.getDatesFromTicketInfo(bookDate: booking, expdate: expiry )
         }
@@ -167,16 +167,16 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         txtTrvlAgent.text = trvTcktData.agent
         txtInvoiceNo.text = trvTcktData.invoiceNum
         txtComments.text = trvTcktData.trvlComments
-
+        
         switchAdvance.isOn = trvTcktData.trvlAdvance
         checkSwitchState(mySwitchState: trvTcktData.trvlAdvance)
         
         if trvTcktData.trvlAprNum == "" {
-             btnAdvances.setTitle("Select EPR No.", for: .normal)
+            btnAdvances.setTitle("Select EPR No.", for: .normal)
         } else {
-             btnAdvances.setTitle(trvTcktData.trvlAprNum, for: .normal)
+            btnAdvances.setTitle(trvTcktData.trvlAprNum, for: .normal)
         }
-   
+        
         isRepMngrSelected = true
         txtApprvdBy.text = trvTcktData.approvdBy
     }
@@ -232,7 +232,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         Helper.addBordersToView(view: vwPNRNo)
         Helper.addBordersToView(view: vwInvoice)
         Helper.addBordersToView(view: vwCommnts)
-                
+        
         switchAdvance.addTarget(self, action: #selector(isAdvance(mySwitch:)), for: UIControlEvents.valueChanged)
         
         txtBookingDate.inputView = datePickerTool
@@ -285,36 +285,51 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
         if currentTxtFld == txtBookingDate {
+            
+            //check if expriy date is selected
+            if txtExpiryDate.text != "" {
+                let expiryDate = Helper.convertToDateFormat2(dateString: txtExpiryDate.text!)
+
+                // Check if Expiry is day greater that Booking/Issue Date
+                if self.isDate1GreaterThanDate2(date1: expiryDate , date2: datePicker.date )  {
+                    txtBookingDate.text = dateFormatter.string(from: datePicker.date) as String
+                    startDate = datePicker.date
+                } else {
+                    // dont assign booking date value
+                    Helper.showMessage(message: "Please Select Booking/Issue date properly")
+                }
+            } else { // assign date value to booking date txtfld
             txtBookingDate.text = dateFormatter.string(from: datePicker.date) as String
             startDate = datePicker.date
+            }
         }
         
         if currentTxtFld == txtExpiryDate {
-           
             txtExpiryDate.text = dateFormatter.string(from: datePicker.date) as String
             endDate = datePicker.date
-            
-            
-            guard let booking = txtBookingDate.text else {
-                return
-            }
-            
-            guard let expiry = txtExpiryDate.text else {
-                return
-            }
-            
-            if self.isTrvlStatusValid(expiry: expiry) {
-                txtTrvlStatus.text = "Valid"
-            } else {
-                txtTrvlStatus.text = "Expired"
-            }
-            
-            if let d = self.ticktsDateDelegate {
-                d.getDatesFromTicketInfo(bookDate: booking, expdate: expiry )
-            }
+        }
+        self.view.endEditing(true)
+        
+        guard let booking = txtBookingDate.text, !booking.isEmpty else {
+            return
+        }
+        guard let expiry = txtExpiryDate.text, !expiry.isEmpty  else {
+            return
         }
         
-        self.view.endEditing(true)
+        let currntDate = Date()
+        let expiryDate = Helper.convertToDateFormat2(dateString: expiry)
+
+        if self.isDate1GreaterThanDate2(date1: expiryDate , date2: currntDate) {
+            txtTrvlStatus.text = "Valid"
+        } else {
+            txtTrvlStatus.text = "Expired"
+        }
+        
+        if let d = self.ticktsDateDelegate {
+            d.getDatesFromTicketInfo(bookDate: booking, expdate: expiry )
+        }
+        
     }
     
     
@@ -342,7 +357,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         let responseJson = JSON(currResponse!)
         
         for(_,j):(String,JSON) in responseJson{
-            let newCurr = j["currency"].stringValue
+            let newCurr = j["Currency"].stringValue
             arrCurr.append(newCurr)
         }
         self.arrCurrency = arrCurr
@@ -369,9 +384,9 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
             
             let newItem = ReportingManager()
             
-             newItem.repMngrName = j["ReportingManagerName"].stringValue
-             newItem.repMngrId = j["ReportingManager"].stringValue
-
+            newItem.repMngrName = j["ReportingManagerName"].stringValue
+            newItem.repMngrId = j["ReportingManager"].stringValue
+            
             arrRepMngr.append(newItem)
         }
         self.arrRepMngr = arrRepMngr
@@ -436,7 +451,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
                         for(_,j):(String,JSON) in jsonRes {
                             
                             let newObj = TravelTicktEPR()
-//                            newObj.eprMainId = j["EmployeePaymentRequestMainID"].stringValue
+                            //                            newObj.eprMainId = j["EmployeePaymentRequestMainID"].stringValue
                             newObj.eprRefId = j["EPRMainReferenceID"].stringValue
                             newObj.eprAmt = j["EPRitemsAmount"].stringValue
                             newObj.eprCurr = j["Currency"].stringValue
@@ -478,7 +493,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
                     chooseEpr.dataSource = arrEprVal.map {$0.eprRefId}
                     chooseEpr.selectionAction = { [weak self] (index, item) in
                         self?.btnAdvances.setTitle(item, for: .normal)
-
+                        
                         self?.txtEprAmtCurrncy.text = arrEprVal[index].eprAmt  + " " +  arrEprVal[index].eprCurr
                     }
                     chooseEpr.show()
@@ -535,15 +550,43 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         chooseAgnt.show()
     }
     
+    
+    func isDate1GreaterThanDate2( date1 : Date, date2 : Date) -> Bool {
+        
+
+        var val = false
+        
+        let order = Calendar.current.compare(date1, to: date2, toGranularity: .day)
+        
+        switch order {
+            
+        case .orderedAscending:
+            print("date1 is earlier than date2")
+            val = false
+            
+        case .orderedSame:
+            print("The two dates are the same")
+            val = true
+            
+        case .orderedDescending:
+            print("date1 is later than date2")
+            val = true
+        }
+        return val
+    }
+    
     func isTrvlStatusValid(expiry : String ) -> Bool {
         
         let expiryDate = Helper.convertToDateFormat2(dateString: expiry)
         let currntDate = Date()
-
+        
         var val = false
         
-        switch expiryDate.compare(currntDate) {
-       
+        let order = Calendar.current.compare(expiryDate, to: currntDate, toGranularity: .day)
+//        switch expiryDate.compare(currntDate) {
+        
+        switch order {
+
         case .orderedAscending:
             print("expiryDate is earlier than currntDate")
             val = false
@@ -629,14 +672,14 @@ extension TravelTicketInformationVC: UITextFieldDelegate , UITextViewDelegate {
         case txtTicktPnrNo, txtTicktCost :
             let scrollPoint:CGPoint = CGPoint(x:0, y:  vwTicktNo.frame.origin.y + 20  )
             scrlVw!.setContentOffset(scrollPoint, animated: true)
-          
+            
         default : break
         }
         return val
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-       
+        
         if textView ==  txtComments {
             let scrollPoint:CGPoint = CGPoint(x:0, y:  vwSelectEPR.frame.origin.y + 60  )
             scrlVw!.setContentOffset(scrollPoint, animated: true)

@@ -131,7 +131,8 @@ class TravelTicketNonEditInfoVC: UIViewController, IndicatorInfoProvider , notif
         if ttData.trvlAprAmt == "" {
             lblAdvance.text! = "-"
         } else {
-            lblAdvance.text! = ttData.trvlAprAmt + " " + ttData.trvlAprCurr
+            lblAdvance.text! =  ttData.trvlAprAmt != "0" ?  ttData.trvlAprAmt + " " + ttData.trvlAprCurr : "-"
+            
         }
         
         if ttData.trvlComments == "" {

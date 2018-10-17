@@ -19,7 +19,7 @@ protocol onTTSubmit {
 
 class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDelegate, getDatesDelegate, UCTT_NotifyComplete {
     
-    
+   
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -53,7 +53,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     var trvlAgentResponse : Data?
     var repMngrResponse : Data?
     var itinryResponse : Data?
-    
     var voucherResponse: Data?
     
     var trvticktAddEditVC : TravelTicketAddEditVC?
@@ -87,17 +86,14 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             self?.buttonBarView.allowsSelection = true
         }
         
-        
         vwTopHeader.delegate = self
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.lblTitle.text = "Travel Ticket"
         
-        
         if isFromView {
             vwTopHeader.btnRight.isHidden = true
             vwTopHeader.lblSubTitle.text = trvlTcktData.trvlrRefNum
-
         } else {
             vwTopHeader.btnRight.setTitleColor(UIColor.white, for: .normal)
             vwTopHeader.btnRight.isHidden = false
@@ -137,19 +133,10 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         self.ttVouchrListVC = vc
     }
     
-    
-    
-    
-    func getCompDetailsFromChild(compCode: Int, loc: String, compName: String) {
-        
-    }
-    
-    
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         var viewArray:[UIViewController] = []
         
         if isFromView {
-            
             let ttPrimNonEdit = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketNonEditVC") as! TravelTicketNonEditVC
             ttPrimNonEdit.ttData = self.trvlTcktData
             viewArray.append(ttPrimNonEdit)
@@ -177,6 +164,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             ttInfo.trvTcktData = self.trvlTcktData
             ttInfo.ticktsDateDelegate = self
             self.notifyChilds = ttInfo
+            ttInfo.loadViewIfNeeded()
+            self.saveTTInfoReference(vc: ttInfo)
             viewArray.append(ttInfo)
         }
         
@@ -184,6 +173,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         ttItinry.isFromView = self.isFromView
         self.notifyChilds = ttItinry
         ttItinry.itinryResponse = self.itinryResponse
+        ttItinry.loadViewIfNeeded()
+        self.saveTTItnryReference(vc: ttItinry)
         viewArray.append(ttItinry)
         
         let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
@@ -192,6 +183,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         ttVoucher.vouchResponse = self.voucherResponse
         ttVoucher.moduleName = Constant.MODULES.TT
         ttVoucher.ucTTNotifyDelegte = self
+        ttVoucher.loadViewIfNeeded()
+        self.saveVocuherListRef(vc: ttVoucher)
         viewArray.append(ttVoucher)
         
         return viewArray
@@ -208,12 +201,10 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         super.didReceiveMemoryWarning()
     }
     
-//    func getCompDetailsFromChild(compCode: Int, loc: String, compName: String) {
-//        self.compCode = compCode
-//        self.compLoc = loc
-//        self.compName = compName
-//    }
     
+    func getCompDetailsFromChild(compCode: Int, loc: String, compName: String) {
+        
+    }
     
     func getRepMngrFromChild(repMgr: String, empId: String) {
         self.repMngr = repMgr
@@ -262,7 +253,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
                     }))
                     self.present(success, animated: true, completion: nil)
                 }  else {
-                    
                     NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
                 }
             })
@@ -272,6 +262,8 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     }
     
     func validateChildVCData() {
+        
+        var eprVal = ""
         
         guard let compny = self.trvticktAddEditVC?.txtCompny?.text, !compny.isEmpty else {
             self.moveToViewController(at: 0, animated: true)
@@ -383,8 +375,24 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             return
         }
         
-        guard let eprVal = self.ttInfo?.btnAdvances.titleLabel?.text else {
+        guard let btnTxt = self.ttInfo?.btnAdvances.titleLabel?.text else {
             return
+        }
+        
+        guard let swtchAdvance = self.ttInfo?.switchAdvance else {
+            return
+        }
+        
+        if swtchAdvance.isOn {
+            if btnTxt == "Select EPR No." {
+                eprVal = ""
+                Helper.showMessage(message: "Please select EPR Details properly")
+                return
+            } else {
+                eprVal = btnTxt
+            }
+        } else {
+            eprVal = btnTxt
         }
         
         guard let apprvdBy = self.ttInfo?.txtApprvdBy.text, !apprvdBy.isEmpty else {
@@ -422,7 +430,6 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         guard let ttItinryArray = self.ttItinryListVC?.arrayList else {
             return
         }
-        
         
         if ttItinryArray.count > 0 {
             
@@ -494,7 +501,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         }
         
         
-        let trvlTicktObj = TravelTicket(refId: trvlTcktData != nil ? "": trvlrRefId , trvlrId: trvlTcktData != nil ? trvlTcktData.trvlrId : 0 , compName: compny, compCode: String(format : "%d", compCode) , compLoc: compLoc , guest: trvlTcktData != nil ? trvlTcktData.guest :  swtchGuest.isOn ? 1 : 0, trvlrName: trvlrName, trvlrDept: dept, trvlrRefNum: trvlTcktData != nil ? trvlTcktData.trvlrRefNum :  "", trvlPurpose: trvlPurpose, trvlType: trvlType, trvlMode: trvlMode, trvlClass: trvlClass, trvlDebitAc: debtAc, trvlCarrier: carrier, trvlTicktNum: ticktNum, trvlTIssue: bookDate, trvlTExpiry: expDate, trvlPNRNum: tPNRNo , trvlCost: amt, trvlCurrncy: currncy, trvlTicktStatus: trvlTcktStatus, trvlInvoiceNum: invNum, trvlAgent: agent, trvlAdvance: isAdvnce, trvlComments: commnts, trvlEPRNum: eprVal != "Select EPR No." ? eprVal : "" , trvlApprovedBy: apprvdByCode, trvlPostingStatus: "", trvlPostedBy: "", trvlPostindDate: newDate, trvlVoucherNum: "" , trvlCounter: trvlTcktData != nil ? trvlTcktData.trvlrCounter : "" , trvlItinry: trvlItinry, trvVoucher: trvlVoucher)
+        let trvlTicktObj = TravelTicket(refId: trvlTcktData != nil ? "": trvlrRefId , trvlrId: trvlTcktData != nil ? trvlTcktData.trvlrId : 0 , compName: compny, compCode: String(format : "%d", compCode) , compLoc: compLoc , guest: trvlTcktData != nil ? trvlTcktData.guest :  swtchGuest.isOn ? 1 : 0, trvlrName: trvlrName, trvlrDept: dept, trvlrRefNum: trvlTcktData != nil ? trvlTcktData.trvlrRefNum :  "", trvlPurpose: trvlPurpose, trvlType: trvlType, trvlMode: trvlMode, trvlClass: trvlClass, trvlDebitAc: debtAc, trvlCarrier: carrier, trvlTicktNum: ticktNum, trvlTIssue: bookDate, trvlTExpiry: expDate, trvlPNRNum: tPNRNo , trvlCost: amt, trvlCurrncy: currncy, trvlTicktStatus: trvlTcktStatus, trvlInvoiceNum: invNum, trvlAgent: agent, trvlAdvance: isAdvnce, trvlComments: commnts, trvlEPRNum: eprVal, trvlApprovedBy: apprvdByCode, trvlPostingStatus: "", trvlPostedBy: "", trvlPostindDate: newDate, trvlVoucherNum: "" , trvlCounter: trvlTcktData != nil ? trvlTcktData.trvlrCounter : "" , trvlItinry: trvlItinry, trvVoucher: trvlVoucher)
         
         
         var newDict: [String: Any]?

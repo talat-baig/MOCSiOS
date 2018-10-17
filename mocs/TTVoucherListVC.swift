@@ -126,8 +126,8 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     override func viewDidAppear(_ animated: Bool) {
         
-        let ttBaseVC = self.parent as? TTBaseViewController
-        ttBaseVC?.saveVocuherListRef(vc: self)
+//        let ttBaseVC = self.parent as? TTBaseViewController
+//        ttBaseVC?.saveVocuherListRef(vc: self)
         
     }
     

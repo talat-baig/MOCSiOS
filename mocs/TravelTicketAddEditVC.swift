@@ -112,13 +112,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         let ttBase = self.parent as! TTBaseViewController
         ttBase.saveTTAddEditReference(vc: self)
         txtDept.isUserInteractionEnabled = false
-        
-//        let ttInfo = self.storyboard?.instantiateViewController(withIdentifier: "TravelTicketInformationVC") as! TravelTicketInformationVC
-////        ttInfo.loadViewIfNeeded()
-//        ttBase.saveTTInfoReference(vc: ttInfo)
-////        ttInfo.loadViewIfNeeded()
-        
-        
+
         self.arrTravlType = parseAndAssignTravelModeData()
         
         parseAndAssignDebitAc()
