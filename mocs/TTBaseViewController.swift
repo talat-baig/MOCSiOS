@@ -162,6 +162,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             ttInfo.trvlAgentResponse = self.trvlAgentResponse
             ttInfo.repMngrResponse = self.repMngrResponse
             ttInfo.trvTcktData = self.trvlTcktData
+            ttInfo.itinryResponse = self.itinryResponse
             ttInfo.ticktsDateDelegate = self
             self.notifyChilds = ttInfo
             ttInfo.loadViewIfNeeded()

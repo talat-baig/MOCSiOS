@@ -23,12 +23,14 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     var currResponse : Data?
     var trvlAgentResponse : Data?
     var repMngrResponse : Data?
+    var itinryResponse : Data?
     
     var arrCarrier : [String] = []
     var arrCurrency : [String] = []
     var arrTrvlAgent : [String] = []
     var arrEPRList : [TravelTicktEPR] = []
     var arrRepMngr : [ReportingManager] = []
+    var arrItnry : [TTItineraryListData] = []
     
     var empId : String = ""
     
@@ -179,6 +181,13 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         
         isRepMngrSelected = true
         txtApprvdBy.text = trvTcktData.approvdBy
+        
+        guard let respValue = itinryResponse else {
+            //            Helper.showMessage(message: "No Itinerary Data Found.")
+            return
+        }
+        
+        populateIntryList(response: respValue)
     }
     
     
@@ -289,7 +298,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
             //check if expriy date is selected
             if txtExpiryDate.text != "" {
                 let expiryDate = Helper.convertToDateFormat2(dateString: txtExpiryDate.text!)
-
+                
                 // Check if Expiry is day greater that Booking/Issue Date
                 if self.isDate1GreaterThanDate2(date1: expiryDate , date2: datePicker.date )  {
                     txtBookingDate.text = dateFormatter.string(from: datePicker.date) as String
@@ -299,14 +308,24 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
                     Helper.showMessage(message: "Please Select Booking/Issue date properly. Booking date could not be greater than expiry date")
                 }
             } else { // assign date value to booking date txtfld
-            txtBookingDate.text = dateFormatter.string(from: datePicker.date) as String
-            startDate = datePicker.date
+                txtBookingDate.text = dateFormatter.string(from: datePicker.date) as String
+                startDate = datePicker.date
             }
         }
         
         if currentTxtFld == txtExpiryDate {
-            txtExpiryDate.text = dateFormatter.string(from: datePicker.date) as String
-            endDate = datePicker.date
+            
+            if self.checkExpiryDateWithItnryDepDate(expDate: datePicker.date) {
+                txtExpiryDate.text = dateFormatter.string(from: datePicker.date) as String
+                endDate = datePicker.date
+            } else {
+//                txtExpiryDate.text = dateFormatter.string(from: datePicker.date) as String
+//                endDate = datePicker.date
+                Helper.showMessage(message: "Travel Itinerary date is less than ticket expiry date")
+            }
+            
+            
+            
         }
         self.view.endEditing(true)
         
@@ -319,7 +338,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         
         let currntDate = Date()
         let expiryDate = Helper.convertToDateFormat2(dateString: expiry)
-
+        
         if self.isDate1GreaterThanDate2(date1: expiryDate , date2: currntDate) {
             txtTrvlStatus.text = "Valid"
         } else {
@@ -338,6 +357,68 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         datePickerTool.isHidden = true
         self.view.endEditing(true)
     }
+    
+    
+    func checkExpiryDateWithItnryDepDate(expDate : Date) -> Bool{
+     
+        if self.arrItnry.count > 0 {
+            
+            for itnryItem in self.arrItnry {
+                
+                let depDate = itnryItem.depDate
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd-MMM-yyyy"
+                let newDate1  = dateFormatter.date(from: depDate)
+                
+                if self.isDate1GreaterThanDate2(date1: expDate, date2: newDate1!) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    
+    func populateIntryList(response : Data) {
+        
+        var data: [TTItineraryListData] = []
+        
+        let pJson = JSON(response)
+        let arr = pJson.arrayObject as! [[String:AnyObject]]
+        
+        if arr.count > 0 {
+            
+            for(_,k):(String,JSON) in pJson {
+                let itinryData = TTItineraryListData()
+                
+                itinryData.ItinID = k["TravelItineraryID"].intValue
+                itinryData.arrvlCity = k["TravelItineraryArrivalCity"].stringValue
+                itinryData.depTime = k["DepartureTime"].stringValue
+                itinryData.depDate = k["TravelItineraryDate"].stringValue
+                itinryData.destCity = k["TravelItineraryDepartureCity"].stringValue
+                itinryData.flightNo = k["FlightNumber"].stringValue
+                itinryData.itatCode = k["ITATcode"].stringValue
+                itinryData.trvlStatus = k["TravelItineraryStatus"].stringValue
+                itinryData.trvRefNum = k["TravelTravellerReferenceNo"].stringValue
+                itinryData.refundStatus = k["TravelItineraryRefundStatus"].stringValue
+                
+                data.append(itinryData)
+            }
+            self.arrItnry = data
+            //            self.tableView.reloadData()
+        } else {
+            
+            //            if isFromView {
+            ////                Helper.showNoItemState(vc:self , messg: "No Itinerary Item found" , tb:tableView)
+            //            } else {
+            //                debugPrint("No Itinerary Item found")
+            //                self.tableView.reloadData()
+            //            }
+        }
+    }
+    
     
     func parseAndAssignCarrierList() {
         
@@ -553,9 +634,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
     
     func isDate1GreaterThanDate2( date1 : Date, date2 : Date) -> Bool {
         
-
         var val = false
-        
         let order = Calendar.current.compare(date1, to: date2, toGranularity: .day)
         
         switch order {
@@ -583,10 +662,10 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         var val = false
         
         let order = Calendar.current.compare(expiryDate, to: currntDate, toGranularity: .day)
-//        switch expiryDate.compare(currntDate) {
+        //        switch expiryDate.compare(currntDate) {
         
         switch order {
-
+            
         case .orderedAscending:
             print("expiryDate is earlier than currntDate")
             val = false
