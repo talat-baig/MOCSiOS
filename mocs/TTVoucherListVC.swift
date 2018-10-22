@@ -125,10 +125,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     
     override func viewDidAppear(_ animated: Bool) {
-        
-//        let ttBaseVC = self.parent as? TTBaseViewController
-//        ttBaseVC?.saveVocuherListRef(vc: self)
-        
     }
     
     
@@ -175,7 +171,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             }
             self.tableView.tableFooterView = nil
             self.tableView.reloadData()
-            
         } else {
             
             if isFromView {
@@ -201,14 +196,13 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     @objc func getVouchersData() {
         
+        var docRefId = ""
         
-        guard let docRefId = self.trvTcktData?.trvlrRefNum else {
-            return
+        if let refId = self.trvTcktData?.trvlrRefNum {
+            docRefId = refId
         }
         
         if internetStatus != .notReachable {
-            
-            //            \Travel Ticket\Phoenix Global Trade Solutions Private Limited (51)\NA\NA\TT17-51-0449-0001\RoutineLog - PHOENIXGLOBAL - Spasare - NKshirsagar.txt
             
             let url =  String.init(format: Constant.DROPBOX.LIST,
                                    Session.authKey,
@@ -218,7 +212,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-                //                self.refreshControl.endRefreshing()
                 if Helper.isResponseValid(vc: self, response: response.result){
                     self.populateList(response: response.result.value)
                 }
@@ -264,31 +257,25 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
     
     
     
-    
     func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
         
         let ttBase = self.parent as! TTBaseViewController
         let code = ttBase.compCode
         let cName = ttBase.compName
-        let cLoc = ttBase.compLoc
+//        let cLoc = ttBase.compLoc
         
         GlobalVariables.shared.isUploadingSomething = true
         
         guard let docRefId = self.trvTcktData?.trvlrRefNum else {
             return
         }
-        
-        
         let compStr =  String(format: "%@ (%d)", cName, code )
         
-        //         \Travel Ticket\Phoenix Global Trade Solutions Private Limited (51)\NA\NA\TT17-51-0449-0001\RoutineLog - PHOENIXGLOBAL - Spasare - NKshirsagar.txt
-        
-        let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "/" + Constant.MODULES.TT + "/" + compStr + "/" + "NA" + "/" + "NA" + "/" + docRefId + "/" + fileInfo.fName + "." + fileInfo.fExtension)
+        let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "\\" + Constant.MODULES.TT + "\\" + compStr + "\\" + "NA" + "\\" + "NA" + "\\" + docRefId + "\\" + fileInfo.fName + "." + fileInfo.fExtension)
         
         DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
         dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
             .response { response, error in
-                
                 
                 DispatchQueue.main.async() {
                     if let response = response {
@@ -299,13 +286,16 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                             return
                         }
                         let newPath = Helper.getOCSFriendlyaPath(path: path)
+                        print(newPath)
+                        let modifiedPath = Helper.getModifiedVoucherPath(path : newPath)
+                        
                         
                         let newVoucher = VoucherData()
                         newVoucher.documentID = ""
                         newVoucher.documentName = fileInfo.fName
                         newVoucher.documentDesc = fileInfo.fDesc
-                        newVoucher.documentPath = newPath
-                        newVoucher.companyName = cName
+                        newVoucher.documentPath = modifiedPath
+                        newVoucher.companyName = compStr
                         newVoucher.location = "NA"
                         newVoucher.businessUnit = "NA"
                         newVoucher.documentCategory = ""
@@ -405,7 +395,7 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
         if internetStatus != .notReachable {
             self.view.showLoading()
             
-            let url = String.init(format: Constant.TT.TT_VOUCHER, Session.authKey, docId)
+            let url = String.init(format: Constant.TT.TT_DELETE_VOUCHER, Session.authKey, docId)
             
             Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 

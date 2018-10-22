@@ -175,8 +175,10 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
         
         if trvTcktData.trvlAprNum == "" {
             btnAdvances.setTitle("Select EPR No.", for: .normal)
+             txtEprAmtCurrncy.text = ""
         } else {
             btnAdvances.setTitle(trvTcktData.trvlAprNum, for: .normal)
+            txtEprAmtCurrncy.text = trvTcktData.trvlAprAmt + " " + trvTcktData.trvlAprCurr
         }
         
         isRepMngrSelected = true
@@ -200,7 +202,9 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
             txtApprvdBy.text = ttBaseVC?.repMngr
         }
         
-        guard let newEmpId = ttBaseVC?.empID else {
+//        ttBaseVC?.getTrvlerEMPId(item: )
+        
+        guard let newEmpId = ttBaseVC?.empIDE else {
             return
         }
         self.empId = newEmpId
@@ -517,7 +521,7 @@ class TravelTicketInformationVC: UIViewController, IndicatorInfoProvider , UIGes
             
             let url = String.init(format: Constant.TT.TT_GET_EPR_LIST, Session.authKey, self.empId)
             self.view.showLoading()
-            
+            print(url)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 if Helper.isResponseValid(vc: self, response: response.result) {

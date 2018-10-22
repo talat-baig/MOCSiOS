@@ -16,6 +16,7 @@ import Alamofire
 
 protocol getRepMngrDelegate: NSObjectProtocol {
     func getRepMngrFromChild(repMgr : String, empId : String) -> Void
+    func getTrvlrNameFromChild(trvlName : String) -> Void
     func getCompDetailsFromChild(compCode : Int, loc : String, compName : String) -> Void
 }
 
@@ -152,6 +153,19 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     func assignDataToFields() {
         
         txtCompny.text = ttData.tCompName
+        
+        self.getTravllerList(compId: Int(ttData.tCompCode)!, comp: {result in
+            
+            if result {
+                if let d = self.repMngrDelegate {
+                    d.getTrvlrNameFromChild(trvlName: self.ttData.trvlrName )
+                }
+
+            } else {
+                
+            }
+        })
+        
         txtFldTrvlName.text = ttData.trvlrName
         txtDept.text = ttData.trvlrDept
         
@@ -197,10 +211,11 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         
         let compCode = self.getCompanyCode(item: compName)
         let compLoc = self.getCompanyLoc(item: compName)
+//        let trvlrName = txtFldTrvlName.text
 
         if let d = self.repMngrDelegate {
             d.getCompDetailsFromChild(compCode: compCode, loc: compLoc, compName : compName)
-        }
+            }
         
         self.view.endEditing(true)
     }

@@ -24,7 +24,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
-    var empID : String = ""
+    var empIDE : String = ""
     var isFromView : Bool = false
     var response:Data?
     
@@ -170,6 +170,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             viewArray.append(ttInfo)
         }
         
+       
         let ttItinry = self.storyboard?.instantiateViewController(withIdentifier: "TTItineraryListVC") as! TTItineraryListVC
         ttItinry.isFromView = self.isFromView
         self.notifyChilds = ttItinry
@@ -178,15 +179,19 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         self.saveTTItnryReference(vc: ttItinry)
         viewArray.append(ttItinry)
         
-        let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
-        ttVoucher.trvTcktData = self.trvlTcktData
-        ttVoucher.isFromView = isFromView
-        ttVoucher.vouchResponse = self.voucherResponse
-        ttVoucher.moduleName = Constant.MODULES.TT
-        ttVoucher.ucTTNotifyDelegte = self
-        ttVoucher.loadViewIfNeeded()
-        self.saveVocuherListRef(vc: ttVoucher)
-        viewArray.append(ttVoucher)
+        if trvlTcktData != nil {
+            
+            let ttVoucher = self.storyboard?.instantiateViewController(withIdentifier: "TTVoucherListVC") as! TTVoucherListVC
+            ttVoucher.trvTcktData = self.trvlTcktData
+            ttVoucher.isFromView = isFromView
+            ttVoucher.vouchResponse = self.voucherResponse
+            ttVoucher.moduleName = Constant.MODULES.TT
+            ttVoucher.ucTTNotifyDelegte = self
+            ttVoucher.loadViewIfNeeded()
+            self.saveVocuherListRef(vc: ttVoucher)
+            viewArray.append(ttVoucher)
+        }
+        
         
         return viewArray
     }
@@ -202,16 +207,19 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
         super.didReceiveMemoryWarning()
     }
     
-    
     func getCompDetailsFromChild(compCode: Int, loc: String, compName: String) {
-        
+        self.compName = compName
+        self.compCode = compCode
     }
     
     func getRepMngrFromChild(repMgr: String, empId: String) {
         self.repMngr = repMgr
-        self.empID = empId
+        self.empIDE = empId
     }
     
+    func getTrvlrNameFromChild(trvlName: String){
+        self.empIDE  = self.getTrvlrEmployeeId(item: trvlName)
+    }
     
     func getDatesFromTicketInfo(bookDate: String, expdate: String) {
         self.bookDateStr = bookDate
@@ -482,6 +490,7 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
 //                newItem.docId = item.documentID
                 newItem.docName = item.documentName
                 newItem.docDesc = item.documentDesc
+                newItem.docCompName = item.companyName
                 newItem.docBU = item.businessUnit
                 newItem.docLoc = item.location
                 newItem.docPath = item.documentPath
@@ -548,6 +557,14 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
             return ""
         }
         return refId
+    }
+    
+    func getTrvlrEmployeeId(item : String) -> String {
+        let trvlrObj = self.trvticktAddEditVC?.arrTravlrData.filter{ $0.fullName == item }.first
+        guard let empId = trvlrObj?.empId else {
+            return ""
+        }
+        return empId
     }
     
     func getRepMngrCode(item : String) -> String {

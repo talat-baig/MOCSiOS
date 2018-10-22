@@ -28,6 +28,8 @@ class Session {
         static let NEWS = "news"
         static let FILTERLIST = "filterlist"
         static let COMPANIES = "companylist"
+        static let CITIES = "cities"
+
 
     }
     
@@ -173,8 +175,17 @@ class Session {
         get{
             return UserDefaults.standard.string(forKey: Veriable.COMPANIES) ?? ""
         }
-        set(currency){
+        set(companies){
             UserDefaults.standard.set(currency, forKey: Veriable.COMPANIES)
+        }
+    }
+    
+    public static var cities: String {
+        get{
+            return UserDefaults.standard.string(forKey: Veriable.CITIES) ?? ""
+        }
+        set(cities){
+            UserDefaults.standard.set(cities, forKey: Veriable.CITIES)
         }
     }
     

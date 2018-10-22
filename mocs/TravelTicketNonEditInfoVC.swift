@@ -13,14 +13,12 @@ import SwiftyJSON
 class TravelTicketNonEditInfoVC: UIViewController, IndicatorInfoProvider , notifyChilds_UC {
   
 
-    
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "TICKET INFORMATION")
     }
     
     weak var ttData : TravelTicketData!
 
-    
     @IBOutlet weak var lblCarrier: UILabel!
     
     @IBOutlet weak var lblTicktNo: UILabel!

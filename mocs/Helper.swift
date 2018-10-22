@@ -588,6 +588,15 @@ class Helper: UIView {
         return path
     }
     
+    public static func getModifiedVoucherPath(path : String) -> String {
+        
+        var newPath = path
+        
+        if path.contains("/") {
+            newPath = path.replacingOccurrences(of: "/", with: "\\", options: .literal, range: nil)
+        }
+        return newPath
+    }
     
     public static func getImage(ext : String) -> UIImage? {
         

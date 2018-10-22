@@ -50,6 +50,7 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         
         populateList(response: respValue)
         
+//        getCityList()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -79,10 +80,36 @@ class TTItineraryListVC: UIViewController, IndicatorInfoProvider, UIGestureRecog
         
     }
     
+    
+//    func getCityList() {
+//
+//        if Session.cities == "" {
+//            if internetStatus != .notReachable {
+//
+//                let url = String.init(format: Constant.TT.TT_GET_CITY_LIST, Session.authKey)
+//                self.view.showLoading()
+//                Alamofire.request(url).responseData(completionHandler: ({ response in
+//                    self.view.hideLoading()
+//                    if Helper.isResponseValid(vc: self, response: response.result){
+//                        let jsonString = JSON(response.result.value!)
+//                        Session.cities = jsonString.rawString()!
+//
+//                    }
+//                }))
+//            } else {
+//                Helper.showNoInternetMessg()
+//            }
+//        } else {
+//
+//        }
+//    }
+    
+    
     @IBAction func btnAddItineraryTapped(_ sender: Any) {
         
         let addItrnyVC = self.storyboard?.instantiateViewController(withIdentifier: "TTAddNewItineraryVC") as! TTAddNewItineraryVC
         addItrnyVC.retDate = expryDate
+//        addItrnyVC.citiesString = Session.cities
         addItrnyVC.depDate = bookDate
         addItrnyVC.okTTItnryAddDel = self
         self.navigationController?.pushViewController(addItrnyVC, animated: true)

@@ -23,7 +23,8 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
     
     var depDate : String = ""
     var retDate : String = ""
-    
+
+//    var citiesString = String()
     var arrTravelStatus : [String] = ["Used","Unused"]
     var index = 0
     weak var ttItnry : TTItineraryListData?
@@ -70,7 +71,7 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
         
         initialSetup()
         
-        getCityList()
+        self.getCityList()
         
         if ttItnry != nil {
             assignDataToFields()
@@ -132,8 +133,6 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
         let issueDate = dateFormatter.string(from:newDate1!)
         txtDate.text = issueDate
         
-//        txtDate.text = ttItnry?.depDate
-        
         txtDepTime.text = ttItnry?.depTime
         txtITATCode.text = ttItnry?.itatCode
         txtTrvlStatus.text = ttItnry?.trvlStatus
@@ -163,35 +162,42 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
         self.view.endEditing(true)
     }
     
-    func getCityList() {
+    func parseAndAssignCities(citiesString : String) -> [String] {
         
-        var arrCityName: [String] = []
-
-        if internetStatus != .notReachable {
+        var expCities = [String]()
+        let jsonObj = JSON.init(parseJSON:citiesString)
+        print(Session.cities)
+        for(_,j):(String,JSON) in jsonObj{
             
-            let url = String.init(format: Constant.TT.TT_GET_CITY_LIST, Session.authKey)
-            self.view.showLoading()
-            
-            Alamofire.request(url).responseData(completionHandler: ({ response in
-                self.view.hideLoading()
-                
-                if Helper.isResponseValid(vc: self, response: response.result) {
-                    
-                    let jsonResponse = JSON(response.result.value)
-                    
-                    for(_,j):(String,JSON) in jsonResponse{
-                       
-                        let cityNme = j["cityname"].stringValue
-                        arrCityName.append(cityNme)
-                    }
-                     self.arrCityList = arrCityName
-                }
-            }))
-        } else {
-            Helper.showNoInternetMessg()
+            let cityNme = j["CityName"].stringValue
+            expCities.append(cityNme)
         }
+        return expCities
     }
     
+    func getCityList() {
+        
+        if Session.cities == "" {
+            if internetStatus != .notReachable {
+                
+                let url = String.init(format: Constant.TT.TT_GET_CITY_LIST, Session.authKey)
+                self.view.showLoading()
+                Alamofire.request(url).responseData(completionHandler: ({ response in
+                    self.view.hideLoading()
+                    if Helper.isResponseValid(vc: self, response: response.result){
+                        let jsonString = JSON(response.result.value!)
+                        Session.cities = jsonString.rawString()!
+                        self.arrCityList = self.parseAndAssignCities(citiesString : Session.cities)
+                    }
+                }))
+            } else {
+                Helper.showNoInternetMessg()
+            }
+        } else {
+            self.arrCityList = parseAndAssignCities(citiesString: Session.cities)
+        }
+    }
+
     @objc func handleTap() {
         self.view.endEditing(true)
     }
