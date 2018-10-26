@@ -28,7 +28,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var selectedItem : MenuDataObject?
     var helpDocViewer: UIDocumentInteractionController!
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request" , "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request" , "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report", "2.2.2 Accounts Payable Report"]
     
 //    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request" , "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report"]
 
@@ -63,7 +63,9 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
         
         let arReport = MenuDataObject(name: "2.2.1 Accounts Receivables (AR) Report", storybdNAme: "ARReport", vcName: "ARReportController", imageName: #imageLiteral(resourceName: "empty"))
-        let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let apReport = MenuDataObject(name: "2.2.2 Accounts Payable Report", storybdNAme: "AccountsPayable", vcName: "APReportController", imageName: #imageLiteral(resourceName: "empty"))
+
+        let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport, apReport], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         
         let pc = MenuDataObject(name: "3.1.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))
@@ -217,7 +219,6 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
             levelOne.selectionStyle = .none
             treeView.separatorStyle = RATreeViewCellSeparatorStyleNone
             levelOne.setupCellViews(title: item.name!, image: item.imageName)
-            
             
             if (item.children?.count == 0)  {
                 levelOne.imgArrow.image = #imageLiteral(resourceName: "empty")

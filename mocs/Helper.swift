@@ -16,6 +16,7 @@ import RATreeView
 /// Cardview
 @IBDesignable
 
+
 class CardView: UIView {
     
     var cornerRadius: CGFloat = 2
@@ -23,7 +24,7 @@ class CardView: UIView {
     var shadowOffsetHeight: Int = 3
     var shadowColor: UIColor? = UIColor.white
     var shadowOpacity: Float = 1
-    
+
     override func layoutSubviews() {
         layer.cornerRadius = cornerRadius
         let shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
@@ -69,6 +70,9 @@ class GlobalVariables : NSObject {
 }
 
 class Helper: UIView {
+    
+
+
     
     public static func setTitle(title:String, subtitle:String) -> UIView {
         
@@ -777,6 +781,11 @@ extension NSObject:Utility{
 //
 //}
 
+var progressTimer: Timer?
+var progressTime = 180.0
+var progressView: UIProgressView?
+var lblTimerTxt = UILabel()
+
 extension UIView{
     
     func loadNib() -> UIView {
@@ -864,6 +873,69 @@ extension UIView{
         self.addSubview(blurEffectView)
     }
     
+    func showLoadingWithMessage(messg : String) {
+        
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let animationView = LOTAnimationView(name: "ocs_loading")
+        animationView.frame = CGRect(x: 0, y: 0, width: 120, height: 100)
+        animationView.loopAnimation = true
+        animationView.play()
+        self.addSubview(blurEffectView)
+
+      
+        blurEffectView.contentView.addSubview(animationView)
+        animationView.center = blurEffectView.contentView.center
+        
+        
+        lblTimerTxt.frame = CGRect(x: self.frame.origin.x + 30 , y: self.frame.origin.y + 370  , width: self.frame.size.width - 60, height: 55)
+        
+        lblTimerTxt.numberOfLines = 0
+        lblTimerTxt.lineBreakMode = .byWordWrapping
+//        lblTimerTxt.sizeToFit()
+        lblTimerTxt.contentMode = .center
+        lblTimerTxt.textAlignment = .center
+        lblTimerTxt.textColor = UIColor.white
+        lblTimerTxt.font = UIFont.systemFont(ofSize: 14.0)
+
+        self.addSubview(lblTimerTxt)
+
+        progressView = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
+        progressView?.frame = CGRect(x: self.frame.origin.x + 30 , y: lblTimerTxt.frame.origin.y + lblTimerTxt.frame.size.height + 2, width: self.frame.size.width - 60, height: 50)
+        progressView?.trackTintColor = AppColor.universalHeaderColor
+        progressView?.progress = 1.0
+        progressView?.transform = CGAffineTransform(scaleX: 1.0, y: 3.0)
+        progressView?.progressTintColor = UIColor.green
+        progressTimer = Timer.scheduledTimer(timeInterval:1.0, target: self, selector: #selector(updateProgress), userInfo: ["messg" :  messg ], repeats: true)
+
+//        self.addSubview(blurEffectView)
+        self.addSubview(progressView!)
+        
+    }
+    
+    @objc func updateProgress() {
+        
+        progressTime -= 1.0
+        progressView?.setProgress(Float(progressTime/180.0), animated: true)
+        print(Float(progressTime/180.0))
+        
+        let messg = progressTimer?.userInfo
+        let dict = progressTimer?.userInfo as! [String : AnyObject]
+        
+        lblTimerTxt.text = dict["messg"]  as! String + " " +  getTimeString(time: progressTime)
+        
+        if(progressView?.progress == 0.00) {
+            progressTime = 180.0
+            progressTimer?.invalidate()
+            lblTimerTxt.text = ""
+            progressView?.removeFromSuperview()
+        }
+    }
+    
+    
     func hideLoading(){
         
         self.subviews.flatMap {  $0 as? UIVisualEffectView }.forEach {
@@ -871,7 +943,31 @@ extension UIView{
         }
     }
     
+    func hideLoadingProgressLoader(){
+        
+        if progressTimer != nil {
+            progressTimer?.invalidate()
+            progressTimer = nil
+        }
+        progressTime = 180.0
+        lblTimerTxt.text = ""
+        lblTimerTxt.removeFromSuperview()
+        progressView?.removeFromSuperview()
+
+        self.subviews.flatMap {  $0 as? UIVisualEffectView }.forEach {
+            $0.removeFromSuperview()
+        }
+    }
     
+    
+    func getTimeString(time: TimeInterval) -> String {
+       
+        let minutes = Int(time) / 60
+        let seconds = time - Double(minutes) * 60
+//        let secondsFraction = seconds - Double(Int(seconds))
+        print("%02i:%02i",minutes,Int(seconds))
+        return String(format:"%02i:%02i",minutes,Int(seconds))
+    }
 }
 
 

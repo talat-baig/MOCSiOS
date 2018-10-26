@@ -392,7 +392,6 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             self.guest = "Guest"
             self.txtFldTrvlName.text = ""
             checkCompanyCodeAndGetTravellerData(compCode: 0)
-//            txtDept.text = "NA"
             
         } else {            
             guard let compnyTitle = txtCompny.text else {

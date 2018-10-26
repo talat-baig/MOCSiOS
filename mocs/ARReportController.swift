@@ -17,6 +17,14 @@ class ARReportController: UIViewController , filterViewDelegate{
     var dataEntry:[PieChartDataEntry] = []
     var arOverallData : AROverallData?
     var arListData = [ARListData]()
+    var progressView: UIProgressView?
+    var progressLabel: UILabel?
+    var progressTime = 1.0
+    var progressCounter = 100.0
+    
+//    weak var progressTimer : Timer?
+//    private var progressTimer: Timer?
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
@@ -41,7 +49,7 @@ class ARReportController: UIViewController , filterViewDelegate{
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Accounts Receivables"
         vwTopHeader.lblSubTitle.isHidden = true
-      
+        
     }
     
     
@@ -62,124 +70,285 @@ class ARReportController: UIViewController , filterViewDelegate{
             arOverallData = nil
             arListData.removeAll()
         }
+        
+        
+        if filterString.contains(",") {
+        
+            Helper.showMessage(message: "Please select only one filter")
+            return
+        }
+        
         self.fetchAllARData()
     }
     
     
+    func stop() {
+        guard progressTimer != nil else { return }
+        progressTimer?.invalidate()
+        progressTimer = nil
+    }
+    
+//    func addProgressView() {
+//
+//        progressView = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
+//        progressView?.center = self.view.center
+//        progressView?.trackTintColor = UIColor.blue
+//        progressView?.progress = 1.0
+//        progressView?.progressTintColor = UIColor.green
+//        progressTimer = Timer.scheduledTimer(timeInterval:1, target: self, selector: #selector(updateProgressVw), userInfo: nil, repeats: true)
+//        view.addSubview(progressView!)
+//    }
+    
+    
+//    @objc func updateProgressVw() {
+//
+//        progressTime -= 0.1
+//        self.progressView?.setProgress(Float(self.progressTime), animated: true)
+//
+//        if(self.progressView?.progress == 0.0) {
+//            self.stop()
+//            progressTime = 1.0
+//
+//            self.progressView?.removeFromSuperview()
+//        }
+//    }
+    
     @objc func fetchAllARData() {
-
+        
+        var messg = ""
+        var arrFilterString = ["35+Ivory Coast+06", "25+Dubai+06"]
+        print(FilterViewController.getFilterString())
         if internetStatus != .notReachable {
-            var isRespOverallValid = true
-            var isRespARListValid = true
-            var isRespChartValid = true
             
-            let group = DispatchGroup()
-            self.view.showLoading()
-            group.enter()
-            
+//            self.view.showLoading()
             let url1 = String.init(format: Constant.AR.OVERALL, Session.authKey,
                                    Helper.encodeURL(url : FilterViewController.getFilterString()))
-            Alamofire.request(url1).responseData(completionHandler: ({ response in
-                group.leave()
-                if Helper.isResponseValid(vc: self, response: response.result){
-
-                    var jsonResponse = JSON(response.result.value!)
-                    
-                    if  (jsonResponse.arrayObject?.isEmpty)! {
-                        isRespOverallValid = false
-                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                        return
-                    } else {
-                         isRespOverallValid = true
-                        /// Modified
-                        self.tblVwARReport.tableFooterView = nil
-                        self.populateOverallData(respJson: jsonResponse)
-                    }
-                } else {
-                    isRespOverallValid = false
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                    
-                }
-            }))
             
-            group.enter()
             let url2 = String.init(format: Constant.AR.CHART, Session.authKey,
                                    Helper.encodeURL(url :  FilterViewController.getFilterString()))
-            Alamofire.request(url2).responseData(completionHandler: ({ response in
-                group.leave()
-                if Helper.isResponseValid(vc: self, response: response.result) {
-//                    isRespChartValid = true
-                    var jsonResponse = JSON(response.result.value!)
-                    
-                    if  (jsonResponse.arrayObject?.isEmpty)! {
-                        isRespChartValid = false
-                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                        return
-                    } else {
-                         isRespChartValid = true
-                        /// Modified
-                        self.tblVwARReport.tableFooterView = nil
-                        self.populateChartData(respJson : jsonResponse)
-                    }
-                } else {
-                    isRespChartValid = false
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                    
-                }
-            }))
             
-            
-            group.enter()
             let url3 = String.init(format: Constant.AR.LIST, Session.authKey,
                                    Helper.encodeURL(url :  FilterViewController.getFilterString()))
-            Alamofire.request(url3).responseData(completionHandler: ({ response in
-                group.leave()
-                if Helper.isResponseValid(vc: self, response: response.result){
-//                    isRespARListValid = true
-                    var jsonResponse = JSON(response.result.value!)
+            
+            print(url1)
+            
+            var request = URLRequest(url: URL(string: url1)!)
+            request.httpMethod = "GET"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.timeoutInterval = 180 // 180 seconds
+            
+            if  arrFilterString.contains(FilterViewController.getFilterString()){
+                messg = "This Report is at a delay of 1 Hour of current time due to technical complexities to derive the numbers -"
+            } else {
+                 messg = "This Report is Live -"
+            }
+                
+            self.view.showLoadingWithMessage(messg: messg)
+            
+            Alamofire.request(request as  URLRequestConvertible).responseData(completionHandler: ({ response in
+                if Helper.isResponseValid(vc: self, response: response.result) {
                     
-                    if  (jsonResponse.arrayObject?.isEmpty)! {
-                        isRespARListValid = false
+                    let ovrAllResp = JSON(response.result.value!)
+                    
+                    if  (ovrAllResp.arrayObject?.isEmpty)! {
+                        self.view.hideLoadingProgressLoader()
+                        self.resetData()
+                        self.tblVwARReport.reloadData()
+                        
+                        self.refreshControl.endRefreshing()
                         Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
                         return
                     } else {
-                         isRespARListValid = true
-                        /// Modified
-                        self.tblVwARReport.tableFooterView = nil
-                        self.populateListData(respJson: jsonResponse)
+                        
+                        Alamofire.request(url2).responseData(completionHandler: ({ response in
+                            if Helper.isResponseValid(vc: self, response: response.result) {
+                                let chartResponse = JSON(response.result.value!)
+                                
+                                if  (chartResponse.arrayObject?.isEmpty)! {
+                                    self.view.hideLoadingProgressLoader()
+                                    self.refreshControl.endRefreshing()
+                                    self.resetData()
+                                    self.tblVwARReport.reloadData()
+                                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+                                    return
+                                } else {
+                                    
+                                    Alamofire.request(url3).responseData(completionHandler: ({ response in
+                                        
+                                        if Helper.isResponseValid(vc: self, response: response.result){
+                                            let listResponse = JSON(response.result.value!)
+                                            
+                                            self.view.hideLoadingProgressLoader()
+                                            self.refreshControl.endRefreshing()
+                                            
+                                            if  (listResponse.arrayObject?.isEmpty)! {
+                                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+                                                return
+                                            } else {
+                                                
+                                                self.populateOverallData(respJson: ovrAllResp)
+                                                self.populateChartData(respJson: chartResponse)
+                                                self.populateListData(respJson: listResponse)
+                                                self.tblVwARReport.tableFooterView = nil
+                                                self.tblVwARReport.reloadData()
+                                            }
+                                        } else {
+                                            self.view.hideLoadingProgressLoader()
+                                            self.refreshControl.endRefreshing()
+                                            self.resetData()
+                                            self.tblVwARReport.reloadData()
+                                            Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+                                        }
+                                    }))
+                                }
+                            } else {
+                                self.view.hideLoadingProgressLoader()
+                                self.refreshControl.endRefreshing()
+                                self.resetData()
+                                self.tblVwARReport.reloadData()
+                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+                            }
+                        }))
                     }
                 } else {
-                    isRespARListValid = false
+                    self.view.hideLoadingProgressLoader()
+                    self.refreshControl.endRefreshing()
+                    self.resetData()
+                    self.tblVwARReport.reloadData()
                     Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
                 }
             }))
             
-            print(FilterViewController.getFilterString())
-            group.notify(queue: .main) {
-                self.view.hideLoading()
-                self.refreshControl.endRefreshing()
-                
-                if isRespARListValid && isRespChartValid && isRespOverallValid {
-                    /// Modified
-                    self.tblVwARReport.tableFooterView = nil
-                    self.tblVwARReport.reloadData()
-                } else {
-                    if !self.dataEntry.isEmpty || self.arOverallData != nil || !self.arListData.isEmpty {
-                        self.dataEntry.removeAll()
-                        self.arOverallData = nil
-                        self.arListData.removeAll()
-                    }
-                    self.tblVwARReport.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                }
-//                  self.tblVwARReport.reloadData()
-            }
         } else {
             Helper.showNoInternetMessg()
+            self.resetData()
+            self.tblVwARReport.reloadData()
             Helper.showNoInternetState(vc: self, tb: self.tblVwARReport, action: #selector(self.fetchAllARData))
             self.refreshControl.endRefreshing()
         }
     }
+    
+    func resetData() {
+        
+        self.arOverallData = nil
+        self.arListData.removeAll()
+        self.dataEntry.removeAll()
+    }
+    
+    //    @objc func fetchNewAllARData() {
+    //
+    //        if internetStatus != .notReachable {
+    //            var isRespOverallValid = true
+    //            var isRespARListValid = true
+    //            var isRespChartValid = true
+    //
+    //            let group = DispatchGroup()
+    //            self.view.showLoading()
+    //            group.enter()
+    //
+    //            let url1 = String.init(format: Constant.AR.OVERALL, Session.authKey,
+    //                                   Helper.encodeURL(url : FilterViewController.getFilterString()))
+    //            Alamofire.request(url1).responseData(completionHandler: ({ response in
+    //                group.leave()
+    //                if Helper.isResponseValid(vc: self, response: response.result){
+    //
+    //                    var jsonResponse = JSON(response.result.value!)
+    //
+    //                    if  (jsonResponse.arrayObject?.isEmpty)! {
+    //                        isRespOverallValid = false
+    //                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+    //                        return
+    //                    } else {
+    //                         isRespOverallValid = true
+    //                        /// Modified
+    //                        self.tblVwARReport.tableFooterView = nil
+    //                        self.populateOverallData(respJson: jsonResponse)
+    //                    }
+    //                } else {
+    //                    isRespOverallValid = false
+    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+    //
+    //                }
+    //            }))
+    //
+    //            group.enter()
+    //            let url2 = String.init(format: Constant.AR.CHART, Session.authKey,
+    //                                   Helper.encodeURL(url :  FilterViewController.getFilterString()))
+    //            Alamofire.request(url2).responseData(completionHandler: ({ response in
+    //                group.leave()
+    //                if Helper.isResponseValid(vc: self, response: response.result) {
+    ////                    isRespChartValid = true
+    //                    var jsonResponse = JSON(response.result.value!)
+    //
+    //                    if  (jsonResponse.arrayObject?.isEmpty)! {
+    //                        isRespChartValid = false
+    //                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+    //                        return
+    //                    } else {
+    //                         isRespChartValid = true
+    //                        /// Modified
+    //                        self.tblVwARReport.tableFooterView = nil
+    //                        self.populateChartData(respJson : jsonResponse)
+    //                    }
+    //                } else {
+    //                    isRespChartValid = false
+    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+    //
+    //                }
+    //            }))
+    //
+    //
+    //            group.enter()
+    //            let url3 = String.init(format: Constant.AR.LIST, Session.authKey,
+    //                                   Helper.encodeURL(url :  FilterViewController.getFilterString()))
+    //            Alamofire.request(url3).responseData(completionHandler: ({ response in
+    //                group.leave()
+    //                if Helper.isResponseValid(vc: self, response: response.result){
+    ////                    isRespARListValid = true
+    //                    var jsonResponse = JSON(response.result.value!)
+    //
+    //                    if  (jsonResponse.arrayObject?.isEmpty)! {
+    //                        isRespARListValid = false
+    //                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+    //                        return
+    //                    } else {
+    //                         isRespARListValid = true
+    //                        /// Modified
+    //                        self.tblVwARReport.tableFooterView = nil
+    //                        self.populateListData(respJson: jsonResponse)
+    //                    }
+    //                } else {
+    //                    isRespARListValid = false
+    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+    //                }
+    //            }))
+    //
+    //            print(FilterViewController.getFilterString())
+    //            group.notify(queue: .main) {
+    //                self.view.hideLoading()
+    //                self.refreshControl.endRefreshing()
+    //
+    //                if isRespARListValid && isRespChartValid && isRespOverallValid {
+    //                    /// Modified
+    //                    self.tblVwARReport.tableFooterView = nil
+    //                    self.tblVwARReport.reloadData()
+    //                } else {
+    //                    if !self.dataEntry.isEmpty || self.arOverallData != nil || !self.arListData.isEmpty {
+    //                        self.dataEntry.removeAll()
+    //                        self.arOverallData = nil
+    //                        self.arListData.removeAll()
+    //                    }
+    //                    self.tblVwARReport.reloadData()
+    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+    //                }
+    ////                  self.tblVwARReport.reloadData()
+    //            }
+    //        } else {
+    //            Helper.showNoInternetMessg()
+    //            Helper.showNoInternetState(vc: self, tb: self.tblVwARReport, action: #selector(self.fetchAllARData))
+    //            self.refreshControl.endRefreshing()
+    //        }
+    //    }
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
@@ -222,7 +391,7 @@ class ARReportController: UIViewController , filterViewDelegate{
         
         self.dataEntry.removeAll()
         if jsonArr.count > 0 {
-//            self.dataEntry.removeAll()
+            //            self.dataEntry.removeAll()
             
             for i in 0..<jsonArr.count {
                 
@@ -239,9 +408,9 @@ class ARReportController: UIViewController , filterViewDelegate{
         let jsonArr = respJson.arrayObject as! [[String:AnyObject]]
         
         self.arListData.removeAll()
-
+        
         if jsonArr.count > 0 {
-//            self.arListData.removeAll()
+            //            self.arListData.removeAll()
             
             for i in 0..<jsonArr.count {
                 

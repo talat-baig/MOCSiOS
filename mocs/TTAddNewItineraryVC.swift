@@ -37,6 +37,7 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
 
     @IBOutlet weak var stckVwDateTime: UIStackView!
     
+    @IBOutlet weak var vwDepTime: UIView!
     @IBOutlet weak var vwArrvlCity: UIView!
     @IBOutlet weak var vwDestCity: UIView!
     @IBOutlet weak var vwFlightNum: UIView!
@@ -115,7 +116,9 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
         Helper.addBordersToView(view: vwFlightNum)
         Helper.addBordersToView(view: vwITATCode)
         Helper.addBordersToView(view: vwTrvlStatus)
-        
+        Helper.addBordersToView(view: vwDepDate)
+        Helper.addBordersToView(view: vwDepTime)
+
         txtDate.inputView = datePickerTool
         txtDepTime.inputView = datePickerTool
     }

@@ -42,19 +42,16 @@ class ARListCell: UITableViewCell {
     @IBOutlet weak var lblAmt4: UILabel!
 
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         vwInner.layer.shadowOpacity = 0.3
         vwInner.layer.shadowOffset = CGSize(width: 0, height: 3)
         vwInner.layer.shadowRadius = 3.0
         vwInner.layer.shadowColor = UIColor.black.cgColor
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
     
     /// Set data of type ARListData to UI elements of Cell

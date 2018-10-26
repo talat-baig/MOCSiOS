@@ -8,19 +8,19 @@
 
 struct ApiKey {
     // LIVE
-    //static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-       static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+//    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-    //static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+        static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-        static let URL = "http://172.16.12.12/OCSWebApi/api"
+//    static let URL = "http://172.16.12.12/OCSWebApi/api"
     
     
 }
@@ -62,8 +62,6 @@ struct Constant
         static let RO = "Release Order - Approval"
         static let CP = "Counterparty - Approval"
         static let TR = "Travel Request - Approval"
-        
-        
     }
     
     /// Help Document Url link
@@ -73,6 +71,7 @@ struct Constant
     
     /// Modules Initials
     struct MODULES {
+        
         static let EPRECR = "Employee Payments And Reimbursments";
         static let TCR = "Travel Claim Reimbursement";
         static let SC = "Sales Contract";
@@ -83,7 +82,6 @@ struct Constant
         static let TASK_MANAGER = "Task Manager"
         static let CP = "Counterparty Profile"
         static let TT = "Travel Ticket"
-
     }
     
     struct API {
@@ -193,10 +191,10 @@ struct Constant
          - 1: AuthID
          - 2: Filter
          */
-//        static let OVERALL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSAROverall?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        //        static let OVERALL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSAROverall?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
         static let OVERALL = ApiUrl.URL +  "/AR/GetARReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
-
+        
         
         /**
          *ARI Chart*
@@ -220,10 +218,6 @@ struct Constant
         
         static let SEND_EMAIL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCPEmails?apiKey="+ApiKey.KEY+"&AuthId=%@&InvoiceNos=%@&EmailIds=%@"
         
-//
-//        GetARReport(string apikeylist, string authid, string filter)
-//
-////        http://172.16.12.12/OCSWebApi/api/AR/GetARReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=96657BD8-0A8A-4188-BA76-4C9BBCB9&filter=25+Dubai+06
         
     }
     
@@ -413,41 +407,41 @@ struct Constant
         static let TT_GET_LIST = ApiUrl.URL + "/TravelTickets/GetTravelTicketListing?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
         
         static let TT_GET_COMPANY_LIST = ApiUrl.URL + "/TravelTickets/LoadCompanyList?apicomlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&comlistauth=%@&refid=%@"
-
+        
         static let TT_GET_CURRNECY_LIST = ApiUrl.URL + "/TravelTickets/LoadCurrencyList?apicurlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&curlistauth=%@&refid=%@"
-
+        
         static let TT_GET_TRAVELLER_LIST = ApiUrl.URL + "/TravelTickets/LoadTravellerDetails?apitravellist=33ddb2ee-59a5-428f-a0a5-7167859b8589&travellistauth=%@&CompID=%d"
         
         static let TT_GET_REPORTING_MNGR = ApiUrl.URL + "/TravelTickets/FillReportingManager?apifillmanager=33ddb2ee-59a5-428f-a0a5-7167859b8589&authfillmanager=%@&login=%@"
-
+        
         static let TT_GET_TRAVEL_MODES = ApiUrl.URL + "/TravelTickets/LoadTravelModes?apimodelist=33ddb2ee-59a5-428f-a0a5-7167859b8589&modelistauth=%@"
         
         static let TT_GET_DEBIT_AC = ApiUrl.URL + "/TravelTickets/LoadDebitName?apidebitlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&debitlistauth=%@"
-
+        
         static let TT_GET_CARRIER_LIST = ApiUrl.URL + "/TravelTickets/LoadCarrier?apicarrierlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&carrierlistauth=%@"
         
         static let TT_GET_CURRENCY_LIST = ApiUrl.URL + "/TravelTickets/LoadCurrencyList?apicurlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&curlistauth=%@"
-
+        
         static let TT_GET_TRAVEL_AGENT = ApiUrl.URL + "/TravelTickets/LoadTravelAgent?apiagentlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&agentlistauth=%@"
-
+        
         static let TT_GET_EPR_LIST = ApiUrl.URL + "/TravelTickets/LoadEPR?apiEPRlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&EPRlistauth=%@&empid=%@"
         
         static let TT_GET_REP_MNGR_LIST = ApiUrl.URL + "/TravelTickets/LoadReportingManager?apimanagerlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&managerlistauth=%@"
-
+        
         static let TT_GET_ITINRY_LIST = ApiUrl.URL + "/TravelTickets/GetTravelItineryListing?apikeyitilist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authitiid=%@&travelref=%@"
-
+        
         static let TT_DELETE_ITINRY = ApiUrl.URL + "/TravelTickets/DeleteTravelItinery?itiapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authiti=%@&ID=%d"
-
+        
         static let TT_GET_CITY_LIST = ApiUrl.URL + "/TravelTickets/LoadCity?apicitylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&citylistauth=%@"
         
         static let TT_ADD_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/AddTravelTicket?addapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&addauth=%@&TravelTicket"
-
+        
         static let TT_DELETE_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/DeleteTravelTicket?deltraapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&deltraauth=%@&travellerID=%d"
-
+        
         static let TT_MAIL_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/MailTravelTicket?mailapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authmail=%@&refID=%@&travellerid=%d"
-
+        
         static let TT_DELETE_VOUCHER = ApiUrl.URL + "/TravelTickets/DeleteTravelItineryVoucher?voapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authvo=%@&docID=%@"
-
+        
     }
     
     
@@ -539,8 +533,6 @@ struct Constant
     
     struct CP {
         
-        //        http://ocsmis.phoenixgroup.net/MOCS_API/api/
-        
         static let LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
         static let VIEW = ApiUrl.URL + "/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
@@ -610,7 +602,7 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-//        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+        //        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
         static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
