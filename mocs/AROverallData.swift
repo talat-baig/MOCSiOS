@@ -10,7 +10,6 @@ import UIKit
 
 
 class AmountDetails {
-    
     var currency = String()
     var amount =  String()
 }

@@ -10,11 +10,8 @@ import UIKit
 
 class ARListCell: UITableViewCell {
 
-    
     @IBOutlet weak var lblCompany: UILabel!
-    
     @IBOutlet weak var lblLocation: UILabel!
-    
     @IBOutlet weak var lblBUnit: UILabel!
     
     @IBOutlet weak var vwInner: UIView!
@@ -28,7 +25,6 @@ class ARListCell: UITableViewCell {
     @IBOutlet weak var stckVw2: UIStackView!
     @IBOutlet weak var stckVw3: UIStackView!
     @IBOutlet weak var stckVw4: UIStackView!
-    
     
     @IBOutlet weak var lblTotalInvVal: UILabel!
     @IBOutlet weak var lblCurr1: UILabel!
@@ -64,7 +60,6 @@ class ARListCell: UITableViewCell {
 
         self.lblInvQnty.text = data.invQnty
         self.lblAmtRecievable.text = data.amtRecievable
-
         
         if data.invValue.count > 0 {
             self.lblInvValue.text = "(" + data.invValue[0].currency.trimmingCharacters(in: .whitespaces) + ") " + data.invValue[0].amount

@@ -57,8 +57,6 @@ class AROverallCell: UITableViewCell {
         
         self.lblAmtRecievable.text = data.amtRecievable
         
-   
-        
         if data.totalAmtRecieved.count > 0 {
             
             for i in 0..<data.totalAmtRecieved.count {
@@ -95,63 +93,5 @@ class AROverallCell: UITableViewCell {
     }
     
     
-    func createStackView(lblCurr1 : String, lblAmt1 : String, lblCurr2 : String , lblAmt2: String) {
-        
-        let lblCurrency1 = UILabel()
-        let lblAmount1 = UILabel()
-        
-        lblCurrency1.text = lblCurr1
-        lblAmount1.text = lblAmt1
-        
-        lblAmount1.textColor = UIColor.white
-        lblCurrency1.textColor = UIColor.white
-        
-        lblCurrency1.font = UIFont.systemFont(ofSize: 13.0)
-        lblAmount1.font = UIFont.systemFont(ofSize: 17.0 ,  weight: .semibold)
-        
-        let s1 = UIStackView()
-        s1.axis = .vertical
-        s1.distribution = .fillEqually
-        s1.alignment = .fill
-        s1.spacing = 0
-        s1.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        s1.addArrangedSubview(lblCurrency1)
-        s1.addArrangedSubview(lblAmount1)
-        // -------- //
-        let lblCurrency2 = UILabel()
-        let lblAmount2 = UILabel()
-        
-        lblCurrency2.text = lblCurr2
-        lblAmount2.text = lblAmt2
-        
-        lblAmount2.textColor = UIColor.white
-        lblCurrency2.textColor = UIColor.white
-        
-        lblCurrency2.font = UIFont.systemFont(ofSize: 13.0)
-        lblAmount2.font = UIFont.systemFont(ofSize: 17.0 ,  weight: .semibold)
-        
-        let s2 = UIStackView()
-        s2.axis = .vertical
-        s2.distribution = .fillEqually
-        s2.alignment = .fill
-        s2.spacing = 0
-        s2.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        s2.addArrangedSubview(lblCurrency2)
-        s2.addArrangedSubview(lblAmount2)
-        
-        
-        let rect = CGRect(origin: CGPoint(x:0, y:16), size: CGSize(width:self.stackVwAmtRecvd.frame.size.width, height:self.stackVwAmtRecvd.frame.size.height - 16))
-        
-        let s3 = UIStackView(frame: rect )
-        s3.axis = .horizontal
-        s3.distribution = .fillEqually
-        s3.alignment = .fill
-        s3.spacing = 0
-        s3.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        s3.addArrangedSubview(s1)
-        s3.addArrangedSubview(s2)
-        
-        stackVwAmtRecvd.addArrangedSubview(s3)
-    }
     
 }

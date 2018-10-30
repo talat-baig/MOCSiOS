@@ -8,19 +8,19 @@
 
 struct ApiKey {
     // LIVE
-        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+//        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-//    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-        static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+//        static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-//    static let URL = "http://172.16.12.12/OCSWebApi/api"
+    static let URL = "http://172.16.12.12/OCSWebApi/api"
     
     
 }
@@ -217,6 +217,24 @@ struct Constant
         static let INSTRUMENTS = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBUCI?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@&Company=%@&Location=%@&BV=%@&Counterparty=%@"
         
         static let SEND_EMAIL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCPEmails?apiKey="+ApiKey.KEY+"&AuthId=%@&InvoiceNos=%@&EmailIds=%@"
+        
+        
+    }
+    
+    
+    struct AP {
+     
+        
+        static let AP_OVERALL = ApiUrl.URL +  "/APReport/GetAPReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        
+     
+        static let AP_CHART = ApiUrl.URL + "/APReport/ShowTop5CP?apitop=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&filter=%@"
+        
+    
+        static let CP_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBUC?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@&Company=%@&Location=%@&BV=%@"
+        
+        
+        static let INSTRUMENTS = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBUCI?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@&Company=%@&Location=%@&BV=%@&Counterparty=%@"
         
         
     }
@@ -602,8 +620,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-        //        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+                static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

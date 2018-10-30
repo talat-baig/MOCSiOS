@@ -17,13 +17,7 @@ class ARReportController: UIViewController , filterViewDelegate{
     var dataEntry:[PieChartDataEntry] = []
     var arOverallData : AROverallData?
     var arListData = [ARListData]()
-    var progressView: UIProgressView?
-    var progressLabel: UILabel?
-    var progressTime = 1.0
-    var progressCounter = 100.0
-    
-//    weak var progressTimer : Timer?
-//    private var progressTimer: Timer?
+
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
@@ -88,35 +82,13 @@ class ARReportController: UIViewController , filterViewDelegate{
         progressTimer = nil
     }
     
-//    func addProgressView() {
-//
-//        progressView = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
-//        progressView?.center = self.view.center
-//        progressView?.trackTintColor = UIColor.blue
-//        progressView?.progress = 1.0
-//        progressView?.progressTintColor = UIColor.green
-//        progressTimer = Timer.scheduledTimer(timeInterval:1, target: self, selector: #selector(updateProgressVw), userInfo: nil, repeats: true)
-//        view.addSubview(progressView!)
-//    }
-    
-    
-//    @objc func updateProgressVw() {
-//
-//        progressTime -= 0.1
-//        self.progressView?.setProgress(Float(self.progressTime), animated: true)
-//
-//        if(self.progressView?.progress == 0.0) {
-//            self.stop()
-//            progressTime = 1.0
-//
-//            self.progressView?.removeFromSuperview()
-//        }
-//    }
+
     
     @objc func fetchAllARData() {
         
         var messg = ""
-        var arrFilterString = ["35+Ivory Coast+06", "25+Dubai+06"]
+        let arrFilterString = ["35+Ivory Coast+06", "25+Dubai+06"]
+        
         print(FilterViewController.getFilterString())
         if internetStatus != .notReachable {
             
@@ -138,9 +110,9 @@ class ARReportController: UIViewController , filterViewDelegate{
             request.timeoutInterval = 180 // 180 seconds
             
             if  arrFilterString.contains(FilterViewController.getFilterString()){
-                messg = "This Report is at a delay of 1 Hour of current time due to technical complexities to derive the numbers -"
+                messg = "This Report is at a delay of 1 Hour of current time due to large data"
             } else {
-                 messg = "This Report is Live -"
+                 messg = "This Report is Live"
             }
                 
             self.view.showLoadingWithMessage(messg: messg)
@@ -229,126 +201,12 @@ class ARReportController: UIViewController , filterViewDelegate{
     }
     
     func resetData() {
-        
         self.arOverallData = nil
         self.arListData.removeAll()
         self.dataEntry.removeAll()
     }
     
-    //    @objc func fetchNewAllARData() {
-    //
-    //        if internetStatus != .notReachable {
-    //            var isRespOverallValid = true
-    //            var isRespARListValid = true
-    //            var isRespChartValid = true
-    //
-    //            let group = DispatchGroup()
-    //            self.view.showLoading()
-    //            group.enter()
-    //
-    //            let url1 = String.init(format: Constant.AR.OVERALL, Session.authKey,
-    //                                   Helper.encodeURL(url : FilterViewController.getFilterString()))
-    //            Alamofire.request(url1).responseData(completionHandler: ({ response in
-    //                group.leave()
-    //                if Helper.isResponseValid(vc: self, response: response.result){
-    //
-    //                    var jsonResponse = JSON(response.result.value!)
-    //
-    //                    if  (jsonResponse.arrayObject?.isEmpty)! {
-    //                        isRespOverallValid = false
-    //                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-    //                        return
-    //                    } else {
-    //                         isRespOverallValid = true
-    //                        /// Modified
-    //                        self.tblVwARReport.tableFooterView = nil
-    //                        self.populateOverallData(respJson: jsonResponse)
-    //                    }
-    //                } else {
-    //                    isRespOverallValid = false
-    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-    //
-    //                }
-    //            }))
-    //
-    //            group.enter()
-    //            let url2 = String.init(format: Constant.AR.CHART, Session.authKey,
-    //                                   Helper.encodeURL(url :  FilterViewController.getFilterString()))
-    //            Alamofire.request(url2).responseData(completionHandler: ({ response in
-    //                group.leave()
-    //                if Helper.isResponseValid(vc: self, response: response.result) {
-    ////                    isRespChartValid = true
-    //                    var jsonResponse = JSON(response.result.value!)
-    //
-    //                    if  (jsonResponse.arrayObject?.isEmpty)! {
-    //                        isRespChartValid = false
-    //                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-    //                        return
-    //                    } else {
-    //                         isRespChartValid = true
-    //                        /// Modified
-    //                        self.tblVwARReport.tableFooterView = nil
-    //                        self.populateChartData(respJson : jsonResponse)
-    //                    }
-    //                } else {
-    //                    isRespChartValid = false
-    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-    //
-    //                }
-    //            }))
-    //
-    //
-    //            group.enter()
-    //            let url3 = String.init(format: Constant.AR.LIST, Session.authKey,
-    //                                   Helper.encodeURL(url :  FilterViewController.getFilterString()))
-    //            Alamofire.request(url3).responseData(completionHandler: ({ response in
-    //                group.leave()
-    //                if Helper.isResponseValid(vc: self, response: response.result){
-    ////                    isRespARListValid = true
-    //                    var jsonResponse = JSON(response.result.value!)
-    //
-    //                    if  (jsonResponse.arrayObject?.isEmpty)! {
-    //                        isRespARListValid = false
-    //                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-    //                        return
-    //                    } else {
-    //                         isRespARListValid = true
-    //                        /// Modified
-    //                        self.tblVwARReport.tableFooterView = nil
-    //                        self.populateListData(respJson: jsonResponse)
-    //                    }
-    //                } else {
-    //                    isRespARListValid = false
-    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-    //                }
-    //            }))
-    //
-    //            print(FilterViewController.getFilterString())
-    //            group.notify(queue: .main) {
-    //                self.view.hideLoading()
-    //                self.refreshControl.endRefreshing()
-    //
-    //                if isRespARListValid && isRespChartValid && isRespOverallValid {
-    //                    /// Modified
-    //                    self.tblVwARReport.tableFooterView = nil
-    //                    self.tblVwARReport.reloadData()
-    //                } else {
-    //                    if !self.dataEntry.isEmpty || self.arOverallData != nil || !self.arListData.isEmpty {
-    //                        self.dataEntry.removeAll()
-    //                        self.arOverallData = nil
-    //                        self.arListData.removeAll()
-    //                    }
-    //                    self.tblVwARReport.reloadData()
-    //                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-    //                }
-    ////                  self.tblVwARReport.reloadData()
-    //            }
-    //        } else {
-    //            Helper.showNoInternetMessg()
-    //            Helper.showNoInternetState(vc: self, tb: self.tblVwARReport, action: #selector(self.fetchAllARData))
-    //            self.refreshControl.endRefreshing()
-    //        }
-    //    }
+   
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()

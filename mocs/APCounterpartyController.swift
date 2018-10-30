@@ -30,7 +30,6 @@ class APCounterpartyController: UIViewController, UIGestureRecognizerDelegate {
         vwTopHeader.lblTitle.text = "Accounts Payable Report"
         vwTopHeader.lblSubTitle.isHidden = true
         
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,6 +39,15 @@ class APCounterpartyController: UIViewController, UIGestureRecognizerDelegate {
     @objc func handleTap() {
         self.srchBar.endEditing(true)
     }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
+    {
+        if (touch.view?.isDescendant(of: tableView))! {
+            return false
+        }
+        return true
+    }
+    
 }
 
 
@@ -64,11 +72,6 @@ extension APCounterpartyController: UITableViewDataSource {
         cell.layer.masksToBounds = true
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 5
-//        if cpListData.count > 0 {
-//            DispatchQueue.main.async {
-////                cell.setDataToView(data: self.cpListData[indexPath.row])
-//            }
-//        }
         return cell
     }
 }
@@ -78,8 +81,13 @@ extension APCounterpartyController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
-       
-        
+        self.srchBar.endEditing(true)
+        let arInsVC = self.storyboard?.instantiateViewController(withIdentifier: "APInvoiceListVC") as! APInvoiceListVC
+//        arInsVC.company = cpListData[indexPath.row].company
+//        arInsVC.location = cpListData[indexPath.row].location
+//        arInsVC.bUnit = cpListData[indexPath.row].bVertical
+//        arInsVC.counterpty = cpListData[indexPath.row].cpName
+        self.navigationController?.pushViewController(arInsVC, animated: true)
     }
 }
 

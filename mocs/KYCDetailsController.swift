@@ -306,7 +306,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                                 
                             default:
                                 NotificationBanner(title: data!["ServerMsg"] as! String ,style: .danger).show()
-                                
                                 break
                             }
                         }
@@ -314,14 +313,11 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                         
                     }
                 }
-                
             }))
         } else {
             
         }
     }
-    
-    
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
      

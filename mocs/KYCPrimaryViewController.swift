@@ -110,4 +110,6 @@ class KYCPrimaryViewController: UIViewController, IndicatorInfoProvider {
     }
     
     
+  
+    
 }

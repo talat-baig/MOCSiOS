@@ -88,7 +88,6 @@ class KYCViewController: ButtonBarPagerTabStripViewController, IndicatorInfoProv
 
         let kycAttachmnt = self.storyboard?.instantiateViewController(withIdentifier: "KYCAttachmentController") as! KYCAttachmentController
 
-        
         views.append(kycPrimary)
         views.append(transDetails)
         views.append(legal)

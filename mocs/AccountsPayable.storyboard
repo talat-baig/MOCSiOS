@@ -178,10 +178,10 @@
             </objects>
             <point key="canvasLocation" x="-516" y="-81"/>
         </scene>
-        <!--Instrument Controller-->
+        <!--APInvoiceListVC-->
         <scene sceneID="hfx-FD-lTf">
             <objects>
-                <viewController storyboardIdentifier="ARInstrumentController" id="nLl-lL-d5J" customClass="ARInstrumentController" customModule="mocs" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="APInvoiceListVC" title="APInvoiceListVC" id="nLl-lL-d5J" customClass="APInvoiceListVC" customModule="mocs" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mGi-KI-tI9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -197,7 +197,7 @@
                                 <rect key="frame" x="0.0" y="70" width="375" height="597"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="arInstrumentCell" rowHeight="219" id="waf-5Y-abR">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="apInvoiceCell" rowHeight="219" id="waf-5Y-abR">
                                         <rect key="frame" x="0.0" y="28" width="375" height="219"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="waf-5Y-abR" id="Koc-Hy-X3D">
@@ -225,8 +225,8 @@
                         <viewLayoutGuide key="safeArea" id="7Pp-AG-6sr"/>
                     </view>
                     <connections>
-                        <outlet property="tblVwInstruments" destination="TDZ-6y-gFY" id="CY9-OV-aa8"/>
-                        <outlet property="vwTopHeader" destination="HZs-JJ-jns" id="oSi-20-X8U"/>
+                        <outlet property="tableView" destination="TDZ-6y-gFY" id="rbc-rS-EPz"/>
+                        <outlet property="vwTopHeader" destination="HZs-JJ-jns" id="hgW-gV-90N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="719-U8-j4l" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -24,7 +24,7 @@ class CardView: UIView {
     var shadowOffsetHeight: Int = 3
     var shadowColor: UIColor? = UIColor.white
     var shadowOpacity: Float = 1
-
+    
     override func layoutSubviews() {
         layer.cornerRadius = cornerRadius
         let shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
@@ -48,10 +48,8 @@ extension UINavigationBar {
             self.layer.shadowRadius = 3.0
             self.layer.shadowColor = UIColor.black.cgColor
             self.layer.shadowOpacity = 0.7
-            
         }
     }
-    
 }
 
 class GlobalVariables : NSObject {
@@ -65,14 +63,12 @@ class GlobalVariables : NSObject {
     
     var uploadQueue : [FileInfo] = []
     
-    
-    
 }
 
 class Helper: UIView {
     
-
-
+    
+    
     
     public static func setTitle(title:String, subtitle:String) -> UIView {
         
@@ -156,7 +152,7 @@ class Helper: UIView {
     
     
     class func daysBetweenDates(startDate: Date, endDate: Date) -> Int {
-
+        
         let components =  Calendar.current.dateComponents([.day], from: startDate, to: endDate).day
         return components!
     }
@@ -350,26 +346,29 @@ class Helper: UIView {
         }
     }
     
-    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, action:Selector){
+    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , action:Selector){
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
-        
+        emptyView.buttonText = "CHANGE FILTER"
         
         if isARReport {
             emptyView.message = "No AR Data for the current\nTry by changing filter"
+        } else if isAPReport {
+            emptyView.message = "No AP Data for the current\nTry by changing filter"
         } else if isTrvReq {
             emptyView.message = "No Travel Request Data found \nTry by again by relaoding"
+            emptyView.buttonText = "RELOAD"
         } else {
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
         
-        
-        if isTrvReq {
-            emptyView.buttonText = "RELOAD"
-        } else {
-            emptyView.buttonText = "CHANGE FILTER"
-        }
+        //
+        //        if isTrvReq {
+        //            emptyView.buttonText = "RELOAD"
+        //        } else {
+        //            emptyView.buttonText = "CHANGE FILTER"
+        //        }
         emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
         tb.tableFooterView = emptyView
         emptyView.translatesAutoresizingMaskIntoConstraints = false
@@ -885,24 +884,23 @@ extension UIView{
         animationView.loopAnimation = true
         animationView.play()
         self.addSubview(blurEffectView)
-
-      
+        
+        
         blurEffectView.contentView.addSubview(animationView)
         animationView.center = blurEffectView.contentView.center
         
         
-        lblTimerTxt.frame = CGRect(x: self.frame.origin.x + 30 , y: self.frame.origin.y + 370  , width: self.frame.size.width - 60, height: 55)
+        lblTimerTxt.frame = CGRect(x: self.frame.origin.x + 30 , y: self.frame.origin.y + 370  , width: self.frame.size.width - 60, height: 70)
         
         lblTimerTxt.numberOfLines = 0
         lblTimerTxt.lineBreakMode = .byWordWrapping
-//        lblTimerTxt.sizeToFit()
         lblTimerTxt.contentMode = .center
         lblTimerTxt.textAlignment = .center
         lblTimerTxt.textColor = UIColor.white
-        lblTimerTxt.font = UIFont.systemFont(ofSize: 14.0)
-
+        lblTimerTxt.font = UIFont.boldSystemFont(ofSize: 16.0)
+        
         self.addSubview(lblTimerTxt)
-
+        
         progressView = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
         progressView?.frame = CGRect(x: self.frame.origin.x + 30 , y: lblTimerTxt.frame.origin.y + lblTimerTxt.frame.size.height + 2, width: self.frame.size.width - 60, height: 50)
         progressView?.trackTintColor = AppColor.universalHeaderColor
@@ -910,8 +908,8 @@ extension UIView{
         progressView?.transform = CGAffineTransform(scaleX: 1.0, y: 3.0)
         progressView?.progressTintColor = UIColor.green
         progressTimer = Timer.scheduledTimer(timeInterval:1.0, target: self, selector: #selector(updateProgress), userInfo: ["messg" :  messg ], repeats: true)
-
-//        self.addSubview(blurEffectView)
+        
+        //        self.addSubview(blurEffectView)
         self.addSubview(progressView!)
         
     }
@@ -922,10 +920,18 @@ extension UIView{
         progressView?.setProgress(Float(progressTime/180.0), animated: true)
         print(Float(progressTime/180.0))
         
-        let messg = progressTimer?.userInfo
         let dict = progressTimer?.userInfo as! [String : AnyObject]
         
-        lblTimerTxt.text = dict["messg"]  as! String + " " +  getTimeString(time: progressTime)
+        //        let messgTxt =  dict["messg"]  as! String
+        //        let timerTxt  = "\n Estimated Time: " + getTimeString(time: progressTime)
+        //        let attributedString = NSMutableAttributedString(string:messgTxt)
+        //        let attrs = [kCTFontAttributeName : UIFont.boldSystemFont(ofSize: 18)]
+        //        let boldString = NSMutableAttributedString(string: timerTxt, attributes:attrs as [NSAttributedStringKey : Any])
+        //        attributedString.append(boldString)
+        
+        lblTimerTxt.text = dict["messg"]  as! String + "\n Estimated Time: " + getTimeString(time: progressTime)
+        
+        //        lblTimerTxt.attributedText = attributedString
         
         if(progressView?.progress == 0.00) {
             progressTime = 180.0
@@ -937,7 +943,6 @@ extension UIView{
     
     
     func hideLoading(){
-        
         self.subviews.flatMap {  $0 as? UIVisualEffectView }.forEach {
             $0.removeFromSuperview()
         }
@@ -953,7 +958,7 @@ extension UIView{
         lblTimerTxt.text = ""
         lblTimerTxt.removeFromSuperview()
         progressView?.removeFromSuperview()
-
+        
         self.subviews.flatMap {  $0 as? UIVisualEffectView }.forEach {
             $0.removeFromSuperview()
         }
@@ -961,10 +966,10 @@ extension UIView{
     
     
     func getTimeString(time: TimeInterval) -> String {
-       
+        
         let minutes = Int(time) / 60
         let seconds = time - Double(minutes) * 60
-//        let secondsFraction = seconds - Double(Int(seconds))
+        //        let secondsFraction = seconds - Double(Int(seconds))
         print("%02i:%02i",minutes,Int(seconds))
         return String(format:"%02i:%02i",minutes,Int(seconds))
     }

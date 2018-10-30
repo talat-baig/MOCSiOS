@@ -133,14 +133,11 @@ struct TTItinerary : Codable {
         case itatCode = "ITATcode"
         case depTime = "DepartureTime"
     }
-    
 }
 
-//public List<TravelTicketVoucher> TravelItineryVouchers { get; set; }
 
 struct TTVoucher : Codable {
     
-//    var docId : String = ""
     var docModName : String = ""
     var docCompName : String = ""
     var docLoc : String = ""
@@ -160,7 +157,6 @@ struct TTVoucher : Codable {
     
     enum CodingKeys : String, CodingKey {
         
-//        case docId = "DocumentID"
         case docModName = "DocumentModuleName"
         case docCompName = "DocumentCompanyName"
         case docLoc = "DocumentLocation"

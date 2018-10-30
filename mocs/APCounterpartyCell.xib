@@ -237,7 +237,7 @@
                                                                     <constraint firstAttribute="height" constant="1" id="TRC-kO-VpI"/>
                                                                 </constraints>
                                                             </view>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invoice Amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1eN-6B-f67">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Paid till Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1eN-6B-f67">
                                                                 <rect key="frame" x="0.0" y="6" width="351" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                                                                 <nil key="textColor"/>
@@ -280,6 +280,24 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="yUH-cj-6kO"/>
+            <connections>
+                <outlet property="lblAmt1" destination="wUn-Ig-BkF" id="fJq-rb-DsO"/>
+                <outlet property="lblAmt2" destination="8kJ-HX-PGF" id="DGi-Fn-6kH"/>
+                <outlet property="lblAmt3" destination="box-f0-44i" id="TSa-Pl-COc"/>
+                <outlet property="lblAmt4" destination="aMm-2H-tfW" id="aUL-iO-7QA"/>
+                <outlet property="lblCPName" destination="3rj-7f-YL5" id="B9j-xV-qQ4"/>
+                <outlet property="lblCurr1" destination="mqv-uK-dgY" id="loW-2f-tEK"/>
+                <outlet property="lblCurr2" destination="xbb-jm-3ds" id="8Xe-Ca-0cW"/>
+                <outlet property="lblCurr3" destination="biW-3s-qpa" id="bCH-Ab-fln"/>
+                <outlet property="lblCurr4" destination="tnm-v0-6cv" id="w0I-U8-iWz"/>
+                <outlet property="lblPaidTillDate" destination="Tf1-DL-UBf" id="zer-em-I98"/>
+                <outlet property="lblbalPayable" destination="6iQ-C1-T9l" id="bw8-ll-S6R"/>
+                <outlet property="stckVw1" destination="MY5-Vs-LMW" id="1Tc-wV-byk"/>
+                <outlet property="stckVw2" destination="9zZ-cR-IKt" id="27s-ib-TZ9"/>
+                <outlet property="stckVw3" destination="Wgf-EL-QlG" id="Jot-mG-ZSw"/>
+                <outlet property="stckVw4" destination="5BI-kS-TPg" id="MRX-9f-Uxo"/>
+                <outlet property="vwInner" destination="mxx-8Z-Ur8" id="ehO-DH-g1J"/>
+            </connections>
             <point key="canvasLocation" x="35.5" y="-16"/>
         </tableViewCell>
     </objects>
