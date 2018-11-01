@@ -9,7 +9,7 @@
 import UIKit
 
 class ARListCell: UITableViewCell {
-
+    
     @IBOutlet weak var lblCompany: UILabel!
     @IBOutlet weak var lblLocation: UILabel!
     @IBOutlet weak var lblBUnit: UILabel!
@@ -36,7 +36,7 @@ class ARListCell: UITableViewCell {
     @IBOutlet weak var lblAmt2: UILabel!
     @IBOutlet weak var lblAmt3: UILabel!
     @IBOutlet weak var lblAmt4: UILabel!
-
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -45,7 +45,7 @@ class ARListCell: UITableViewCell {
         vwInner.layer.shadowRadius = 3.0
         vwInner.layer.shadowColor = UIColor.black.cgColor
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -57,7 +57,7 @@ class ARListCell: UITableViewCell {
         self.lblCompany.text = data.company
         self.lblBUnit.text = data.bVertical
         self.lblLocation.text = data.location
-
+        
         self.lblInvQnty.text = data.invQnty
         self.lblAmtRecievable.text = data.amtRecievable
         
@@ -65,13 +65,13 @@ class ARListCell: UITableViewCell {
             self.lblInvValue.text = "(" + data.invValue[0].currency.trimmingCharacters(in: .whitespaces) + ") " + data.invValue[0].amount
             lblInvValue.isHidden = false
         } else {
-             lblInvValue.isHidden = true
+            lblInvValue.isHidden = true
         }
         
         if data.amtRecieved.count > 0 {
             
             for i in 0..<data.amtRecieved.count {
-               
+                
                 if i == 0 {
                     stckVw1.isHidden = false
                     stckVw2.isHidden = true
@@ -105,6 +105,11 @@ class ARListCell: UITableViewCell {
                     lblAmt4.text =  data.amtRecieved[i].amount
                 }
             }
+        } else {
+                stckVw1.isHidden = true
+                stckVw2.isHidden = true
+                stckVw3.isHidden = true
+                stckVw4.isHidden = true
         }
     }
 }

@@ -11,10 +11,14 @@ import UIKit
 class APCounterPartyData: NSObject {
     
     var cpName = String()
+    
     var company = String()
     var location = String()
     var bVertical = String()
+    
     var balPayable = String()
     var totalInvValue = [AmountDetails]()
-    var paidTillDate = String()
+//    var paidTillDate = String()
 }
+
+

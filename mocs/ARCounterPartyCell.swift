@@ -86,7 +86,6 @@ class ARCounterPartyCell: UITableViewCell {
             self.lblInvValue.isHidden = true
         }
         
-        
         let dataCount = data.totalAmtRecieved.count
         
         if dataCount > 0 {
@@ -137,7 +136,7 @@ class ARCounterPartyCell: UITableViewCell {
                         lblCurr2.text =  data.totalAmtRecieved[i].currency
                         lblAmt2.text =  data.totalAmtRecieved[i].amount
                     }
-                    if i == 3 {
+                    if i == 2 {
                         lblCurr3.text =  data.totalAmtRecieved[i].currency
                         lblAmt3.text =  data.totalAmtRecieved[i].amount
                     }
@@ -160,11 +159,11 @@ class ARCounterPartyCell: UITableViewCell {
                         lblCurr2.text =  data.totalAmtRecieved[i].currency
                         lblAmt2.text =  data.totalAmtRecieved[i].amount
                     }
-                    if i == 3 {
+                    if i == 2 {
                         lblCurr3.text =  data.totalAmtRecieved[i].currency
                         lblAmt3.text =  data.totalAmtRecieved[i].amount
                     }
-                    if i == 4 {
+                    if i == 3 {
                         lblCurr4.text =  data.totalAmtRecieved[i].currency
                         lblAmt4.text =  data.totalAmtRecieved[i].amount
                     }

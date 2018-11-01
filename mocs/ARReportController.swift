@@ -34,6 +34,9 @@ class ARReportController: UIViewController , filterViewDelegate{
         tblVwARReport.addSubview(refreshControl)
         
         FilterViewController.filterDelegate = self
+       
+
+        
         fetchAllARData()
         
         self.navigationController?.isNavigationBarHidden = true
@@ -66,11 +69,7 @@ class ARReportController: UIViewController , filterViewDelegate{
         }
         
         
-        if filterString.contains(",") {
-        
-            Helper.showMessage(message: "Please select only one filter")
-            return
-        }
+       
         
         self.fetchAllARData()
     }
@@ -90,6 +89,13 @@ class ARReportController: UIViewController , filterViewDelegate{
         let arrFilterString = ["35+Ivory Coast+06", "25+Dubai+06"]
         
         print(FilterViewController.getFilterString())
+        
+        
+        if FilterViewController.getFilterString().contains(",") {
+            Helper.showMessage(message: "Please select only one filter")
+            return
+        }
+        
         if internetStatus != .notReachable {
             
 //            self.view.showLoading()
@@ -312,7 +318,7 @@ extension ARReportController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if dataEntry.count > 0{
+        if dataEntry.count > 0 {
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
         } else {
@@ -333,8 +339,10 @@ extension ARReportController: UITableViewDataSource {
             } else {
                 return 0
             }
+        case 2:
+             return self.arListData.count
         default:
-            return self.arListData.count
+            return 0
         }
         
     }
@@ -357,6 +365,7 @@ extension ARReportController: UITableViewDataSource {
                     height = 225
                 }
             }
+            print("Overall height" , height)
             break
         case 1:  height = 300
             break

@@ -81,6 +81,11 @@ class APOverallCell: UITableViewCell {
                     lblAmt4.text =  data.totalInvoice[i].amount
                 }
             }
+        } else {
+            stckVw1.isHidden = true
+            stckVw2.isHidden = true
+            stckVw3.isHidden = true
+            stckVw4.isHidden = true
         }
     }
     

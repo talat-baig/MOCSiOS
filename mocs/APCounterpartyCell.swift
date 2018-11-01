@@ -52,8 +52,10 @@ class APCounterpartyCell: UITableViewCell {
     
     public func setDataToView(data: APCounterPartyData){
         
+        self.lblCPName.text = data.cpName
+
         self.lblbalPayable.text = data.balPayable
-        self.lblPaidTillDate.text = data.paidTillDate
+//        self.lblPaidTillDate.text = data.paidTillDate
      
         let dataCount = data.totalInvValue.count
         
@@ -77,6 +79,7 @@ class APCounterpartyCell: UITableViewCell {
                 stckVw2.isHidden = false
                 stckVw3.isHidden = true
                 stckVw4.isHidden = true
+                
                 for i in 0..<dataCount {
                     if i == 0 {
                         lblCurr1.text = data.totalInvValue[i].currency
@@ -105,7 +108,7 @@ class APCounterpartyCell: UITableViewCell {
                         lblCurr2.text =  data.totalInvValue[i].currency
                         lblAmt2.text =  data.totalInvValue[i].amount
                     }
-                    if i == 3 {
+                    if i == 2 {
                         lblCurr3.text =  data.totalInvValue[i].currency
                         lblAmt3.text =  data.totalInvValue[i].amount
                     }
@@ -128,11 +131,11 @@ class APCounterpartyCell: UITableViewCell {
                         lblCurr2.text =  data.totalInvValue[i].currency
                         lblAmt2.text =  data.totalInvValue[i].amount
                     }
-                    if i == 3 {
+                    if i == 2 {
                         lblCurr3.text =  data.totalInvValue[i].currency
                         lblAmt3.text =  data.totalInvValue[i].amount
                     }
-                    if i == 4 {
+                    if i == 3 {
                         lblCurr4.text =  data.totalInvValue[i].currency
                         lblAmt4.text =  data.totalInvValue[i].amount
                     }

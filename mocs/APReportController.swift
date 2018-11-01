@@ -16,7 +16,6 @@ class APReportController: UIViewController , filterViewDelegate {
     var dataEntry:[PieChartDataEntry] = []
     var apData : APListData?
     
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
@@ -239,8 +238,12 @@ class APReportController: UIViewController , filterViewDelegate {
                 let newDetails = AmountDetails()
                 newDetails.currency = k["Currency"].stringValue
                 newDetails.amount = k["Amount Received"].stringValue
-                apData.totalInvoice.append(newDetails)
+                
+                if newDetails.currency != "  " {
+                     apData.totalInvoice.append(newDetails)
+                }
             }
+            
             self.apData = apData
         }
     }
@@ -336,11 +339,12 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
             if let invCount = self.apData?.totalInvoice.count {
                 
                 if invCount > 2 {
-                    height = 200
+                    height = 180
                 } else {
-                    height = 150
+                    height = 148
                 }
             }
+            print("case 0:", height)
             break
         case 1:  height = 300.0
             break
@@ -348,7 +352,7 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
             if let invCount = self.apData?.totalInvoice.count {
                 
                 if invCount > 2 {
-                    height = 280
+                    height = 270
                 } else {
                     height = 230
                 }
@@ -387,6 +391,10 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.section == 2 {
             let apCPVC = self.storyboard?.instantiateViewController(withIdentifier: "APCounterpartyController") as! APCounterpartyController
+            apCPVC.company =  self.apData!.company
+            apCPVC.location =  self.apData!.location
+            apCPVC.bUnit =  self.apData!.bVertical
+
             self.navigationController?.pushViewController(apCPVC, animated: true)
             
         } else {
