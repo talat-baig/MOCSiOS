@@ -25,17 +25,24 @@ class APListCell: UITableViewCell {
     @IBOutlet weak var stckVw2: UIStackView!
     @IBOutlet weak var stckVw3: UIStackView!
     @IBOutlet weak var stckVw4: UIStackView!
+    @IBOutlet weak var stckVw5: UIStackView!
+    @IBOutlet weak var stckVw6: UIStackView!
+
     
     @IBOutlet weak var lblCurr1: UILabel!
     @IBOutlet weak var lblCurr2: UILabel!
     @IBOutlet weak var lblCurr3: UILabel!
     @IBOutlet weak var lblCurr4: UILabel!
-    
+    @IBOutlet weak var lblCurr5: UILabel!
+    @IBOutlet weak var lblCurr6: UILabel!
+
     @IBOutlet weak var lblAmt1: UILabel!
     @IBOutlet weak var lblAmt2: UILabel!
     @IBOutlet weak var lblAmt3: UILabel!
     @IBOutlet weak var lblAmt4: UILabel!
-    
+    @IBOutlet weak var lblAmt5: UILabel!
+    @IBOutlet weak var lblAmt6: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -68,6 +75,9 @@ class APListCell: UITableViewCell {
                     stckVw2.isHidden = true
                     stckVw3.isHidden = true
                     stckVw4.isHidden = true
+                    stckVw5.isHidden = true
+                    stckVw6.isHidden = true
+
                     lblCurr1.text = data.totalInvoice[i].currency
                     lblAmt1.text = data.totalInvoice[i].amount
                 }
@@ -75,28 +85,54 @@ class APListCell: UITableViewCell {
                     stckVw2.isHidden = false
                     stckVw3.isHidden = true
                     stckVw4.isHidden = true
-                    
+                    stckVw5.isHidden = true
+                    stckVw6.isHidden = true
+
                     lblCurr2.text =  data.totalInvoice[i].currency
                     lblAmt2.text =  data.totalInvoice[i].amount
                 }
                 if i == 2 {
                     stckVw3.isHidden = false
                     stckVw4.isHidden = true
-                    
+                    stckVw5.isHidden = true
+                    stckVw6.isHidden = true
+
                     lblCurr3.text =  data.totalInvoice[i].currency
                     lblAmt3.text =  data.totalInvoice[i].amount
                 }
                 if i == 3 {
                     stckVw4.isHidden = false
+                    stckVw5.isHidden = true
+                    stckVw6.isHidden = true
+
                     lblCurr4.text =  data.totalInvoice[i].currency
                     lblAmt4.text =  data.totalInvoice[i].amount
                 }
+                
+                if i == 4 {
+                    stckVw5.isHidden = false
+                    stckVw6.isHidden = true
+                    
+                    lblCurr5.text =  data.totalInvoice[i].currency
+                    lblAmt5.text =  data.totalInvoice[i].amount
+                }
+                if i == 5 {
+                    stckVw6.isHidden = false
+                    
+                    lblCurr6.text =  data.totalInvoice[i].currency
+                    lblAmt6.text =  data.totalInvoice[i].amount
+                }
+                
+                
             }
         } else {
             stckVw1.isHidden = true
             stckVw2.isHidden = true
             stckVw3.isHidden = true
             stckVw4.isHidden = true
+            stckVw5.isHidden = true
+            stckVw6.isHidden = true
+
         }
         
     }

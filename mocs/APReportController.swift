@@ -80,6 +80,9 @@ class APReportController: UIViewController , filterViewDelegate {
                     self.refreshControl.endRefreshing()
 
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
+                        self.resetData()
+                        self.tableView.reloadData()
+
                         Helper.showNoFilterState(vc: self, tb: self.tableView, isAPReport: true, action: #selector(self.showFilterMenu))
                         return
                     } else {
@@ -239,9 +242,15 @@ class APReportController: UIViewController , filterViewDelegate {
                 newDetails.currency = k["Currency"].stringValue
                 newDetails.amount = k["Amount Received"].stringValue
                 
-                if newDetails.currency != "  " {
-                     apData.totalInvoice.append(newDetails)
+                if k["Currency"].stringValue == "  " {
+                    newDetails.currency = " -"
+                } else {
+                    newDetails.currency = k["Currency"].stringValue
                 }
+                
+//                if newDetails.currency != "  " {
+                     apData.totalInvoice.append(newDetails)
+//                }
             }
             
             self.apData = apData
@@ -338,8 +347,16 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             if let invCount = self.apData?.totalInvoice.count {
                 
-                if invCount > 2 {
+//                if invCount > 2 {
+//                    height = 180
+//                } else {
+//                    height = 148
+//                }
+                
+                if invCount > 2 && invCount <= 4 {
                     height = 180
+                } else if invCount > 2 && invCount <= 6 {
+                    height = 215
                 } else {
                     height = 148
                 }
@@ -351,9 +368,17 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
         case 2:
             if let invCount = self.apData?.totalInvoice.count {
                 
-                if invCount > 2 {
+//                if invCount > 2 {
+//                    height = 270
+//                } else {
+//                    height = 230
+//                }
+               // 3, 4
+                if invCount > 2 && invCount <= 4 {
                     height = 270
-                } else {
+                } else if invCount > 2 && invCount <= 6 {  // 3,4,5,6
+                    height = 295
+                } else { // 1,2
                     height = 230
                 }
             }

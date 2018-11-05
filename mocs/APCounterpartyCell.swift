@@ -26,17 +26,24 @@ class APCounterpartyCell: UITableViewCell {
     @IBOutlet weak var stckVw2: UIStackView!
     @IBOutlet weak var stckVw3: UIStackView!
     @IBOutlet weak var stckVw4: UIStackView!
+    @IBOutlet weak var stckVw5: UIStackView!
+    @IBOutlet weak var stckVw6: UIStackView!
+
     
     @IBOutlet weak var lblCurr1: UILabel!
     @IBOutlet weak var lblCurr2: UILabel!
     @IBOutlet weak var lblCurr3: UILabel!
     @IBOutlet weak var lblCurr4: UILabel!
-    
+    @IBOutlet weak var lblCurr5: UILabel!
+    @IBOutlet weak var lblCurr6: UILabel!
+
     @IBOutlet weak var lblAmt1: UILabel!
     @IBOutlet weak var lblAmt2: UILabel!
     @IBOutlet weak var lblAmt3: UILabel!
     @IBOutlet weak var lblAmt4: UILabel!
-    
+    @IBOutlet weak var lblAmt5: UILabel!
+    @IBOutlet weak var lblAmt6: UILabel!
+
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -67,7 +74,9 @@ class APCounterpartyCell: UITableViewCell {
                 stckVw2.isHidden = true
                 stckVw3.isHidden = true
                 stckVw4.isHidden = true
-                
+                stckVw5.isHidden = true
+                stckVw6.isHidden = true
+
                 for i in 0..<dataCount {
                     lblCurr1.text = data.totalInvValue[i].currency
                     lblAmt1.text = data.totalInvValue[i].amount
@@ -79,7 +88,9 @@ class APCounterpartyCell: UITableViewCell {
                 stckVw2.isHidden = false
                 stckVw3.isHidden = true
                 stckVw4.isHidden = true
-                
+                stckVw5.isHidden = true
+                stckVw6.isHidden = true
+
                 for i in 0..<dataCount {
                     if i == 0 {
                         lblCurr1.text = data.totalInvValue[i].currency
@@ -98,7 +109,9 @@ class APCounterpartyCell: UITableViewCell {
                 stckVw2.isHidden = false
                 stckVw3.isHidden = false
                 stckVw4.isHidden = true
-                
+                stckVw5.isHidden = true
+                stckVw6.isHidden = true
+
                 for i in 0..<dataCount {
                     if i == 0 {
                         lblCurr1.text = data.totalInvValue[i].currency
@@ -121,7 +134,9 @@ class APCounterpartyCell: UITableViewCell {
                 stckVw2.isHidden = false
                 stckVw3.isHidden = false
                 stckVw4.isHidden = false
-                
+                stckVw5.isHidden = true
+                stckVw6.isHidden = true
+
                 for i in 0..<dataCount {
                     if i == 0 {
                         lblCurr1.text = data.totalInvValue[i].currency
@@ -141,6 +156,73 @@ class APCounterpartyCell: UITableViewCell {
                     }
                 }
                 break
+            case 5:
+                stckVw1.isHidden = false
+                stckVw2.isHidden = false
+                stckVw3.isHidden = false
+                stckVw4.isHidden = false
+                stckVw5.isHidden = false
+                stckVw6.isHidden = true
+                
+                for i in 0..<dataCount {
+                    if i == 0 {
+                        lblCurr1.text = data.totalInvValue[i].currency
+                        lblAmt1.text = data.totalInvValue[i].amount
+                    }
+                    if i == 1 {
+                        lblCurr2.text =  data.totalInvValue[i].currency
+                        lblAmt2.text =  data.totalInvValue[i].amount
+                    }
+                    if i == 2 {
+                        lblCurr3.text =  data.totalInvValue[i].currency
+                        lblAmt3.text =  data.totalInvValue[i].amount
+                    }
+                    if i == 3 {
+                        lblCurr4.text =  data.totalInvValue[i].currency
+                        lblAmt4.text =  data.totalInvValue[i].amount
+                    }
+                    if i == 4 {
+                        lblCurr5.text =  data.totalInvValue[i].currency
+                        lblAmt5.text =  data.totalInvValue[i].amount
+                    }
+                }
+                break
+            case 6:
+                stckVw1.isHidden = false
+                stckVw2.isHidden = false
+                stckVw3.isHidden = false
+                stckVw4.isHidden = false
+                stckVw5.isHidden = false
+                stckVw6.isHidden = false
+                
+                for i in 0..<dataCount {
+                    if i == 0 {
+                        lblCurr1.text = data.totalInvValue[i].currency
+                        lblAmt1.text = data.totalInvValue[i].amount
+                    }
+                    if i == 1 {
+                        lblCurr2.text =  data.totalInvValue[i].currency
+                        lblAmt2.text =  data.totalInvValue[i].amount
+                    }
+                    if i == 2 {
+                        lblCurr3.text =  data.totalInvValue[i].currency
+                        lblAmt3.text =  data.totalInvValue[i].amount
+                    }
+                    if i == 3 {
+                        lblCurr4.text =  data.totalInvValue[i].currency
+                        lblAmt4.text =  data.totalInvValue[i].amount
+                    }
+                    if i == 4 {
+                        lblCurr5.text =  data.totalInvValue[i].currency
+                        lblAmt5.text =  data.totalInvValue[i].amount
+                    }
+                    if i == 5 {
+                        lblCurr6.text =  data.totalInvValue[i].currency
+                        lblAmt6.text =  data.totalInvValue[i].amount
+                    }
+                }
+                break
+
             default:
                 break
             }
@@ -149,6 +231,9 @@ class APCounterpartyCell: UITableViewCell {
             stckVw2.isHidden = true
             stckVw3.isHidden = true
             stckVw4.isHidden = true
+            stckVw5.isHidden = true
+            stckVw6.isHidden = true
+
         }
     }
     

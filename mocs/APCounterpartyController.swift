@@ -90,12 +90,19 @@ class APCounterpartyController: UIViewController, UIGestureRecognizerDelegate {
                         
                         for(_,k):(String,JSON) in subJson1 {
                             let newDetails = AmountDetails()
-                            newDetails.currency = k["Currency"].stringValue
+//                            newDetails.currency = k["Currency"].stringValue
+                           
+                            if k["Currency"].stringValue == "  " {
+                                newDetails.currency = " -"
+                            } else {
+                                newDetails.currency = k["Currency"].stringValue
+                            }
+                            
                             newDetails.amount = k["Invoice Value"].stringValue
                             
-                            if newDetails.currency != "  " {
+//                            if newDetails.currency != "  " {
                                 newCPObj.totalInvValue.append(newDetails)
-                            }
+//                            }
                         }
                         self.cpListData.append(newCPObj)
                     }
@@ -164,17 +171,19 @@ extension APCounterpartyController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        //        let width = self.cpListData[indexPath.row].cpName.count
         var height : CGFloat = 90.0
         let invCount = self.cpListData[indexPath.row].totalInvValue.count
         
         if invCount > 0 {
-            if invCount > 2 {
+            if invCount > 2 && invCount <= 4 {
                 height = 210
+            } else if invCount > 2 && invCount <= 6 {
+                height = 250
             } else {
                 height = 170
             }
         }
+        print("CP Cell", height)
         return height
     }
     

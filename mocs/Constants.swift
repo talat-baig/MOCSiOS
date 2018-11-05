@@ -8,19 +8,19 @@
 
 struct ApiKey {
     // LIVE
-        //static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+//    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-        //static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+        static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-    static let URL = "http://172.16.12.12/OCSWebApi/api"
+//    static let URL = "http://172.16.12.12/OCSWebApi/api"
     
     
 }
@@ -231,8 +231,6 @@ struct Constant
         static let CP_LIST = ApiUrl.URL + "/APReport/ShowCounterParty?apicp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authcp=%@&filter=%@&company=%@&location=%@&BV=%@"
         
         static let CP_INVOICE = ApiUrl.URL + "/APReport/ShowCounterPartyInvoice?apicpi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authcpi=%@&filter=%@&company=%@&location=%@&BV=%@&counterparty=%@"
-
-//        MailAPReport(string mailapi, string authmail, string emailid, string invoiceno, string filter
         
         static let SEND_EMAIL =  ApiUrl.URL + "/APReport/MailAPReport?mailapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authmail=%@&emailid=%@&invoiceno=%@"
     }
