@@ -21,7 +21,6 @@ class APReportController: UIViewController , filterViewDelegate {
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,7 +43,6 @@ class APReportController: UIViewController , filterViewDelegate {
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Accounts Payable"
         vwTopHeader.lblSubTitle.isHidden = true
-        //        self.tableView.tableFooterView = nil
         
     }
     
@@ -53,44 +51,44 @@ class APReportController: UIViewController , filterViewDelegate {
     }
     
     @objc func fetchAllAPData() {
-
+        
         if internetStatus != .notReachable {
-
+            
             let url1 = String.init(format: Constant.AP.AP_OVERALL, Session.authKey,
                                    Helper.encodeURL(url : FilterViewController.getFilterString()))
-
+            
             let url2 = String.init(format: Constant.AP.AP_CHART, Session.authKey,
                                    Helper.encodeURL(url :  FilterViewController.getFilterString()))
-
+            
             var request = URLRequest(url: URL(string: url1)!)
             request.httpMethod = "GET"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.timeoutInterval = 180
-
+            
             let messg = "This Report is Live"
-
+            
             self.view.showLoadingWithMessage(messg: messg)
-
+            
             Alamofire.request(request as  URLRequestConvertible).responseData(completionHandler: ({ response in
                 if Helper.isResponseValid(vc: self, response: response.result) {
-
+                    
                     let ovrAllResp = JSON(response.result.value!)
-
+                    
                     self.view.hideLoadingProgressLoader()
                     self.refreshControl.endRefreshing()
-
+                    
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-
+                        
                         Helper.showNoFilterState(vc: self, tb: self.tableView, isAPReport: true, action: #selector(self.showFilterMenu))
                         return
                     } else {
-
+                        
                         Alamofire.request(url2).responseData(completionHandler: ({ response in
                             if Helper.isResponseValid(vc: self, response: response.result) {
                                 let chartResponse = JSON(response.result.value!)
-
+                                
                                 if  (chartResponse.arrayObject?.isEmpty)! {
                                     self.view.hideLoadingProgressLoader()
                                     self.refreshControl.endRefreshing()
@@ -99,7 +97,7 @@ class APReportController: UIViewController , filterViewDelegate {
                                     Helper.showNoFilterState(vc: self, tb: self.tableView, isAPReport: true, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
-
+                                    
                                     self.populateOverallData(respJson: ovrAllResp)
                                     self.populateChartData(respJson: chartResponse)
                                     self.tableView.tableFooterView = nil
@@ -133,95 +131,6 @@ class APReportController: UIViewController , filterViewDelegate {
     
     
     
-//    @objc func fetchAllAPData() {
-//
-//        if internetStatus != .notReachable {
-//            var isRespOverallValid = true
-//            var isRespChartValid = true
-//
-//            let group = DispatchGroup()
-//            self.view.showLoading()
-//            group.enter()
-//
-//            let url1 = String.init(format: Constant.AP.AP_OVERALL, Session.authKey,
-//                                   Helper.encodeURL(url : FilterViewController.getFilterString()))
-//
-//
-//            Alamofire.request(url1).responseData(completionHandler: ({ response in
-//                group.leave()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//
-//                    var jsonResponse = JSON(response.result.value!)
-//
-//                    if  (jsonResponse.arrayObject?.isEmpty)! {
-//                        isRespOverallValid = false
-//                        Helper.showNoFilterState(vc: self, tb: self.tableView, isARReport: true, action: #selector(self.showFilterMenu))
-//                        return
-//                    } else {
-//                        isRespOverallValid = true
-//                        /// Modified
-//                        self.tableView.tableFooterView = nil
-//                        self.populateOverallData(respJson: jsonResponse)
-//                    }
-//                } else {
-//                    isRespOverallValid = false
-//                    Helper.showNoFilterState(vc: self, tb: self.tableView, isARReport: true, action: #selector(self.showFilterMenu))
-//
-//                }
-//            }))
-//
-//            group.enter()
-//
-//            let url2 = String.init(format: Constant.AP.AP_CHART, Session.authKey,   Helper.encodeURL(url :  FilterViewController.getFilterString()))
-//
-//            Alamofire.request(url2).responseData(completionHandler: ({ response in
-//                group.leave()
-//                if Helper.isResponseValid(vc: self, response: response.result) {
-//                    //                    isRespChartValid = true
-//                    var jsonResponse = JSON(response.result.value!)
-//
-//                    if  (jsonResponse.arrayObject?.isEmpty)! {
-//                        isRespChartValid = false
-//                        Helper.showNoFilterState(vc: self, tb: self.tableView, isARReport: true, action: #selector(self.showFilterMenu))
-//                        return
-//                    } else {
-//                        isRespChartValid = true
-//                        /// Modified
-//                        self.tableView.tableFooterView = nil
-//                        self.populateChartData(respJson : jsonResponse)
-//                    }
-//                } else {
-//                    isRespChartValid = false
-//                    Helper.showNoFilterState(vc: self, tb: self.tableView, isARReport: true, action: #selector(self.showFilterMenu))
-//
-//                }
-//            }))
-//
-//            print(FilterViewController.getFilterString())
-//            group.notify(queue: .main) {
-//                self.view.hideLoading()
-//                self.refreshControl.endRefreshing()
-//
-//                if isRespOverallValid && isRespChartValid {
-//                    /// Modified
-//                    self.tableView.tableFooterView = nil
-//                    self.tableView.reloadData()
-//                } else {
-//                    if !self.dataEntry.isEmpty || self.apData != nil {
-//                        self.dataEntry.removeAll()
-//                        self.apData = nil
-//                    }
-//                    self.tableView.reloadData()
-//                    Helper.showNoFilterState(vc: self, tb: self.tableView, isARReport: true, action: #selector(self.showFilterMenu))
-//                }
-//            }
-//        } else {
-//            Helper.showNoInternetMessg()
-//            Helper.showNoInternetState(vc: self, tb: self.tableView, action: #selector(self.fetchAllAPData))
-//            self.refreshControl.endRefreshing()
-//        }
-//    }
-
     
     func populateOverallData (respJson : JSON) {
         
@@ -248,9 +157,7 @@ class APReportController: UIViewController , filterViewDelegate {
                     newDetails.currency = k["Currency"].stringValue
                 }
                 
-//                if newDetails.currency != "  " {
-                     apData.totalInvoice.append(newDetails)
-//                }
+                apData.totalInvoice.append(newDetails)
             }
             
             self.apData = apData
@@ -347,11 +254,11 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             if let invCount = self.apData?.totalInvoice.count {
                 
-//                if invCount > 2 {
-//                    height = 180
-//                } else {
-//                    height = 148
-//                }
+                //                if invCount > 2 {
+                //                    height = 180
+                //                } else {
+                //                    height = 148
+                //                }
                 
                 if invCount > 2 && invCount <= 4 {
                     height = 180
@@ -368,12 +275,12 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
         case 2:
             if let invCount = self.apData?.totalInvoice.count {
                 
-//                if invCount > 2 {
-//                    height = 270
-//                } else {
-//                    height = 230
-//                }
-               // 3, 4
+                //                if invCount > 2 {
+                //                    height = 270
+                //                } else {
+                //                    height = 230
+                //                }
+                // 3, 4
                 if invCount > 2 && invCount <= 4 {
                     height = 270
                 } else if invCount > 2 && invCount <= 6 {  // 3,4,5,6
@@ -419,7 +326,7 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
             apCPVC.company =  self.apData!.company
             apCPVC.location =  self.apData!.location
             apCPVC.bUnit =  self.apData!.bVertical
-
+            
             self.navigationController?.pushViewController(apCPVC, animated: true)
             
         } else {

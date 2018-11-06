@@ -113,7 +113,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         let ttBase = self.parent as! TTBaseViewController
         ttBase.saveTTAddEditReference(vc: self)
         txtDept.isUserInteractionEnabled = false
-
+        
         self.arrTravlType = parseAndAssignTravelModeData()
         
         parseAndAssignDebitAc()
@@ -134,8 +134,6 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             swtchPurpose.isOn = false
             checkPurposeSwitch()
             
-//            parseAndAssignCompaniesData()
-            
             swtchGuest.isEnabled = true
             swtchTrvlType.isEnabled = false
             
@@ -144,7 +142,11 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             txtTravelMode.isEnabled = true
             swtchTrvlType.isEnabled = true
             
-            txtCompny.text = self.arrCompData[0].compName
+            if self.arrCompData.count > 0 {
+                txtCompny.text = self.arrCompData[0].compName
+            } else {
+                txtCompny.text = ""
+            }
             self.checkCompanyCodeAndGetTravellerData(compCode: self.arrCompData[0].compCode)
         }
     }
@@ -160,7 +162,6 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
                 if let d = self.repMngrDelegate {
                     d.getTrvlrNameFromChild(trvlName: self.ttData.trvlrName )
                 }
-
             } else {
                 
             }
@@ -211,11 +212,11 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         
         let compCode = self.getCompanyCode(item: compName)
         let compLoc = self.getCompanyLoc(item: compName)
-//        let trvlrName = txtFldTrvlName.text
-
+        //        let trvlrName = txtFldTrvlName.text
+        
         if let d = self.repMngrDelegate {
             d.getCompDetailsFromChild(compCode: compCode, loc: compLoc, compName : compName)
-            }
+        }
         
         self.view.endEditing(true)
     }
@@ -262,7 +263,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         swtchGuest.addTarget(self, action: #selector(guestType(mySwitch:)), for: UIControlEvents.valueChanged)
         swtchPurpose.addTarget(self, action: #selector(purposeType(mySwitch:)), for: UIControlEvents.valueChanged)
         swtchTrvlType.addTarget(self, action: #selector(trvType(mySwitch:)), for: UIControlEvents.valueChanged)
-       
+        
         
     }
     
@@ -295,9 +296,9 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         }
         
         self.arrCompData = arrCompData
-
-//        txtCompny.text = self.arrCompData[0].compName
-//        self.checkCompanyCodeAndGetTravellerData(compCode: self.arrCompData[0].compCode)
+        
+        //        txtCompny.text = self.arrCompData[0].compName
+        //        self.checkCompanyCodeAndGetTravellerData(compCode: self.arrCompData[0].compCode)
         
     }
     
@@ -411,12 +412,12 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
             if txtDebitAcName.text != "" {
                 txtDebitAcName.text = ""
             }
-          
+            
         } else {
             lblPurpse.text = "Official"
             self.canEditDebitAc = false  // textfld editing is enabled
             self.view.endEditing(true)
-           
+            
         }
     }
     
@@ -476,7 +477,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     }
     
     
-   
+    
     
     func checkCompanyCodeAndGetTravellerData(compCode : Int) {
         
@@ -553,16 +554,16 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         }
         return compCity
     }
-   
     
-//    func getTrvlerEMPId(item : String) -> Int {
-//
-//        let compnyObject = self.arrTravlrData.filter{ $0.empId == item }.first
-//        guard let compCode = compnyObject?.compCode else {
-//            return 0
-//        }
-//        return compCode
-//    }
+    
+    //    func getTrvlerEMPId(item : String) -> Int {
+    //
+    //        let compnyObject = self.arrTravlrData.filter{ $0.empId == item }.first
+    //        guard let compCode = compnyObject?.compCode else {
+    //            return 0
+    //        }
+    //        return compCode
+    //    }
     
     func getTravllerList(compId : Int, comp : @escaping(Bool) -> ()) {
         
@@ -642,7 +643,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     func checkPurposeSwitch() {
         self.purposeType(mySwitch: swtchPurpose)
     }
-
+    
     func addDropDownToTrvlModeTxtFld() {
         
         let chooseTrvlMode = DropDown()

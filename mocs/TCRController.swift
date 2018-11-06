@@ -62,9 +62,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         self.populateList()
     }
     
-//    func clearAllTapped() {
-//        self.populateList()
-//    }
+
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         

@@ -67,10 +67,6 @@ class ARReportController: UIViewController , filterViewDelegate{
             arOverallData = nil
             arListData.removeAll()
         }
-        
-        
-       
-        
         self.fetchAllARData()
     }
     

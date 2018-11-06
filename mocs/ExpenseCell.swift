@@ -34,8 +34,13 @@ class ExpenseCell: UITableViewCell {
         date.text! = data.expDate
         category.text! = data.expCategory
         vendor.text! = data.expVendor
-        payment.text! = data.expPaymentType
         comments.text! = data.expComments
+        
+        if data.expAmount == "" {
+            payment.text! = "-"
+        } else {
+            payment.text! = String.init(format: "%@ %@ by %@", data.expCurrency,data.expAmount,data.expPaymentType)
+        }
     }
     
     @IBAction func delete_click(_ sender: Any) {

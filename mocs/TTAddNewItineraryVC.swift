@@ -66,6 +66,7 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
     @IBOutlet weak var btnAdd: UIButton!
     @IBOutlet weak var mySubVw: UIView!
     override func viewDidLoad() {
+        
         super.viewDidLoad()
 
         self.navigationController?.isNavigationBarHidden = true
