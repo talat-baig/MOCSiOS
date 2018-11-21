@@ -44,7 +44,6 @@ class ROCargoDetailsEditVC: UIViewController {
         outerVw.layer.borderColor = UIColor.lightGray.cgColor
         outerVw.layer.masksToBounds = true;
         
-        
         tableView.separatorStyle = .none
         
         populateList()
@@ -61,80 +60,7 @@ class ROCargoDetailsEditVC: UIViewController {
     
 
     
-    
-    
-//    func getCargoDetails(refId : String) {
-//
-//        var data: [WHRListData] = []
-//
-//        if internetStatus != .notReachable {
-//
-//            let url = String.init(format: Constant.RO.CARGO_DETAILS, refId , Session.authKey)
-//
-//            self.view.showLoading()
-//
-//            Alamofire.request(url).responseData(completionHandler: ({ cargoResponse in
-//
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: cargoResponse.result) {
-//
-//                    let responseJson = JSON(cargoResponse.result.value!)
-//
-//                    for(_,j):(String,JSON) in responseJson {
-//
-//                        let arr = responseJson.arrayObject as! [[String:AnyObject]]
-//
-//                        if arr.count > 0 {
-//
-//                            for(_,k):(String,JSON) in responseJson {
-//                                let whrList = WHRListData()
-//                                whrList.vesselName = k["ROVesselName"].stringValue
-//                                whrList.uom = k["ROUom"].stringValue
-//                                whrList.product = k["ROProduct"].stringValue
-//                                whrList.brand = k["ROBrand"].stringValue
-//                                whrList.bagSize = k["ROBagSize"].stringValue
-//                                whrList.quality = k["ROQuality"].stringValue
-//                                whrList.wtTerms = k["ROWeightTerms"].stringValue
-//                                whrList.qtyRcvd = k["ROQuantityReceivedinmt"].stringValue
-//                                whrList.whrDate = k["ROWhrDateORGrnDate"].stringValue
-//                                whrList.whrId = k["RUID"].stringValue
-//                                whrList.whrNum = k["ROWhrNoORGrnNo"].stringValue
-//                                whrList.roID = k["ROReferenceID"].stringValue
-//                                whrList.reqQty = k["RORequestedQtyinmt"].stringValue
-//                                whrList.balQty = k["ROBalanceQtyinmt"].stringValue
-//                                whrList.manualNo = k["WHR_Manual_No"].stringValue
-//
-//
-//                                if k["ROReceiptQtyinmt"].stringValue == "" {
-//                                    whrList.rcptQty = "0"
-//                                } else {
-//                                    whrList.rcptQty = k["ROReceiptQtyinmt"].stringValue
-//                                }
-//                                //                    whrList.rcptQty = k["ROReceiptQtyinmt"].stringValue
-//
-//                                //                    whrList.roGuid = k["ROGUID"].stringValue
-//
-//                                data.append(whrList)
-//                            }
-//
-//                            self.whrData = data
-//                            self.tableView.reloadData()
-//                        } else {
-//
-//
-//                        }
-//                    }
-//
-//
-//
-//                }
-//            }))
-//        } else {
-//            Helper.showNoInternetMessg()
-//        }
-//
-//    }
-    
+ 
     func populateList() {
         var data: [RRcptData] = []
         

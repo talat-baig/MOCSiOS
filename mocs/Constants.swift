@@ -8,7 +8,7 @@
 
 struct ApiKey {
     // LIVE
-//        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+    //        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
     static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
@@ -17,7 +17,7 @@ struct ApiKey {
 struct ApiUrl {
     
     // LIVE
-//        static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+    //        static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
     static let URL = "http://172.16.12.12/OCSWebApi/api"
@@ -210,9 +210,7 @@ struct Constant
          */
         static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBU?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
-        
         static let CP_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBUC?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@&Company=%@&Location=%@&BV=%@"
-        
         
         static let INSTRUMENTS = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBUCI?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@&Company=%@&Location=%@&BV=%@&Counterparty=%@"
         
@@ -220,9 +218,19 @@ struct Constant
         
     }
     
+    struct AvlRel {
+        
+        static let VESSEL_LIST = ApiUrl.URL +  "/AvailableReleaseReport/AvailableReportForVessel?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        static let PRODUCT_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableReportForProducts?productlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        static let WAREHOUSE_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableReportForWarehouse?warehouselist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        static let VESSEL_WISE_PRODUCT_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableProductForVessel?apikeyvessel=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&VesselName=%@"
+        
+//        http://172.16.12.12/OCSWebApi/api/AvailableReleaseReport/AvailableProductForVessel?apikeyvessel=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=B4F03D5B-12BC-48B0-A46C-B66E0623&VesselName=CMB YASMINE-01-May-15
+    }
+    
     
     struct AP {
-     
+        
         static let AP_OVERALL = ApiUrl.URL +  "/APReport/GetAPReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
         
         static let AP_CHART = ApiUrl.URL + "/APReport/ShowTop5CP?apitop=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&filter=%@"
@@ -615,8 +623,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-                static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-//        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+        //        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

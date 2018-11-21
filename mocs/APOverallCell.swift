@@ -65,7 +65,6 @@ class APOverallCell: UITableViewCell {
                     stckVw4.isHidden = true
                     stckVw5.isHidden = true
                     stckVw6.isHidden = true
-
                     
                     lblCurr1.text = data.totalInvoice[i].currency
                     lblAmt1.text = data.totalInvoice[i].amount

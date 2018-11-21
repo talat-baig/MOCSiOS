@@ -146,7 +146,6 @@ class ARReportController: UIViewController , filterViewDelegate{
                                     Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
-                                    
                                     Alamofire.request(url3).responseData(completionHandler: ({ response in
                                         
                                         if Helper.isResponseValid(vc: self, response: response.result){

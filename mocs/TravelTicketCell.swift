@@ -44,7 +44,7 @@ class TravelTicketCell: UITableViewCell {
         super.awakeFromNib()
         
         outerVw.layer.shadowOpacity = 0.25
-        outerVw.layer.shadowOffset = CGSize(width: 0, height: 2)
+        outerVw.layer.shadowOffset = CGSize(width: 2, height: 2)
         outerVw.layer.shadowRadius = 1
         outerVw.layer.shadowColor = UIColor.black.cgColor
     }

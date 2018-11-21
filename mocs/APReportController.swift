@@ -253,12 +253,7 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
             
         case 0:
             if let invCount = self.apData?.totalInvoice.count {
-                
-                //                if invCount > 2 {
-                //                    height = 180
-                //                } else {
-                //                    height = 148
-                //                }
+          
                 
                 if invCount > 2 && invCount <= 4 {
                     height = 180
@@ -275,12 +270,7 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
         case 2:
             if let invCount = self.apData?.totalInvoice.count {
                 
-                //                if invCount > 2 {
-                //                    height = 270
-                //                } else {
-                //                    height = 230
-                //                }
-                // 3, 4
+                
                 if invCount > 2 && invCount <= 4 {
                     height = 270
                 } else if invCount > 2 && invCount <= 6 {  // 3,4,5,6
@@ -351,3 +341,5 @@ extension APReportController: WC_HeaderViewDelegate {
     }
     
 }
+
+

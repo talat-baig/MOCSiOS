@@ -18,17 +18,7 @@ class APInvoiceListVC: UIViewController {
     var apInvoiceData:[APInvoiceData] = []
     
     var jsonResp : Data?
-    
-    /// Company variable as String
-//    var company = String()
-//
-//    /// Business unit as String
-//    var bUnit = String()
-//
-//    /// Location as String
-//    var location = String()
-//
-//    /// CounterParty as String
+   
     var counterpty = String()
     
     /// emailFromHeaderDelegate  delegate object
@@ -106,48 +96,7 @@ class APInvoiceListVC: UIViewController {
         }
     }
     
-//    func populateList() {
-//
-//        if internetStatus != .notReachable {
-//
-//            self.view.showLoading()
-//            let url:String = String.init(format: Constant.AP.CP_INVOICE, Session.authKey, Helper.encodeURL(url : FilterViewController.getFilterString()),Helper.encodeURL(url:self.company),Helper.encodeURL(url: self.location),Helper.encodeURL(url:self.bUnit),Helper.encodeURL(url:self.counterpty))
-//
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//
-//                    let jsonResponse = JSON(response.result.value!)
-//
-//                    let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
-//
-//
-//                    for i in 0..<jsonArr.count {
-//
-//                        let newARObj = APInvoiceData()
-//                        newARObj.location = jsonResponse[i]["Location"].stringValue
-//                        newARObj.company = jsonResponse[i]["Company"].stringValue
-//                        newARObj.bVertical = jsonResponse[i]["Business Vertical"].stringValue
-//                        newARObj.counterpty = jsonResponse[i]["Counterparty"].stringValue
-//                        newARObj.invNo = jsonResponse[i]["Invoice No"].stringValue
-//                        newARObj.currency = jsonResponse[i]["Currency"].stringValue
-//                        newARObj.invtDate = jsonResponse[i]["Invoice Date"].stringValue
-//                        newARObj.dueDate = jsonResponse[i]["Due Date"].stringValue
-//                        newARObj.invVal = jsonResponse[i]["Invoice Amount"].stringValue
-//                        newARObj.invBalPayble = jsonResponse[i]["Balance Payable (USD)"].stringValue
-//
-//                        self.apInvoiceData.append(newARObj)
-//                    }
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                    }
-//                }
-//            }))
-//        }else{
-//            Helper.showNoInternetMessg()
-//        }
-//    }
-    
+
     /// Method to open custom email view by passing data to view and assign delegate
     func openCustomSendEmailView(invoiceNum : String) {
         
@@ -261,7 +210,7 @@ extension APInvoiceListVC: UITableViewDataSource, UITableViewDelegate {
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 5
         cell.btnSendEmail.tag = indexPath.row
-        //        cell.btnSendEmail.addTarget(self, action: #selector(self.sendEmailTapped(sender:)), for: UIControlEvents.touchUpInside)
+        cell.btnSendEmail.addTarget(self, action: #selector(self.sendEmailTapped(sender:)), for: UIControlEvents.touchUpInside)
         //                cell.selectionStyle = .none
         
         if apInvoiceData.count > 0 {
