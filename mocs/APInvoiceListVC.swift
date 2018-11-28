@@ -18,7 +18,7 @@ class APInvoiceListVC: UIViewController {
     var apInvoiceData:[APInvoiceData] = []
     
     var jsonResp : Data?
-   
+    
     var counterpty = String()
     
     /// emailFromHeaderDelegate  delegate object
@@ -96,7 +96,7 @@ class APInvoiceListVC: UIViewController {
         }
     }
     
-
+    
     /// Method to open custom email view by passing data to view and assign delegate
     func openCustomSendEmailView(invoiceNum : String) {
         
@@ -122,16 +122,18 @@ class APInvoiceListVC: UIViewController {
                     NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
                     return
                 }
-                let jsonResponse = JSON.init(parseJSON: response.result.value!)
+                let jsonResponse = JSON.init(parseJSON: resp)
                 
                 if jsonResponse["ServerMsg"].stringValue == "Success" {
-                    let alert = UIAlertController(title: "Success", message: "Request has been Mailed Successfully", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Success", message: "Mail has been sent Successfully", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
-                    
+                } else {
+                    let alert = UIAlertController(title: "Oops", message: "Unable to send mail. Please try again later", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                 }
             })
-
         } else {
             Helper.showNoInternetMessg()
         }
@@ -147,13 +149,18 @@ class APInvoiceListVC: UIViewController {
 
 extension APInvoiceListVC: emailFromHeaderDelegate, sendEmailFromViewDelegate {
     
+    func onSendTap(whrNo: String, roId: String, manual: String, emailIds: String) {
+        
+    }
+    
+    
     /// sendEmailFromViewDelegate method
     /// - Parameters:
     ///    - invoice: Invoice number and String
     ///    - emailIds: Email Ids as String
     func onSendEmailTap(invoice: String, emailIds: String) {
         self.resetTableViews()
-       self.sendInstrumentsEmail(invIds: invoice, emailIds: emailIds)
+        self.sendInstrumentsEmail(invIds: invoice, emailIds: emailIds)
     }
     
     /// Tap Action method for left arrow cancel button

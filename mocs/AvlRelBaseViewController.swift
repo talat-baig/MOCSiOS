@@ -34,60 +34,7 @@ class AvlRelBaseViewController: UIViewController {
         
     }
     
-//    func getProductDataAndNavigate() {
-//
-//
-//        if internetStatus != .notReachable {
-//
-//            let url1 = String.init(format: Constant.AvlRel.VESSEL_LIST, Session.authKey,  Helper.encodeURL(url : FilterViewController.getFilterString()))
-//
-//            let url2 = String.init(format: Constant.AvlRel.PRODUCT_LIST, Session.authKey,  Helper.encodeURL(url : FilterViewController.getFilterString()))
-//
-//            self.view.showLoading()
-//
-//            Alamofire.request(url1).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//
-//                    let responseJson = JSON(response.result.value!)
-//                    let arrData = responseJson.arrayObject as! [[String:AnyObject]]
-//                }
-//            }))
-//        }
-//    }
-    
-    
-    
-    
-    func getVesselData() {
-        
-        if internetStatus != .notReachable {
-            
-            let url = String.init(format: Constant.AvlRel.VESSEL_LIST, Session.authKey,  Helper.encodeURL(url : FilterViewController.getFilterString()))
-            self.view.showLoading()
-            
-            Alamofire.request(url).responseData(completionHandler: ({ response in
-                
-                self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
-                    
-                    let responseJson = JSON(response.result.value!)
-                    let arrData = responseJson.arrayObject as! [[String:AnyObject]]
-                    
-                    if (arrData.count > 0) {
-                        let vessl = self.storyboard?.instantiateViewController(withIdentifier: "VesselListViewController") as! VesselListViewController
-                        vessl.response = response.result.value
-                        self.navigationController?.pushViewController(vessl, animated: true)
-                    } else {
-                        self.view.makeToast("Data not found")
-                    }
-                }
-            }))
-        } else {
-            Helper.showNoInternetMessg()
-        }
-    }
+   
     
     @objc func navigateToList(sender: UIButton) {
         
@@ -97,7 +44,9 @@ class AvlRelBaseViewController: UIViewController {
         }
         
         if sender.tag == 0 {
-            getVesselData()
+//            getVesselData()
+            let vessl = self.storyboard?.instantiateViewController(withIdentifier: "VesselListViewController") as! VesselListViewController
+            self.navigationController?.pushViewController(vessl, animated: true)
         } else if sender.tag == 1 {
             let prod = self.storyboard?.instantiateViewController(withIdentifier: "ProductListViewController") as! ProductListViewController
             self.navigationController?.pushViewController(prod, animated: true)

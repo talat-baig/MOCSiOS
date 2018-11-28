@@ -161,7 +161,7 @@ class HomeViewController: UIViewController , filterViewDelegate {
                 }
             }
             self.tableView.reloadData()
-        }else{
+        } else {
             Helper.showMessage(message: "No Latest News Available", style: .info)
         }
     }

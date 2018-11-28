@@ -243,13 +243,12 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                 self.view.hideLoading()
                 
                 if response.result.value == "Success" {
-                    
                     let alert = UIAlertController(title: "Success", message: "Mail has been sent Successfully", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                 }
             })
-        }else{
+        } else {
             Helper.showNoInternetMessg()
         }
     }

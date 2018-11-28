@@ -12,4 +12,6 @@ class AvlRelProductData: NSObject {
     var prodName = ""
     var prodQty = ""
     var totalQty = ""
+    var relPending = ""
+
 }

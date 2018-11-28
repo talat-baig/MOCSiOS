@@ -8,19 +8,19 @@
 
 struct ApiKey {
     // LIVE
-    //        static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+    //    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-    //        static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+    static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-    static let URL = "http://172.16.12.12/OCSWebApi/api"
+    //    static let URL = "http://172.16.12.12/OCSWebApi/api"
     
     
 }
@@ -215,17 +215,31 @@ struct Constant
         static let INSTRUMENTS = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_mOCSARCLBUCI?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@&Company=%@&Location=%@&BV=%@&Counterparty=%@"
         
         static let SEND_EMAIL = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCPEmails?apiKey="+ApiKey.KEY+"&AuthId=%@&InvoiceNos=%@&EmailIds=%@"
-        
     }
     
     struct AvlRel {
         
         static let VESSEL_LIST = ApiUrl.URL +  "/AvailableReleaseReport/AvailableReportForVessel?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        
         static let PRODUCT_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableReportForProducts?productlist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        
         static let WAREHOUSE_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableReportForWarehouse?warehouselist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        
         static let VESSEL_WISE_PRODUCT_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableProductForVessel?apikeyvessel=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&VesselName=%@"
         
-//        http://172.16.12.12/OCSWebApi/api/AvailableReleaseReport/AvailableProductForVessel?apikeyvessel=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=B4F03D5B-12BC-48B0-A46C-B66E0623&VesselName=CMB YASMINE-01-May-15
+        static let PRODUCT_WISE_RO_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableROOfProduct?apikeyproduct=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&VesselName=%@&ROProduct=%@"
+
+        static let GET_RO_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableROForWarehouse?apikeyroware=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&Warehousename=%@&VesselName=%@&ROProduct=%@&flag=%d"
+        
+        static let AVL_WHR_FOR_RO = ApiUrl.URL + "/AvailableReleaseReport/AvailableWHROfRO?apikeyRO=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&ROProduct=%@&VesselName=%@&ROReferenceID=%@"
+        
+        static let WAREHOUSE_WISE_PRODUCT_LIST = ApiUrl.URL + "/AvailableReleaseReport/AvailableProductForWarehouse?apikeyware=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&Warehousename=%@&VesselName=%@"
+        
+        static let SEND_EMAIL = ApiUrl.URL + "/AvailableReleaseReport/MailAvailableReleaseReport?mailapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authmail=%@&emailid=%@&ROReferenceID=%@&WHRNo=%@&ManualNo=%@"
+
+//        MailAvailableReleaseReport(string mailapi, string authmail, string emailid, string ROReferenceID, string WHRNo, string ManualNo)
+
+        
     }
     
     
@@ -240,6 +254,7 @@ struct Constant
         static let CP_INVOICE = ApiUrl.URL + "/APReport/ShowCounterPartyInvoice?apicpi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authcpi=%@&filter=%@&company=%@&location=%@&BV=%@&counterparty=%@"
         
         static let SEND_EMAIL =  ApiUrl.URL + "/APReport/MailAPReport?mailapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authmail=%@&emailid=%@&invoiceno=%@"
+        
     }
     
     struct EMPLOYEE {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,9 +25,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5cc-92-L1X">
-                    <rect key="frame" x="8" y="26" width="35" height="35"/>
+                    <rect key="frame" x="8" y="26" width="40" height="35"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="35" id="CZq-2v-PO9"/>
+                        <constraint firstAttribute="width" constant="40" id="CZq-2v-PO9"/>
                         <constraint firstAttribute="height" constant="35" id="Ixg-k9-eYL"/>
                     </constraints>
                     <state key="normal" image="back">
@@ -51,7 +51,7 @@
                     </connections>
                 </button>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ZcS-tJ-Vls">
-                    <rect key="frame" x="52.999999999999993" y="20.999999999999996" width="79.333333333333314" height="40.666666666666657"/>
+                    <rect key="frame" x="52.999999999999993" y="20.666666666666668" width="79.333333333333314" height="40.666666666666657"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title Text " lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PyD-7v-XLx">
                             <rect key="frame" x="0.0" y="0.0" width="79.333333333333329" height="20.333333333333332"/>
@@ -74,7 +74,7 @@
                     </constraints>
                 </stackView>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fdb-Y1-uDa">
-                    <rect key="frame" x="330" y="21" width="35" height="35"/>
+                    <rect key="frame" x="322" y="21" width="43" height="35"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="35" id="7BT-gG-1yx"/>
                         <constraint firstAttribute="width" relation="lessThanOrEqual" priority="250" constant="100" id="cGU-K4-axY"/>
@@ -106,8 +106,8 @@
         </view>
     </objects>
     <resources>
-        <image name="back" width="33" height="33"/>
-        <image name="filter" width="19" height="19"/>
-        <image name="menu" width="19" height="19"/>
+        <image name="back" width="100" height="100"/>
+        <image name="filter" width="43.5" height="43.5"/>
+        <image name="menu" width="43.5" height="43.5"/>
     </resources>
 </document>

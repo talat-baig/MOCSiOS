@@ -20,8 +20,11 @@ class ProductListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwSummary: UIView!
     @IBOutlet weak var lblTotalQty: UILabel!
-
+    @IBOutlet weak var vwHeaderAndQty: UIView!
+    
     let arrProduct = ["Brazilian Parboiled Rice","Brown Sugar","Lentils","abcd"]
+    
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +32,10 @@ class ProductListViewController: UIViewController {
         self.tableView.register(UINib(nibName: "AvlRelListCell", bundle: nil), forCellReuseIdentifier: "cell")
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+        
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVesselAndProductData))
+        tableView.addSubview(refreshControl)
+        
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
@@ -41,13 +48,16 @@ class ProductListViewController: UIViewController {
         tableView.estimatedRowHeight = 55.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        lblTotalQty.text = "-"
+        self.vwSummary.layer.borderWidth = 1
+        self.vwSummary.layer.borderColor = AppColor.universalHeaderColor.cgColor
+        self.vwSummary.layer.cornerRadius = 5
+        
         getVesselAndProductData()
         
     }
     
     func showEmptyState(){
-        Helper.showNoItemState(vc: self, messg: "No Data Available. Please Reload.", tb: tableView, action: #selector(getVesselAndProductData))
+        Helper.showNoFilterStateResized(vc: self, messg: "No Available Release Data for the current. Try by changing filter.", tb: tableView)
     }
     
     func parseAndAssignVesselData(response : Data?) {
@@ -66,7 +76,7 @@ class ProductListViewController: UIViewController {
             arrVessl.append(newCurr)
         }
         self.arrVessel = arrVessl
-
+        
     }
     
     
@@ -85,13 +95,13 @@ class ProductListViewController: UIViewController {
             }
             newProd.prodQty = j["Release Available for Sale (mt)"].stringValue
             newProd.totalQty = j["Total Release Available for Sale (mt)"].stringValue
-
+            
             arrProd.append(newProd)
         }
         self.arrayList = arrProd
         
         DispatchQueue.main.async {
-            self.lblTotalQty.text =  "Total Qty : " +  self.arrayList[0].totalQty
+            self.lblTotalQty.text =  "Total Qty(MT) : " +  self.arrayList[0].totalQty
             self.tableView.reloadData()
         }
     }
@@ -106,6 +116,7 @@ class ProductListViewController: UIViewController {
             self.view.showLoading()
             Alamofire.request(url1).responseData(completionHandler: ({ vesselResp in
                 self.view.hideLoading()
+                self.refreshControl.endRefreshing()
                 
                 if Helper.isResponseValid(vc: self, response: vesselResp.result) {
                     
@@ -116,6 +127,7 @@ class ProductListViewController: UIViewController {
                         // call Product List API
                         Alamofire.request(url2).responseData(completionHandler: ({ prodResponse in
                             self.view.hideLoading()
+                            self.refreshControl.endRefreshing()
                             
                             if Helper.isResponseValid(vc: self, response: prodResponse.result) {
                                 
@@ -124,10 +136,13 @@ class ProductListViewController: UIViewController {
                                 
                                 if (arrProd.count > 0) {
                                     self.tableView.tableFooterView = nil
+                                    self.vwHeaderAndQty.isHidden = false
                                     self.parseAndAssignVesselData(response:vesselResp.result.value)
                                     self.parseAndAssignProductData(response:prodResponse.result.value )
                                 } else {
                                     // No Product data found
+                                    self.lblTotalQty.text =  " "
+                                    self.vwHeaderAndQty.isHidden = true
                                     self.showEmptyState()
                                 }
                             } else {
@@ -136,10 +151,16 @@ class ProductListViewController: UIViewController {
                         }))
                     } else {
                         // No Vessel data Found
+                        self.lblTotalQty.text =  " "
+                        self.vwHeaderAndQty.isHidden = true
                         self.showEmptyState()
                     }
                 }
             }))
+        } else {
+            self.vwHeaderAndQty.isHidden = true
+            self.lblTotalQty.text = " "
+            Helper.showNoInternetMessg()
         }
     }
 }

@@ -162,6 +162,14 @@ class ARInstrumentController: UIViewController {
 
 extension ARInstrumentController: emailFromHeaderDelegate, sendEmailFromViewDelegate {
     
+    func onSendTap(whrNo: String, roId: String, manual: String, emailIds: String) {
+        
+    }
+    
+ 
+   
+    
+    
     /// sendEmailFromViewDelegate method
     /// - Parameters:
     ///    - invoice: Invoice number and String

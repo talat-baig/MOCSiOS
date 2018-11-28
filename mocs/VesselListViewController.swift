@@ -20,15 +20,18 @@ class VesselListViewController: UIViewController {
     
     @IBOutlet weak var vwSummary: UIView!
     
+    @IBOutlet weak var vwHeaderAndQty: UIView!
+
     @IBOutlet weak var lblTotalQty: UILabel!
 
     var arrayList : [VesselList] = []
     var arrVessetList : [String] = []
-    
+
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+
     override func viewDidLoad() {
         super.viewDidLoad()
        
-
         self.tableView.register(UINib(nibName: "AvlRelListCell", bundle: nil), forCellReuseIdentifier: "cell")
 
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
@@ -43,19 +46,69 @@ class VesselListViewController: UIViewController {
         tableView.estimatedRowHeight = 55.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVesselData))
+        tableView.addSubview(refreshControl)
 
-        parseAndAssignVesselData()
-        parseAndAssignVesselList()
+        
+        self.vwSummary.layer.borderWidth = 1
+        self.vwSummary.layer.borderColor = AppColor.universalHeaderColor.cgColor
+        self.vwSummary.layer.cornerRadius = 5
+
+        getVesselData()
     }
     
-    func parseAndAssignVesselList() {
+    @objc func getVesselData() {
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.AvlRel.VESSEL_LIST, Session.authKey,  Helper.encodeURL(url : FilterViewController.getFilterString()))
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let responseJson = JSON(response.result.value!)
+                    let arrData = responseJson.arrayObject as! [[String:AnyObject]]
+                    
+                    if (arrData.count > 0) {
+                      
+                        self.tableView.tableFooterView = nil
+                        self.vwHeaderAndQty.isHidden = false
+                        self.parseAndAssignVesselData(response : response.result.value! )
+                        self.parseAndAssignVesselList(response : response.result.value! )
+                    } else {
+                        self.lblTotalQty.text =  " "
+                        self.vwHeaderAndQty.isHidden = true
+                        self.showEmptyState()
+                    }
+                } else {
+                    self.lblTotalQty.text =  " "
+                    self.vwHeaderAndQty.isHidden = true
+                    self.showEmptyState()
+                }
+            }))
+        } else {
+            self.vwHeaderAndQty.isHidden = true
+            self.lblTotalQty.text = " "
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    func showEmptyState(){
+        Helper.showNoFilterStateResized(vc: self, messg: "No Available Release Data for the current. Try by changing filter.", tb: tableView)
+    }
+    
+    func parseAndAssignVesselList(response : Data?) {
 
         var arrVessl: [String] = []
         let responseJson = JSON(response!)
 
         for(_,j):(String,JSON) in responseJson {
-            var newCurr : String = ""
             
+            var newCurr : String = ""
             if j["Vessel Name"].stringValue == "" {
                newCurr = "-"
             } else {
@@ -67,11 +120,11 @@ class VesselListViewController: UIViewController {
     }
     
     
-    func parseAndAssignVesselData() {
+    func parseAndAssignVesselData(response : Data?) {
         
         var arrVessl: [VesselList] = []
         let responseJson = JSON(response!)
-        
+
         for(_,j):(String,JSON) in responseJson {
             let newVessl = VesselList()
             
@@ -80,17 +133,14 @@ class VesselListViewController: UIViewController {
             } else {
                newVessl.vesselName = j["Vessel Name"].stringValue
             }
-            
             newVessl.relAvlSale = j["Realease Available for Sale (mt)"].stringValue
             newVessl.totalQty = j["Total Realease Available for Sale (mt)"].stringValue
-
             arrVessl.append(newVessl)
         }
         self.arrayList = arrVessl
         
         DispatchQueue.main.async {
-            
-            self.lblTotalQty.text =  "Total Qty : " +  self.arrayList[0].totalQty
+            self.lblTotalQty.text =  "Total Qty(MT) : " +  self.arrayList[0].totalQty
             self.tableView.reloadData()
         }
     }

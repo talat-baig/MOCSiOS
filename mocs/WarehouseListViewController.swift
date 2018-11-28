@@ -13,13 +13,16 @@ import Alamofire
 
 class WarehouseListViewController: UIViewController {
     
-    var arrVessel : [VesselList] = []
+    var arrVessel : [String] = []
     var arrayList : [WarehouseData] = []
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwSummary: UIView!
     @IBOutlet weak var lblTotalQty: UILabel!
+    @IBOutlet weak var vwHeaderAndQty: UIView!
+    
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,30 +41,35 @@ class WarehouseListViewController: UIViewController {
         tableView.estimatedRowHeight = 55.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        lblTotalQty.text = "-"
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVesselAndWarehouseData))
+        tableView.addSubview(refreshControl)
+        
+        self.vwSummary.layer.borderWidth = 1
+        self.vwSummary.layer.borderColor = AppColor.universalHeaderColor.cgColor
+        self.vwSummary.layer.cornerRadius = 5
+        
         getVesselAndWarehouseData()
     }
     
     
     func showEmptyState(){
-        Helper.showNoItemState(vc: self, messg: "No Data Available. Please Reload.", tb: tableView, action: #selector(getVesselAndWarehouseData))
+        Helper.showNoFilterStateResized(vc: self, messg: "No Available Release Data for the current. Try by changing filter.", tb: tableView)
     }
     
     func parseAndAssignVesselData(response : Data?) {
         
-        let arrVessl: [VesselList] = []
+        var arrVessl: [String] = []
         let responseJson = JSON(response!)
         
         for(_,j):(String,JSON) in responseJson {
+            var newCurr : String = ""
             
-            let newObj = VesselList()
             if j["Vessel Name"].stringValue == "" {
-                newObj.vesselName = "-"
+                newCurr = "-"
             } else {
-                newObj.vesselName = j["Vessel Name"].stringValue
+                newCurr = j["Vessel Name"].stringValue
             }
-            newObj.relAvlSale = j["Realease Available for Sale (mt)"].stringValue
-            arrVessel.append(newObj)
+            arrVessl.append(newCurr)
         }
         self.arrVessel = arrVessl
     }
@@ -82,13 +90,13 @@ class WarehouseListViewController: UIViewController {
             }
             newWare.wareQty = j["Release Available for Sale (mt)"].stringValue
             newWare.totalQty = j["Total Release Available for Sale (mt)"].stringValue
-
+            
             arrWare.append(newWare)
         }
         self.arrayList = arrWare
         
         DispatchQueue.main.async {
-            self.lblTotalQty.text =  "Total Qty : " +  self.arrayList[0].totalQty
+            self.lblTotalQty.text =  "Total Qty(MT) : " +  self.arrayList[0].totalQty
             self.tableView.reloadData()
         }
     }
@@ -103,6 +111,7 @@ class WarehouseListViewController: UIViewController {
             self.view.showLoading()
             Alamofire.request(url1).responseData(completionHandler: ({ vesselResp in
                 self.view.hideLoading()
+                self.refreshControl.endRefreshing()
                 
                 if Helper.isResponseValid(vc: self, response: vesselResp.result) {
                     
@@ -113,6 +122,7 @@ class WarehouseListViewController: UIViewController {
                         // call Product List API
                         Alamofire.request(url2).responseData(completionHandler: ({ wareResponse in
                             self.view.hideLoading()
+                            self.refreshControl.endRefreshing()
                             
                             if Helper.isResponseValid(vc: self, response: wareResponse.result) {
                                 
@@ -121,12 +131,15 @@ class WarehouseListViewController: UIViewController {
                                 
                                 if (arrWare.count > 0) {
                                     self.tableView.tableFooterView = nil
+                                    self.vwHeaderAndQty.isHidden = false
                                     self.parseAndAssignVesselData(response:vesselResp.result.value)
                                     self.parseAndAssignWarehouseData(response:wareResponse.result.value )
                                     
-                                   
+                                    
                                 } else {
                                     // No warehouse data found
+                                    self.lblTotalQty.text = " "
+                                    self.vwHeaderAndQty.isHidden = true
                                     self.showEmptyState()
                                 }
                             } else {
@@ -135,10 +148,17 @@ class WarehouseListViewController: UIViewController {
                         }))
                     } else {
                         // No Vessel data Found
+                        self.lblTotalQty.text = " "
+                        self.vwHeaderAndQty.isHidden = true
+                        self.lblTotalQty.text = " "
                         self.showEmptyState()
                     }
                 }
             }))
+        } else {
+            self.vwHeaderAndQty.isHidden = true
+            self.lblTotalQty.text = " "
+            Helper.showNoInternetMessg()
         }
     }
     
@@ -175,8 +195,10 @@ extension WarehouseListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detail = self.storyboard?.instantiateViewController(withIdentifier: "DetailsListViewController") as! DetailsListViewController
         detail.isFromWarehouse = true
+        detail.arrVesselList = self.arrVessel
         detail.titleStr = arrayList[indexPath.row].wareName
         self.navigationController?.pushViewController(detail, animated: true)
+        
     }
 }
 

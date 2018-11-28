@@ -444,16 +444,37 @@ class Helper: UIView {
         
     }
     
+    public static func showNoFilterStateResized(vc:UIViewController, messg: String = "" , tb:UITableView, action:Selector? = nil) -> Void{
+        let emptyView = EmptyStateView()
+        emptyView.image = UIImage(named: "no_result")!
+
+//        if action != nil{
+            emptyView.message = messg
+//            emptyView.button.isHidden = false
+//            emptyView.buttonText = "RELOAD"
+//            emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
+//        }else{
+//            emptyView.message = messg
+//            emptyView.button.isHidden = true
+//        }
+        tb.tableFooterView = emptyView
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+    }
+    
     public static func showNoItemState(vc:UIViewController, messg: String = "" , tb:UITableView, action:Selector? = nil) -> Void{
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "empty_box")!
+        emptyView.message = messg
+
         if action != nil{
-            emptyView.message = messg
             emptyView.button.isHidden = false
             emptyView.buttonText = "LOAD ITEM"
             emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
         }else{
-            emptyView.message = messg
             emptyView.button.isHidden = true
         }
         tb.tableFooterView = emptyView

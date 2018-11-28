@@ -42,6 +42,11 @@ class AvlRelListCell: UITableViewCell {
         lblText.text = "Warehouse Name"
     }
     
+    func setRODataToView(data: ROListData) {
+        lblName.text = data.roNum
+        lblQty.text = data.relSale
+        lblText.text = "RO Number"
+    }
     
     
     override func setSelected(_ selected: Bool, animated: Bool) {
