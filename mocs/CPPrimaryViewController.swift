@@ -10,12 +10,19 @@ import UIKit
 import XLPagerTabStrip
 import SwiftyJSON
 
+//
+//enum FlagColor : String {
+//
+//    case Green
+//}
+
 class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
 
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "PRIMARY DETAILS")
     }
     
+    var flagColor : String = ""
     @IBOutlet weak var scrlVw: UIScrollView!
     
     @IBOutlet weak var mySubVw: UIView!
@@ -42,6 +49,9 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var lblMobNum: UILabel!
     @IBOutlet weak var lblPhNum: UILabel!
     
+    @IBOutlet weak var lblColorName: UILabel!
+    @IBOutlet weak var lblColor: UILabel!
+    @IBOutlet weak var lblFlagDesc: UILabel!
     var primResponse : Data?
     
     override func viewDidLoad() {
@@ -68,16 +78,22 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
                 lblFaxNum.text! = j["Faxno"].stringValue
             }
             
-            if j["Email"].stringValue == "" {
-                lblEmail.text! = "-"
-            } else {
-                lblEmail.text! = j["Email"].stringValue
-            }
+//            if j["Email1"].stringValue == "" {
+//                lblEmail.text! = "-"
+//            } else {
+//                lblEmail.text! = j["Email1"].stringValue
+//            }
             
             if j["Website"].stringValue == "" {
                 lblWebsite.text! = "-"
             } else {
                 lblWebsite.text! = j["Website"].stringValue
+            }
+            
+            if j["Email"].stringValue == "" {
+                lblEmail.text! = "-"
+            } else {
+                lblEmail.text! = j["Email"].stringValue
             }
             
             if j["ShortName"].stringValue == "" {
@@ -97,6 +113,24 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
             } else {
                 lblPhno1.text! = j["PhoneNo1"].stringValue
             }
+            
+            if j["Flagging"].stringValue == "" || j["Flagging"].stringValue == "Green" {
+                self.lblColorName.text! = "(Green)"
+                self.lblColor.backgroundColor = AppColor.greenFlag
+            } else if j["Flagging"].stringValue == "Red" {
+                self.lblColorName.text! =  "(" + j["Flagging"].stringValue + ")"
+                self.lblColor.backgroundColor = AppColor.redFalg
+            } else if j["Flagging"].stringValue == "Amber" {
+                self.lblColorName.text! =  "(" + j["Flagging"].stringValue + ")"
+                self.lblColor.backgroundColor = AppColor.amberFlag
+            }
+            
+            if j["Description"].stringValue == "" {
+                self.lblFlagDesc.text! = "-"
+            } else {
+                self.lblFlagDesc.text! = j["Description"].stringValue
+            }
+            
             
             if j["Address"].stringValue == "" {
                 lblAddress.text! = "-"
@@ -140,11 +174,14 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
                 lblJobTitle.text! = j["JobTitle"].stringValue
             }
             
+           
+            
             if j["Email1"].stringValue == "" {
-                lblShortName.text! = "-"
+                lblContactEmail.text! = "-"
             } else {
-                lblShortName.text! = j["Email1"].stringValue
+                lblContactEmail.text! = j["Email1"].stringValue
             }
+            
             
             if j["MobileNo"].stringValue == "" {
                 lblMobNum.text! = "-"

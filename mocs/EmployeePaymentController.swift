@@ -99,6 +99,8 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                     }
                      self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
@@ -236,7 +238,7 @@ extension EmployeePaymentController: UITableViewDelegate, UITableViewDataSource,
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+        return 330
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

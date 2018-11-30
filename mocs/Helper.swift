@@ -346,7 +346,7 @@ class Helper: UIView {
         }
     }
     
-    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , action:Selector){
+    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, action:Selector){
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
@@ -357,20 +357,18 @@ class Helper: UIView {
         } else if isAPReport {
             emptyView.message = "No AP Data for the current\nTry by changing filter"
         } else if isTrvReq {
-            emptyView.message = "No Travel Request Data found \nTry by again by relaoding"
+            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
             emptyView.buttonText = "RELOAD"
+        } else if isCP {
+            emptyView.message = "No Counterparty Data found \n Try again by reloading"
         } else {
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
         
-        //
-        //        if isTrvReq {
-        //            emptyView.buttonText = "RELOAD"
-        //        } else {
-        //            emptyView.buttonText = "CHANGE FILTER"
-        //        }
+       
         emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
         tb.tableFooterView = emptyView
+        
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
         emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true

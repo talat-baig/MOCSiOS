@@ -10,12 +10,15 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class AvlRelBaseViewController: UIViewController {
+class AvlRelBaseViewController: UIViewController,filterViewDelegate , clearFilterDelegate {
+    
+    
     
     /// Top Header
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var collVw: UICollectionView!
     let arrImgName = [ "vessel", "product", "warehouse"]
     let arrTitle = ["Vessel", "Product" , "Warehouse"]
     
@@ -32,9 +35,29 @@ class AvlRelBaseViewController: UIViewController {
         vwTopHeader.lblTitle.text = "Available Releases"
         vwTopHeader.lblSubTitle.isHidden = true
         
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        flowLayout.minimumInteritemSpacing = 5.0
+        collVw.collectionViewLayout = flowLayout
+        
+        FilterViewController.filterDelegate = self
+        FilterViewController.clearFilterDelegate = self
+
+
     }
     
-   
+    func cancelFilter(filterString: String) {
+    }
+    
+    
+    func applyFilter(filterString: String) {
+       self.collVw.reloadData()
+    }
+    
+    func clearAll() {
+        self.collVw.reloadData()
+    }
     
     @objc func navigateToList(sender: UIButton) {
         
@@ -70,7 +93,6 @@ extension AvlRelBaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         return 165
     }
     
@@ -112,3 +134,35 @@ extension AvlRelBaseViewController: WC_HeaderViewDelegate {
         self.presentRightMenuViewController(sender as AnyObject)
     }
 }
+
+
+extension AvlRelBaseViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return FilterViewController.selectedDataObj.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterCollectionCell", for: indexPath as IndexPath) as! FilterCollectionViewCell
+        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+        cell.lblTitle.text = newStr
+        cell.lblTitle.preferredMaxLayoutWidth = 100
+        return cell
+    }
+    
+    func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
+    {
+        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        return size
+    }
+    
+    
+}
+
+
+
+

@@ -103,6 +103,8 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
@@ -170,7 +172,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                     self.present(alert, animated: true, completion: nil)
                 }
             }))
-        }else{
+        } else {
             Helper.showNoInternetMessg()
         }
     }
@@ -236,7 +238,7 @@ extension SalesContractController: UISearchBarDelegate {
 extension SalesContractController: UITableViewDataSource, UITableViewDelegate, onButtonClickListener{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 336
+        return 342
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

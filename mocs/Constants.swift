@@ -11,7 +11,7 @@ struct ApiKey {
     static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-    //    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+//        static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
@@ -20,9 +20,7 @@ struct ApiUrl {
     static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-    //    static let URL = "http://172.16.12.12/OCSWebApi/api"
-    
-    
+//        static let URL = "http://172.16.12.12/OCSWebApi/api"
 }
 
 
@@ -43,6 +41,11 @@ struct AppColor {
     static let scrollVwColor = UIColor(red: 92.0/255.0, green: 94.0/255.0, blue: 102.0/255.0, alpha: 1.0)
     
     static let grayColor = UIColor(red: 154.0/255.0, green: 154.0/255.0, blue: 154.0/255.0, alpha: 1.0)
+    
+    static let greenFlag = UIColor(red: 16.0/255.0, green: 155.0/255.0, blue: 53.0/255.0, alpha: 1.0)
+    static let amberFlag = UIColor(red: 255.0/255.0, green: 194.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+    static let redFalg = UIColor(red: 239.0/255.0, green: 35.0/255.0, blue: 35.0/255.0, alpha: 1.0)
+
     
 }
 
@@ -573,6 +576,7 @@ struct Constant
         
         static let VIEW = ApiUrl.URL + "/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
         
+        
         static let BANK_DETAILS = ApiUrl.URL + "/CounterParty/GetCounterPartyBankDetailsByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustID=%@"
         
         static let REL_DETAILS = ApiUrl.URL + "/CounterParty/GetCounterPartyRelationByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CuID=%@"
@@ -638,8 +642,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-        //        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

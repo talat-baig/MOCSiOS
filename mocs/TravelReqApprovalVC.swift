@@ -128,6 +128,8 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                         
                     }
                     self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, isTrvReq: true, isARReport: false, action: #selector(self.populateList))
                 }
             }))
         } else {
@@ -138,8 +140,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         
     }
     
-    
-    
+  
     
     func getItirenaryData(trfData :TravelRequestData, isFromView : Bool ) {
         

@@ -116,6 +116,8 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                     }
                      self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {

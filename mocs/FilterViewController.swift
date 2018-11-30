@@ -15,7 +15,10 @@ import RATreeView
 protocol filterViewDelegate {
     func applyFilter(filterString : String)
     func cancelFilter(filterString : String)
-    //    func clearAllTapped()
+}
+
+protocol clearFilterDelegate {
+    func clearAll()
 }
 
 class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewDataSource, onFilterButtonTap {
@@ -37,7 +40,8 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     
     @IBOutlet weak var vwButtons: UIView!
     static var filterDelegate: filterViewDelegate?
-    
+    static var clearFilterDelegate: clearFilterDelegate?
+
     //Added By RV : 13 May 18
     var delegate: onFilterButtonTap?
     var headerVwFilter : FilterHeaderView?
@@ -254,9 +258,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             } else {
                 
                 newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeWhiteSpaces(url: (newObj.location?.locName)!) + "+" +  newObj.code!
-
             }
-            
             newStrArr.append(newStr)
         }
         
@@ -317,7 +319,10 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             }
             self.treeView.reloadRows(forItems: [FilterViewController.selectedDataObj], with: RATreeViewRowAnimationNone)
             FilterViewController.selectedDataObj.removeAll()
-            
+        }
+        
+        if let d = FilterViewController.clearFilterDelegate {
+            d.clearAll()
         }
         
         updateFilterHeader()
@@ -454,7 +459,7 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterCollectionCell", for: indexPath as IndexPath) as! FilterCollectionViewCell
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
-        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name! 
         cell.lblTitle.text = newStr
         cell.lblTitle.preferredMaxLayoutWidth = 100
         return cell

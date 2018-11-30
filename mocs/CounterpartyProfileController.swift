@@ -12,7 +12,6 @@ import SwiftyJSON
 
 class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelegate , onCPApprove  , onCPUpdate {
   
-    
     @IBOutlet weak var srchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
@@ -125,9 +124,11 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                         
                     } else {
                         self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView,  isCP: true, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView,  isCP: true, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
@@ -192,9 +193,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                 if Helper.isResponseValid(vc: self, response: bnkResponse.result) {
                     
                     let responseJson = JSON(bnkResponse.result.value!)
-                    
                     self.getRelationShipDetailsAndNavigate(primResponse: primResponse, bnkResponse: bnkResponse.result.value! , data : data)
-                    
                 }
             }))
         }else{

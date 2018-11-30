@@ -11,13 +11,14 @@ import Alamofire
 import Charts
 import SwiftyJSON
 
-class APReportController: UIViewController , filterViewDelegate {
+class APReportController: UIViewController , filterViewDelegate, clearFilterDelegate {
     
     var dataEntry:[PieChartDataEntry] = []
     var apData : APListData?
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
+    @IBOutlet weak var collVw: UICollectionView!
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
@@ -33,9 +34,16 @@ class APReportController: UIViewController , filterViewDelegate {
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllAPData))
         tableView.addSubview(refreshControl)
         
-        FilterViewController.filterDelegate = self
-        fetchAllAPData()
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        flowLayout.minimumInteritemSpacing = 5.0
+        collVw.collectionViewLayout = flowLayout
         
+        FilterViewController.filterDelegate = self
+        FilterViewController.clearFilterDelegate = self
+
+        fetchAllAPData()
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -43,6 +51,7 @@ class APReportController: UIViewController , filterViewDelegate {
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Accounts Payable"
         vwTopHeader.lblSubTitle.isHidden = true
+        
         
     }
     
@@ -200,7 +209,15 @@ class APReportController: UIViewController , filterViewDelegate {
             return
         }
         self.fetchAllAPData()
+        self.collVw.reloadData()
     }
+    
+    
+    func clearAll() {
+        self.collVw.reloadData()
+        self.fetchAllAPData()
+    }
+    
     
     func resetData() {
         self.apData = nil
@@ -343,3 +360,29 @@ extension APReportController: WC_HeaderViewDelegate {
 }
 
 
+extension APReportController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return FilterViewController.selectedDataObj.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterCollectionCell", for: indexPath as IndexPath) as! FilterCollectionViewCell
+        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+        cell.lblTitle.text = newStr
+        cell.lblTitle.preferredMaxLayoutWidth = 100
+        return cell
+    }
+    
+    func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
+    {
+        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        return size
+    }
+    
+    
+}

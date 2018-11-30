@@ -62,7 +62,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         self.populateList()
     }
     
-
+    
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
@@ -114,11 +114,13 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                         }
                         self.arrayList = newData
                         self.newArray = newData
-                       self.tableView.tableFooterView = nil
+                        self.tableView.tableFooterView = nil
                     }else{
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                     }
-                 self.tableView.reloadData()
+                    self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
@@ -239,7 +241,7 @@ extension TCRController: UISearchBarDelegate {
 extension TCRController:UITableViewDelegate, UITableViewDataSource,onButtonClickListener{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 410
+        return 425
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

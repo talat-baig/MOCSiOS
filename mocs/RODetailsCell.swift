@@ -32,6 +32,11 @@ class RODetailsCell: UITableViewCell {
         outerVw.layer.shadowOffset = CGSize(width: 2, height: 2)
         outerVw.layer.shadowRadius = 1
         outerVw.layer.shadowColor = UIColor.black.cgColor
+        
+        whrHeaderVw.layer.shadowOpacity = 0.25
+        whrHeaderVw.layer.shadowOffset = CGSize(width: 0, height: 2)
+        whrHeaderVw.layer.shadowRadius = 1
+        whrHeaderVw.layer.shadowColor = UIColor.black.cgColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

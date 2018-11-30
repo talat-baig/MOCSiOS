@@ -110,6 +110,12 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
             floaty.close()
         })
         
+        floaty.addItem("Photo Library", icon:UIImage(named: "photos_library")!, handler: { item in
+            
+            self.showMediaAlbum()
+            floaty.close()
+        })
+        
         self.view.addSubview(floaty)
         
         if isFromView {
@@ -123,6 +129,8 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         self.uf_delegate = self
         
     }
+    
+   
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -187,6 +195,14 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         self.imagePicker.delegate = self
         self.imagePicker.allowsEditing = true
         self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+        present(self.imagePicker, animated: true, completion: nil)
+    }
+    
+    func showMediaAlbum() {
+        self.imagePicker.modalPresentationStyle = UIModalPresentationStyle.currentContext
+        self.imagePicker.delegate = self
+        self.imagePicker.allowsEditing = true
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
         present(self.imagePicker, animated: true, completion: nil)
     }
     

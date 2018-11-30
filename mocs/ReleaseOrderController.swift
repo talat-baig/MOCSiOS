@@ -85,6 +85,10 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         self.populateList()
     }
     
+    func showEmptyState(){
+        Helper.showNoItemState(vc:self ,  tb:tableView)
+    }
+    
     @objc func populateList(){
         if internetStatus != .notReachable {
             
@@ -141,6 +145,8 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                         Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{

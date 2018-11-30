@@ -83,6 +83,8 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             floaty.close()
         })
         
+      
+        
         floaty.addItem("Select File", icon: #imageLiteral(resourceName: "fileExplorer"), handler: { item in
             let documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["public.text","com.apple.iwork.pages.pages", "public.data"], in: UIDocumentPickerMode.import)
             documentPicker.delegate = self
@@ -92,6 +94,13 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
             self.present(documentPicker, animated: true, completion: nil)
             
+            floaty.close()
+        })
+        
+        
+        floaty.addItem("Photo Library", icon:UIImage(named: "photos_library")!, handler: { item in
+        
+            self.showMediaAlbum()
             floaty.close()
         })
         
@@ -168,6 +177,14 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         present(self.imagePicker, animated: true, completion: nil)
     }
     
+    
+    func showMediaAlbum() {
+        self.imagePicker.modalPresentationStyle = UIModalPresentationStyle.currentContext
+        self.imagePicker.delegate = self
+        self.imagePicker.allowsEditing = true
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        present(self.imagePicker, animated: true, completion: nil)
+    }
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         if controller.documentPickerMode == UIDocumentPickerMode.import {

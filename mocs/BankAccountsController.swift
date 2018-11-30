@@ -53,7 +53,7 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var lblEnhancementVal: UILabel!
     @IBOutlet weak var lblReqByDate: UILabel!
     @IBOutlet weak var lblApprovedByDate: UILabel!
-
+    @IBOutlet weak var lblGradeDesc: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,6 +151,7 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
                 lblApprovedOn.text! = j["ApprovedDate"].stringValue
             }
             
+           
             
             
             lblInternalCL.text! = j["InternalCreditLimit"].stringValue
@@ -159,9 +160,21 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
             lblMaxTenor.text! = j["MaxTenor"].stringValue
             lblSublimit1.text! = j["Sublimit1"].stringValue
             lblSublimit2.text! = j["Sublimit2"].stringValue
-            lblInstrument1.text! = j["Instrument1"].stringValue
-            lblInstrument2.text! = j["Instrument2"].stringValue
-            lblInstrument2.text! = j["Email"].stringValue
+//            lblInstrument1.text! = j["Instrument1"].stringValue
+//            lblInstrument2.text! = j["Instrument2"].stringValue
+            
+            if j["Instrument1"].stringValue == "" {
+                lblInstrument1.text! = "-"
+            } else {
+                lblInstrument1.text! = j["Instrument1"].stringValue
+            }
+            if j["Instrument2"].stringValue == "" {
+                lblInstrument2.text! = "-"
+            } else {
+                lblInstrument2.text! = j["Instrument2"].stringValue
+            }
+            
+//            lblemm.text! = j["Email"].stringValue
             lblMaxLimit1.text! = j["MaxLimit1"].stringValue
             lblMaxLimit2.text! = j["MaxLimit2"].stringValue
             lblMaxCredit.text! = j["MaxCreditPeriod"].stringValue
@@ -179,6 +192,15 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
             } else {
                 lblApprovedByDate.text! = j["Approveddate1"].stringValue
             }
+            
+            if j["Grades"].stringValue == "" &&  j["Description"].stringValue == "" {
+                lblGradeDesc.text! = "-"
+            } else {
+                lblGradeDesc.text! = j["Grades"].stringValue + " " +  j["Description"].stringValue
+            }
+
+
+            
            
         }
     }
