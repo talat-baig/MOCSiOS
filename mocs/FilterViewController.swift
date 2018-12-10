@@ -256,7 +256,6 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             if noBU {
                 newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeWhiteSpaces(url:(newObj.location?.locName)!)
             } else {
-                
                 newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeWhiteSpaces(url: (newObj.location?.locName)!) + "+" +  newObj.code!
             }
             newStrArr.append(newStr)
@@ -312,7 +311,6 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         if FilterViewController.selectedDataObj.count != 0 {
             
             for newObj in FilterViewController.selectedDataObj {
-                
                 newObj.company?.isExpanded = false
                 newObj.location?.isExpanded = false
                 newObj.isSelect = false
@@ -431,12 +429,10 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             let state = treeView.isCellExpanded(cell)
             item.location?.isExpanded = !(item.location?.isExpanded)!
             
-            
             if let index = selectedLocation.index(where: {$0 == item}) {
             } else {
                 selectedLocation.append(item)
             }
-            
             
             if !state {
                 treeView.collapseRow(forItem: item)
@@ -459,9 +455,10 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterCollectionCell", for: indexPath as IndexPath) as! FilterCollectionViewCell
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
-        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name! 
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
         cell.lblTitle.text = newStr
-        cell.lblTitle.preferredMaxLayoutWidth = 100
+        cell.lblTitle.font =  UIFont.systemFont(ofSize: 17.0)
+//        cell.lblTitle.preferredMaxLayoutWidth = 100
         return cell
     }
     
@@ -472,7 +469,6 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
         return size
     }
-    
     
 }
 

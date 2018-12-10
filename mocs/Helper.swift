@@ -213,6 +213,8 @@ class Helper: UIView {
     
     
     
+    
+    
     public static func isResponseValid(vc: UIViewController, response:Result<Data>, tv:UITableView? = nil)-> Bool{
         var isValid: Bool = false
         

@@ -99,7 +99,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         btnKYCContctType.layer.borderWidth = 1
         btnKYCContctType.layer.borderColor =  AppColor.lightGray.cgColor
         
-        
         btnKYCRequired.layer.cornerRadius = 5
         btnKYCRequired.layer.borderWidth = 1
         btnKYCRequired.layer.borderColor =  AppColor.lightGray.cgColor

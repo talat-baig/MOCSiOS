@@ -12,6 +12,10 @@ protocol customPopUpDelegate {
     func onRightBtnTap(data:AnyObject , text : String, isApprove : Bool) -> Void
 }
 
+protocol wunderlistPopupDelegate {
+    func onRightBtnTap() -> Void
+}
+
 class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     
     /// text view for comments
@@ -37,6 +41,11 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     
      /// Delegate object for custom pop-up view
     var cpvDelegate: customPopUpDelegate?
+    var wunderDelegate: wunderlistPopupDelegate?
+    
+    var isFromSideMenu = false
+
+    
     
      /// Object of type AnyObject
     var data : AnyObject?
@@ -110,14 +119,32 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     /// Action method for right button tapped
     @IBAction func btnRightTapped(_ sender: Any) {
        
-        if let d = cpvDelegate {
-            var comment = ""
+        
+        if isFromSideMenu {
             
-            if !txtVwComments.isHidden {
-                comment = txtVwComments.text
+            if let d = wunderDelegate {
+               
+                d.onRightBtnTap()
             }
-            d.onRightBtnTap(data: data! , text : comment , isApprove: isApprove)
+        } else {
+            
+            if let d = cpvDelegate {
+                var comment = ""
+                
+                if !txtVwComments.isHidden {
+                    comment = txtVwComments.text
+                }
+                d.onRightBtnTap(data: data! , text : comment , isApprove: isApprove)
+            }
+            
         }
+        
+       
+        
+        
+        
+        
+        
     }
     
     /// Set data passed from view controller to custom pop-up view UI elements
@@ -128,7 +155,7 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     ///   - rightButton: Right button text
     ///   - isTxtVwHidden: Bool Flag to know if text view is hidden or not
     ///   - isApprove: Bool flag to know if pop-up is for Approve or Decline
-    func setDataToCustomView(title: String, description: String, leftButton: String = "", rightButton: String = "" ,isTxtVwHidden : Bool  = false , isApprove : Bool = true) {
+    func setDataToCustomView(title: String, description: String, leftButton: String = "", rightButton: String = "" ,isTxtVwHidden : Bool  = false , isApprove : Bool = true ,  isFromSideMenu : Bool = false ) {
         
         self.lblTitle.text = title
         self.lblSubtitle.text = description
@@ -136,6 +163,15 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
         self.btnLeft.setTitle(leftButton,for: .normal)
         self.btnRight.setTitle(rightButton,for: .normal)
         self.isApprove = isApprove
+        self.isFromSideMenu = isFromSideMenu
+        
+        if isFromSideMenu {
+            imgVw.image = UIImage(named: "wunderlist")
+        } else {
+            imgVw.image = UIImage(named: "approve_questn")
+        }
+        
+        
         
         if isTxtVwHidden {
             txtVwComments.isHidden = true

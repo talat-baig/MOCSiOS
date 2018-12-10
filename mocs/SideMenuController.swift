@@ -18,7 +18,6 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
     }
     
-    
     @IBOutlet weak var stckVwHome: UIStackView!
     @IBOutlet weak var vwTreeTable: UIView!
     @IBOutlet weak var lblUserName: UILabel!
@@ -27,8 +26,9 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var delegateController: TLAViewController!
     var selectedItem : MenuDataObject?
     var helpDocViewer: UIDocumentInteractionController!
+    var wunderPopup = CustomPopUpView()
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request" , "Employee Directory", "Task Manager", "2.2.1 Accounts Receivables (AR) Report", "2.2.2 Accounts Payable Report", "2.2.3 Available Release Report"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request", "Employee Directory","Task Manager" , "2.2.1 Accounts Receivables (AR) Report", "2.2.2 Accounts Payable Report", "2.2.3 Available Release Report", "2.2.4 Sales Summary Report"]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -62,12 +62,15 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let arReport = MenuDataObject(name: "2.2.1 Accounts Receivables (AR) Report", storybdNAme: "ARReport", vcName: "ARReportController", imageName: #imageLiteral(resourceName: "empty"))
         let apReport = MenuDataObject(name: "2.2.2 Accounts Payable Report", storybdNAme: "AccountsPayable", vcName: "APReportController", imageName: #imageLiteral(resourceName: "empty"))
         let avlRelReport = MenuDataObject(name: "2.2.3 Available Release Report", storybdNAme: "AvblReleases", vcName: "AvlRelBaseViewController", imageName: #imageLiteral(resourceName: "empty"))
+        let salesSummRpt = MenuDataObject(name: "2.2.4 Sales Summary Report", storybdNAme: "SalesSummary", vcName: "SalesSummaryReportController", imageName: #imageLiteral(resourceName: "empty"))
 
-        let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport, apReport,avlRelReport ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         
         let pc = MenuDataObject(name: "3.1.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))
         let sc = MenuDataObject(name: "3.1.2 Sales Contract (SC)", storybdNAme: "SalesContract", vcName: "SalesContractController", imageName: #imageLiteral(resourceName: "empty"))
+//        let sc = MenuDataObject(name: "3.1.2 Sales Contract (SC)", storybdNAme: "SalesContract", vcName: "SummaryForApprovalController", imageName: #imageLiteral(resourceName: "empty"))
+
         let dc = MenuDataObject(name: "3.1.3 Delivery Orders (DO)", storybdNAme: "DeliveryOrder", vcName: "DeliveryOrderController", imageName: #imageLiteral(resourceName: "empty"))
         let tcr = MenuDataObject(name: "3.1.4 Travel Claims Reimbursement (TCR)", storybdNAme: "TCR", vcName: "TCRController", imageName: #imageLiteral(resourceName: "empty"))
         let ecr = MenuDataObject(name: "3.1.5 Employee Claims & Payments (ECR EPR)", storybdNAme: "EmployeePayment", vcName: "EmployeePaymentController", imageName: #imageLiteral(resourceName: "empty"))
@@ -182,6 +185,11 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         } else if item.name == "Help" {
             self.openHelpDoc()
         }
+//        else if item.name == "Task Manager" {
+//            checkWunderListAppInstalled()
+//        } else {
+//
+//        }
         
         treeView.reloadRows(forItems: [item], with: RATreeViewRowAnimationNone)
     }
@@ -275,10 +283,45 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
 //            print("60")
             return 60
         }
-        
     }
     
-    
+//    func schemeAvailable(scheme: String) -> Bool {
+//        if let url = URL(string: scheme) {
+//            return UIApplication.shared.canOpenURL(url)
+//        }
+//        return false
+//    }
+//
+//    func open(scheme: String) {
+//        if let url = URL(string: scheme) {
+//            UIApplication.shared.open(url, options: [:], completionHandler: {
+//                (success) in
+//                print("Open \(scheme): \(success)")
+//            })
+//        }
+//    }
+//
+//    func openInstallAppPopup() {
+//
+//        self.wunderPopup = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
+//        self.wunderPopup.setDataToCustomView(title: "Wunderlist App Not Found", description: "Download it from App Store", leftButton: "NO", rightButton: "YES", isTxtVwHidden: true, isApprove: false, isFromSideMenu: true)
+//        self.wunderPopup.wunderDelegate = self
+//        self.wunderPopup.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+//        self.view.window?.addSubview(self.wunderPopup)
+//    }
+//
+//    func checkWunderListAppInstalled() {
+//
+//        let wunderList = schemeAvailable(scheme: "wunderlist://")
+//
+//        if wunderList {
+//            open(scheme: "wunderlist://")
+//        } else {
+//            self.openInstallAppPopup()
+//        }
+//    }
+//
+//
     func downloadFile(destinationUrl : URL) {
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             return (destinationUrl, [.removePreviousFile, .createIntermediateDirectories])
@@ -333,6 +376,20 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     }
     
 }
+
+//extension SideMenuController: wunderlistPopupDelegate {
+//
+//    func onRightBtnTap() {
+//        let urlStr = "itms://itunes.apple.com/in/app/wunderlist-to-do-list-tasks/id406644151?mt=8"
+//        if #available(iOS 10.0, *) {
+//            UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
+//        } else {
+//            UIApplication.shared.openURL(URL(string: urlStr)!)
+//        }
+//        self.wunderPopup.removeFromSuperviewWithAnimate()
+//    }
+//
+//}
 
 extension SideMenuController: UIDocumentInteractionControllerDelegate {
     

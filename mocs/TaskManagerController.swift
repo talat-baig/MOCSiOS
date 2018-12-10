@@ -18,10 +18,12 @@ class TaskManagerController: UIViewController {
     
     /// Array of object type Task Data
     var arrayList:[TaskData] = []
-    
+    var wunderPopup = CustomPopUpView()
+
     /// Table View
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var btnWunderlist: UIButton!
     /// Top Header
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
@@ -32,6 +34,9 @@ class TaskManagerController: UIViewController {
         tableView.addSubview(refreshControl)
         
         self.navigationController?.isNavigationBarHidden = true
+        
+        btnWunderlist.layer.borderWidth = 1
+        btnWunderlist.layer.borderColor =  AppColor.universalHeaderColor.cgColor
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
@@ -53,7 +58,6 @@ class TaskManagerController: UIViewController {
     
     /// Method that calls API to list tasks and populate table view according to API response data
     @objc func populateList(){
-        
         if internetStatus != .notReachable {
             var data:[TaskData] = []
             self.view.showLoading()
@@ -86,9 +90,7 @@ class TaskManagerController: UIViewController {
     /// Method to Create task. Calls API for createing new task.
     /// - Parameter name: Name of task as String
     func createTask(name : String) {
-        
         if internetStatus != .notReachable {
-            
             let url = String.init(format: Constant.TASK_MANAGER.CREATE_LIST, name, Helper.encodeURL(url: Session.email))
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -102,7 +104,49 @@ class TaskManagerController: UIViewController {
             Helper.showNoInternetMessg()
         }
     }
-
+    
+    
+    func schemeAvailable(scheme: String) -> Bool {
+        if let url = URL(string: scheme) {
+            return UIApplication.shared.canOpenURL(url)
+        }
+        return false
+    }
+    
+    func open(scheme: String) {
+        if let url = URL(string: scheme) {
+            UIApplication.shared.open(url, options: [:], completionHandler: {
+                (success) in
+                print("Open \(scheme): \(success)")
+            })
+        }
+    }
+    
+    func openInstallAppPopup() {
+        
+        self.wunderPopup = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
+        self.wunderPopup.setDataToCustomView(title: "Wunderlist App Not Found", description: "Download it from App Store?", leftButton: "NO", rightButton: "YES", isTxtVwHidden: true, isApprove: false, isFromSideMenu: true)
+        self.wunderPopup.wunderDelegate = self
+        self.wunderPopup.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        self.view.window?.addSubview(self.wunderPopup)
+    }
+    
+    func checkWunderListAppInstalled() {
+        
+        let wunderList = schemeAvailable(scheme: "wunderlist://")
+        
+        if wunderList {
+            open(scheme: "wunderlist://")
+        } else {
+            self.openInstallAppPopup()
+        }
+    }
+    
+    
+    @IBAction func btnWunderlistTapped(_ sender: Any) {
+        self.checkWunderListAppInstalled()
+    }
+    
     /// Action method for button to Add New task 
     @IBAction func addNewTask(_ sender: Any) {
         
@@ -184,4 +228,18 @@ extension TaskManagerController: WC_HeaderViewDelegate {
         
     }
     
+}
+
+extension TaskManagerController: wunderlistPopupDelegate {
+
+    func onRightBtnTap() {
+        let urlStr = "itms-apps://itunes.apple.com/in/app/wunderlist-to-do-list-tasks/id406644151?mt=8"
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(URL(string: urlStr)!)
+        }
+        self.wunderPopup.removeFromSuperviewWithAnimate()
+    }
+
 }

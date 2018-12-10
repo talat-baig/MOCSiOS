@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="240" id="gb6-fc-P88" customClass="PieChartEntryCell" customModule="mocs" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="240"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gb6-fc-P88" id="C15-LZ-xWT">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="239.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3G5-60-fjY">
+                        <rect key="frame" x="14" y="4" width="347" height="231.5"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fig-VF-vjs" customClass="PieChartView" customModule="Charts">
+                                <rect key="frame" x="12" y="12" width="323" height="207.5"/>
+                                <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="Fig-VF-vjs" secondAttribute="trailing" constant="4" id="Y3D-Y9-Woc"/>
+                            <constraint firstItem="Fig-VF-vjs" firstAttribute="top" secondItem="3G5-60-fjY" secondAttribute="topMargin" constant="4" id="Y6M-e3-Y3W"/>
+                            <constraint firstItem="Fig-VF-vjs" firstAttribute="leading" secondItem="3G5-60-fjY" secondAttribute="leadingMargin" constant="4" id="YWq-Wc-5bA"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Fig-VF-vjs" secondAttribute="bottom" constant="4" id="mjO-bd-fLS"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="5"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="3G5-60-fjY" firstAttribute="leading" secondItem="C15-LZ-xWT" secondAttribute="leading" constant="14" id="K3Q-Di-Z6M"/>
+                    <constraint firstItem="3G5-60-fjY" firstAttribute="top" secondItem="C15-LZ-xWT" secondAttribute="top" constant="4" id="WO2-eX-nHU"/>
+                    <constraint firstAttribute="trailing" secondItem="3G5-60-fjY" secondAttribute="trailing" constant="14" id="f2F-LH-mFg"/>
+                    <constraint firstAttribute="bottom" secondItem="3G5-60-fjY" secondAttribute="bottom" constant="4" id="gVY-QU-ViY"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="outerVw" destination="3G5-60-fjY" id="wgc-gf-61C"/>
+                <outlet property="pieChart" destination="Fig-VF-vjs" id="Sxa-7O-lu7"/>
+            </connections>
+            <point key="canvasLocation" x="49.5" y="130"/>
+        </tableViewCell>
+    </objects>
+</document>
