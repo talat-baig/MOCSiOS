@@ -90,27 +90,19 @@ class APCounterpartyController: UIViewController, UIGestureRecognizerDelegate {
                         
                         for(_,k):(String,JSON) in subJson1 {
                             let newDetails = AmountDetails()
-//                            newDetails.currency = k["Currency"].stringValue
                            
                             if k["Currency"].stringValue == "  " {
                                 newDetails.currency = " -"
                             } else {
                                 newDetails.currency = k["Currency"].stringValue
                             }
-                            
                             newDetails.amount = k["Invoice Value"].stringValue
-                            
-//                            if newDetails.currency != "  " {
-                                newCPObj.totalInvValue.append(newDetails)
-//                            }
+                            newCPObj.totalInvValue.append(newDetails)
                         }
                         self.cpListData.append(newCPObj)
                     }
                     self.newArray = self.cpListData
-                    
-//                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-//                    }
+                    self.tableView.reloadData()
                 }
             }))
         } else {

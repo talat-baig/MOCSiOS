@@ -51,8 +51,6 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Accounts Payable"
         vwTopHeader.lblSubTitle.isHidden = true
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -139,8 +137,6 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
     }
     
     
-    
-    
     func populateOverallData (respJson : JSON) {
         
         self.apData = nil
@@ -165,10 +161,8 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                 } else {
                     newDetails.currency = k["Currency"].stringValue
                 }
-                
                 apData.totalInvoice.append(newDetails)
             }
-            
             self.apData = apData
         }
     }

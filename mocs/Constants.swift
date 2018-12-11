@@ -258,6 +258,19 @@ struct Constant
         
     }
     
+    struct SalesSummary {
+        
+        static let SS_OVERALL = ApiUrl.URL +  "/SalesSummary/GetSalesSummaryReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        
+        static let SS_CHART = ApiUrl.URL + "/SalesSummary/ShowTop5CPOfSS?apikeytop=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&filter=%@"
+
+        static let SS_SALES_LIST = ApiUrl.URL + "/SalesSummary/GetContractNumberList?apikeycon=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@"
+        
+        static let SS_PRODUCT_LIST = ApiUrl.URL + "/SalesSummary/GetProductList?apikeyorder=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&orderno=%@"
+
+        
+    }
+    
     struct EMPLOYEE {
         /**
          *Get All Employee Directory*

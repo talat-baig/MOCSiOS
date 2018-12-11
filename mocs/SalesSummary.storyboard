@@ -181,6 +181,152 @@
             </objects>
             <point key="canvasLocation" x="1447" y="-81"/>
         </scene>
+        <!--SalesContractListVC-->
+        <scene sceneID="Ou5-M9-7d9">
+            <objects>
+                <viewController storyboardIdentifier="SalesContractListVC" title="SalesContractListVC" id="1dZ-dU-9oP" customClass="SalesContractListVC" customModule="mocs" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SvF-EQ-ZAP"/>
+                        <viewControllerLayoutGuide type="bottom" id="G0p-XC-B0m"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="UtE-qY-bqh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LXw-Fw-2i0" customClass="WC_HeaderView" customModule="mocs" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="d4b-ET-pwF"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Cx9-y0-7o7">
+                                <rect key="frame" x="8" y="78" width="359" height="589"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="151" id="fQt-Nt-2zv">
+                                        <rect key="frame" x="0.0" y="28" width="359" height="151"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fQt-Nt-2zv" id="ts0-aD-RQN">
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="150.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="1dZ-dU-9oP" id="nhb-tv-slC"/>
+                                    <outlet property="delegate" destination="1dZ-dU-9oP" id="fCC-zI-Yyc"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="LXw-Fw-2i0" firstAttribute="leading" secondItem="UtE-qY-bqh" secondAttribute="leading" id="Bgk-tB-xt7"/>
+                            <constraint firstAttribute="trailing" secondItem="LXw-Fw-2i0" secondAttribute="trailing" id="FtI-Bd-DVJ"/>
+                            <constraint firstItem="G0p-XC-B0m" firstAttribute="top" secondItem="Cx9-y0-7o7" secondAttribute="bottom" id="PyE-my-y5K"/>
+                            <constraint firstItem="Cx9-y0-7o7" firstAttribute="leading" secondItem="UtE-qY-bqh" secondAttribute="leading" constant="8" id="p7C-KY-xyT"/>
+                            <constraint firstItem="Cx9-y0-7o7" firstAttribute="top" secondItem="LXw-Fw-2i0" secondAttribute="bottom" constant="8" id="pb4-BJ-Xsg"/>
+                            <constraint firstAttribute="trailing" secondItem="Cx9-y0-7o7" secondAttribute="trailing" constant="8" id="vYg-e7-RUb"/>
+                            <constraint firstItem="LXw-Fw-2i0" firstAttribute="top" secondItem="UtE-qY-bqh" secondAttribute="top" id="wnr-UO-xmX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="0at-yY-JAW"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Sales Contract" id="D2Z-t0-RMW">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="menu" id="g4C-3b-fnn">
+                            <color key="tintColor" red="0.1083565962" green="0.20052874309999999" blue="0.62983819799999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="presentLeftMenuViewController:" destination="1dZ-dU-9oP" id="IzV-Kh-4kM"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="filter" id="HJs-aV-YEw">
+                            <color key="tintColor" red="0.1083565962" green="0.20052874309999999" blue="0.62983819799999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="presentRightMenuViewController:" destination="1dZ-dU-9oP" id="LZ8-ir-kS8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="Cx9-y0-7o7" id="6ax-B5-LN4"/>
+                        <outlet property="vwTopHeader" destination="LXw-Fw-2i0" id="Mqr-Hi-V1k"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yjb-vq-tCI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2182" y="-81"/>
+        </scene>
+        <!--SalesSummProductVC-->
+        <scene sceneID="fhA-TA-ENc">
+            <objects>
+                <viewController storyboardIdentifier="SalesSummProductVC" title="SalesSummProductVC" id="IK6-aq-2NU" customClass="SalesSummProductVC" customModule="mocs" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="CgV-Pu-T2g"/>
+                        <viewControllerLayoutGuide type="bottom" id="NtG-Gs-u0a"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wrh-Y3-Ehu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8o-iv-LQQ" customClass="WC_HeaderView" customModule="mocs" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="RZy-AO-lqT"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vry-wG-xDY">
+                                <rect key="frame" x="8" y="78" width="359" height="589"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="151" id="Slc-1v-ftz">
+                                        <rect key="frame" x="0.0" y="28" width="359" height="151"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Slc-1v-ftz" id="0Cz-VA-crc">
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="150.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="IK6-aq-2NU" id="eHV-qY-c6j"/>
+                                    <outlet property="delegate" destination="IK6-aq-2NU" id="Jya-ex-z3q"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="x8o-iv-LQQ" firstAttribute="leading" secondItem="wrh-Y3-Ehu" secondAttribute="leading" id="14M-us-tyr"/>
+                            <constraint firstItem="vry-wG-xDY" firstAttribute="top" secondItem="x8o-iv-LQQ" secondAttribute="bottom" constant="8" id="HVn-po-OMk"/>
+                            <constraint firstItem="vry-wG-xDY" firstAttribute="leading" secondItem="wrh-Y3-Ehu" secondAttribute="leading" constant="8" id="Ozx-E6-OQH"/>
+                            <constraint firstAttribute="trailing" secondItem="x8o-iv-LQQ" secondAttribute="trailing" id="QOg-wP-SSo"/>
+                            <constraint firstAttribute="trailing" secondItem="vry-wG-xDY" secondAttribute="trailing" constant="8" id="VOu-fn-9Yl"/>
+                            <constraint firstItem="x8o-iv-LQQ" firstAttribute="top" secondItem="wrh-Y3-Ehu" secondAttribute="top" id="hVc-M3-jCU"/>
+                            <constraint firstItem="NtG-Gs-u0a" firstAttribute="top" secondItem="vry-wG-xDY" secondAttribute="bottom" id="jlR-Za-WBf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Xjg-5o-b4q"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Sales Contract" id="tn5-zl-bdG">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="menu" id="bx4-hZ-5bw">
+                            <color key="tintColor" red="0.1083565962" green="0.20052874309999999" blue="0.62983819799999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="presentLeftMenuViewController:" destination="IK6-aq-2NU" id="WYr-dA-ao1"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="filter" id="GfI-zR-8tE">
+                            <color key="tintColor" red="0.1083565962" green="0.20052874309999999" blue="0.62983819799999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="presentRightMenuViewController:" destination="IK6-aq-2NU" id="dBY-y0-Isc"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="vry-wG-xDY" id="XC5-04-gSB"/>
+                        <outlet property="vwTopHeader" destination="x8o-iv-LQQ" id="4OI-7A-Aus"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xq8-R4-CpU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2182" y="-81"/>
+        </scene>
     </scenes>
     <resources>
         <image name="filter" width="21.75" height="21.75"/>

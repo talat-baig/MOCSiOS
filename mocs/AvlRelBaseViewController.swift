@@ -12,8 +12,6 @@ import SwiftyJSON
 
 class AvlRelBaseViewController: UIViewController,filterViewDelegate , clearFilterDelegate {
     
-    
-    
     /// Top Header
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
