@@ -150,6 +150,14 @@ class APCounterpartyController: UIViewController, UIGestureRecognizerDelegate {
 }
 
 
+// Mark: - UITextFieldDelegate method
+extension APCounterpartyController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        handleTap()
+        return false
+    }
+}
 
 extension APCounterpartyController: UITableViewDataSource {
     

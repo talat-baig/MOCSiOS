@@ -14,9 +14,14 @@ import SwiftyJSON
 class SalesSummaryReportController: UIViewController, filterViewDelegate, clearFilterDelegate {
     
     var barDataEntry: [BarChartDataEntry] = []
+    
     var ssData : SSListData?
     
-    let buUnit = ["Pheonix", "Sugar", "Global" , "Premium Rice", "Pharma Chemicals"]
+    // Countrparty Names arry to show on Graph
+    var cpNameArr : [String] = []
+    
+    // Countrparty Values arry to show on Graph
+    var cpValuesArr : [String] = []
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
@@ -115,7 +120,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                         self.resetData()
                         self.tableView.reloadData()
 
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, isAPReport: true, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, isSC: true, action: #selector(self.showFilterMenu))
                         return
                     } else {
 
@@ -128,7 +133,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, isAPReport: true, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, isSC: true, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
 
@@ -142,7 +147,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, isAPReport: true, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, isSC: true, action: #selector(self.showFilterMenu))
                             }
                         }))
                     }
@@ -151,7 +156,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, isAPReport: true, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, isSC: true, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {
@@ -198,30 +203,26 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
         
         let jsonArr = respJson.arrayObject as! [[String:AnyObject]]
         self.barDataEntry.removeAll()
+        self.cpNameArr.removeAll()
+        self.cpValuesArr.removeAll()
+
+        
         if jsonArr.count > 0 {
             
             for i in 0..<jsonArr.count {
-                let name = respJson[i]["Counteparty Name"].stringValue
-                let qty = Double(respJson[i]["Product Quantity"].stringValue)
+                let name = respJson[i]["CounterParty Name"].stringValue
+                let qtyStr = respJson[i]["Product Quantity"].stringValue
+                let qty = Double(qtyStr)
+                
                 let dataEntry = BarChartDataEntry(x: Double(i), y: Double(qty!) )
+                
                 self.barDataEntry.append(dataEntry)
-                //  self.barDataEntry.append(BarChartDataEntry( (value: amt!, label: name))
+                self.cpNameArr.append(name)
+                self.cpValuesArr.append(qtyStr)
             }
         }
     }
     
-    
-//    func populateBarChartData() {
-//
-//        let paValue = [60.0, 40.0, 30.0, 10.0, 24.0]
-//
-//        self.barDataEntry.removeAll()
-//
-//        for i in 0..<self.buUnit.count {
-//            let dataEntry = BarChartDataEntry(x: Double(i), y: paValue[i])
-//            self.barDataEntry.append(dataEntry)
-//        }
-//    }
 
     func resetData() {
         self.ssData = nil
@@ -236,7 +237,6 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
 
 // MARK: - UITableViewDataSource methods
 extension SalesSummaryReportController: UITableViewDataSource, UITableViewDelegate {
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
@@ -268,7 +268,6 @@ extension SalesSummaryReportController: UITableViewDataSource, UITableViewDelega
         default:
             return 1
         }
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -276,7 +275,6 @@ extension SalesSummaryReportController: UITableViewDataSource, UITableViewDelega
         var height : CGFloat = 0.0
         
         switch indexPath.section {
-            
         case 0:
             if let totalValue = self.ssData?.totalValue.count {
 
@@ -284,22 +282,28 @@ extension SalesSummaryReportController: UITableViewDataSource, UITableViewDelega
                     height = 180
                 } else if totalValue > 2 && totalValue <= 6 {
                     height = 215
-                } else {
+                } else if totalValue > 6 {
                     height = 215
+                } else {
+                     height = 140
                 }
             }
-            print("case 0:", height)
+            print("Case 0:", height)
             break
         case 1:  height = 300.0
             break
         case 2:
+          
             if let totalValue = self.ssData?.totalValue.count {
+                  print("Case 2 :", totalValue)
                 if totalValue > 2 && totalValue <= 4 {
                     height = 270
                 } else if totalValue > 2 && totalValue <= 6 {  // 3,4,5,6
                     height = 295
-                } else { // 1,2
-                    height = 230
+                } else if totalValue > 6 {
+                    height = 295
+                } else {
+                    height = 230 // 1, 2 need testing
                 }
             }
             break
@@ -320,7 +324,7 @@ extension SalesSummaryReportController: UITableViewDataSource, UITableViewDelega
             return cell
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "chartcell") as! SSChartCell
-            cell.setupDataToViews(dataEntry: self.barDataEntry, arrLabel: self.buUnit )
+            cell.setupDataToViews(dataEntry: self.barDataEntry, arrLabel: self.cpNameArr, arrValues: self.cpValuesArr )
             cell.selectionStyle = .none
             return cell
         } else {
@@ -335,9 +339,6 @@ extension SalesSummaryReportController: UITableViewDataSource, UITableViewDelega
         
         if indexPath.section == 2 {
             let salesDetails = self.storyboard?.instantiateViewController(withIdentifier: "SalesContractListVC") as! SalesContractListVC
-            salesDetails.company =  self.ssData!.company
-            salesDetails.location =  self.ssData!.location
-            salesDetails.bUnit =  self.ssData!.bVertical
             self.navigationController?.pushViewController(salesDetails, animated: true)
         } else {
             

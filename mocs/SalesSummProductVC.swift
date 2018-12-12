@@ -30,7 +30,7 @@ class SalesSummProductVC: UIViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "Sales Summary[Product Details]"
+        vwTopHeader.lblTitle.text = "Sales Summary[Product]"
         vwTopHeader.lblSubTitle.isHidden = true
         
         populateList()
@@ -57,12 +57,27 @@ class SalesSummProductVC: UIViewController {
                         
                         let newObj = SalesSummProdData()
                         
+                        
+                        
                         newObj.prodName = jsonResponse[i]["Product Name"].stringValue
                         newObj.qty = jsonResponse[i]["Quantity"].stringValue
                         newObj.qlty = jsonResponse[i]["Quality"].stringValue
                         newObj.curr = jsonResponse[i]["Currency"].stringValue
-                        newObj.sku = jsonResponse[i]["SKU"].stringValue
-                        newObj.brnd = jsonResponse[i]["Brand"].stringValue
+//                        newObj.sku = jsonResponse[i]["SKU"].stringValue
+                        
+                        if jsonResponse[i]["SKU"].stringValue == "" {
+                            newObj.sku = "-"
+                        } else {
+                            newObj.sku = jsonResponse[i]["SKU"].stringValue
+                        }
+                        
+                        if jsonResponse[i]["Brand"].stringValue == "" {
+                            newObj.brnd = "-"
+                        } else {
+                            newObj.brnd = jsonResponse[i]["Brand"].stringValue
+                        }
+                        
+//                        newObj.brnd = jsonResponse[i]["Brand"].stringValue
                         newObj.price = jsonResponse[i]["Price"].stringValue
                         newObj.qtyMT = jsonResponse[i]["Quantity (MT)"].stringValue
                         newObj.lotNo = jsonResponse[i]["LOT Number"].stringValue

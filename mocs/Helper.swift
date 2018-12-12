@@ -39,6 +39,8 @@ class CardView: UIView {
 }
 
 
+
+
 extension UINavigationBar {
     
     var castShadow : String {
@@ -348,7 +350,7 @@ class Helper: UIView {
         }
     }
     
-    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, action:Selector){
+    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, isSC : Bool = false, action:Selector){
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
@@ -363,6 +365,8 @@ class Helper: UIView {
             emptyView.buttonText = "RELOAD"
         } else if isCP {
             emptyView.message = "No Counterparty Data found \n Try again by reloading"
+        } else if isSC {
+            emptyView.message = "No Sales Data for the current\nTry by changing filter"
         } else {
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
@@ -379,36 +383,36 @@ class Helper: UIView {
     }
     
     
-    public static func showNoFilterStateForReports(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, action:Selector){
-        
-        let emptyView = EmptyState()
-        emptyView.image = UIImage(named: "no_result")!
-        emptyView.buttonText = "CHANGE FILTER"
-        
-        if isARReport {
-            emptyView.message = "No AR Data for the current\nTry by changing filter"
-        } else if isAPReport {
-            emptyView.message = "No AP Data for the current\nTry by changing filter"
-        } else if isTrvReq {
-            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
-            emptyView.buttonText = "RELOAD"
-        } else if isCP {
-            emptyView.message = "No Counterparty Data found \n Try again by reloading"
-        } else {
-            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
-        }
-        
-        
-        emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
-        tb.tableFooterView = emptyView
-        
-        emptyView.translatesAutoresizingMaskIntoConstraints = false
-        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
-        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
-        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
-        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
-    }
-    
+//    public static func showNoFilterStateForReports(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, action:Selector){
+//
+//        let emptyView = EmptyState()
+//        emptyView.image = UIImage(named: "no_result")!
+//        emptyView.buttonText = "CHANGE FILTER"
+//
+//        if isARReport {
+//            emptyView.message = "No AR Data for the current\nTry by changing filter"
+//        } else if isAPReport {
+//            emptyView.message = "No AP Data for the current\nTry by changing filter"
+//        } else if isTrvReq {
+//            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
+//            emptyView.buttonText = "RELOAD"
+//        } else if isCP {
+//            emptyView.message = "No Counterparty Data found \n Try again by reloading"
+//        } else {
+//            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
+//        }
+//
+//
+//        emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
+//        tb.tableFooterView = emptyView
+//
+//        emptyView.translatesAutoresizingMaskIntoConstraints = false
+//        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+//        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+//        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+//        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+//    }
+//
     
     public static func isFileExists(fileName : String) -> Bool {
         

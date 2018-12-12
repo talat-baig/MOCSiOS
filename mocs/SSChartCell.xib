@@ -11,18 +11,27 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="240" id="AbR-Ve-hjT" customClass="SSChartCell" customModule="mocs" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="240"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="271" id="AbR-Ve-hjT" customClass="SSChartCell" customModule="mocs" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="271"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AbR-Ve-hjT" id="c4K-kE-1vT">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="239.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="270.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dem-Mr-zRE">
-                        <rect key="frame" x="14" y="4" width="347" height="231.5"/>
+                        <rect key="frame" x="14" y="4" width="347" height="262.5"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Top Counterparty/Counterparties" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vQp-Nx-Ogn">
+                                <rect key="frame" x="16" y="4" width="315" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="PSX-bu-u3U"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="52O-qE-2Ti" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="12" y="12" width="323" height="207.5"/>
+                                <rect key="frame" x="12" y="29" width="323" height="221.5"/>
                                 <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
@@ -30,8 +39,11 @@
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="52O-qE-2Ti" secondAttribute="trailing" constant="4" id="5Mu-t6-ywo"/>
                             <constraint firstItem="52O-qE-2Ti" firstAttribute="leading" secondItem="dem-Mr-zRE" secondAttribute="leadingMargin" constant="4" id="5lg-J9-TSA"/>
+                            <constraint firstAttribute="trailing" secondItem="vQp-Nx-Ogn" secondAttribute="trailing" constant="16" id="AjJ-uK-OR5"/>
+                            <constraint firstItem="vQp-Nx-Ogn" firstAttribute="top" secondItem="dem-Mr-zRE" secondAttribute="top" constant="4" id="MPB-aa-VwD"/>
                             <constraint firstAttribute="bottomMargin" secondItem="52O-qE-2Ti" secondAttribute="bottom" constant="4" id="NXb-L3-JlZ"/>
-                            <constraint firstItem="52O-qE-2Ti" firstAttribute="top" secondItem="dem-Mr-zRE" secondAttribute="topMargin" constant="4" id="WFP-fb-iO8"/>
+                            <constraint firstItem="52O-qE-2Ti" firstAttribute="top" secondItem="vQp-Nx-Ogn" secondAttribute="bottom" constant="4" id="Zv1-G4-LJU"/>
+                            <constraint firstItem="vQp-Nx-Ogn" firstAttribute="leading" secondItem="dem-Mr-zRE" secondAttribute="leading" constant="16" id="hOA-dD-Air"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -51,7 +63,7 @@
                 <outlet property="barGraphVw" destination="52O-qE-2Ti" id="ro0-Mw-n2g"/>
                 <outlet property="outerVw" destination="dem-Mr-zRE" id="IG4-tD-Upd"/>
             </connections>
-            <point key="canvasLocation" x="49.5" y="130"/>
+            <point key="canvasLocation" x="48.799999999999997" y="143.47826086956522"/>
         </tableViewCell>
     </objects>
 </document>

@@ -34,17 +34,6 @@ class SalesSummaryCell: UITableViewCell {
         outerVw.layer.shadowRadius = 1
         outerVw.layer.shadowColor = UIColor.black.cgColor
         
-//        let shadowSize : CGFloat = 5.0
-//        let shadowPath = UIBezierPath(rect: CGRect(x: -shadowSize / 2,
-//                                                   y: -shadowSize / 2,
-//                                                   width: self.outerVw.frame.size.width + shadowSize,
-//                                                   height: self.outerVw.frame.size.height + shadowSize))
-//        self.outerVw.layer.masksToBounds = false
-//        self.headerVw.layer.shadowColor = UIColor.black.cgColor
-//        self.headerVw.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-//        self.headerVw.layer.shadowOpacity = 0.5
-//        self.headerVw.layer.shadowPath = shadowPath.cgPath
-        
         headerVw.layer.shadowOpacity = 0.25
         headerVw.layer.shadowOffset = CGSize(width: 1, height: 2)
         headerVw.layer.shadowRadius = 1

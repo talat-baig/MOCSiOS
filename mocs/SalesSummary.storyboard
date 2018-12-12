@@ -201,7 +201,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Cx9-y0-7o7">
-                                <rect key="frame" x="8" y="78" width="359" height="589"/>
+                                <rect key="frame" x="8" y="141" width="359" height="526"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="151" id="fQt-Nt-2zv">
@@ -218,14 +218,28 @@
                                     <outlet property="delegate" destination="1dZ-dU-9oP" id="fCC-zI-Yyc"/>
                                 </connections>
                             </tableView>
+                            <searchBar contentMode="redraw" placeholder="Search by Contract ID" translatesAutoresizingMaskIntoConstraints="NO" id="R2O-sq-aB7">
+                                <rect key="frame" x="0.0" y="70" width="375" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="D5J-g6-Oxn"/>
+                                </constraints>
+                                <color key="barTintColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="1dZ-dU-9oP" id="a03-yC-DHR"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="LXw-Fw-2i0" firstAttribute="leading" secondItem="UtE-qY-bqh" secondAttribute="leading" id="Bgk-tB-xt7"/>
+                            <constraint firstItem="R2O-sq-aB7" firstAttribute="trailing" secondItem="0at-yY-JAW" secondAttribute="trailing" id="EQk-PD-4Xb"/>
                             <constraint firstAttribute="trailing" secondItem="LXw-Fw-2i0" secondAttribute="trailing" id="FtI-Bd-DVJ"/>
+                            <constraint firstItem="R2O-sq-aB7" firstAttribute="leading" secondItem="0at-yY-JAW" secondAttribute="leading" id="KXC-MR-k9R"/>
                             <constraint firstItem="G0p-XC-B0m" firstAttribute="top" secondItem="Cx9-y0-7o7" secondAttribute="bottom" id="PyE-my-y5K"/>
+                            <constraint firstItem="Cx9-y0-7o7" firstAttribute="top" secondItem="R2O-sq-aB7" secondAttribute="bottom" constant="15" id="cWb-02-Y2f"/>
                             <constraint firstItem="Cx9-y0-7o7" firstAttribute="leading" secondItem="UtE-qY-bqh" secondAttribute="leading" constant="8" id="p7C-KY-xyT"/>
-                            <constraint firstItem="Cx9-y0-7o7" firstAttribute="top" secondItem="LXw-Fw-2i0" secondAttribute="bottom" constant="8" id="pb4-BJ-Xsg"/>
+                            <constraint firstItem="R2O-sq-aB7" firstAttribute="top" secondItem="LXw-Fw-2i0" secondAttribute="bottom" id="sAD-Gh-Swi"/>
                             <constraint firstAttribute="trailing" secondItem="Cx9-y0-7o7" secondAttribute="trailing" constant="8" id="vYg-e7-RUb"/>
                             <constraint firstItem="LXw-Fw-2i0" firstAttribute="top" secondItem="UtE-qY-bqh" secondAttribute="top" id="wnr-UO-xmX"/>
                         </constraints>
@@ -246,13 +260,14 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="srchBar" destination="R2O-sq-aB7" id="bRs-UO-N5y"/>
                         <outlet property="tableView" destination="Cx9-y0-7o7" id="6ax-B5-LN4"/>
                         <outlet property="vwTopHeader" destination="LXw-Fw-2i0" id="Mqr-Hi-V1k"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yjb-vq-tCI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2182" y="-81"/>
+            <point key="canvasLocation" x="2181.5999999999999" y="-81.409295352323838"/>
         </scene>
         <!--SalesSummProductVC-->
         <scene sceneID="fhA-TA-ENc">
@@ -325,7 +340,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xq8-R4-CpU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2182" y="-81"/>
+            <point key="canvasLocation" x="2884" y="-81"/>
         </scene>
     </scenes>
     <resources>

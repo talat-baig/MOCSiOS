@@ -10,23 +10,27 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class SalesContractListVC: UIViewController {
+class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
     
-    var company = ""
-    var location = ""
-    var bUnit = ""
+    //    var company = ""
+    //    var location = ""
+    //    var bUnit = ""
     
     var scData = [SalesSummData]()
     var newArray = [SalesSummData]()
-
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var srchBar: UISearchBar!
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.register(UINib(nibName: "SalesSummaryCell", bundle: nil), forCellReuseIdentifier: "cell")
         
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        gestureRecognizer.delegate = self
+        self.view.addGestureRecognizer(gestureRecognizer)
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -37,9 +41,11 @@ class SalesContractListVC: UIViewController {
         vwTopHeader.lblSubTitle.isHidden = true
         
         populateList()
-        
     }
     
+    @objc func handleTap() {
+        self.srchBar.endEditing(true)
+    }
     
     @objc func populateList() {
         
@@ -47,18 +53,16 @@ class SalesContractListVC: UIViewController {
             
             self.view.showLoading()
             let url:String = String.init(format: Constant.SalesSummary.SS_SALES_LIST, Session.authKey)
-            
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 if Helper.isResponseValid(vc: self, response: response.result){
-                  
+                    
                     let jsonResponse = JSON(response.result.value!)
                     let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
                     for i in 0..<jsonArr.count {
                         
                         let ssdObj = SalesSummData()
-                        
                         ssdObj.refNo = jsonResponse[i]["Sales order/Contract"].stringValue
                         ssdObj.cpName = jsonResponse[i]["Buyer Name"].stringValue
                         ssdObj.cpID = jsonResponse[i]["CPID"].stringValue
@@ -71,7 +75,6 @@ class SalesContractListVC: UIViewController {
                         ssdObj.pol = jsonResponse[i]["POL"].stringValue
                         ssdObj.pod = jsonResponse[i]["POD"].stringValue
                         ssdObj.invAmt = jsonResponse[i]["Invoice Amount"].stringValue
-
                         self.scData.append(ssdObj)
                     }
                     self.newArray = self.scData
@@ -79,10 +82,27 @@ class SalesContractListVC: UIViewController {
                 }
             }))
         } else {
-            
+            Helper.showNoInternetMessg()
         }
     }
-            
+    
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
+    {
+        if (touch.view?.isDescendant(of: tableView))! {
+            return false
+        }
+        return true
+    }
+}
+
+// Mark: - UITextFieldDelegate method
+extension SalesContractListVC: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        handleTap()
+        return false
+    }
 }
 
 extension SalesContractListVC: UITableViewDataSource {
@@ -115,11 +135,34 @@ extension SalesContractListVC: UITableViewDataSource {
 extension SalesContractListVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        
         let salesDetails = self.storyboard?.instantiateViewController(withIdentifier: "SalesSummProductVC") as! SalesSummProductVC
         salesDetails.refNo =  self.scData[indexPath.row].refNo
         self.navigationController?.pushViewController(salesDetails, animated: true)
+    }
+}
+
+extension SalesContractListVC: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if  searchText.isEmpty {
+            self.scData = newArray
+        } else {
+            let filteredArray = newArray.filter {
+                $0.refNo.localizedCaseInsensitiveContains(searchText)
+            }
+            self.scData = filteredArray
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        srchBar.text = ""
+        self.srchBar.endEditing(true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.srchBar.endEditing(true)
     }
 }
 

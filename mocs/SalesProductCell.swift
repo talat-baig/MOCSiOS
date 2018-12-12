@@ -22,9 +22,15 @@ class SalesProductCell: UITableViewCell {
     @IBOutlet weak var lblQlty: UILabel!
     @IBOutlet weak var lblCurr: UILabel!
     @IBOutlet weak var lblBagSize: UILabel!
+    @IBOutlet weak var headerVw: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        headerVw.layer.shadowOpacity = 0.25
+        headerVw.layer.shadowOffset = CGSize(width: 1, height: 2)
+        headerVw.layer.shadowRadius = 1
+        headerVw.layer.shadowColor = UIColor.black.cgColor
         
         outerVw.layer.shadowOpacity = 0.25
         outerVw.layer.shadowOffset = CGSize(width: 0, height: 2)
