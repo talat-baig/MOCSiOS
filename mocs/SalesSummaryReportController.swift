@@ -227,6 +227,8 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
     func resetData() {
         self.ssData = nil
         self.barDataEntry.removeAll()
+        self.cpNameArr.removeAll()
+        self.cpValuesArr.removeAll()
     }
     
     @objc func showFilterMenu(){

@@ -25,6 +25,7 @@ class SSChartCell: UITableViewCell {
     
     func setupDataToViews(dataEntry : [BarChartDataEntry] , arrLabel : [String], arrValues : [String]) {
 
+
         barGraphVw.drawValueAboveBarEnabled = false
         barGraphVw.drawGridBackgroundEnabled = false
         barGraphVw.isUserInteractionEnabled = false
@@ -79,14 +80,20 @@ class SSChartCell: UITableViewCell {
         l.xEntrySpace = 4
         
         var legenEntries : [LegendEntry] = []
-       
+
+        if l.isLegendCustom {
+            l.resetCustom()
+        }
+
         for i in 0..<arrLabel.count {
             let lgnd = LegendEntry()
             lgnd.formColor = ChartColorTemplates.vordiplom()[i]
             lgnd.label = arrLabel[i]
             legenEntries.append(lgnd)
         }
+        
         l.setCustom(entries: legenEntries)
+        barGraphVw.notifyDataSetChanged() // *imp:  need to notify , if not, app will crash 
     }
     
 }

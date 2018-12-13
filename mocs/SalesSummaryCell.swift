@@ -48,13 +48,32 @@ class SalesSummaryCell: UITableViewCell {
         self.data = data
         lblRefNum.text = data?.refNo
         cpName.text = data?.cpName
-        contrctVal.text = data?.value
+        
+        
+        let val = data?.value ?? "-"
+        let valCurr = data?.valCurr ?? ""
+        
+        if valCurr == "" {
+            contrctVal.text = val
+        } else {
+            contrctVal.text = val + "(" + valCurr + ")"
+        }
+        
+//        contrctVal.text = data?.value
         pol.text = data?.pol
         pod.text = data?.pod
         paymntTerm.text = data?.paymntTerm
         startDte.text = data?.shipStrtDate
         endDte.text = data?.shipEndDate
-        invAmt.text = data?.invAmt
+        
+        let amt = data?.invAmt ?? "-"
+        let curr = data?.invCurr ?? ""
+        
+        if curr == "" {
+            invAmt.text = amt
+        } else {
+            invAmt.text =  amt + "(" + curr + ")"
+        }
         doQty.text = data?.doQty
         contrctStatus.text = data?.contrctStatus
     }

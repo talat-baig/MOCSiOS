@@ -32,6 +32,7 @@ class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         self.navigationController?.isNavigationBarHidden = true
+        self.tableView.separatorStyle = .none
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
@@ -75,6 +76,9 @@ class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
                         ssdObj.pol = jsonResponse[i]["POL"].stringValue
                         ssdObj.pod = jsonResponse[i]["POD"].stringValue
                         ssdObj.invAmt = jsonResponse[i]["Invoice Amount"].stringValue
+                        ssdObj.valCurr = jsonResponse[i]["Contract Value"].stringValue
+                        ssdObj.invCurr = jsonResponse[i]["Invoice Currency"].stringValue
+
                         self.scData.append(ssdObj)
                     }
                     self.newArray = self.scData

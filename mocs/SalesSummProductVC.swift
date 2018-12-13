@@ -23,7 +23,6 @@ class SalesSummProductVC: UIViewController {
         super.viewDidLoad()
 
         self.tableView.register(UINib(nibName: "SalesProductCell", bundle: nil), forCellReuseIdentifier: "cell")
-        
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -57,13 +56,25 @@ class SalesSummProductVC: UIViewController {
                         
                         let newObj = SalesSummProdData()
                         
-                        
-                        
                         newObj.prodName = jsonResponse[i]["Product Name"].stringValue
-                        newObj.qty = jsonResponse[i]["Quantity"].stringValue
-                        newObj.qlty = jsonResponse[i]["Quality"].stringValue
-                        newObj.curr = jsonResponse[i]["Currency"].stringValue
-//                        newObj.sku = jsonResponse[i]["SKU"].stringValue
+
+                        if jsonResponse[i]["Quantity"].stringValue == "" {
+                            newObj.qty = "-"
+                        } else {
+                            newObj.qty = jsonResponse[i]["Quantity"].stringValue
+                        }
+                        
+                        if jsonResponse[i]["Quality"].stringValue == "" {
+                            newObj.qlty = "-"
+                        } else {
+                            newObj.qlty = jsonResponse[i]["Quality"].stringValue
+                        }
+                        
+                        if jsonResponse[i]["Currency"].stringValue == "" {
+                            newObj.curr = "-"
+                        } else {
+                            newObj.curr = jsonResponse[i]["Currency"].stringValue
+                        }
                         
                         if jsonResponse[i]["SKU"].stringValue == "" {
                             newObj.sku = "-"
@@ -77,8 +88,12 @@ class SalesSummProductVC: UIViewController {
                             newObj.brnd = jsonResponse[i]["Brand"].stringValue
                         }
                         
-//                        newObj.brnd = jsonResponse[i]["Brand"].stringValue
-                        newObj.price = jsonResponse[i]["Price"].stringValue
+                        if jsonResponse[i]["Price"].stringValue == "" {
+                            newObj.price = "-"
+                        } else {
+                            newObj.price = jsonResponse[i]["Price"].stringValue
+                        }
+                        
                         newObj.qtyMT = jsonResponse[i]["Quantity (MT)"].stringValue
                         newObj.lotNo = jsonResponse[i]["LOT Number"].stringValue
                         newObj.bagSize = jsonResponse[i]["Bag Size"].stringValue

@@ -14,12 +14,16 @@ class SalesSummData: NSObject {
     var cpName = ""
     var cpID = ""
     var value = ""
+    var valCurr = ""
+
     var paymntTerm = ""
     var pol = ""
     var pod = ""
     var shipStrtDate = ""
     var shipEndDate = ""
     var invAmt = ""
+    var invCurr = ""
+
     var doQty = ""
     var contrctStatus = ""
 
