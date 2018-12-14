@@ -20,7 +20,9 @@ struct ApiUrl {
 //    static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-        static let URL = "http://172.16.12.12/OCSWebApi/api"
+    static let URL = "http://172.16.12.11:85/api"
+ 
+        //static let URL = "http://172.16.12.12/OCSWebApi/api"
 }
 
 

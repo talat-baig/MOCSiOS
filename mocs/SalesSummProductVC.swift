@@ -29,8 +29,8 @@ class SalesSummProductVC: UIViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "Sales Summary[Product]"
-        vwTopHeader.lblSubTitle.isHidden = true
+        vwTopHeader.lblTitle.text = "Sales Summary Report"
+        vwTopHeader.lblSubTitle.text = refNo
         
         populateList()
         
@@ -122,7 +122,7 @@ extension SalesSummProductVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 290
+        return 270
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

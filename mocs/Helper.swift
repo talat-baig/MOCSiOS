@@ -366,7 +366,7 @@ class Helper: UIView {
         } else if isCP {
             emptyView.message = "No Counterparty Data found \n Try again by reloading"
         } else if isSC {
-            emptyView.message = "No Sales Data for the current\nTry by changing filter"
+            emptyView.message = "No Sales Summary Data for the current\nTry by changing filter"
         } else {
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }

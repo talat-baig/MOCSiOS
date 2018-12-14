@@ -187,11 +187,15 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                 newDetails.currency = k["Currency"].stringValue
                 newDetails.amount = k["Summary Value"].stringValue
                 
-                if k["Currency"].stringValue == "  " {
-                    newDetails.currency = " -"
+                let currStr = k["Currency"].stringValue
+                let charSet = CharacterSet.whitespaces
+                let trimmedString = currStr.trimmingCharacters(in: charSet)
+                if (trimmedString == "") {
+                     newDetails.currency = " -"
                 } else {
-                    newDetails.currency = k["Currency"].stringValue
+                     newDetails.currency = k["Currency"].stringValue
                 }
+
                 summ.totalValue.append(newDetails)
             }
             self.ssData = summ

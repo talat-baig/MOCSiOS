@@ -12,10 +12,7 @@ import SwiftyJSON
 
 class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
     
-    //    var company = ""
-    //    var location = ""
-    //    var bUnit = ""
-    
+
     var scData = [SalesSummData]()
     var newArray = [SalesSummData]()
     
@@ -23,6 +20,7 @@ class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var srchBar: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,7 +36,7 @@ class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "Sales Summary[Contractwise]"
+        vwTopHeader.lblTitle.text = "Sales Summary[Contract-wise]"
         vwTopHeader.lblSubTitle.isHidden = true
         
         populateList()
@@ -69,14 +67,46 @@ class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
                         ssdObj.cpID = jsonResponse[i]["CPID"].stringValue
                         ssdObj.paymntTerm = jsonResponse[i]["Payment Term"].stringValue
                         ssdObj.value = jsonResponse[i]["Contract Value"].stringValue
-                        ssdObj.shipStrtDate = jsonResponse[i]["Shipment Start Date"].stringValue
-                        ssdObj.shipEndDate = jsonResponse[i]["Shipment End Date"].stringValue
+//                        ssdObj.shipStrtDate = jsonResponse[i]["Shipment Start Date"].stringValue
+                        if jsonResponse[i]["Shipment Start Date"].stringValue == "" {
+                            ssdObj.shipStrtDate = "-"
+                        } else {
+                            ssdObj.shipStrtDate = jsonResponse[i]["Shipment Start Date"].stringValue
+                        }
+                        if jsonResponse[i]["POD"].stringValue == "" {
+                            ssdObj.shipEndDate = "-"
+                        } else {
+                            ssdObj.shipEndDate = jsonResponse[i]["Shipment End Date"].stringValue
+                        }
+                        
+//                        ssdObj.shipEndDate = jsonResponse[i]["Shipment End Date"].stringValue
                         ssdObj.doQty = jsonResponse[i]["DO Quantity"].stringValue
                         ssdObj.contrctStatus = jsonResponse[i]["Contract Status"].stringValue
-                        ssdObj.pol = jsonResponse[i]["POL"].stringValue
-                        ssdObj.pod = jsonResponse[i]["POD"].stringValue
-                        ssdObj.invAmt = jsonResponse[i]["Invoice Amount"].stringValue
-                        ssdObj.valCurr = jsonResponse[i]["Contract Value"].stringValue
+//                        ssdObj.pol = jsonResponse[i]["POL"].stringValue
+                        
+                        if jsonResponse[i]["POL"].stringValue == "" {
+                            ssdObj.pol = "-"
+                        } else {
+                            ssdObj.pol = jsonResponse[i]["POL"].stringValue
+                        }
+                        
+                        if jsonResponse[i]["POD"].stringValue == "" {
+                            ssdObj.pod = "-"
+                        } else {
+                            ssdObj.pod = jsonResponse[i]["POD"].stringValue
+                        }
+                        
+//                        ssdObj.pod = jsonResponse[i]["POD"].stringValue
+//                        ssdObj.invAmt = jsonResponse[i]["Invoice Amount"].stringValue
+                        
+                        if jsonResponse[i]["Invoice Amount"].stringValue == "" {
+                            ssdObj.invAmt = "-"
+                        } else {
+                            ssdObj.invAmt = jsonResponse[i]["Invoice Amount"].stringValue
+                        }
+                        
+                        
+                        ssdObj.valCurr = jsonResponse[i]["Contract Currency"].stringValue
                         ssdObj.invCurr = jsonResponse[i]["Invoice Currency"].stringValue
 
                         self.scData.append(ssdObj)
