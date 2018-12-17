@@ -20,8 +20,7 @@ class PurchaseSummProductVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.tableView.register(UINib(nibName: "PurchaseProdCell", bundle: nil), forCellReuseIdentifier: "cell")
+    self.tableView.register(UINib(nibName: "PurchaseProdCell", bundle: nil), forCellReuseIdentifier: "cell")
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -37,72 +36,58 @@ class PurchaseSummProductVC: UIViewController {
     /// Method that fetches Counterparty List thorugh API call and populates table view with the response data
     @objc func populateList() {
         
-//        if internetStatus != .notReachable {
+        if internetStatus != .notReachable {
+
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.PurchaseSummary.PC_PRODUCT_LIST, Session.authKey, refNo)
+
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+
+                    let jsonResponse = JSON(response.result.value!)
+                    let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
+
+                    for i in 0..<jsonArr.count {
+
+                        let newObj = PurchaseSummProdData()
+
+                        newObj.prodName = jsonResponse[i]["Product Name"].stringValue
 //
-//            self.view.showLoading()
-//            let url:String = String.init(format: Constant.SalesSummary.SS_PRODUCT_LIST, Session.authKey, refNo)
+                        if jsonResponse[i]["Quantity (MT)"].stringValue == "" {
+                            newObj.qty = "-"
+                        } else {
+                            newObj.qty = jsonResponse[i]["Quantity (MT)"].stringValue
+                        }
+
+                        if jsonResponse[i]["Currency"].stringValue == "" {
+                            newObj.curr = "-"
+                        } else {
+                            newObj.curr = jsonResponse[i]["Currency"].stringValue
+                        }
 //
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
+                        if jsonResponse[i]["SKU"].stringValue == "" {
+                            newObj.sku = "-"
+                        } else {
+                            newObj.sku = jsonResponse[i]["SKU"].stringValue
+                        }
+
+                        if jsonResponse[i]["Price"].stringValue == "" {
+                            newObj.price = "-"
+                        } else {
+                            newObj.price = jsonResponse[i]["Price"].stringValue
+                        }
 //
-//                    let jsonResponse = JSON(response.result.value!)
-//                    let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
-//
-//                    for i in 0..<jsonArr.count {
-//
-//                        let newObj = SalesSummProdData()
-//
-//                        newObj.prodName = jsonResponse[i]["Product Name"].stringValue
-//
-//                        if jsonResponse[i]["Quantity"].stringValue == "" {
-//                            newObj.qty = "-"
-//                        } else {
-//                            newObj.qty = jsonResponse[i]["Quantity"].stringValue
-//                        }
-//
-//                        if jsonResponse[i]["Quality"].stringValue == "" {
-//                            newObj.qlty = "-"
-//                        } else {
-//                            newObj.qlty = jsonResponse[i]["Quality"].stringValue
-//                        }
-//
-//                        if jsonResponse[i]["Currency"].stringValue == "" {
-//                            newObj.curr = "-"
-//                        } else {
-//                            newObj.curr = jsonResponse[i]["Currency"].stringValue
-//                        }
-//
-//                        if jsonResponse[i]["SKU"].stringValue == "" {
-//                            newObj.sku = "-"
-//                        } else {
-//                            newObj.sku = jsonResponse[i]["SKU"].stringValue
-//                        }
-//
-//                        if jsonResponse[i]["Brand"].stringValue == "" {
-//                            newObj.brnd = "-"
-//                        } else {
-//                            newObj.brnd = jsonResponse[i]["Brand"].stringValue
-//                        }
-//
-//                        if jsonResponse[i]["Price"].stringValue == "" {
-//                            newObj.price = "-"
-//                        } else {
-//                            newObj.price = jsonResponse[i]["Price"].stringValue
-//                        }
-//
-//                        newObj.qtyMT = jsonResponse[i]["Quantity (MT)"].stringValue
-//                        newObj.lotNo = jsonResponse[i]["LOT Number"].stringValue
-//                        newObj.bagSize = jsonResponse[i]["Bag Size"].stringValue
-//
-//                        self.prodData.append(newObj)
-//                    }
-//                    self.tableView.reloadData()
-//                }
-//            }))
-//        } else {
+                        newObj.lotNo = jsonResponse[i]["LOT ID"].stringValue
+
+                        self.prodData.append(newObj)
+                    }
+                    self.tableView.reloadData()
+                }
+            }))
+        } else {
         
-//        }
+        }
     }
 
 
@@ -129,7 +114,7 @@ extension PurchaseSummProductVC: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! PurchaseProdCell
         cell.layer.masksToBounds = true
-//        cell.setDataToView(data: self.prodData[indexPath.row])
+        cell.setDataToView(data: self.prodData[indexPath.row])
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 5
         return cell

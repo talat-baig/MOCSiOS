@@ -11,7 +11,7 @@ import Alamofire
 import SwiftyJSON
 
 class PurchaseContractListVC: UIViewController, UIGestureRecognizerDelegate {
-
+    
     var pcData = [PurchaseSummData]()
     var newArray = [PurchaseSummData]()
     
@@ -22,7 +22,7 @@ class PurchaseContractListVC: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         
         self.tableView.register(UINib(nibName: "PurchaseSummCell", bundle: nil), forCellReuseIdentifier: "cell")
         
@@ -48,76 +48,72 @@ class PurchaseContractListVC: UIViewController, UIGestureRecognizerDelegate {
     
     @objc func populateList() {
         
-//        if internetStatus != .notReachable {
-//
-//            self.view.showLoading()
-//            let url:String = String.init(format: Constant.SalesSummary.SS_SALES_LIST, Session.authKey)
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//
-//                    let jsonResponse = JSON(response.result.value!)
-//                    let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
-//
-//                    for i in 0..<jsonArr.count {
-//
-//                        let ssdObj = SalesSummData()
-//                        ssdObj.refNo = jsonResponse[i]["Sales order/Contract"].stringValue
-//                        ssdObj.cpName = jsonResponse[i]["Buyer Name"].stringValue
-//                        ssdObj.cpID = jsonResponse[i]["CPID"].stringValue
-//                        ssdObj.paymntTerm = jsonResponse[i]["Payment Term"].stringValue
-//                        ssdObj.value = jsonResponse[i]["Contract Value"].stringValue
-//                        //                        ssdObj.shipStrtDate = jsonResponse[i]["Shipment Start Date"].stringValue
-//                        if jsonResponse[i]["Shipment Start Date"].stringValue == "" {
-//                            ssdObj.shipStrtDate = "-"
-//                        } else {
-//                            ssdObj.shipStrtDate = jsonResponse[i]["Shipment Start Date"].stringValue
-//                        }
-//                        if jsonResponse[i]["POD"].stringValue == "" {
-//                            ssdObj.shipEndDate = "-"
-//                        } else {
-//                            ssdObj.shipEndDate = jsonResponse[i]["Shipment End Date"].stringValue
-//                        }
-//
-//                        //                        ssdObj.shipEndDate = jsonResponse[i]["Shipment End Date"].stringValue
-//                        ssdObj.doQty = jsonResponse[i]["DO Quantity"].stringValue
-//                        ssdObj.contrctStatus = jsonResponse[i]["Contract Status"].stringValue
-//                        //                        ssdObj.pol = jsonResponse[i]["POL"].stringValue
-//
-//                        if jsonResponse[i]["POL"].stringValue == "" {
-//                            ssdObj.pol = "-"
-//                        } else {
-//                            ssdObj.pol = jsonResponse[i]["POL"].stringValue
-//                        }
-//
-//                        if jsonResponse[i]["POD"].stringValue == "" {
-//                            ssdObj.pod = "-"
-//                        } else {
-//                            ssdObj.pod = jsonResponse[i]["POD"].stringValue
-//                        }
-//
-//                        //                        ssdObj.pod = jsonResponse[i]["POD"].stringValue
-//                        //                        ssdObj.invAmt = jsonResponse[i]["Invoice Amount"].stringValue
-//
-//                        if jsonResponse[i]["Invoice Amount"].stringValue == "" {
-//                            ssdObj.invAmt = "-"
-//                        } else {
-//                            ssdObj.invAmt = jsonResponse[i]["Invoice Amount"].stringValue
-//                        }
-//
-//
-//                        ssdObj.valCurr = jsonResponse[i]["Contract Currency"].stringValue
-//                        ssdObj.invCurr = jsonResponse[i]["Invoice Currency"].stringValue
-//
-//                        self.pcData.append(ssdObj)
-//                    }
-//                    self.newArray = self.pcData
-//                    self.tableView.reloadData()
-//                }
-//            }))
-//        } else {
-//            Helper.showNoInternetMessg()
-//        }
+        if internetStatus != .notReachable {
+            
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.PurchaseSummary.PC_SALES_LIST, Session.authKey)
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let jsonResponse = JSON(response.result.value!)
+                    let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
+                    
+                    for i in 0..<jsonArr.count {
+                        
+                        let pcDataObj = PurchaseSummData()
+                        pcDataObj.refNo = jsonResponse[i]["Purchase Contract"].stringValue
+                        pcDataObj.fundPaymnt = jsonResponse[i]["Funds Payment Amount"].stringValue
+                        pcDataObj.supplierName = jsonResponse[i]["Supplier Name"].stringValue
+                        pcDataObj.paymntTerm = jsonResponse[i]["Payment Term"].stringValue
+                        pcDataObj.delTerm = jsonResponse[i]["Delivery Term"].stringValue
+                        pcDataObj.value = jsonResponse[i]["Value"].stringValue
+                        pcDataObj.grQty = jsonResponse[i]["Goods Received Qty"].stringValue
+                        
+                        if jsonResponse[i]["Shipment Start Date"].stringValue == "" {
+                            pcDataObj.shipStrtDte = "-"
+                        } else {
+                            pcDataObj.shipStrtDte = jsonResponse[i]["Shipment Start Date"].stringValue
+                        }
+                        if jsonResponse[i]["Shipment End Date"].stringValue == "" {
+                            pcDataObj.shipEndDte = "-"
+                        } else {
+                            pcDataObj.shipEndDte = jsonResponse[i]["Shipment End Date"].stringValue
+                        }
+                        pcDataObj.rcvdInvQty = jsonResponse[i]["Quantity"].stringValue
+                        pcDataObj.contractStatus = jsonResponse[i]["Contract Status"].stringValue
+                        
+                        if jsonResponse[i]["POL"].stringValue == "" {
+                            pcDataObj.pol = "-"
+                        } else {
+                            pcDataObj.pol = jsonResponse[i]["POL"].stringValue
+                        }
+                        
+                        if jsonResponse[i]["POD"].stringValue == "" {
+                            pcDataObj.pod = "-"
+                        } else {
+                            pcDataObj.pod = jsonResponse[i]["POD"].stringValue
+                        }
+                        
+                        if jsonResponse[i]["Invoice Amount"].stringValue == "" {
+                            pcDataObj.rcvdInvAmt = "-"
+                        } else {
+                            pcDataObj.rcvdInvAmt = jsonResponse[i]["Invoice Amount"].stringValue
+                        }
+                        
+                        
+                        //                        pcDataObj. = jsonResponse[i]["Contract Currency"].stringValue
+                        //                        pcDataObj.invCurr = jsonResponse[i]["Invoice Currency"].stringValue
+                        
+                        self.pcData.append(pcDataObj)
+                    }
+                    self.newArray = self.pcData
+                    self.tableView.reloadData()
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
     
     
@@ -147,9 +143,7 @@ extension PurchaseContractListVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.pcData.count
-        return 2
-
+        return self.pcData.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -160,7 +154,7 @@ extension PurchaseContractListVC: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! PurchaseSummCell
         cell.layer.masksToBounds = true
-//        cell.setDataTOView(data:  self.pcData[indexPath.row] )
+        cell.setDataTOView(data:  self.pcData[indexPath.row] )
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 5
         return cell
@@ -172,9 +166,9 @@ extension PurchaseContractListVC: UITableViewDataSource {
 extension PurchaseContractListVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let salesDetails = self.storyboard?.instantiateViewController(withIdentifier: "PurchaseSummProductVC") as! PurchaseSummProductVC
-//        salesDetails.refNo =  self.pcData[indexPath.row].refNo
-        self.navigationController?.pushViewController(salesDetails, animated: true)
+        let purSumm = self.storyboard?.instantiateViewController(withIdentifier: "PurchaseSummProductVC") as! PurchaseSummProductVC
+        purSumm.refNo =  self.pcData[indexPath.row].refNo
+        self.navigationController?.pushViewController(purSumm, animated: true)
     }
 }
 
@@ -182,15 +176,15 @@ extension PurchaseContractListVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-//        if  searchText.isEmpty {
-//            self.pcData = newArray
-//        } else {
-//            let filteredArray = newArray.filter {
-//                $0.refNo.localizedCaseInsensitiveContains(searchText)
-//            }
-//            self.pcData = filteredArray
-//        }
-//        tableView.reloadData()
+        //                if  searchText.isEmpty {
+        //                    self.pcData = newArray
+        //                } else {
+        //                    let filteredArray = newArray.filter {
+        //                        $0.refNo.localizedCaseInsensitiveContains(searchText)
+        //                    }
+        //                    self.pcData = filteredArray
+        //                }
+        //                tableView.reloadData()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

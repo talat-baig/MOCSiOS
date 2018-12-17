@@ -282,36 +282,37 @@ extension SalesSummaryReportController: UITableViewDataSource, UITableViewDelega
         
         switch indexPath.section {
         case 0:
-            if let totalValue = self.ssData?.totalValue.count {
-
-                if totalValue > 2 && totalValue <= 4 {
-                    height = 180
-                } else if totalValue > 2 && totalValue <= 6 {
-                    height = 215
-                } else if totalValue > 6 {
-                    height = 215
-                } else {
-                     height = 140
-                }
-            }
-            print("Case 0:", height)
+//            if let totalValue = self.ssData?.totalValue.count {
+//
+//                if totalValue > 2 && totalValue <= 4 {
+//                    height = 180
+//                } else if totalValue > 2 && totalValue <= 6 {
+//                    height = 215
+//                } else if totalValue > 6 {
+//                    height = 215
+//                } else {
+//                     height = 140
+//                }
+//            }
+            height = 70.0
+//            print("Case 0:", height)
             break
         case 1:  height = 300.0
             break
         case 2:
-          
-            if let totalValue = self.ssData?.totalValue.count {
-                  print("Case 2 :", totalValue)
-                if totalValue > 2 && totalValue <= 4 {
-                    height = 270
-                } else if totalValue > 2 && totalValue <= 6 {  // 3,4,5,6
-                    height = 295
-                } else if totalValue > 6 {
-                    height = 295
-                } else {
-                    height = 230 // 1, 2 need testing
-                }
-            }
+          height = 150.0
+//            if let totalValue = self.ssData?.totalValue.count {
+//                  print("Case 2 :", totalValue)
+//                if totalValue > 2 && totalValue <= 4 {
+//                    height = 270
+//                } else if totalValue > 2 && totalValue <= 6 {  // 3,4,5,6
+//                    height = 295
+//                } else if totalValue > 6 {
+//                    height = 295
+//                } else {
+//                    height = 230 // 1, 2 need testing
+//                }
+//            }
             break
         default: height = 200.0
             break

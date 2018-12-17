@@ -58,8 +58,7 @@ class SalesSummaryCell: UITableViewCell {
         } else {
             contrctVal.text = val + "(" + valCurr + ")"
         }
-        
-//        contrctVal.text = data?.value
+
         pol.text = data?.pol
         pod.text = data?.pod
         paymntTerm.text = data?.paymntTerm

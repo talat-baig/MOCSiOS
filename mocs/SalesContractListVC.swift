@@ -73,7 +73,7 @@ class SalesContractListVC: UIViewController, UIGestureRecognizerDelegate {
                         } else {
                             ssdObj.shipStrtDate = jsonResponse[i]["Shipment Start Date"].stringValue
                         }
-                        if jsonResponse[i]["POD"].stringValue == "" {
+                        if jsonResponse[i]["Shipment End Date"].stringValue == "" {
                             ssdObj.shipEndDate = "-"
                         } else {
                             ssdObj.shipEndDate = jsonResponse[i]["Shipment End Date"].stringValue

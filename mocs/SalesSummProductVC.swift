@@ -29,7 +29,7 @@ class SalesSummProductVC: UIViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "Sales Summary Report"
+        vwTopHeader.lblTitle.text = "Sales Summary[Products]"
         vwTopHeader.lblSubTitle.text = refNo
         
         populateList()

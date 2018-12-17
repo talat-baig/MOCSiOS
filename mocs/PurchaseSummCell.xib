@@ -315,7 +315,7 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="8Qv-3l-0fV">
                                                                 <rect key="frame" x="0.0" y="0.0" width="174" height="50"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Invoice Amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxY-dn-lpN">
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Received Invoice Amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxY-dn-lpN">
                                                                         <rect key="frame" x="0.0" y="0.0" width="174" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="Z42-lm-oDA"/>
@@ -341,7 +341,7 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="QJy-yR-2dF">
                                                                 <rect key="frame" x="174" y="0.0" width="174" height="50"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Delivery Term" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uae-40-ddD">
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Received Invoice Qty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uae-40-ddD">
                                                                         <rect key="frame" x="0.0" y="0.0" width="174" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="20" id="xj0-ER-bHn"/>
@@ -429,10 +429,10 @@
                                                         <rect key="frame" x="0.0" y="324.5" width="348" height="50"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Bbo-Zw-3wS">
-                                                                <rect key="frame" x="0.0" y="0.0" width="174" height="50"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="348" height="50"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Received Invoice Qty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hUD-kc-7bc">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="174" height="20"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Delivery Term" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hUD-kc-7bc">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="348" height="20"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="QdR-xu-iWI"/>
                                                                             <constraint firstAttribute="height" constant="20" id="k4d-3D-1Mx"/>
@@ -441,27 +441,7 @@
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wk6-FV-tG1">
-                                                                        <rect key="frame" x="0.0" y="20" width="174" height="30"/>
-                                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                                                        <color key="textColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                </subviews>
-                                                            </stackView>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="8T4-0u-Y0m">
-                                                                <rect key="frame" x="174" y="0.0" width="174" height="50"/>
-                                                                <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Received Invoice Amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZHd-7L-kXb">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="174" height="20"/>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="ekK-rL-5C0"/>
-                                                                            <constraint firstAttribute="height" constant="20" id="wvm-mF-mF2"/>
-                                                                        </constraints>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pq4-vb-J4z">
-                                                                        <rect key="frame" x="0.0" y="20" width="174" height="30"/>
+                                                                        <rect key="frame" x="0.0" y="20" width="348" height="30"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                                         <color key="textColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <nil key="highlightedColor"/>
@@ -507,6 +487,7 @@
                 <outlet property="cpName" destination="Ahs-zM-wIw" id="77L-sp-T8z"/>
                 <outlet property="delivryTrm" destination="HZd-qh-vd0" id="wmz-c4-qiR"/>
                 <outlet property="endDte" destination="sBy-Tl-G6n" id="MsQ-7i-KcP"/>
+                <outlet property="fundsPymnt" destination="iA6-UL-LqW" id="fQs-dZ-du7"/>
                 <outlet property="grQty" destination="83y-8b-KPx" id="gju-Mx-38u"/>
                 <outlet property="headerVw" destination="Dpw-2J-h9N" id="ep0-jh-foq"/>
                 <outlet property="invAmt" destination="O1W-4r-Gax" id="sRk-3Z-KgT"/>
@@ -515,7 +496,6 @@
                 <outlet property="paymntTerm" destination="JFv-Ea-jOZ" id="oJ2-aQ-odV"/>
                 <outlet property="pod" destination="cTZ-Kk-eM5" id="JqZ-dx-5Ai"/>
                 <outlet property="pol" destination="iZO-w7-dl4" id="nkd-cR-JJ6"/>
-                <outlet property="rcvdInvAmt" destination="Pq4-vb-J4z" id="cUc-Je-aQ9"/>
                 <outlet property="rcvdInvQty" destination="wk6-FV-tG1" id="sQb-6B-eb4"/>
                 <outlet property="startDte" destination="UHQ-6L-2rS" id="95j-RY-h1z"/>
             </connections>

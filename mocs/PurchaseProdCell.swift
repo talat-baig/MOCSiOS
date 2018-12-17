@@ -10,6 +10,7 @@ import UIKit
 
 class PurchaseProdCell: UITableViewCell {
     
+    @IBOutlet weak var lblProdName: UILabel!
     @IBOutlet weak var outerVw: UIView!
     @IBOutlet weak var headerVw: UIView!
     @IBOutlet weak var lblLotNo: UILabel!
@@ -17,6 +18,7 @@ class PurchaseProdCell: UITableViewCell {
     @IBOutlet weak var lblPrice: UILabel!
     @IBOutlet weak var lblCurr: UILabel!
 
+    @IBOutlet weak var lblSKU: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -35,14 +37,13 @@ class PurchaseProdCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setDataToView(data : SalesSummProdData) {
+    func setDataToView(data : PurchaseSummProdData) {
         
-//        lblProdName.text = data.prodName
-//        lblQtyMT.text = data.qtyMT
-//        lblPrice.text = data.price
-//        lblSKU.text = data.sku
-//        lblCurr.text = data.curr
-//        lblBrand.text = data.brnd
-//        lblLotNo.text = data.lotNo
+        lblProdName.text = data.prodName
+        lblQty.text = data.qty
+        lblPrice.text = data.price
+        lblSKU.text = data.sku
+        lblCurr.text = data.curr
+        lblLotNo.text = data.lotNo
     }
 }

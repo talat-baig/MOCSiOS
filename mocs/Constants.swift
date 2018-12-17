@@ -20,8 +20,7 @@ struct ApiUrl {
 //    static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-    static let URL = "http://172.16.12.11:85/api"
- 
+    static let URL = "http://172.16.13.12:85/api"
         //static let URL = "http://172.16.12.12/OCSWebApi/api"
 }
 
@@ -269,8 +268,17 @@ struct Constant
         static let SS_SALES_LIST = ApiUrl.URL + "/SalesSummary/GetContractNumberList?apikeycon=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@"
         
         static let SS_PRODUCT_LIST = ApiUrl.URL + "/SalesSummary/GetProductList?apikeyorder=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&orderno=%@"
-
+    }
+    
+    struct PurchaseSummary {
         
+        static let PC_OVERALL = ApiUrl.URL +  "/PurchaseSummary/GetPurchaseSummaryReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        
+        static let PC_CHART = ApiUrl.URL + "/PurchaseSummary/ShowTop5CPOfPS?apikeytop=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&filter=%@"
+        
+        static let PC_SALES_LIST = ApiUrl.URL + "/PurchaseSummary/GetContractNumberListPS?apikeycon=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@"
+        
+        static let PC_PRODUCT_LIST = ApiUrl.URL + "/PurchaseSummary/GetProductListPS?apikeyorder=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&orderno=%@"
     }
     
     struct EMPLOYEE {

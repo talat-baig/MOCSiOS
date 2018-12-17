@@ -25,7 +25,6 @@ class SSChartCell: UITableViewCell {
     
     func setupDataToViews(dataEntry : [BarChartDataEntry] , arrLabel : [String], arrValues : [String]) {
 
-
         barGraphVw.drawValueAboveBarEnabled = false
         barGraphVw.drawGridBackgroundEnabled = false
         barGraphVw.isUserInteractionEnabled = false
@@ -51,6 +50,7 @@ class SSChartCell: UITableViewCell {
         leftAxis.spaceTop = 0.15
         leftAxis.axisMinimum = 0 // FIXME: HUH?? this replaces startAtZero = YES
         leftAxis.drawGridLinesEnabled = false
+    
         
         let rightAxis = barGraphVw.rightAxis
         rightAxis.enabled = false

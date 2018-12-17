@@ -9,7 +9,7 @@
 import UIKit
 
 class PurchaseSummCell: UITableViewCell {
-
+    
     var data : PurchaseSummData?
     
     @IBOutlet weak var lblRefNum: UILabel!
@@ -24,10 +24,13 @@ class PurchaseSummCell: UITableViewCell {
     @IBOutlet weak var delivryTrm: UILabel!
     @IBOutlet weak var grQty: UILabel!
     @IBOutlet weak var rcvdInvQty: UILabel!
-    @IBOutlet weak var rcvdInvAmt: UILabel!
     @IBOutlet weak var invAmt: UILabel!
     @IBOutlet weak var contrctStatus: UILabel!
+    
+    @IBOutlet weak var fundsPymnt: UILabel!
     @IBOutlet weak var outerVw: UIView!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -43,43 +46,46 @@ class PurchaseSummCell: UITableViewCell {
         headerVw.layer.shadowRadius = 1
         headerVw.layer.shadowColor = UIColor.black.cgColor
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
     func setDataTOView(data : PurchaseSummData?) {
-//        self.data = data
-//        lblRefNum.text = data?.refNo
-//        cpName.text = data?.cpName
-//
-//
-//        let val = data?.value ?? "-"
+        self.data = data
+        lblRefNum.text = data?.refNo
+        cpName.text = data?.supplierName
+        
+        let val = data?.value ?? "-"
 //        let valCurr = data?.valCurr ?? ""
-//
+        
 //        if valCurr == "" {
-//            contrctVal.text = val
+            contrctVal.text = val
 //        } else {
 //            contrctVal.text = val + "(" + valCurr + ")"
 //        }
-//
-//        //        contrctVal.text = data?.value
-//        pol.text = data?.pol
-//        pod.text = data?.pod
-//        paymntTerm.text = data?.paymntTerm
-//        startDte.text = data?.shipStrtDate
-//        endDte.text = data?.shipEndDate
-//
-//        let amt = data?.invAmt ?? "-"
+        
+        pol.text = data?.pol
+        pod.text = data?.pod
+        paymntTerm.text = data?.paymntTerm
+        startDte.text = data?.shipStrtDte
+        endDte.text = data?.shipEndDte
+        fundsPymnt.text = data?.fundPaymnt
+        grQty.text = data?.grQty
+        delivryTrm.text = data?.delTerm
+        rcvdInvQty.text = data?.rcvdInvQty
+        
+        let amt = data?.invAmt ?? "-"
 //        let curr = data?.invCurr ?? ""
-//
+        
 //        if curr == "" {
-//            invAmt.text = amt
+            invAmt.text = amt
 //        } else {
 //            invAmt.text =  amt + "(" + curr + ")"
 //        }
-//        doQty.text = data?.doQty
-//        contrctStatus.text = data?.contrctStatus
+        
+        grQty.text = data?.grQty
+        contrctStatus.text = data?.contractStatus
     }
     
 }

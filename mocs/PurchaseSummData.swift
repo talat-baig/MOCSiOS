@@ -10,4 +10,20 @@ import UIKit
 
 class PurchaseSummData: NSObject {
 
+    var refNo = ""
+    var supplierName = ""
+    var fundPaymnt = ""
+    var value = ""
+    var pol = ""
+    var pod = ""
+    var invAmt = ""
+    var paymntTerm = ""
+    var grQty = ""
+    var contractStatus = ""
+    var shipEndDte = ""
+    var shipStrtDte = ""
+    var rcvdInvQty = ""
+    var rcvdInvAmt = ""
+    var delTerm = ""
+
 }

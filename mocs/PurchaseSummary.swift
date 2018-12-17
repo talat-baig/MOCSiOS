@@ -6,8 +6,10 @@
 //  Copyright © 2018 Rv. All rights reserved.
 //
 
-import UIKit
-
-class PurchaseSummary: NSObject {
-
-}
+//import UIKit
+//
+//class PurchaseSummary: NSObject {
+//
+//    
+//
+//}
