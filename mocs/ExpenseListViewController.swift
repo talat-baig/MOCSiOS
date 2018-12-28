@@ -31,11 +31,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
 
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getExpenseData))
         
-        guard let respValue = response else {
-            Helper.showMessage(message: "Something went wrong!, Please try refreshing")
-            return
-        }
-        
+      
         if isFromView {
             btnAddExpense.isHidden = true
             
@@ -43,6 +39,12 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
             btnAddExpense.isHidden = false
             tblVwExpenseList.addSubview(refreshControl)
         }
+        
+        guard let respValue = response else {
+            Helper.showMessage(message: "Something went wrong!, Please try refreshing")
+            return
+        }
+
         populateList(response: respValue)
         
     }
@@ -88,6 +90,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
     
     
     func populateList(response : Data) {
+        
         var data: [ExpenseListData] = []
         let jsonResponse = JSON(response)
         
@@ -133,29 +136,29 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
         }
     }
     
-    func getCurrency(comp : @escaping(Bool) ->()) {
-        if Session.currency == "" {
-            if internetStatus != .notReachable {
-                let url = String.init(format: Constant.API.CURRENCY_TYPE, Session.authKey)
-                self.view.showLoading()
-                Alamofire.request(url).responseData(completionHandler: ({ response in
-                    self.view.hideLoading()
-                    if Helper.isResponseValid(vc: self, response: response.result){
-                        let jsonString = JSON(response.result.value!)
-                        Session.currency = jsonString.rawString()!
-                        comp(true)
-                    } else {
-                        comp(false)
-                    }
-                }))
-                
-            } else {
-                
-                comp(false)
-            }
-        }
-         comp(true)
-    }
+//    func getCurrency(comp : @escaping(Bool) ->()) {
+//        if Session.currency == "" {
+//            if internetStatus != .notReachable {
+//                let url = String.init(format: Constant.API.CURRENCY_TYPE, Session.authKey)
+//                self.view.showLoading()
+//                Alamofire.request(url).responseData(completionHandler: ({ response in
+//                    self.view.hideLoading()
+//                    if Helper.isResponseValid(vc: self, response: response.result){
+//                        let jsonString = JSON(response.result.value!)
+//                        Session.currency = jsonString.rawString()!
+//                        comp(true)
+//                    } else {
+//                        comp(false)
+//                    }
+//                }))
+//                
+//            } else {
+//                
+//                comp(false)
+//            }
+//        }
+//         comp(true)
+//    }
             
     
     func getCurrencyAndOpenVC(eplData: ExpenseListData?) {
@@ -196,7 +199,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
         }
     }
     
-    func deleteExpense(data : ExpenseListData){
+    func deleteExpense(data : ExpenseListData) {
         if internetStatus != .notReachable {
             self.view.showLoading()
             let url = String.init(format: Constant.API.EXPENSE_DELETE, Session.authKey, self.tcrData.headRef, data.expId.trimmingCharacters(in: .whitespaces), self.tcrData.counter)

@@ -15,7 +15,10 @@ import RATreeView
 protocol filterViewDelegate {
     func applyFilter(filterString : String)
     func cancelFilter(filterString : String)
-    //    func clearAllTapped()
+}
+
+protocol clearFilterDelegate {
+    func clearAll()
 }
 
 class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewDataSource, onFilterButtonTap {
@@ -37,7 +40,8 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     
     @IBOutlet weak var vwButtons: UIView!
     static var filterDelegate: filterViewDelegate?
-    
+    static var clearFilterDelegate: clearFilterDelegate?
+
     //Added By RV : 13 May 18
     var delegate: onFilterButtonTap?
     var headerVwFilter : FilterHeaderView?
@@ -138,8 +142,6 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         }
         
         let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
-        
-        
         
         if jsonArr.count > 0 {
             
@@ -245,11 +247,17 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     }
     
     
-    static func getFilterString() -> String {
+    static func getFilterString(noBU : Bool = false ) -> String {
         
         var newStrArr : [String]  = []
+        var newStr = String()
         for newObj in self.selectedDataObj {
-            let  newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeURL(url:(newObj.location?.locName)!) + "+" +  newObj.code!
+            
+            if noBU {
+                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeWhiteSpaces(url:(newObj.location?.locName)!)
+            } else {
+                newStr = Helper.encodeURL(url:(newObj.company?.compCode)!) + "+" + Helper.encodeWhiteSpaces(url: (newObj.location?.locName)!) + "+" +  newObj.code!
+            }
             newStrArr.append(newStr)
         }
         
@@ -303,14 +311,16 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         if FilterViewController.selectedDataObj.count != 0 {
             
             for newObj in FilterViewController.selectedDataObj {
-                
                 newObj.company?.isExpanded = false
                 newObj.location?.isExpanded = false
                 newObj.isSelect = false
             }
             self.treeView.reloadRows(forItems: [FilterViewController.selectedDataObj], with: RATreeViewRowAnimationNone)
             FilterViewController.selectedDataObj.removeAll()
-            
+        }
+        
+        if let d = FilterViewController.clearFilterDelegate {
+            d.clearAll()
         }
         
         updateFilterHeader()
@@ -419,12 +429,10 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             let state = treeView.isCellExpanded(cell)
             item.location?.isExpanded = !(item.location?.isExpanded)!
             
-            
             if let index = selectedLocation.index(where: {$0 == item}) {
             } else {
                 selectedLocation.append(item)
             }
-            
             
             if !state {
                 treeView.collapseRow(forItem: item)
@@ -449,7 +457,8 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
         let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
         cell.lblTitle.text = newStr
-        cell.lblTitle.preferredMaxLayoutWidth = 100
+        cell.lblTitle.font =  UIFont.systemFont(ofSize: 17.0)
+//        cell.lblTitle.preferredMaxLayoutWidth = 100
         return cell
     }
     
@@ -460,7 +469,6 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
         return size
     }
-    
     
 }
 

@@ -12,6 +12,7 @@ import SwiftyJSON
 
 protocol sendEmailFromViewDelegate {
     func onSendEmailTap(invoice : String , emailIds : String) -> Void
+    func onSendTap(whrNo  : String , roId : String, manual : String, emailIds: String) -> Void
     func onCancelTap() -> Void
 }
 
@@ -19,8 +20,13 @@ protocol sendEmailFromViewDelegate {
 class SendEmailView: UIView, UIGestureRecognizerDelegate {
     
     /// Invoice number as String
+    
+    var whrNum : String?
+    var roId : String?
+    var manualNo : String?
     var invoiceNum : String?
     
+    var isFromAvlRel = false
     /// sendEmailFromViewDelegate object
     var delegate : sendEmailFromViewDelegate?
     
@@ -51,7 +57,6 @@ class SendEmailView: UIView, UIGestureRecognizerDelegate {
         gestureRecognizer.delegate = self
         self.addGestureRecognizer(gestureRecognizer)
         
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -66,6 +71,13 @@ class SendEmailView: UIView, UIGestureRecognizerDelegate {
     func passInvoiceNumToView(invoiceNum : String) {
         self.invoiceNum = invoiceNum
     }
+    
+    func passWHRdetails(whrNum : String, roId : String, manualNo : String) {
+        self.whrNum = whrNum
+        self.roId = roId
+        self.manualNo = manualNo
+    }
+    
     
     /// Validate Email Ids
     func validateEmailIds(emailIDStr : String) -> String {
@@ -108,24 +120,30 @@ class SendEmailView: UIView, UIGestureRecognizerDelegate {
         
         if emailIds == "" || emailIds == "Please enter valid email Id" {
             Helper.showMessage(message: "Please enter valid email Id")
-          return
-        }
-        
-        guard let invoiceNum = self.invoiceNum else {
             return
         }
         
-        if let d = delegate {
-            d.onSendEmailTap(invoice: invoiceNum, emailIds: emailIds)
-            self.removeFromSuperviewWithAnimate()
+        if isFromAvlRel {
+            if let d = delegate {
+                d.onSendTap(whrNo: self.whrNum ?? "" , roId: self.roId ?? "", manual: self.manualNo ?? "" , emailIds: emailIds)
+                self.removeFromSuperviewWithAnimate()
+            }
+        } else {
             
+            guard let invoiceNum = self.invoiceNum else {
+                return
+            }
+            
+            if let d = delegate {
+                d.onSendEmailTap(invoice: invoiceNum , emailIds: emailIds)
+                self.removeFromSuperviewWithAnimate()
+            }
         }
-        
     }
     
     /// Action method for Cancel Button.
     @IBAction func btnCancelTapped(_ sender: Any) {
- 
+        
         if let d = delegate {
             d.onCancelTap()
         }
@@ -143,10 +161,10 @@ class SendEmailView: UIView, UIGestureRecognizerDelegate {
         if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             var keyboardHeight : CGFloat
-                keyboardHeight = keyboardRectangle.height - 60
+            keyboardHeight = keyboardRectangle.height - 60
             var contentInset:UIEdgeInsets = self.scrlVw.contentInset
             contentInset.bottom = keyboardHeight
-
+            
             self.scrlVw.isScrollEnabled = false
             self.scrlVw.contentInset = contentInset
         }
@@ -164,7 +182,7 @@ class SendEmailView: UIView, UIGestureRecognizerDelegate {
 extension SendEmailView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-       
+        
         if textField == txtFldEmailIds {
             self.endEditing(true)
         }

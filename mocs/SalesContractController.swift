@@ -39,7 +39,6 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
         self.view.addGestureRecognizer(gestureRecognizer)
         FilterViewController.filterDelegate = self
         
-        
         self.navigationController?.isNavigationBarHidden = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         vwHeader.delegate = self
@@ -100,9 +99,11 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
@@ -170,7 +171,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                     self.present(alert, animated: true, completion: nil)
                 }
             }))
-        }else{
+        } else {
             Helper.showNoInternetMessg()
         }
     }
@@ -236,7 +237,7 @@ extension SalesContractController: UISearchBarDelegate {
 extension SalesContractController: UITableViewDataSource, UITableViewDelegate, onButtonClickListener{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 336
+        return 342
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

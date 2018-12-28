@@ -11,14 +11,17 @@ import Alamofire
 import Charts
 import SwiftyJSON
 
-class ARReportController: UIViewController , filterViewDelegate{
+class ARReportController: UIViewController , filterViewDelegate ,clearFilterDelegate{
     
     @IBOutlet weak var tblVwARReport: UITableView!
     var dataEntry:[PieChartDataEntry] = []
     var arOverallData : AROverallData?
     var arListData = [ARListData]()
-    @IBOutlet weak var vwTopHeader: WC_HeaderView!
+
     
+    @IBOutlet weak var vwTopHeader: WC_HeaderView!
+    @IBOutlet weak var collVw: UICollectionView!
+
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -31,7 +34,15 @@ class ARReportController: UIViewController , filterViewDelegate{
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllARData))
         tblVwARReport.addSubview(refreshControl)
         
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        flowLayout.minimumInteritemSpacing = 5.0
+        collVw.collectionViewLayout = flowLayout
+        
         FilterViewController.filterDelegate = self
+        FilterViewController.clearFilterDelegate = self
+
         fetchAllARData()
         
         self.navigationController?.isNavigationBarHidden = true
@@ -41,7 +52,7 @@ class ARReportController: UIViewController , filterViewDelegate{
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Accounts Receivables"
         vwTopHeader.lblSubTitle.isHidden = true
-      
+        
     }
     
     
@@ -63,124 +74,152 @@ class ARReportController: UIViewController , filterViewDelegate{
             arListData.removeAll()
         }
         self.fetchAllARData()
+        self.collVw.reloadData()
+    }
+    
+    func clearAll() {
+        self.collVw.reloadData()
+        self.fetchAllARData()
     }
     
     
+    func stop() {
+        guard progressTimer != nil else { return }
+        progressTimer?.invalidate()
+        progressTimer = nil
+    }
+    
+
+    
     @objc func fetchAllARData() {
-//        print(FilterViewController.getFilterString())
+        
+        var messg = ""
+        let arrFilterString = ["35+Ivory Coast+06", "25+Dubai+06"]
+        
+        print(FilterViewController.getFilterString())
+        
+        
+        if FilterViewController.getFilterString().contains(",") {
+            Helper.showMessage(message: "Please select only one filter")
+            return
+        }
+        
         if internetStatus != .notReachable {
-            var isRespOverallValid = true
-            var isRespARListValid = true
-            var isRespChartValid = true
             
-            let group = DispatchGroup()
-            self.view.showLoading()
-            group.enter()
-            
+//            self.view.showLoading()
             let url1 = String.init(format: Constant.AR.OVERALL, Session.authKey,
                                    Helper.encodeURL(url : FilterViewController.getFilterString()))
-            Alamofire.request(url1).responseData(completionHandler: ({ response in
-                group.leave()
-                if Helper.isResponseValid(vc: self, response: response.result){
-//                    isRespOverallValid = true
-                    var jsonResponse = JSON(response.result.value!)
-                    
-                    if  (jsonResponse.arrayObject?.isEmpty)! {
-                        isRespOverallValid = false
-                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                        
-                        return
-                    } else {
-                         isRespOverallValid = true
-                        /// Modified
-                        self.tblVwARReport.tableFooterView = nil
-                        self.populateOverallData(respJson: jsonResponse)
-                    }
-                } else {
-                    isRespOverallValid = false
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                    
-                }
-            }))
             
-            group.enter()
             let url2 = String.init(format: Constant.AR.CHART, Session.authKey,
                                    Helper.encodeURL(url :  FilterViewController.getFilterString()))
-            Alamofire.request(url2).responseData(completionHandler: ({ response in
-                group.leave()
-                if Helper.isResponseValid(vc: self, response: response.result) {
-//                    isRespChartValid = true
-                    var jsonResponse = JSON(response.result.value!)
-                    
-                    if  (jsonResponse.arrayObject?.isEmpty)! {
-                        isRespChartValid = false
-                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                        return
-                    } else {
-                         isRespChartValid = true
-                        /// Modified
-                        self.tblVwARReport.tableFooterView = nil
-                        self.populateChartData(respJson : jsonResponse)
-                    }
-                } else {
-                    isRespChartValid = false
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                    
-                }
-            }))
             
-            
-            group.enter()
             let url3 = String.init(format: Constant.AR.LIST, Session.authKey,
                                    Helper.encodeURL(url :  FilterViewController.getFilterString()))
-            Alamofire.request(url3).responseData(completionHandler: ({ response in
-                group.leave()
-                if Helper.isResponseValid(vc: self, response: response.result){
-//                    isRespARListValid = true
-                    var jsonResponse = JSON(response.result.value!)
+            
+            print(url1)
+            
+            var request = URLRequest(url: URL(string: url1)!)
+            request.httpMethod = "GET"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.timeoutInterval = 180 // 180 seconds
+            
+            if  arrFilterString.contains(FilterViewController.getFilterString()){
+                messg = "This Report is at a delay of 1 Hour of current time due to large data"
+            } else {
+                 messg = "This Report is Live"
+            }
+                
+            self.view.showLoadingWithMessage(messg: messg)
+
+            Alamofire.request(request as  URLRequestConvertible).responseData(completionHandler: ({ response in
+                if Helper.isResponseValid(vc: self, response: response.result) {
                     
-                    if  (jsonResponse.arrayObject?.isEmpty)! {
-                        isRespARListValid = false
-                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+                    let ovrAllResp = JSON(response.result.value!)
+                    
+                    if  (ovrAllResp.arrayObject?.isEmpty)! {
+                        self.view.hideLoadingProgressLoader()
+                        self.resetData()
+                        self.tblVwARReport.reloadData()
+                        
+                        self.refreshControl.endRefreshing()
+                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
                         return
                     } else {
-                         isRespARListValid = true
-                        /// Modified
-                        self.tblVwARReport.tableFooterView = nil
-                        self.populateListData(respJson: jsonResponse)
+                        
+                        Alamofire.request(url2).responseData(completionHandler: ({ response in
+                            if Helper.isResponseValid(vc: self, response: response.result) {
+                                let chartResponse = JSON(response.result.value!)
+                                
+                                if  (chartResponse.arrayObject?.isEmpty)! {
+                                    self.view.hideLoadingProgressLoader()
+                                    self.refreshControl.endRefreshing()
+                                    self.resetData()
+                                    self.tblVwARReport.reloadData()
+                                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                                    return
+                                } else {
+                                    Alamofire.request(url3).responseData(completionHandler: ({ response in
+                                        
+                                        if Helper.isResponseValid(vc: self, response: response.result){
+                                            let listResponse = JSON(response.result.value!)
+                                            
+                                            self.view.hideLoadingProgressLoader()
+                                            self.refreshControl.endRefreshing()
+                                            
+                                            if  (listResponse.arrayObject?.isEmpty)! {
+                                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                                                return
+                                            } else {
+                                                
+                                                self.populateOverallData(respJson: ovrAllResp)
+                                                self.populateChartData(respJson: chartResponse)
+                                                self.populateListData(respJson: listResponse)
+                                                self.tblVwARReport.tableFooterView = nil
+                                                self.tblVwARReport.reloadData()
+                                            }
+                                        } else {
+                                            self.view.hideLoadingProgressLoader()
+                                            self.refreshControl.endRefreshing()
+                                            self.resetData()
+                                            self.tblVwARReport.reloadData()
+                                            Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                                        }
+                                    }))
+                                }
+                            } else {
+                                self.view.hideLoadingProgressLoader()
+                                self.refreshControl.endRefreshing()
+                                self.resetData()
+                                self.tblVwARReport.reloadData()
+                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                            }
+                        }))
                     }
                 } else {
-                    isRespARListValid = false
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
+                    self.view.hideLoadingProgressLoader()
+                    self.refreshControl.endRefreshing()
+                    self.resetData()
+                    self.tblVwARReport.reloadData()
+                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
                 }
             }))
             
-            print(FilterViewController.getFilterString())
-            group.notify(queue: .main) {
-                self.view.hideLoading()
-                self.refreshControl.endRefreshing()
-                
-                if isRespARListValid && isRespChartValid && isRespOverallValid {
-                    /// Modified
-                    self.tblVwARReport.tableFooterView = nil
-                    self.tblVwARReport.reloadData()
-                } else {
-                    if !self.dataEntry.isEmpty || self.arOverallData != nil || !self.arListData.isEmpty {
-                        self.dataEntry.removeAll()
-                        self.arOverallData = nil
-                        self.arListData.removeAll()
-                    }
-                    self.tblVwARReport.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, isARReport: true, action: #selector(self.showFilterMenu))
-                }
-//                  self.tblVwARReport.reloadData()
-            }
         } else {
             Helper.showNoInternetMessg()
+            self.resetData()
+            self.tblVwARReport.reloadData()
             Helper.showNoInternetState(vc: self, tb: self.tblVwARReport, action: #selector(self.fetchAllARData))
             self.refreshControl.endRefreshing()
         }
     }
+    
+    func resetData() {
+        self.arOverallData = nil
+        self.arListData.removeAll()
+        self.dataEntry.removeAll()
+    }
+    
+   
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
@@ -223,7 +262,7 @@ class ARReportController: UIViewController , filterViewDelegate{
         
         self.dataEntry.removeAll()
         if jsonArr.count > 0 {
-//            self.dataEntry.removeAll()
+            //            self.dataEntry.removeAll()
             
             for i in 0..<jsonArr.count {
                 
@@ -240,9 +279,9 @@ class ARReportController: UIViewController , filterViewDelegate{
         let jsonArr = respJson.arrayObject as! [[String:AnyObject]]
         
         self.arListData.removeAll()
-
+        
         if jsonArr.count > 0 {
-//            self.arListData.removeAll()
+            //            self.arListData.removeAll()
             
             for i in 0..<jsonArr.count {
                 
@@ -286,12 +325,12 @@ extension ARReportController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if dataEntry.count > 0{
+        if dataEntry.count > 0 {
             tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
+//            tableView.separatorStyle = .singleLine
         } else {
             tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
+//            tableView.separatorStyle = .none
         }
         
         switch section {
@@ -307,8 +346,10 @@ extension ARReportController: UITableViewDataSource {
             } else {
                 return 0
             }
+        case 2:
+             return self.arListData.count
         default:
-            return self.arListData.count
+            return 0
         }
         
     }
@@ -331,6 +372,7 @@ extension ARReportController: UITableViewDataSource {
                     height = 225
                 }
             }
+            print("Overall height" , height)
             break
         case 1:  height = 300
             break
@@ -365,7 +407,7 @@ extension ARReportController: UITableViewDataSource {
             
         } else if indexPath.section == 1 {
             let cell = tblVwARReport.dequeueReusableCell(withIdentifier: "chartCell") as! ARChartCell
-            cell.setDataToViews(dataEntry: self.dataEntry)
+            cell.setDataToViews(dataEntry: self.dataEntry, strTxt: String(format : "TOP %d COUNTER PARTIES",self.dataEntry.count))
             cell.selectionStyle = .none
             return cell
             
@@ -413,6 +455,34 @@ extension ARReportController: WC_HeaderViewDelegate {
     func topMenuRightButtonTapped(sender: Any) {
         self.presentRightMenuViewController(sender as AnyObject)
     }
+    
+}
+
+
+extension ARReportController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return FilterViewController.selectedDataObj.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterCollectionCell", for: indexPath as IndexPath) as! FilterCollectionViewCell
+        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+        cell.lblTitle.text = newStr
+        cell.lblTitle.preferredMaxLayoutWidth = 100
+        return cell
+    }
+    
+    func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
+    {
+        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        return size
+    }
+    
     
 }
 

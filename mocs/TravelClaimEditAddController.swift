@@ -16,8 +16,8 @@ protocol onTCRSubmit: NSObjectProtocol {
 }
 
 
-class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate , notifyChilds_UC {
-    
+class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate , notifyChilds_UC , addEPRAdvancesDelegate  {
+   
     
     weak var currentTxtFld: UITextField? = nil
     var response:Data?
@@ -29,6 +29,8 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
     
     var tcrEprArr : [TCREPRListData] = []
     
+    
+    @IBOutlet weak var btnAdvances: UIButton!
     @IBOutlet weak var btnSubmit: UIButton!
     @IBOutlet weak var scrlVw: UIScrollView!
     
@@ -65,6 +67,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
     
     weak var okTCRSubmit : onTCRSubmit?
     
+    
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         return IndicatorInfo(title: "PRIMARY DETAILS")
     }
@@ -73,6 +76,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         super.viewDidLoad()
         
         initialSetup()
+        
         if response != nil {
             /// Edit
             vwTopHeader.isHidden = true
@@ -136,71 +140,21 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         vwTopHeader.lblTitle.text = "Add New Claim"
         vwTopHeader.lblSubTitle.isHidden = true
         
-        vwCompany.layer.borderWidth = 1
-        vwCompany.layer.borderColor = UIColor.lightGray.cgColor
-        vwCompany.layer.cornerRadius = 5
-        vwCompany.layer.masksToBounds = true;
+        Helper.addBordersToView(view: vwCompany)
+        Helper.addBordersToView(view: vwLocation)
+        Helper.addBordersToView(view: vwBusiness)
+        Helper.addBordersToView(view: vwTripType)
+        Helper.addBordersToView(view: vwPot)
+        Helper.addBordersToView(view: vwPov)
+        Helper.addBordersToView(view: vwCities)
         
-        vwLocation.layer.borderWidth = 1
-        vwLocation.layer.borderColor = UIColor.lightGray.cgColor
-        vwLocation.layer.cornerRadius = 5
-        vwLocation.layer.masksToBounds = true;
-        
-        vwBusiness.layer.borderWidth = 1
-        vwBusiness.layer.borderColor = UIColor.lightGray.cgColor
-        vwBusiness.layer.cornerRadius = 5
-        vwBusiness.layer.masksToBounds = true;
-        
-        vwTripType.layer.borderWidth = 1
-        vwTripType.layer.borderColor = UIColor.lightGray.cgColor
-        vwTripType.layer.cornerRadius = 5
-        vwTripType.layer.masksToBounds = true;
-        
-        vwPot.layer.borderWidth = 1
-        vwPot.layer.borderColor = UIColor.lightGray.cgColor
-        vwPot.layer.cornerRadius = 5
-        vwPot.layer.masksToBounds = true;
-        
-        vwPov.layer.borderWidth = 1
-        vwPov.layer.borderColor = UIColor.lightGray.cgColor
-        vwPov.layer.cornerRadius = 5
-        vwPov.layer.masksToBounds = true;
-        
-        vwCities.layer.borderWidth = 1
-        vwCities.layer.borderColor = UIColor.lightGray.cgColor
-        vwCities.layer.cornerRadius = 5
-        vwCities.layer.masksToBounds = true;
+    
+        btnAdvances.layer.cornerRadius = 5
+        btnAdvances.layer.borderWidth = 1
+        btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
         
     }
     
-    
-    @IBAction func switchToggled(_ sender: UISwitch) {
-        self.checkSwitchValue()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        let lastView : UIView! = mySubVw.subviews.last
-        let height = lastView.frame.size.height
-        let pos = lastView.frame.origin.y
-        let sizeOfContent = height + pos + 100
-        
-        scrlVw.contentSize.height = sizeOfContent
-    }
-    
-    func checkSwitchValue() {
-        
-        if tcSwitchControl.isOn {
-            typeOfTravel = "International"
-        } else {
-            typeOfTravel = "Domestic"
-        }
-    }
-    
-    func notifyChild(messg: String , success : Bool) {
-        Helper.showVUMessage(message: messg, success: success)
-    }
     
     func parseAndAssign() {
         let jsonResponse = JSON(response!)
@@ -213,7 +167,6 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
             self.txtFldPurposeVisit.text = j["Purpose of Travel"].stringValue
             self.txtFldCitiesVisited.text = j["Places Visited"].stringValue
             
-            print( j["Travel Start Date"].stringValue)
             startDate = Helper.convertToDate(dateString: j["Travel Start Date"].stringValue)
             endDate = Helper.convertToDate(dateString: j["Travel End Date"].stringValue)
             
@@ -232,20 +185,172 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
                 tcSwitchControl.isOn = false
             }
             
-            // checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
+            if j["Alloted_EPR"].stringValue == "" {
+                
+            } else {
+                checkAllotedEPR(res: j["Alloted_EPR"].stringValue)
+            }
             
         }
     }
     
     
+    @IBAction func switchToggled(_ sender: UISwitch) {
+        self.checkSwitchValue()
+    }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let lastView : UIView! = mySubVw.subviews.last
+        let height = lastView.frame.size.height
+        let pos = lastView.frame.origin.y
+        let sizeOfContent = height + pos + 100
+        print(sizeOfContent)
+        scrlVw.contentSize.height = sizeOfContent
+    }
     
-    /// Handle user tap when keyboard is open
     @objc func handleTap() {
         self.view.endEditing(true)
     }
     
-    func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String, eprStr : String = "", counter : Int = 0 ){
+    func checkSwitchValue() {
+        
+        if tcSwitchControl.isOn {
+            typeOfTravel = "International"
+        } else {
+            typeOfTravel = "Domestic"
+        }
+    }
+    
+    func notifyChild(messg: String , success : Bool) {
+        Helper.showVUMessage(message: messg, success: success)
+    }
+    
+    
+    func onAddTap(eprIdString: String, tempArr: [TCREPRListData]) {
+        if eprIdString == "" {
+            btnAdvances.setTitle("Open Advances", for: .normal)
+        } else {
+            btnAdvances.setTitle(eprIdString, for: .normal)
+        }
+        self.tcrEprArr = tempArr
+    }
+    
+    
+    func onCancelTap() {
+        let eprString = btnAdvances.currentTitle
+        if eprString != "" {
+            let newStrArr = eprString?.components(separatedBy: ",")
+            for newTmp in self.tcrEprArr {
+                for j in newStrArr! {
+                    if newTmp.eprRefId == j {
+                        newTmp.isSelect = true
+                    }
+                }
+            }
+        }
+    }
+    
+    func checkAllotedEPR(res : String) {
+        
+        var json = JSON.init(parseJSON: res)
+        let jsonArr = json.arrayObject as! [[String:Any]]
+        
+        if jsonArr.count > 0 {
+            for(_,j):(String,JSON) in json {
+                let newObj = TCREPRListData()
+                newObj.eprRefId = j["EPR_REF_ID"].stringValue
+                let newAmt = Float(j["Total_Requested_Value"].stringValue)
+                
+                newObj.eprAmt = newAmt!
+                newObj.isSelect = true
+                self.tcrEprArr.append(newObj)
+            }
+        }
+        let refIdStrings =  self.tcrEprArr.map {$0.eprRefId}
+        
+        let advancesString = refIdStrings.joined(separator: ",")
+        
+        if refIdStrings.isEmpty {
+            btnAdvances.setTitle("Open Advances", for: .normal)
+        } else {
+            btnAdvances.setTitle(advancesString, for: .normal)
+        }
+    }
+    
+    @IBAction func btnEPRAdvancesTapped(_ sender: Any) {
+        
+        // Call EPR API
+        if internetStatus != .notReachable{
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.TCR.TCR_EPR_LIST, Session.authKey)
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let jsonRes = JSON(response.result.value!)
+                    let jsonArray = jsonRes.arrayObject as! [[String:AnyObject]]
+                    
+                    if jsonArray.count > 0 {
+                        var tempArr1 : [TCREPRListData] = []
+                        
+                        for(_,j):(String,JSON) in jsonRes {
+                            let newObj = TCREPRListData()
+                            newObj.eprRefId = j["EPRMainReferenceID"].stringValue
+                            newObj.eprAmt = Float(j["EPRitemsAmount"].stringValue)!
+                            newObj.isSelect = false
+                            tempArr1.append(newObj)
+                        }
+                        
+                        var tempArr2 : [TCREPRListData] = []
+                        
+                        
+                        for newEpr in tempArr1 {
+                            for newTmp in self.tcrEprArr {
+                                if newEpr.eprRefId == newTmp.eprRefId {
+                                    tempArr2.append(newEpr)
+                                }
+                            }
+                        }
+                        
+                        for newObj in tempArr2 {
+                            if let index = tempArr1.index(where: { $0.eprRefId == newObj.eprRefId }) {
+                                tempArr1.remove(at: index)
+                            }
+                        }
+                        
+                        self.tcrEprArr.append(contentsOf: tempArr1)
+                        
+                        let eprView = Bundle.main.loadNibNamed("EPRListView", owner: nil, options: nil)![0] as! EPRListView
+                        eprView.setEprData(arrData: self.tcrEprArr)
+                        eprView.delegate = self
+                        DispatchQueue.main.async {
+                            self.navigationController?.view.addMySubview(eprView)
+                        }
+                    } else {
+                        if self.tcrEprArr.count > 0 {
+                            let eprView = Bundle.main.loadNibNamed("EPRListView", owner: nil, options: nil)![0] as! EPRListView
+                            eprView.setEprData(arrData: self.tcrEprArr)
+                            eprView.delegate = self
+                            DispatchQueue.main.async {
+                                self.navigationController?.view.addMySubview(eprView)
+                            }
+                        } else {
+                            Helper.showMessage(message: "You have no Advances")
+                        }
+                    }
+                }
+            }))
+        }else{
+            Helper.showMessage(message: "No Internet, Please Try Again")
+        }
+    }
+    
+ 
+    
+    func insertOrUpdate(tcrRefNo:String ,travelType:String, bPurpose : String, places : String, fromStr : String ,toStr : String,  counter : Int = 0 , eprStr : String ) {
+        
         if self.internetStatus != .notReachable {
             
             self.view.showLoading()
@@ -254,12 +359,12 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
             if response == nil {
                 url = String.init(format: Constant.API.TCR_INSERT, Session.authKey, travelType, Helper.encodeURL(url:bPurpose), Helper.encodeURL(url:places), fromStr, toStr, eprStr)
             } else {
-                url = String.init(format: Constant.API.TCR_UPDATE, Session.authKey, tcrRefNo, travelType, Helper.encodeURL(url:bPurpose),Helper.encodeURL(url:places), fromStr, toStr,  Helper.encodeURL(url:eprStr), counter)
+                url = String.init(format: Constant.API.TCR_UPDATE, Session.authKey, tcrRefNo, travelType, Helper.encodeURL(url:bPurpose),Helper.encodeURL(url:places), fromStr, toStr, counter , Helper.encodeURL(url:eprStr))
             }
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isResponseValid(vc: self, response: response.result) {
                     var messg = String()
                     
                     if self.tcrNo != "" {
@@ -344,7 +449,20 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         
         self.handleTap()
         
-        self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter )
+        
+        if let eprString = btnAdvances.titleLabel?.text {
+
+            if eprString == "Open Advances" {
+                self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter , eprStr: "" )
+                
+            } else {
+                self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter ,  eprStr: eprString)
+            }
+            
+        }
+        
+      
+//        self.insertOrUpdate(tcrRefNo: tcrNo , travelType: typeOfTravel, bPurpose: pov , places: cv, fromStr: txtFldStartDate.text!, toStr: txtFldEndDate.text!, counter: counter , )
         
     }
     

@@ -45,7 +45,7 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         FilterViewController.filterDelegate = self
-
+        
         vwHeader.delegate = self
         vwHeader.btnLeft.isHidden = false
         vwHeader.btnRight.isHidden = false
@@ -69,7 +69,7 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
     func cancelFilter(filterString: String) {
         self.populateList()
     }
-
+    
     ///  Apply Fitler for the list.
     /// - filterString - Filter selected String
     func applyFilter(filterString: String) {
@@ -92,11 +92,11 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
                 if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView){
                     let jsonResponse = JSON(response.result.value!);
                     let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
-                   
-                     self.arrayList.removeAll()
+                    
+                    self.arrayList.removeAll()
                     if jsonArray.count > 0{
                         
-//                        self.arrayList.removeAll()
+                        //                        self.arrayList.removeAll()
                         
                         for(_,j):(String,JSON) in jsonResponse{
                             let data = TRIData()
@@ -118,27 +118,33 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
                         }
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
-//                        self.tableView.reloadData()
+                        //                        self.tableView.reloadData()
                     }else{
                         self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                 }
             }))
-        }else{
+        } else {
             
-            Helper.showNoInternetMessg()
             Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             refreshControl.endRefreshing()
         }
     }
     
+    
+    func showEmptyState(){
+        Helper.showNoItemState(vc:self ,  tb:tableView)
+    }
+    
+    
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
         if isApprove {
             
-            // self.approveContract(data: data as! PurchaseContractData, remark: text)
         } else {
             self.declineInvoice(data: data as! TRIData)
             declVw.removeFromSuperviewWithAnimate()
@@ -218,7 +224,7 @@ extension TradeInvoiceController:UITableViewDataSource, UITableViewDelegate, onB
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 346
+        return 352
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -241,7 +247,7 @@ extension TradeInvoiceController:UITableViewDataSource, UITableViewDelegate, onB
         return cell
     }
     
-
+    
     
     func onViewClick(data: AnyObject) {
         let viewClaim = self.storyboard?.instantiateViewController(withIdentifier: "TRIViewController") as! TRIViewController

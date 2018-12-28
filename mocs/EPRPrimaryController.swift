@@ -30,7 +30,6 @@ class EPRPrimaryController: UIViewController, IndicatorInfoProvider {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         parseAndAssign()
     }
 

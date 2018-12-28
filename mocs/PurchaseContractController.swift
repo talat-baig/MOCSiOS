@@ -13,7 +13,6 @@ import SwiftyJSON
 
 class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate, filterViewDelegate, customPopUpDelegate {
     
-    
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -25,12 +24,9 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     
-   
-    
     func cancelFilter(filterString: String) {
         self.populateList()
     }
-    
     
     func applyFilter(filterString: String) {
         if !arrayList.isEmpty  {
@@ -47,7 +43,6 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
         self.tableView.register(UINib(nibName: "ContractCell", bundle: nil), forCellReuseIdentifier: "cell")
         self.tableView.addSubview(self.refreshControl)
      
-        
         srchBar.delegate = self
         
         
@@ -117,10 +112,13 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                         /// Modified
                         self.tableView.tableFooterView = nil
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                     }
                     
                     self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
+
                 }
             }))
         }else{
@@ -169,7 +167,7 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                 }
             }))
         }else{
-            Helper.showMessage(message: "No Internet Available, Pleassae Try Aagain")
+            Helper.showMessage(message: "No Internet Available, Please Try Aagain")
         }
         
     }
@@ -265,7 +263,7 @@ extension PurchaseContractController: UITableViewDataSource, UITableViewDelegate
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 336
+        return 342
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

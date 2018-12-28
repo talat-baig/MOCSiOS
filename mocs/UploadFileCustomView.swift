@@ -57,7 +57,7 @@ class UploadFileCustomView: UIView , UIGestureRecognizerDelegate{
         imgVwFile.clipsToBounds = true
     }
     
-    func setImageToView(image : UIImage , docArray : [VoucherData]) {
+    func setImageToView(image : UIImage , docArray : [VoucherData] = [] ) {
         imgVwFile.image = image
         self.docArray = docArray
     }

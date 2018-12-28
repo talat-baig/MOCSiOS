@@ -10,17 +10,30 @@ import UIKit
 
 protocol onEcrExpOptionMenuTap: NSObjectProtocol {
     
-    func onEditClick() -> Void
+    func onEditClick(data: ECRExpenseListData) -> Void
     func onDeleteClick(data:ECRExpenseListData) -> Void
 }
 
 class ECRExpenseListAdapter: UITableViewCell {
     
-    weak var data: ECRExpenseListData?
     @IBOutlet weak var vwOuter: UIView!
     
     @IBOutlet weak var btnMenu: UIButton!
+    
+    @IBOutlet weak var lblReason: UILabel!
+    
+    @IBOutlet weak var lblAmount: UILabel!
+    
+    @IBOutlet weak var lblVendor: UILabel!
+    
+    @IBOutlet weak var lblComments: UILabel!
+    
+    @IBOutlet weak var lblStatus: UILabel!
+    
+    weak var data: ECRExpenseListData!
+    
     weak var delegate: onMoreClickListener?
+    
     weak var ecrExpMenuTapDelegate: onEcrExpOptionMenuTap?
     
     override func awakeFromNib() {
@@ -37,15 +50,17 @@ class ECRExpenseListAdapter: UITableViewCell {
     }
     
     func setDataToView(data:ECRExpenseListData?){
-        //        lblExpDate.text = data.expDate
-        //        lblCategory.text = data.expCategory
-        //        lblVendor.text = data.expVendor
-        //        lblPayment.text = String.init(format: "%@ %@ by %@", data.expCurrency,data.expAmount,data.expPaymentType)
-        //        lblComments.text = data.expComments
-//        self.data = data
+        
+        lblReason.text = data?.reason
+        lblAmount.text = data?.expAmount
+        lblVendor.text = data?.vendor
+        lblComments.text = data?.comments
+        lblStatus.text = data?.addedDate
+        self.data = data
     }
     
     @IBAction func moreClick(_ sender: UIButton) {
+        
         if (delegate?.responds(to: Selector(("onClick:"))) != nil){
             
             let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
@@ -53,12 +68,12 @@ class ECRExpenseListAdapter: UITableViewCell {
                 if (self.ecrExpMenuTapDelegate?.responds(to: Selector(("onEditClick:"))) != nil){
                  
                     
-                    self.ecrExpMenuTapDelegate?.onEditClick()
+                    self.ecrExpMenuTapDelegate?.onEditClick(data: self.data)
                 }
             })
             let deleteAction = UIAlertAction(title: "Delete", style: .default, handler: { (UIAlertAction) -> Void in
                 if (self.ecrExpMenuTapDelegate?.responds(to: Selector(("onDeleteClick:"))) != nil){
-//                    self.ecrExpMenuTapDelegate?.onDeleteClick(data: self.data!)
+                    self.ecrExpMenuTapDelegate?.onDeleteClick(data: self.data)
                 }
             })
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in

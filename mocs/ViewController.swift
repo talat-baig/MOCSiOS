@@ -51,7 +51,6 @@ class ViewController: UIViewController {
         Alamofire.request(url).responseData(completionHandler: ({ response in
             self.view.hideLoading()
             
-            
             if Helper.isResponseValid(vc: self, response: response.result){
                 
                 //index -> Index of Array
@@ -67,8 +66,16 @@ class ViewController: UIViewController {
                     Session.location = subjson["Location"].stringValue
                     Session.department = subjson["Department"].stringValue
                     Session.dbtoken = subjson["DBToken"].stringValue
+                    Session.empCode = subjson["EmployeeCode"].stringValue
+                    Session.reportMngr = subjson["ReportingManager"].stringValue
+                    Session.designation = subjson["Designation"].stringValue
+
+                    self.getCurrency()
                     debugPrint(Session.authKey)
-                    
+                    debugPrint(Session.empCode)
+                    debugPrint(Session.reportMngr)
+                    debugPrint(Session.designation)
+
                     let storyBoard: UIStoryboard = UIStoryboard(name:"Home",bundle:nil)
                     let mainPage = storyBoard.instantiateViewController(withIdentifier: "rootController") as! RootViewController
                     
@@ -79,6 +86,37 @@ class ViewController: UIViewController {
         }))
         
     }
+    
+    func getCurrency() {
+        
+        if Session.currency == "" {
+            
+            if internetStatus != .notReachable {
+                
+                let url = String.init(format: Constant.API.CURRENCY_TYPE, Session.authKey)
+                self.view.showLoading()
+                
+                Alamofire.request(url).responseData(completionHandler: ({ response in
+                    
+                    self.view.hideLoading()
+                    
+                    if Helper.isResponseValid(vc: self, response: response.result){
+                        let jsonString = JSON(response.result.value!)
+                        Session.currency = jsonString.rawString()!
+                        print(jsonString)
+                    } else {
+                        
+                    }
+                }))
+                
+            } else {
+                
+            }
+        }
+        
+    }
+    
+    
     
     @IBAction func btnShowPasswordTapped(_ sender: Any) {
         

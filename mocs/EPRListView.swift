@@ -32,12 +32,12 @@ class EPRListView: UIView {
         
         self.tblVwEPR.register(UINib(nibName: "EPRListCell", bundle: nil), forCellReuseIdentifier: "eprCell")
         
+//        self.tblVwEPR.separatorStyle = .none
+        
     }
     
     func setEprData(arrData : [TCREPRListData]){
-        
         self.arrayList = arrData
-        
         self.tblVwEPR.reloadData()
     }
     
@@ -73,12 +73,11 @@ class EPRListView: UIView {
 extension EPRListView: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.arrayList.count
-        return 2
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 65
+        return 66
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

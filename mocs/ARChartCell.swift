@@ -46,9 +46,9 @@ class ARChartCell: UITableViewCell {
     
     /// Method that set data from array of elements of type PieChartDataEntry to views.
     /// - Parameter dataEntry: Array of PieChartDataEntry elements
-    func setDataToViews(dataEntry : [PieChartDataEntry] ) {
+    func setDataToViews(dataEntry : [PieChartDataEntry] , strTxt : String = "" ){
         
-        let strTxt = String(format : "TOP %d COUNTER PARTIES", dataEntry.count)
+//        let strTxt = String(format : "TOP %d COUNTER PARTIES", dataEntry.count)
         let nsRange = NSString(string: strTxt).range(of: strTxt, options: String.CompareOptions.caseInsensitive)
         let nsRange2 = NSString(string: strTxt).range(of: "PARTIES", options: String.CompareOptions.caseInsensitive)
         
@@ -82,16 +82,7 @@ class ARChartCell: UITableViewCell {
             + [UIColor(red: 51/255, green: 181/255, blue: 229/255, alpha: 1)]
         
         let data = PieChartData(dataSet: set)
-        
-        //        let pFormatter = NumberFormatter()
-        //        pFormatter.numberStyle = .percent
-        //        pFormatter.maximumFractionDigits = 1
-        //        pFormatter.multiplier = 1
-        //        pFormatter.percentSymbol = " %"
-        //        data.se tValueFormatter(DefaultValueFormatter(formatter: pFormatter))
-        //
-        //        data.setValueFont(.systemFont(ofSize: 11, weight: .light))
-        //        data.setValueTextColor(.white)
+       
         arPieChart.drawEntryLabelsEnabled = false
         arPieChart.data = data
         arPieChart.reloadInputViews()

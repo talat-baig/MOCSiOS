@@ -10,11 +10,18 @@ import UIKit
 import DropDown
 import SwiftyJSON
 import Alamofire
+import NotificationBannerSwift
 import DropDown
+
+
+protocol onECRPaymentAddDelegate: NSObjectProtocol {
+    func onOkClick() -> Void
+}
 
 class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     @IBOutlet weak var btnSubmit: UIButton!
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     @IBOutlet weak var scrlVw: UIScrollView!
@@ -25,9 +32,9 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     @IBOutlet weak var vwExpenseDetails: UIView!
     
-    @IBOutlet weak var vwCurrType: UIView!
+    @IBOutlet weak var txtInvoiceNum: UITextField!
     
-    @IBOutlet weak var vwPymntType: UIView!
+    @IBOutlet weak var btnAccChrgHd: UIButton!
     
     @IBOutlet weak var vwComments: UIView!
     
@@ -39,24 +46,75 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
     
     @IBOutlet weak var txtExpDate: UITextField!
     
-    @IBOutlet weak var txtPaymntReason: UITextField!
-    
     @IBOutlet weak var stckVwCurrency: UIStackView!
     
-    @IBOutlet weak var btnPymntType: UIButton!
+    @IBOutlet weak var btnReason: UIButton!
     
-    @IBOutlet weak var btnCurrType: UIButton!
+    @IBOutlet weak var vwInvNo: UIView!
+    
+    @IBOutlet weak var vwAccChargeHd: UIView!
     
     @IBOutlet var datePickerTool: UIView!
     
     @IBOutlet weak var datePicker: UIDatePicker!
     
-    var arrCurrType = ["-","INR","AED","USD","DNH"]
+    weak var okPymntDelegate : onECRPaymentAddDelegate?
     
-    var arrPymntType = ["-","CARD","CASH"]
+    var arrAccChrg = [String]()
+    
+    var arrReason = [String]()
+    
+    weak var ecrExpListData : ECRExpenseListData!
+    
+    weak var ecrData : EmployeeClaimData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        initialSetup()
+        
+        if ecrExpListData != nil {
+            // Edit
+            assignDataToViews()
+        } else {
+            // Add
+            btnAccChrgHd.setTitle("Select", for:.normal)
+            btnReason.setTitle("Select", for:.normal)
+        }
+        
+        checkDatePickerDates()
+        
+    }
+    
+    /// Handle user tap when keyboard is open
+    @objc func handleTap() {
+        self.view.endEditing(true)
+    }
+    
+    
+    func checkDatePickerDates() {
+        
+        if ecrData.claimTypeInInt == 0 {
+            let currentDate = Date()
+            datePicker.date = currentDate
+            datePicker.maximumDate = currentDate
+            datePicker.minimumDate = currentDate
+
+            
+        } else {
+            
+            let currentDate = Date()
+            datePicker.date = currentDate
+            datePicker.maximumDate = currentDate
+            datePicker.minimumDate = Date.distantPast
+
+        }
+    }
+    
+    
+    func initialSetup() {
+        
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.keyboardWillShow(notification:)),
@@ -70,7 +128,7 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "Add New Expense"
+        vwTopHeader.lblTitle.text = "Add New Payment"
         vwTopHeader.lblSubTitle.isHidden = true
         
         
@@ -78,57 +136,57 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         
-        btnCurrType.contentHorizontalAlignment = .left
-        btnPymntType.contentHorizontalAlignment = .left
-        
         txtExpDate.inputView = datePickerTool
         
-        vwPymntReason.layer.borderWidth = 1
-        vwPymntReason.layer.borderColor = UIColor.lightGray.cgColor
-        vwPymntReason.layer.cornerRadius = 5
-        vwPymntReason.layer.masksToBounds = true;
+        Helper.addBordersToView(view: vwPymntReason)
+        Helper.addBordersToView(view: vwVendor)
+        Helper.addBordersToView(view: vwInvNo)
+        Helper.addBordersToView(view: vwAccChargeHd)
+        Helper.addBordersToView(view: vwExpenseDetails)
+        Helper.addBordersToView(view: vwComments)
         
-        vwVendor.layer.borderWidth = 1
-        vwVendor.layer.borderColor = UIColor.lightGray.cgColor
-        vwVendor.layer.cornerRadius = 5
-        vwVendor.layer.masksToBounds = true;
-        
-        
-        vwExpenseDetails.layer.borderWidth = 1
-        vwExpenseDetails.layer.borderColor = UIColor.lightGray.cgColor
-        vwExpenseDetails.layer.cornerRadius = 5
-        vwExpenseDetails.layer.masksToBounds = true;
+        btnReason.contentHorizontalAlignment = .left
+        btnAccChrgHd.contentHorizontalAlignment = .left
         
         
-        vwCurrType.layer.borderWidth = 1
-        vwCurrType.layer.borderColor = UIColor.lightGray.cgColor
-        vwCurrType.layer.cornerRadius = 5
-        vwCurrType.layer.masksToBounds = true;
+        self.automaticallyAdjustsScrollViewInsets = false
         
-        vwPymntType.layer.borderWidth = 1
-        vwPymntType.layer.borderColor = UIColor.lightGray.cgColor
-        vwPymntType.layer.cornerRadius = 5
-        vwPymntType.layer.masksToBounds = true;
+//        let currentDate = Date()
+//        datePicker.date = currentDate
+//        datePicker.minimumDate = currentDate
+//        datePicker.maximumDate = currentDate
         
-        vwComments.layer.borderWidth = 1
-        vwComments.layer.borderColor = UIColor.lightGray.cgColor
-        vwComments.layer.cornerRadius = 5
-        vwComments.layer.masksToBounds = true;
-        
-        
-        btnPymntType.setTitle(arrPymntType[0], for: .normal)
-        btnCurrType.setTitle(arrPymntType[0], for: .normal)
     }
     
-    /// Handle user tap when keyboard is open
-    @objc func handleTap() {
-        self.view.endEditing(true)
+    func assignDataToViews() {
+        
+        let newReqDate = Helper.convertToDate(dateString: ecrExpListData.addedDate)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let modDate = dateFormatter.string(from: newReqDate)
+        
+        
+        btnAccChrgHd.setTitle(ecrExpListData.accntCharge, for: .normal)
+        btnReason.setTitle(self.ecrExpListData.reason, for: .normal)
+
+        
+        self.getPaymentReason(accntChrg: ecrExpListData.accntCharge, comp: {(result) in
+          
+        })
+        
+//        self.btnReason.setTitle(self.ecrExpListData.reason, for: .normal)
+        
+        txtVendor.text = ecrExpListData.vendor
+        txtExpDate.text = modDate
+        txtAmtPaid.text = ecrExpListData.expAmount
+        txtInvoiceNum.text = ecrExpListData.invoiceNo
+        txtComments.text = ecrExpListData.comments
+        
+        
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -145,7 +203,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         }
     }
     
-    
     /// Invoked before hiding keyboard and used to move view down
     @objc func keyboardWillHide(notification: NSNotification) {
         self.scrlVw.isScrollEnabled = true
@@ -153,23 +210,185 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         self.scrlVw.contentInset = contentInset
     }
     
-    @IBAction func btnPaymentTapped(_ sender: Any) {
+    func getPaymentReason( accntChrg : String , comp : @escaping(Bool) ->()) {
+        
+        if internetStatus != .notReachable {
+            var newData:[String] = []
+//            print("accntCharge : %@", accntChrg)
+            let url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, Helper.encodeURL(url: ecrData.claimType) , Helper.encodeURL(url: accntChrg), self.ecrData.headRef)
+//            print("pymtn reason:",url)
+            self.view.showLoading()
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let jsonString = JSON(response.result.value!)
+                    print(jsonString)
+                    for(_,j):(String,JSON) in jsonString {
+                        let newCurr = j["AccChargeHead"].stringValue
+                        newData.append(newCurr)
+                    }
+                    self.arrReason = newData
+                    comp(true)
+                    
+                } else {
+                    comp(false)
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+            comp(false)
+        }
+    }
+    
+    
+    @IBAction func btnSubmitTapped(_ sender: Any) {
+        
+        guard let accntChrg = btnAccChrgHd.titleLabel?.text, !accntChrg.isEmpty else {
+            Helper.showMessage(message: "Please enter Account Charge Head")
+            return
+        }
+        
+        guard let reason = btnReason.titleLabel?.text, !accntChrg.isEmpty else {
+            Helper.showMessage(message: "Please enter Payment Reason")
+            return
+        }
+        
+        //        guard let reason = btnReason.titleLabel?.text, !accntChrg.isEmpty else {
+        //            Helper.showMessage(message: "Please enter Payment Reason")
+        //            return
+        //        }
+        
+        guard let pymntDate = txtExpDate.text, !pymntDate.isEmpty else {
+            Helper.showMessage(message: "Please enter Payment Date")
+            return
+        }
+        
+        guard let amtPaid = txtAmtPaid.text, !amtPaid.isEmpty else {
+            Helper.showMessage(message: "Please enter Amount Paid")
+            return
+        }
+        
+        guard let vendor = txtVendor.text else {
+            return
+        }
+        
+        guard let invNo = txtInvoiceNum.text else {
+            return
+        }
+        
+        guard let comments = txtComments.text else {
+            return
+        }
+        
+        var refId = String()
+        
+        if ecrExpListData == nil  {
+            refId = ecrData.headRef
+        } else {
+            refId = ecrExpListData.eprItemsId
+        }
+        
+        self.addOrEditClaim(refId: refId, pymntDate: pymntDate, invoiceNo: invNo, comments: comments, amtPaid: amtPaid, vendor: vendor, accntChrgHead: accntChrg, reason: reason, counter: ecrData.counter)
+        
+    }
+    
+    
+    func addOrEditClaim( refId : String, pymntDate : String, invoiceNo : String, comments : String, amtPaid : String ,vendor : String,  accntChrgHead: String , reason : String, counter : Int = 0) {
+        
+        if self.internetStatus != .notReachable {
+            
+            self.view.showLoading()
+            var url = String()
+            var newRecord = [String : Any]()
+            
+            if ecrExpListData == nil {
+                
+                url = String.init(format: Constant.API.ECR_ADD_PAYMENT, Session.authKey, refId , counter )
+                
+                newRecord = ["EPRItemsDate": pymntDate , "EPRItemsCategory": accntChrgHead, "EPRItemsAccountChargeHead": reason, "EPRItemsVendorName": vendor, "EPRItemsInvoiceNumber": invoiceNo, "EPRItemsAmount": amtPaid, "EPRItemsRemarks": comments , "EPRItemsTaxType": ""] as [String : Any]
+                
+            } else {
+                
+                url = String.init(format: Constant.API.ECR_UPDATE_PAYMENT, Session.authKey,refId )
+                newRecord = ["EPRItemsDate": pymntDate , "EPRItemsCategory": accntChrgHead, "EPRItemsAccountChargeHead": reason, "EPRItemsVendorName": vendor, "EPRItemsInvoiceNumber": invoiceNo, "EPRItemsAmount": amtPaid, "EPRItemsRemarks": comments , "EPRItemsTaxType": ""] as [String : Any]
+            }
+            print("add or edit:", url)
+            
+            Alamofire.request(url, method: .post, parameters: newRecord, encoding: JSONEncoding.default)
+                .responseString(completionHandler: {  response in
+                    self.view.hideLoading()
+                    debugPrint(response.result.value as Any)
+                    
+                    let jsonResponse = JSON.init(parseJSON: response.result.value!)
+                    
+                    if jsonResponse["ServerMsg"].stringValue == "Success" {
+                        
+                        var messg = String()
+                        
+                        if self.ecrExpListData != nil {
+                            messg = "Payment has been Updated Successfully"
+                        } else {
+                            messg = "Payment has been Added Successfully"
+                        }
+                        
+                        
+                        let success = UIAlertController(title: "Success", message: messg, preferredStyle: .alert)
+                        success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
+                            
+                            if let d = self.okPymntDelegate {
+                                d.onOkClick()
+                            }
+                            self.navigationController?.popViewController(animated: true)
+                        }))
+                        self.present(success, animated: true, completion: nil)
+                    }  else {
+                        
+                        NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
+                    }
+                })
+        }
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        
+        super.viewDidLayoutSubviews()
+        scrlVw.contentSize.height = 650
+    }
+    
+    
+    @IBAction func btnReasonTapped(_ sender: Any) {
+        
         let dropDown = DropDown()
-        dropDown.anchorView = btnPymntType // UIView or UIBarButtonItem
-        dropDown.dataSource = arrPymntType
+        dropDown.anchorView = btnReason
+        dropDown.dataSource = arrReason
         dropDown.selectionAction = { [weak self] (index, item) in
-            self?.btnPymntType.setTitle(item, for: .normal)
+            self?.btnReason.setTitle(item, for: .normal)
         }
         dropDown.show()
     }
     
-    
-    @IBAction func btnCurrencyTapped(_ sender: Any) {
+    @IBAction func btnAccntChrgHd(_ sender: Any) {
         let dropDown = DropDown()
-        dropDown.anchorView = btnCurrType // UIView or UIBarButtonItem
-        dropDown.dataSource = arrCurrType
+        dropDown.anchorView = btnAccChrgHd
+        dropDown.dataSource = arrAccChrg
         dropDown.selectionAction = { [weak self] (index, item) in
-            self?.btnCurrType.setTitle(item, for: .normal)
+            
+            self?.btnAccChrgHd.setTitle(item, for: .normal)
+            self?.getPaymentReason(accntChrg: item, comp: {(result) in
+                
+                if result {
+                    
+                    self?.btnReason.setTitle(self?.arrReason.first, for: .normal)
+                    
+                } else {
+                    
+                }
+            })
+            
         }
         dropDown.show()
     }
@@ -191,19 +410,21 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
 extension EmpClaimExpenseAddEditVC : UITextViewDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-       
+        
         if textView == txtComments {
-            let scrollPoint:CGPoint = CGPoint(x:0, y: stckVwCurrency.frame.origin.y)
+            let scrollPoint:CGPoint = CGPoint(x:0, y:  vwExpenseDetails.frame.origin.y + 15 )
             scrlVw!.setContentOffset(scrollPoint, animated: true)
         }
         return true
     }
+    
+    
 }
 
 extension EmpClaimExpenseAddEditVC : UITextFieldDelegate {
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
         datePickerTool.isHidden = true
         self.view.endEditing(true)
         return true
@@ -215,9 +436,8 @@ extension EmpClaimExpenseAddEditVC : UITextFieldDelegate {
             datePickerTool.isHidden = false
         }
         
-        if textField == txtComments {
-            
-            let scrollPoint:CGPoint = CGPoint(x:0, y: stckVwCurrency.frame.origin.y)
+        if textField == txtInvoiceNum {
+            let scrollPoint:CGPoint = CGPoint(x:0, y:  vwVendor.frame.origin.y  )
             scrlVw!.setContentOffset(scrollPoint, animated: true)
         }
         

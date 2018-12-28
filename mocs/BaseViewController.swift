@@ -9,14 +9,10 @@
 import UIKit
 import  XLPagerTabStrip
 
+
 protocol onTCRUpdate {
     func onTCRUpdateClick()
 }
-//
-//protocol cancelRequestDelegate {
-//    func cancelUploadReq()
-//}
-
 
 protocol notifyChilds_UC {
     func notifyChild(messg : String , success : Bool)
@@ -83,7 +79,7 @@ class BaseViewController: ButtonBarPagerTabStripViewController, onTCRSubmit, UC_
     }
     
     func notifyUCVouchers(messg: String, success: Bool) {
-//         Helper.showMessage(message: messg, style: .success)
+
         if let d = notifyChilds {
             d.notifyChild(messg: messg, success : success)
         }
@@ -120,8 +116,6 @@ class BaseViewController: ButtonBarPagerTabStripViewController, onTCRSubmit, UC_
         tcVouchersVC.moduleName = Constant.MODULES.TCR
         tcVouchersVC.vouchResponse = voucherResponse
         tcVouchersVC.ucNotifyDelegate = self
-//        self.notifyChilds = tcVouchersVC
-//        self.cancelReqDel = tcVouchersVC
         
         viewArray.append(tcExpenseVC)
         viewArray.append(tcVouchersVC)

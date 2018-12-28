@@ -15,7 +15,8 @@ class AttachmentCell: UITableViewCell {
     @IBOutlet weak var btnStatus: UIButton!
     @IBOutlet weak var btnDelete: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
-    
+    @IBOutlet weak var imgError: UIImageView!
+
     @IBOutlet weak var vwOuter: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()

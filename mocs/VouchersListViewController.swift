@@ -14,7 +14,6 @@ import SwiftyDropbox
 import Alamofire
 import SwiftyJSON
 import FileBrowser
-import MaterialShowcase
 
 protocol UC_NotifyComplete {
     func notifyUCVouchers(messg : String, success : Bool) -> Void
@@ -22,11 +21,10 @@ protocol UC_NotifyComplete {
 
 class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDocumentPickerDelegate {
     
-    
     var arrayList:[VoucherData] = []
     var tcrData = TravelClaimData()
-   /// -- ECR Data
-    var ecrData = ECRClaimData()
+    /// -- ECR Data
+    //    var ecrData = ECRClaimData()
     var moduleName = String()
     var imagePicker = UIImagePickerController()
     var delegate:uploadFileDelegate?
@@ -85,10 +83,12 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             floaty.close()
         })
         
+      
+        
         floaty.addItem("Select File", icon: #imageLiteral(resourceName: "fileExplorer"), handler: { item in
             let documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["public.text","com.apple.iwork.pages.pages", "public.data"], in: UIDocumentPickerMode.import)
             documentPicker.delegate = self
-
+            
             /// Set Document picker navigation bar text color
             UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor], for: .normal)
             documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
@@ -97,8 +97,15 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             floaty.close()
         })
         
+        
+        floaty.addItem("Photo Library", icon:UIImage(named: "photos_library")!, handler: { item in
+        
+            self.showMediaAlbum()
+            floaty.close()
+        })
+        
         self.view.addSubview(floaty)
-
+        
         if isFromView {
             floaty.isHidden = true
             self.populateList(response: vouchResponse)
@@ -114,7 +121,6 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         
         tblVwVouchers.register(UINib.init(nibName: "AttachmentCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
-    
     
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -172,15 +178,23 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     }
     
     
+    func showMediaAlbum() {
+        self.imagePicker.modalPresentationStyle = UIModalPresentationStyle.currentContext
+        self.imagePicker.delegate = self
+        self.imagePicker.allowsEditing = true
+        self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        present(self.imagePicker, animated: true, completion: nil)
+    }
+    
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         if controller.documentPickerMode == UIDocumentPickerMode.import {
             
-            let data = getDataFromFileUrl(fileUrl: url)
+            let data = Helper.getDataFromFileUrl(fileUrl: url)
             let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
             myView.frame = (self.navigationController?.view.frame)!
             myView.data = data
             myView.extensn = url.pathExtension
-            let image = self.getImage(ext: url.pathExtension) ?? #imageLiteral(resourceName: "file.png")
+            let image = Helper.getImage(ext: url.pathExtension) ?? #imageLiteral(resourceName: "file.png")
             myView.setImageToView(image: image , docArray: self.arrayList)
             myView.uploadDelegate = self
             DispatchQueue.main.async {
@@ -189,25 +203,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         }
     }
     
-    
-    func getImage(ext : String) -> UIImage? {
-        
-        var selectedImg = UIImage()
-        
-        switch ext {
-        case "pdf": selectedImg = #imageLiteral(resourceName: "pdf")
-            break
-        case "png", "JPG" , "jpg":  selectedImg = #imageLiteral(resourceName: "imageIcon")
-            break
-        case "txt", "xlsx", ".docx" , ".rtf" : selectedImg = #imageLiteral(resourceName: "file")
-            break
-        default:
-            break
-        }
-        return selectedImg
-        
-    }
-    
+   
     func getDataFromFile(file : FBFile) -> Data? {
         
         var pData = Data()
@@ -220,28 +216,11 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         
     }
     
-    func getDataFromFileUrl(fileUrl: URL) -> Data? {
-        
-        var pData = Data()
-        do {
-            let fileData = try Data.init(contentsOf: fileUrl)
-            pData = fileData
-        } catch {
-            print(error)
-        }
-        return pData
-    }
-    
-    
     func showEmptyState(){
         Helper.showNoItemState(vc:self , messg: "List is Empty\nTry to load by tapping below button" , tb:tblVwVouchers,  action:#selector(getVouchersData))
     }
     
-    //    func cancelUploadReq() {
-    //        dbRequest?.cancel()
-    //    }
-    
-    func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool)-> ()) {
+    func uploadImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
         
         GlobalVariables.shared.isUploadingSomething = true
         
@@ -252,15 +231,15 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
         dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
             .response { response, error in
-                
+              
                 DispatchQueue.main.async() {
                     if let response = response {
                         self.addItemToServer(dModName: Constant.MODULES.TCR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
                             
-                            comp(result)
+                            comp(result, "")
                         })
                     } else if error != nil {
-                        comp(false)
+                        comp(false, (error?.description)!)
                     }
                 }
             }
@@ -318,12 +297,8 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                                   Session.authKey,Helper.encodeURL(url: dModName), Helper.encodeURL(url: company), Helper.encodeURL(url:location),Helper.encodeURL(url: bUnit), docRefId,
                                   Helper.encodeURL(url: docName),
                                   Helper.encodeURL(url: docDesc), Helper.encodeURL(url:docFilePath))
-            //            self.view.showLoading()
-            //            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             Alamofire.request(url).responseData(completionHandler: ({ response in
-                //                self.view.hideLoading()
-                //                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                //                GlobalVariables.shared.isUploadingSomething = false
+                
                 if Helper.isResponseValid(vc: self, response: response.result) {
                     compHandler(true)
                 } else {
@@ -355,6 +330,10 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                 if result {
                     self.arrayList.remove(at: buttonRow)
                     self.tblVwVouchers.reloadData()
+                    if self.arrayList.count == 0 {
+                        print("Zeroooooooo")
+                        self.showEmptyState()
+                    }
                 } else {
                     Helper.showMessage(message: "No Internet Available, Please check your connection")
                 }
@@ -454,7 +433,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
     
     @objc func populateList(response : Data?) {
         
-         self.tblVwVouchers.tableFooterView = nil
+        //        self.tblVwVouchers.tableFooterView = nil
         guard response != nil else {
             return
         }
@@ -469,7 +448,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         let array = jsonResponse.arrayObject as! [[String:AnyObject]]
         
         
-        if array.count > 0{
+        if array.count > 0 {
             
             self.arrayList.removeAll()
             
@@ -488,7 +467,9 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                 data.addDate = j["AddedByUser"].stringValue
                 data.addedUser = j["AddedDate"].stringValue
                 self.arrayList.append(data)
+              
             }
+            self.tblVwVouchers.tableFooterView = nil
             self.tblVwVouchers.reloadData()
             
         } else {
@@ -524,27 +505,22 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         newFileInfo.notifInfo.notifIdentifier = IndexPath(row:indx - 1, section: 0)
         newFileInfo.notifInfo.notifName = "UploadVoucher"
         
-        
         let fIndx = GlobalVariables.shared.uploadQueue.index(where: {$0.fName == fileInfo.fName})
         GlobalVariables.shared.uploadQueue[fIndx!] = newFileInfo
-        
         //---
-        
-        for neew in GlobalVariables.shared.uploadQueue {
-            
-            debugPrint(neew.fName)
-            debugPrint(neew.notifInfo.notifName)
+        for new in GlobalVariables.shared.uploadQueue {
+            debugPrint(new.fName)
+            debugPrint(new.notifInfo.notifName)
         }
         
         ///
+        self.tblVwVouchers.tableFooterView = nil
         self.tblVwVouchers.reloadData()
         self.uploadFilesFromQueue()
         
     }
     
-    private class func sendNotificationsToCell(progress: Double, cellIndexpath: IndexPath, fileName : String) {
-        NotificationCenter.default.post(name: Notification.Name("UploadVoucher"), object: nil, userInfo: ["progress": progress, "notifIdentifier":(cellIndexpath, fileName)])
-    }
+
     
     func uploadFilesFromQueue() {
         
@@ -560,10 +536,8 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             return
         }
         
-        //   if GlobalVariables.shared.uploadQueue.count > 1 {
-        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        self.uploadImageData(fileInfo : newUpload ,comp: { result in
+        self.uploadImageData(fileInfo : newUpload ,comp: { result,errmessg  in
             
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             
@@ -573,11 +547,17 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             self.uploadFilesFromQueue()
             
             if result {
-
+                
             } else {
-
+                
                 if let d = self.ucNotifyDelegate {
-                    d.notifyUCVouchers(messg: "Sorry! Unable to Upload Voucher. Please try Again", success: false)
+                    
+                    if errmessg.debugDescription.contains("conflict") {
+                        d.notifyUCVouchers(messg: "Unable to Upload. File with this name already exists. Please enter different name.", success: false)
+                    } else {
+                        d.notifyUCVouchers(messg: "Sorry! Unable to Upload Voucher. Please try Again", success: false)
+                    }
+                    self.getVouchersData()
                 }
                 self.dbRequest?.cancel()
                 return
@@ -613,9 +593,8 @@ extension VouchersListViewController: UIImagePickerControllerDelegate, UINavigat
         self.imagePicker.dismiss(animated: true, completion: { () -> Void in
             self.view.showLoading()
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                //                let imgData = UIImagePNGRepresentation(image)
+
                 let compressData = UIImageJPEGRepresentation(image, 0.5) //max value is 1.0 and minimum is 0.0
-                //                let compressedImage = UIImage(data: compressData!)
                 
                 let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
                 myView.frame = (self.navigationController?.view.frame)!
@@ -702,15 +681,6 @@ extension VouchersListViewController: UITableViewDataSource, UITableViewDelegate
             }
         }
         
-        
-        //
-        //        if GlobalVariables.shared.isUploadingSomething {
-        //            cellView.isUserInteractionEnabled = false
-        //        } else {
-        //            cellView.isUserInteractionEnabled = true
-        //        }
-        //
-        
         if !Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension)  {
             cellView.btnStatus.setImage(#imageLiteral(resourceName: "download"), for: .normal)
             cellView.status.text = "(Tap to Download)"
@@ -748,6 +718,7 @@ extension VouchersListViewController: UITableViewDataSource, UITableViewDelegate
             self.docFileViewer.presentPreview(animated: true)
             
         } else {
+            
             Helper.showLoading(vc: self)
             self.downloadFile(path: arrayList[indexPath.row].documentPath, fileName : arrayList[indexPath.row].documentName, comp: { result in
                 Helper.hideLoading(vc: self)

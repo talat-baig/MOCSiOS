@@ -162,6 +162,14 @@ class ARInstrumentController: UIViewController {
 
 extension ARInstrumentController: emailFromHeaderDelegate, sendEmailFromViewDelegate {
     
+    func onSendTap(whrNo: String, roId: String, manual: String, emailIds: String) {
+        
+    }
+    
+ 
+   
+    
+    
     /// sendEmailFromViewDelegate method
     /// - Parameters:
     ///    - invoice: Invoice number and String
@@ -227,7 +235,7 @@ extension ARInstrumentController: UITableViewDataSource {
         cell.layer.cornerRadius = 5
         cell.btnSendEmail.tag = indexPath.row
         cell.btnSendEmail.addTarget(self, action: #selector(self.sendEmailTapped(sender:)), for: UIControlEvents.touchUpInside)
-        cell.selectionStyle = .none
+//        cell.selectionStyle = .none
         
         if arInstrumentsData.count > 0 {
             let isSelected = self.selectedIndexPath.contains(indexPath)

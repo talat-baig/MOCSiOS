@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class VoucherData{
+class VoucherData {
     var documentID:String = ""
     var moduleName:String = ""
     var companyName:String = ""

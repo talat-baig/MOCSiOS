@@ -33,8 +33,8 @@ class ARIPrimaryController: UIViewController, IndicatorInfoProvider {
         
     }
 
-    func populateView(){
-        if let ariData = data{
+    func populateView() {
+        if let ariData = data {
             company.text! = ariData.company
             location.text! = ariData.location
             businessUnit.text! = ariData.businessUnit

@@ -10,11 +10,11 @@ import UIKit
 import Toast_Swift
 
 protocol onOptionECRTapDelegate: NSObjectProtocol {
-    func onViewClick(data:ECRClaimData) -> Void
-    func onEditClick(data:ECRClaimData) -> Void
-    func onDeleteClick(data:ECRClaimData) -> Void
-    func onSubmitClick(data:ECRClaimData) -> Void
-    func onEmailClick(data:ECRClaimData) -> Void
+    func onViewClick(data:EmployeeClaimData) -> Void
+    func onEditClick(data:EmployeeClaimData) -> Void
+    func onDeleteClick(data:EmployeeClaimData) -> Void
+    func onSubmitClick(data:EmployeeClaimData) -> Void
+    func onEmailClick(data:EmployeeClaimData) -> Void
 }
 
 
@@ -22,10 +22,32 @@ protocol onOptionECRTapDelegate: NSObjectProtocol {
 class EmployeeClaimAdapter: UITableViewCell {
     
     @IBOutlet weak var vwOuter: UIView!
-    weak var data: ECRClaimData?
     @IBOutlet weak var btnOptionMenu: UIButton!
     weak var optionECRTapDelegate:onOptionECRTapDelegate?
     weak var delegate: onMoreClickListener?
+    
+    
+    weak var data:EmployeeClaimData!
+    
+    
+    @IBOutlet weak var lblRefId: UILabel!
+    @IBOutlet weak var lblStatus: UILabel!
+    
+    @IBOutlet weak var lblCompany: UILabel!
+    @IBOutlet weak var lblLocation: UILabel!
+    
+    
+    @IBOutlet weak var lblReqDate: UILabel!
+    @IBOutlet weak var lblEmpDept: UILabel!
+    
+    
+    @IBOutlet weak var lblReqAmnt: UILabel!
+    @IBOutlet weak var lblCurrency: UILabel!
+    
+    
+    @IBOutlet weak var lblBalance: UILabel!
+    @IBOutlet weak var lblPaidAmt: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,13 +63,23 @@ class EmployeeClaimAdapter: UITableViewCell {
         
     }
     
-    func setDataToView(data:ECRExpenseListData?){
-        //        lblExpDate.text = data.expDate
-        //        lblCategory.text = data.expCategory
-        //        lblVendor.text = data.expVendor
-        //        lblPayment.text = String.init(format: "%@ %@ by %@", data.expCurrency,data.expAmount,data.expPaymentType)
-        //        lblComments.text = data.expComments
-        //        self.data = data
+    func setDataToView(data:EmployeeClaimData){
+        
+        
+        lblRefId.text = data.headRef
+        lblStatus.text = "(" + data.headStatus + ")"
+        
+        lblCompany.text = data.companyName
+        lblEmpDept.text = data.employeeDepartment
+        lblLocation.text = data.location
+        lblReqAmnt.text = data.reqAmount
+        lblCurrency.text = data.currency
+        lblBalance.text = data.balance
+        lblPaidAmt.text = data.paidAmount
+        
+        lblReqDate.text = data.requestedDate
+        self.data = data
+        
     }
     
     
@@ -87,11 +119,11 @@ class EmployeeClaimAdapter: UITableViewCell {
             
         })
         
-        //        if data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame{
-        optionMenu.addAction(editAction)
-        optionMenu.addAction(deleteActon)
-        optionMenu.addAction(submitAction)
-        //        }
+        if data.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame{
+            optionMenu.addAction(editAction)
+            optionMenu.addAction(deleteActon)
+            optionMenu.addAction(submitAction)
+        }
         optionMenu.addAction(viewAction)
         optionMenu.addAction(emailAction)
         optionMenu.addAction(cancelAction)

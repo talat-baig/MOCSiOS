@@ -13,9 +13,21 @@ import Lottie
 import NotificationBannerSwift
 import RATreeView
 
+
+enum EmpStateScreen {
+    
+    case isARReport
+    case isAPReport
+    case isTrvReq
+    case isCP
+    case isSC
+    case isPC
+    case isFRA
+    case isApprovals
+}
+
 /// Cardview
 @IBDesignable
-
 class CardView: UIView {
     
     var cornerRadius: CGFloat = 2
@@ -47,10 +59,8 @@ extension UINavigationBar {
             self.layer.shadowRadius = 3.0
             self.layer.shadowColor = UIColor.black.cgColor
             self.layer.shadowOpacity = 0.7
-            
         }
     }
-    
 }
 
 class GlobalVariables : NSObject {
@@ -63,15 +73,12 @@ class GlobalVariables : NSObject {
     var isUploadingSomething = Bool()
     
     var uploadQueue : [FileInfo] = []
-    
-    
-    
 }
+
 
 class Helper: UIView {
     
     public static func setTitle(title:String, subtitle:String) -> UIView {
-        
         
         let titleLabel = UILabel.init(frame: CGRect.zero)
         titleLabel.backgroundColor = UIColor.clear
@@ -90,7 +97,6 @@ class Helper: UIView {
         let twoLineTitleView = UIView.init(frame: CGRect.init(x: 0, y: 0, width:max(titleLabel.frame.size.width, subTitleLabel.frame.size.width), height: 30))
         twoLineTitleView.addSubview(titleLabel)
         twoLineTitleView.addSubview(subTitleLabel)
-        
         
         return twoLineTitleView
     }
@@ -143,7 +149,76 @@ class Helper: UIView {
         return UserDefaults.standard.object(forKey: key) != nil
     }
     
+    class func addBordersToView(view : UIView){
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.layer.cornerRadius = 5
+        view.layer.masksToBounds = true;
+    }
     
+    
+    class func daysBetweenDates(startDate: Date, endDate: Date) -> Int {
+        
+        let components =  Calendar.current.dateComponents([.day], from: startDate, to: endDate).day
+        return components!
+    }
+    
+    public static func isPostResponseValid(vc: UIViewController, response : Result<String>, tv:UITableView? = nil)-> Bool{
+        
+        var isValid: Bool = false
+        
+        switch response {
+        case .success:
+            let jsonResponse = JSON.init(parseJSON: response.value!)
+            debugPrint("Response",jsonResponse)
+            if jsonResponse.dictionaryObject != nil {
+                
+                let data = jsonResponse.dictionaryObject
+                
+                if data != nil {
+                    
+                    if (data?.count)! > 0 {
+                        
+                        switch data!["ServerMsg"] as! String {
+                        case "Success":
+                            isValid = true
+                            break
+                            
+                            
+                        default:
+                            isValid = false
+                            Helper.showMessage(message: data!["ServerMsg"] as! String , style: .danger)
+                            break
+                        }
+                    } else {
+                        isValid = true
+                    }
+                }
+                
+            } else {
+                NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
+            }
+            
+            break
+        case .failure(let error):
+            if error._code == NSURLErrorTimedOut{
+                isValid = false
+                NotificationBanner(title: "Timeout",subtitle:"Request taking time too long, Check your connection and please try again", style: .warning).show()
+                if tv != nil{
+                    showNoInternetState(vc: vc, tb: tv!, action: nil)
+                }
+            } else if error._code == -1009 {
+                Helper.showNoInternetMessg()
+            } else {
+                NotificationBanner(title: "Opps!",subtitle:"Unexpected error occurred, Please try again later", style: .warning).show()
+            }
+            break
+        }
+        return isValid
+    }
+    
+    
+
     public static func isResponseValid(vc: UIViewController, response:Result<Data>, tv:UITableView? = nil)-> Bool{
         var isValid: Bool = false
         
@@ -153,8 +228,8 @@ class Helper: UIView {
             debugPrint("Response",jsonResponse)
             if jsonResponse.arrayObject is [[String:AnyObject]]{
                 let data = jsonResponse.arrayObject as! [[String:AnyObject]]
-                if data.count > 0{
-                    for(_,j):(String,JSON) in jsonResponse{
+                if data.count > 0 { 
+                    for(_,j):(String,JSON) in jsonResponse {
                         switch j["ServerMsg"] != JSON.null ? j["ServerMsg"].stringValue : "" {
                         case "Success":
                             isValid = true
@@ -184,41 +259,10 @@ class Helper: UIView {
                             }))
                             vc.present(alert, animated: true, completion: nil)
                             break
-                        case "Email Sent...":
+                            
+                        case "Email Sent...","Success. Please click on List Vouchers", "New List Added","New Task Added" ,"Note Updated" , "Purchase Contract marked as declined","Sales Contract marked as declined","ARI marked as declined", "ARI marked as approved","TRI marked as approved","TRI marked as declined","TCR marked as Declined","TCR marked as Approved","EPR | ECR marked as Declined","EPR | ECR claim marked as Approved","DO marked as Approved","DO marked as Declined":
                             isValid = true
                             break
-                        case "Success. Please click on List Vouchers" :
-                            isValid = true
-                        case "New List Added" :
-                            isValid = true
-                        case "New Task Added" :
-                            isValid = true
-                        case "Note Updated" :
-                            isValid = true
-                        case "Purchase Contract marked as declined" :
-                            isValid = true
-                        case "Sales Contract marked as declined" :
-                            isValid = true
-                        case "ARI marked as declined" :
-                            isValid = true
-                        case "ARI marked as approved" :
-                            isValid = true
-                        case "TRI marked as approved" :
-                            isValid = true
-                        case "TRI marked as declined" :
-                            isValid = true
-                        case "TCR marked as Declined" :
-                            isValid = true
-                        case "TCR marked as Approved" :
-                            isValid = true
-                        case "EPR | ECR marked as Declined" :
-                            isValid = true
-                        case "EPR | ECR claim marked as Approved" :
-                            isValid = true
-                        case "DO marked as Approved" :
-                            isValid = true
-                        case "DO marked as Declined" :
-                            isValid = true
                             
                         default:
                             isValid = false
@@ -228,7 +272,7 @@ class Helper: UIView {
                 }else{
                     isValid = true
                 }
-            }else{
+            } else {
                 NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
             }
             break
@@ -271,6 +315,22 @@ class Helper: UIView {
         return str! as String
     }
     
+    public static func encodeLocString(url: String) -> String {
+        
+        let newStr = url.replacingOccurrences(of: " ", with: "+")
+        
+        return newStr
+    }
+    
+    
+    public static func encodeWhiteSpaces(url: String) -> String {
+        
+        let newStr = url.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        return newStr
+    }
+    
+    
     public static func showNoInternetMessg() {
         Helper.showMessage(message: "Internet not reachable, Please Try Again")
     }
@@ -292,20 +352,46 @@ class Helper: UIView {
         }
     }
     
-    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isARReport : Bool = false, action:Selector){
+    public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: EmpStateScreen, action:Selector){
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
+        emptyView.buttonText = "CHANGE FILTER"
         
-        if isARReport {
+        switch reports {
+            
+        case EmpStateScreen.isARReport :
             emptyView.message = "No AR Data for the current\nTry by changing filter"
-        } else {
+            
+        case EmpStateScreen.isAPReport :
+            emptyView.message = "No AP Data for the current\nTry by changing filter"
+            
+        case EmpStateScreen.isTrvReq :
+            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
+            emptyView.buttonText = "RELOAD"
+            
+        case EmpStateScreen.isCP :
+            emptyView.message = "No Counterparty Data found \n Try again by reloading"
+            
+        case EmpStateScreen.isSC :
+            emptyView.message = "No Sales Summary Data for the current\nTry by changing filter"
+            
+        case EmpStateScreen.isPC :
+            emptyView.message = "No Purchase Summary Data for the current\nTry by changing filter"
+
+        case EmpStateScreen.isFRA :
+            emptyView.message = "No Funds Receipt Summary Data for the current\nTry by changing filter"
+
+        case EmpStateScreen.isApprovals :
+            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
+
+        default :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
         
-        emptyView.buttonText = "CHANGE FILTER"
         emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
         tb.tableFooterView = emptyView
+        
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
         emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
@@ -313,6 +399,70 @@ class Helper: UIView {
         emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
     }
     
+    
+    //    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, isSC : Bool = false, action:Selector){
+    //
+    //        let emptyView = EmptyState()
+    //        emptyView.image = UIImage(named: "no_result")!
+    //        emptyView.buttonText = "CHANGE FILTER"
+    //
+    //        if isARReport {
+    //            emptyView.message = "No AR Data for the current\nTry by changing filter"
+    //        } else if isAPReport {
+    //            emptyView.message = "No AP Data for the current\nTry by changing filter"
+    //        } else if isTrvReq {
+    //            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
+    //            emptyView.buttonText = "RELOAD"
+    //        } else if isCP {
+    //            emptyView.message = "No Counterparty Data found \n Try again by reloading"
+    //        } else if isSC {
+    //            emptyView.message = "No Sales Summary Data for the current\nTry by changing filter"
+    //        } else {
+    //            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
+    //        }
+    //
+    //
+    //        emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
+    //        tb.tableFooterView = emptyView
+    //
+    //        emptyView.translatesAutoresizingMaskIntoConstraints = false
+    //        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+    //        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+    //        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+    //        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+    //    }
+    
+    
+    //    public static func showNoFilterStateForReports(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, action:Selector){
+    //
+    //        let emptyView = EmptyState()
+    //        emptyView.image = UIImage(named: "no_result")!
+    //        emptyView.buttonText = "CHANGE FILTER"
+    //
+    //        if isARReport {
+    //            emptyView.message = "No AR Data for the current\nTry by changing filter"
+    //        } else if isAPReport {
+    //            emptyView.message = "No AP Data for the current\nTry by changing filter"
+    //        } else if isTrvReq {
+    //            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
+    //            emptyView.buttonText = "RELOAD"
+    //        } else if isCP {
+    //            emptyView.message = "No Counterparty Data found \n Try again by reloading"
+    //        } else {
+    //            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
+    //        }
+    //
+    //
+    //        emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
+    //        tb.tableFooterView = emptyView
+    //
+    //        emptyView.translatesAutoresizingMaskIntoConstraints = false
+    //        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+    //        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+    //        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+    //        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+    //    }
+    //
     
     public static func isFileExists(fileName : String) -> Bool {
         
@@ -379,16 +529,32 @@ class Helper: UIView {
         
     }
     
-    public static func showNoItemState(vc:UIViewController, messg: String = "" , tb:UITableView, action:Selector? = nil) -> Void{
+    public static func showNoFilterStateResized(vc:UIViewController, messg: String = "" , tb:UITableView, action:Selector? = nil) -> Void {
+        
+        let emptyView = EmptyStateView()
+        emptyView.image = UIImage(named: "no_result")!
+        
+        emptyView.message = messg
+      
+        tb.tableFooterView = emptyView
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+    }
+    
+    public static func showNoItemState(vc:UIViewController, messg: String = "" , tb:UITableView, action:Selector? = nil) -> Void {
+        
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "empty_box")!
+        emptyView.message = messg
+        
         if action != nil{
-            emptyView.message = messg
             emptyView.button.isHidden = false
             emptyView.buttonText = "LOAD ITEM"
             emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
         }else{
-            emptyView.message = messg
             emptyView.button.isHidden = true
         }
         tb.tableFooterView = emptyView
@@ -474,6 +640,17 @@ class Helper: UIView {
         return newStr
     }
     
+    public static func convertToDateFormat2(dateString: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone =  TimeZone(abbreviation: "GMT+0:00")
+        let serverDate: Date = dateFormatter.date(from: dateString)! // according to date format your date string
+        return serverDate
+    }
+    
+    
     public static func convertToDate(dateString: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MMM-yyyy"
@@ -508,11 +685,77 @@ class Helper: UIView {
         return newPath
     }
     
-    public static func getOCSFriendlyaPath(path:String) -> String{
+    public static func getOCSFriendlyaPath(path:String) -> String {
         if path.contains(Constant.DROPBOX.DROPBOX_BASE_PATH){
             return path.replacingOccurrences(of: Constant.DROPBOX.DROPBOX_BASE_PATH, with: "")
         }
         return path
+    }
+    
+    public static func getModifiedVoucherPath(path : String) -> String {
+        
+        var newPath = path
+        
+        if path.contains("/") {
+            newPath = path.replacingOccurrences(of: "/", with: "\\", options: .literal, range: nil)
+        }
+        return newPath
+    }
+    
+    public static func getImage(ext : String) -> UIImage? {
+        
+        var selectedImg = UIImage()
+        
+        switch ext {
+        case "pdf": selectedImg = #imageLiteral(resourceName: "pdf")
+            break
+        case "png", "JPG" , "jpg":  selectedImg = #imageLiteral(resourceName: "imageIcon")
+            break
+        case "txt", "xlsx", ".docx" , ".rtf" : selectedImg = #imageLiteral(resourceName: "file")
+            break
+        default:
+            break
+        }
+        return selectedImg
+    }
+    
+    
+    
+    public static func getDataFromFileUrl(fileUrl: URL) -> Data? {
+        
+        var pData = Data()
+        do {
+            let fileData = try Data.init(contentsOf: fileUrl)
+            pData = fileData
+        } catch {
+            print(error)
+        }
+        return pData
+    }
+    
+    
+    
+    public static func parseAndAssignCurrency() -> [String] {
+        
+        let jsonObj = JSON.init(parseJSON:Session.currency)
+        var currArr = [String]()
+        
+        for(_,j):(String,JSON) in jsonObj{
+            let newCurr = j["Currency"].stringValue
+            currArr.append(newCurr)
+        }
+        return currArr
+    }
+    
+    public static func convertToDictionary(text: String) -> [String: Any]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
     }
     
 }
@@ -638,6 +881,11 @@ extension NSObject:Utility{
 //
 //}
 
+var progressTimer: Timer?
+var progressTime = 180.0
+var progressView: UIProgressView?
+var lblTimerTxt = UILabel()
+
 extension UIView{
     
     func loadNib() -> UIView {
@@ -646,7 +894,6 @@ extension UIView{
         let nib = UINib(nibName: nibName, bundle: bundle)
         return nib.instantiate(withOwner: self, options: nil).first as! UIView
     }
-    
     
     
     func removeFromSuperviewWithAnimate(_ animationDuration: TimeInterval = 0.15) {
@@ -726,7 +973,92 @@ extension UIView{
         self.addSubview(blurEffectView)
     }
     
+    func showLoadingWithMessage(messg : String) {
+        
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        let animationView = LOTAnimationView(name: "ocs_loading")
+        animationView.frame = CGRect(x: 0, y: 0, width: 120, height: 100)
+        animationView.loopAnimation = true
+        animationView.play()
+        self.addSubview(blurEffectView)
+        
+        
+        blurEffectView.contentView.addSubview(animationView)
+        animationView.center = blurEffectView.contentView.center
+        
+        
+        lblTimerTxt.frame = CGRect(x: self.frame.origin.x + 30 , y: self.frame.origin.y + 370  , width: self.frame.size.width - 60, height: 70)
+        
+        lblTimerTxt.numberOfLines = 0
+        lblTimerTxt.lineBreakMode = .byWordWrapping
+        lblTimerTxt.contentMode = .center
+        lblTimerTxt.textAlignment = .center
+        lblTimerTxt.textColor = UIColor.white
+        lblTimerTxt.font = UIFont.boldSystemFont(ofSize: 16.0)
+        
+        self.addSubview(lblTimerTxt)
+        
+        progressView = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
+        progressView?.frame = CGRect(x: self.frame.origin.x + 30 , y: lblTimerTxt.frame.origin.y + lblTimerTxt.frame.size.height + 2, width: self.frame.size.width - 60, height: 50)
+        progressView?.trackTintColor = AppColor.universalHeaderColor
+        progressView?.progress = 1.0
+        progressView?.transform = CGAffineTransform(scaleX: 1.0, y: 3.0)
+        progressView?.progressTintColor = UIColor.green
+        progressTimer = Timer.scheduledTimer(timeInterval:1.0, target: self, selector: #selector(updateProgress), userInfo: ["messg" :  messg ], repeats: true)
+        
+        //        self.addSubview(blurEffectView)
+        self.addSubview(progressView!)
+        
+    }
+    
+    @objc func updateProgress() {
+        
+        progressTime -= 1.0
+        progressView?.setProgress(Float(progressTime/180.0), animated: true)
+        print(Float(progressTime/180.0))
+        
+        let dict = progressTimer?.userInfo as! [String : AnyObject]
+        
+        //        let messgTxt =  dict["messg"]  as! String
+        //        let timerTxt  = "\n Estimated Time: " + getTimeString(time: progressTime)
+        //        let attributedString = NSMutableAttributedString(string:messgTxt)
+        //        let attrs = [kCTFontAttributeName : UIFont.boldSystemFont(ofSize: 18)]
+        //        let boldString = NSMutableAttributedString(string: timerTxt, attributes:attrs as [NSAttributedStringKey : Any])
+        //        attributedString.append(boldString)
+        
+        lblTimerTxt.text = dict["messg"]  as! String + "\n Estimated Time: " + getTimeString(time: progressTime)
+        
+        //        lblTimerTxt.attributedText = attributedString
+        
+        if(progressView?.progress == 0.00) {
+            progressTime = 180.0
+            progressTimer?.invalidate()
+            lblTimerTxt.text = ""
+            progressView?.removeFromSuperview()
+        }
+    }
+    
+    
     func hideLoading(){
+        self.subviews.flatMap {  $0 as? UIVisualEffectView }.forEach {
+            $0.removeFromSuperview()
+        }
+    }
+    
+    func hideLoadingProgressLoader(){
+        
+        if progressTimer != nil {
+            progressTimer?.invalidate()
+            progressTimer = nil
+        }
+        progressTime = 180.0
+        lblTimerTxt.text = ""
+        lblTimerTxt.removeFromSuperview()
+        progressView?.removeFromSuperview()
         
         self.subviews.flatMap {  $0 as? UIVisualEffectView }.forEach {
             $0.removeFromSuperview()
@@ -734,7 +1066,17 @@ extension UIView{
     }
     
     
+    func getTimeString(time: TimeInterval) -> String {
+        
+        let minutes = Int(time) / 60
+        let seconds = time - Double(minutes) * 60
+        //        let secondsFraction = seconds - Double(Int(seconds))
+        print("%02i:%02i",minutes,Int(seconds))
+        return String(format:"%02i:%02i",minutes,Int(seconds))
+    }
 }
+
+
 extension String{
     mutating func removingRegexMatches(pattern:String,replaceWith:String = ""){
         do{

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="245" id="qYM-xy-gj0" customClass="BarGraphEntryCell" customModule="mocs" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="245"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qYM-xy-gj0" id="1X5-V5-9jz">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="244.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBe-k5-ArO">
+                        <rect key="frame" x="10" y="4" width="355" height="236.5"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hQV-UY-jIB" customClass="BarChartView" customModule="Charts">
+                                <rect key="frame" x="8" y="8" width="339" height="190.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVM-ok-ARb">
+                                <rect key="frame" x="8" y="202.5" width="339" height="30"/>
+                                <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="hfL-U5-LQo"/>
+                                </constraints>
+                                <state key="normal" title="Pending Approvals for Company">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="hQV-UY-jIB" secondAttribute="trailing" constant="8" id="90v-cT-Rc6"/>
+                            <constraint firstItem="PVM-ok-ARb" firstAttribute="leading" secondItem="cBe-k5-ArO" secondAttribute="leading" constant="8" id="E2a-IM-z5e"/>
+                            <constraint firstItem="PVM-ok-ARb" firstAttribute="top" secondItem="hQV-UY-jIB" secondAttribute="bottom" constant="4" id="MUH-YM-Fv8"/>
+                            <constraint firstAttribute="trailing" secondItem="PVM-ok-ARb" secondAttribute="trailing" constant="8" id="RcY-c1-pPR"/>
+                            <constraint firstItem="hQV-UY-jIB" firstAttribute="leading" secondItem="cBe-k5-ArO" secondAttribute="leading" constant="8" id="VPA-HB-j4r"/>
+                            <constraint firstItem="hQV-UY-jIB" firstAttribute="top" secondItem="cBe-k5-ArO" secondAttribute="top" constant="8" id="dyL-EV-P9W"/>
+                            <constraint firstAttribute="bottom" secondItem="PVM-ok-ARb" secondAttribute="bottom" constant="4" id="im2-EE-sFY"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="5"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="cBe-k5-ArO" firstAttribute="leading" secondItem="1X5-V5-9jz" secondAttribute="leading" constant="10" id="LjE-UA-cEQ"/>
+                    <constraint firstAttribute="trailing" secondItem="cBe-k5-ArO" secondAttribute="trailing" constant="10" id="gxE-og-rpH"/>
+                    <constraint firstAttribute="bottom" secondItem="cBe-k5-ArO" secondAttribute="bottom" constant="4" id="iGq-8o-fas"/>
+                    <constraint firstItem="cBe-k5-ArO" firstAttribute="top" secondItem="1X5-V5-9jz" secondAttribute="top" constant="4" id="ueg-g6-ehT"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="barChartVw" destination="hQV-UY-jIB" id="mHf-D3-sFJ"/>
+                <outlet property="outrVw" destination="cBe-k5-ArO" id="k7s-dU-6ur"/>
+            </connections>
+            <point key="canvasLocation" x="48.799999999999997" y="130.88455772113943"/>
+        </tableViewCell>
+    </objects>
+</document>

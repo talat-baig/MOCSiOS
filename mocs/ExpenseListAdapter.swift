@@ -47,7 +47,13 @@ class ExpenseListAdapter: UITableViewCell {
         lblExpDate.text = data.expDate
         lblCategory.text = data.expCategory
         lblVendor.text = data.expVendor
-        lblPayment.text = String.init(format: "%@ %@ by %@", data.expCurrency,data.expAmount,data.expPaymentType)
+        
+        if data.expAmount == "" {
+            lblPayment.text = "-"
+        } else {
+            lblPayment.text = String.init(format: "%@ %@ by %@", data.expCurrency,data.expAmount,data.expPaymentType)
+        }
+        
         lblComments.text = data.expComments
         self.data = data
     }

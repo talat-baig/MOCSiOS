@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 class TRIData{
     var refId:String = String()
     var company:String = String()

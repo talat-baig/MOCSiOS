@@ -6,8 +6,8 @@
 //  Copyright © 2018 Rv. All rights reserved.
 //
 
-import UIKit
-
-class ECRClaimData: NSObject {
-
-}
+//import UIKit
+//
+//class ECRClaimData: NSObject {
+//
+//}

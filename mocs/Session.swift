@@ -15,14 +15,24 @@ class Session {
         static let USER = "user"
         static let EMAIL = "email"
         static let COMPANY = "company"
+//        static let PRODUCTS = "products"
+
         static let LOCATION = "location"
         static let DEPARTMENT = "department"
+        static let EMPCODE = "employeeCode"
+        static let DESIGNATION = "designation"
+        static let REPORTMNGR = "reportingManager"
+
         static let DBTOKEN = "dbtoken"
         static let CURRENCY = "currency"
         static let EXPCATEGORY = "category"
         static let EXPSUBCATEGORY = "subcategory"
         static let NEWS = "news"
         static let FILTERLIST = "filterlist"
+        static let COMPANIES = "companylist"
+        static let CITIES = "cities"
+
+
     }
     
     public static var login: Bool{
@@ -134,6 +144,61 @@ class Session {
         }
     }
     
+    public static var reportMngr: String{
+        get{
+            return UserDefaults.standard.object(forKey: Veriable.REPORTMNGR) as? String ?? ""
+        }
+        set(reportMngr){
+            UserDefaults.standard.set(reportMngr, forKey: Veriable.REPORTMNGR)
+        }
+    }
     
+    
+    public static var designation: String{
+        get{
+            return UserDefaults.standard.object(forKey: Veriable.DESIGNATION) as? String ?? ""
+        }
+        set(designation){
+            UserDefaults.standard.set(designation, forKey: Veriable.DESIGNATION)
+        }
+    }
+    
+    
+    public static var empCode: String{
+        get{
+            return UserDefaults.standard.object(forKey: Veriable.EMPCODE) as? String ?? ""
+        }
+        set(empCode){
+            UserDefaults.standard.set(empCode, forKey: Veriable.EMPCODE)
+        }
+    }
+    
+    public static var companies: String {
+        get{
+            return UserDefaults.standard.string(forKey: Veriable.COMPANIES) ?? ""
+        }
+        set(companies){
+            UserDefaults.standard.set(currency, forKey: Veriable.COMPANIES)
+        }
+    }
+    
+    public static var cities: String {
+        get{
+            return UserDefaults.standard.string(forKey: Veriable.CITIES) ?? ""
+        }
+        set(cities){
+            UserDefaults.standard.set(cities, forKey: Veriable.CITIES)
+        }
+    }
+    
+    
+//    public static var productList: String{
+//        get{
+//            return UserDefaults.standard.object(forKey: Veriable.PRODUCTS) as? String ?? ""
+//        }
+//        set(productList){
+//            UserDefaults.standard.set(company, forKey: Veriable.PRODUCTS)
+//        }
+//    }
 }
 

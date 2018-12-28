@@ -11,9 +11,7 @@ import UIKit
 class LevelZeroCell: UITableViewCell {
     
     @IBOutlet weak var lblTitle: UILabel!
-    
     @IBOutlet weak var imgIcon: UIImageView!
-    
     @IBOutlet weak var imgArrow: UIImageView!
     
     override func awakeFromNib() {
@@ -24,7 +22,7 @@ class LevelZeroCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setupCellViews(title : String, image : UIImage){
+    func setupCellViews(title : String, image : UIImage) {
         lblTitle.text = title
         imgIcon.image = image
     }

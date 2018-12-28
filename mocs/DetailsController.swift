@@ -52,7 +52,7 @@ class DetailsController: UIViewController {
     }
  
     /// Method to parse json response data and assign to UI elements
-    func parseResponse(response:Data){
+    func parseResponse(response:Data) {
         
         let jsonObj = JSON(response)
         for(_,j):(String,JSON) in jsonObj{

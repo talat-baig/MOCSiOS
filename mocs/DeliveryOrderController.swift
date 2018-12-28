@@ -118,11 +118,13 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate,fil
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
-                    
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                 }
+                
             }))
         }else{
             Helper.showNoInternetMessg()
@@ -227,7 +229,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate,fil
 extension DeliveryOrderController:UITableViewDelegate, UITableViewDataSource, onButtonClickListener{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 311
+        return 318
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

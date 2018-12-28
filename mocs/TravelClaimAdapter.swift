@@ -42,7 +42,6 @@ class TravelClaimAdapter: UITableViewCell {
     
     weak var data:TravelClaimData!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -52,7 +51,7 @@ class TravelClaimAdapter: UITableViewCell {
         vwOuter.layer.shadowColor = UIColor.black.cgColor
     }
     
-    func setDataToView(data:TravelClaimData){
+    func setDataToView(data:TravelClaimData) {
         headRefID.text = data.headRef
         headStatus.text = "(" + data.headStatus + ")"
         companyName.text = data.companyName
@@ -64,6 +63,7 @@ class TravelClaimAdapter: UITableViewCell {
         totalAmount.text = data.totalAmount
         self.data = data
     }
+    
     @IBAction func moreClick(_ sender: UIButton) {
         let optionMenu = UIAlertController(title: nil, message: data.headRef, preferredStyle: .actionSheet)
        

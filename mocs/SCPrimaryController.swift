@@ -48,7 +48,7 @@ class SCPrimaryController: UIViewController, IndicatorInfoProvider {
             company.text! = j["Company Name"].stringValue
             location.text! = j["Location"].stringValue
             businessUnit.text! = j["Business Vertical"].stringValue
-            commodity.text != j["Commodity"].stringValue
+            commodity.text! = j["Commodity"].stringValue
             supplier.text! = j["Supplier"].stringValue
             cpid.text! = j["CP Id"].stringValue
             trader.text! = j["Trader"].stringValue

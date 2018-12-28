@@ -8,7 +8,8 @@
 
 import Foundation
 
-class TravelClaimData{
+class TravelClaimData {
+    
     var headRef: String = ""
     var headStatus: String = ""
     var employeeName: String = ""

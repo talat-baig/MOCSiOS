@@ -17,9 +17,11 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
     var refreshControl: UIRefreshControl = UIRefreshControl()
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var srchBar: UISearchBar!
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
 
     override func viewDidLoad() {
@@ -58,11 +60,13 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         self.populateList()
     }
     
-    @objc func populateList(){
+    @objc func populateList() {
         var newData :[EPRData] = []
         if internetStatus != .notReachable {
             let url = String.init(format: Constant.EPR.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()))
+                                  Helper.encodeURL(url: FilterViewController.getFilterString(noBU: true)))
+            
+            print(url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -90,11 +94,13 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                         self.newArray = newData
                         self.arrayList = newData
                         self.tableView.tableFooterView = nil
-//                        self.tableView.reloadData()
+
                     }else{
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                     }
                      self.tableView.reloadData()
+                } else {
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
@@ -107,6 +113,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         if isApprove {
             self.approveClaim(data:data as! EPRData, comment : text)
+            myView.removeFromSuperviewWithAnimate()
         } else {
             
             if text == "" || text == "Enter Comment" {
@@ -231,7 +238,7 @@ extension EmployeePaymentController: UITableViewDelegate, UITableViewDataSource,
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+        return 330
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

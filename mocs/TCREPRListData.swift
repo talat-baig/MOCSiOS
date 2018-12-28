@@ -11,7 +11,7 @@ import UIKit
 class TCREPRListData: NSObject {
 
     var eprRefId = String()
-    var eprAmt = String()
+    var eprAmt = Float()
     var isSelect : Bool = false
     
 }

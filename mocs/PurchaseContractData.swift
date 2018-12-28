@@ -8,6 +8,7 @@
 
 import Foundation
 class PurchaseContractData {
+    
     var RefNo:String = ""
     var company:String = ""
     var location:String = ""

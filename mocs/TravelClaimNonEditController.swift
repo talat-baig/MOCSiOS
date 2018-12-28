@@ -12,7 +12,6 @@ import SwiftyJSON
 class TravelClaimNonEditController: UIViewController, IndicatorInfoProvider, notifyChilds_UC {
    
     
-    
     var response:Data?
     
     @IBOutlet weak var lblCompany: UILabel!
