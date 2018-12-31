@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		44B0AA5BF079679D6CC0561D /* Pods_mocs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF83B7D20C9A312EBD7A8BD /* Pods_mocs.framework */; };
-		5700A81121D4DE06008DBC17 /* ApprovalFilterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5700A81021D4DE06008DBC17 /* ApprovalFilterData.swift */; };
+		5700A81121D4DE06008DBC17 /* PASummaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5700A81021D4DE06008DBC17 /* PASummaryData.swift */; };
 		5706B8D320A8843300AF4228 /* FilterHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5706B8D220A8843300AF4228 /* FilterHeaderView.xib */; };
 		5706B8D720A8992000AF4228 /* FilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5706B8D620A8992000AF4228 /* FilterHeaderView.swift */; };
 		571065F620FE1693006E7864 /* CargoInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571065F420FE1693006E7864 /* CargoInfoCell.swift */; };
@@ -21,10 +21,6 @@
 		5712D98F21491AD10083F8EF /* TravelRequestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5712D98E21491AD10083F8EF /* TravelRequestData.swift */; };
 		571493B921B6472200DD332C /* OpenWunderlistController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571493B821B6472200DD332C /* OpenWunderlistController.swift */; };
 		5715D48F21B7E65E0042C0CB /* SummaryForApprovalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5715D48E21B7E65E0042C0CB /* SummaryForApprovalController.swift */; };
-		5715D49221B7EFDE0042C0CB /* PieChartEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5715D49021B7EFDE0042C0CB /* PieChartEntryCell.swift */; };
-		5715D49321B7EFDE0042C0CB /* PieChartEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5715D49121B7EFDE0042C0CB /* PieChartEntryCell.xib */; };
-		5715D49621B7EFF50042C0CB /* BarGraphEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5715D49421B7EFF50042C0CB /* BarGraphEntryCell.swift */; };
-		5715D49721B7EFF50042C0CB /* BarGraphEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5715D49521B7EFF50042C0CB /* BarGraphEntryCell.xib */; };
 		5719F2E0216E13790042BDBF /* TravelTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5719F2DF216E13790042BDBF /* TravelTicket.swift */; };
 		571B23D721BE38C300D4A1A7 /* SalesSummary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 571B23D621BE38C300D4A1A7 /* SalesSummary.storyboard */; };
 		571B23DE21BE414700D4A1A7 /* SSOverallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571B23DC21BE414700D4A1A7 /* SSOverallCell.swift */; };
@@ -140,6 +136,10 @@
 		57523DDD2164D9430053DE66 /* GroupCompany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57523DDC2164D9430053DE66 /* GroupCompany.swift */; };
 		57531D5B2111C73400294EBD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 57531D5A2111C73300294EBD /* GoogleService-Info.plist */; };
 		5756B36A20907E5D006753E3 /* TCREPRListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756B36920907E5D006753E3 /* TCREPRListData.swift */; };
+		5756DE8421D6239900C355EE /* PieChartEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756DE8221D6239600C355EE /* PieChartEntryCell.swift */; };
+		5756DE8521D6239900C355EE /* PieChartEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5756DE8321D6239800C355EE /* PieChartEntryCell.xib */; };
+		5756DE8821D6334D00C355EE /* BarGraphEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5756DE8621D6334C00C355EE /* BarGraphEntryCell.swift */; };
+		5756DE8921D6334D00C355EE /* BarGraphEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5756DE8721D6334D00C355EE /* BarGraphEntryCell.xib */; };
 		5758A5FE20D105990064B69D /* EmpClaimExpenseAddEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5758A5FD20D105990064B69D /* EmpClaimExpenseAddEditVC.swift */; };
 		5758A60220D1079C0064B69D /* ECRBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5758A60120D1079C0064B69D /* ECRBaseViewController.swift */; };
 		5758A60420D114E00064B69D /* ECRExpenseListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5758A60320D114E00064B69D /* ECRExpenseListVC.swift */; };
@@ -361,7 +361,7 @@
 
 /* Begin PBXFileReference section */
 		0A74E773C04090EEA6384C54 /* Pods-mocs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mocs.debug.xcconfig"; path = "Pods/Target Support Files/Pods-mocs/Pods-mocs.debug.xcconfig"; sourceTree = "<group>"; };
-		5700A81021D4DE06008DBC17 /* ApprovalFilterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalFilterData.swift; sourceTree = "<group>"; };
+		5700A81021D4DE06008DBC17 /* PASummaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PASummaryData.swift; sourceTree = "<group>"; };
 		5706B8D220A8843300AF4228 /* FilterHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterHeaderView.xib; sourceTree = "<group>"; };
 		5706B8D620A8992000AF4228 /* FilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterHeaderView.swift; sourceTree = "<group>"; };
 		571065F420FE1693006E7864 /* CargoInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CargoInfoCell.swift; sourceTree = "<group>"; };
@@ -374,10 +374,6 @@
 		5712D98E21491AD10083F8EF /* TravelRequestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestData.swift; sourceTree = "<group>"; };
 		571493B821B6472200DD332C /* OpenWunderlistController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWunderlistController.swift; sourceTree = "<group>"; };
 		5715D48E21B7E65E0042C0CB /* SummaryForApprovalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryForApprovalController.swift; sourceTree = "<group>"; };
-		5715D49021B7EFDE0042C0CB /* PieChartEntryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartEntryCell.swift; sourceTree = "<group>"; };
-		5715D49121B7EFDE0042C0CB /* PieChartEntryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PieChartEntryCell.xib; sourceTree = "<group>"; };
-		5715D49421B7EFF50042C0CB /* BarGraphEntryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarGraphEntryCell.swift; sourceTree = "<group>"; };
-		5715D49521B7EFF50042C0CB /* BarGraphEntryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BarGraphEntryCell.xib; sourceTree = "<group>"; };
 		5719F2DF216E13790042BDBF /* TravelTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelTicket.swift; sourceTree = "<group>"; };
 		571B23D621BE38C300D4A1A7 /* SalesSummary.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SalesSummary.storyboard; sourceTree = "<group>"; };
 		571B23DC21BE414700D4A1A7 /* SSOverallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSOverallCell.swift; sourceTree = "<group>"; };
@@ -493,6 +489,10 @@
 		57523DDC2164D9430053DE66 /* GroupCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCompany.swift; sourceTree = "<group>"; };
 		57531D5A2111C73300294EBD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5756B36920907E5D006753E3 /* TCREPRListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCREPRListData.swift; sourceTree = "<group>"; };
+		5756DE8221D6239600C355EE /* PieChartEntryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PieChartEntryCell.swift; sourceTree = "<group>"; };
+		5756DE8321D6239800C355EE /* PieChartEntryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PieChartEntryCell.xib; sourceTree = "<group>"; };
+		5756DE8621D6334C00C355EE /* BarGraphEntryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarGraphEntryCell.swift; sourceTree = "<group>"; };
+		5756DE8721D6334D00C355EE /* BarGraphEntryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BarGraphEntryCell.xib; sourceTree = "<group>"; };
 		5758A5FD20D105990064B69D /* EmpClaimExpenseAddEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmpClaimExpenseAddEditVC.swift; sourceTree = "<group>"; };
 		5758A60120D1079C0064B69D /* ECRBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECRBaseViewController.swift; sourceTree = "<group>"; };
 		5758A60320D114E00064B69D /* ECRExpenseListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECRExpenseListVC.swift; sourceTree = "<group>"; };
@@ -1115,6 +1115,10 @@
 		8443BFCE203AB89900F09DE0 /* Approval */ = {
 			isa = PBXGroup;
 			children = (
+				5756DE8621D6334C00C355EE /* BarGraphEntryCell.swift */,
+				5756DE8721D6334D00C355EE /* BarGraphEntryCell.xib */,
+				5756DE8221D6239600C355EE /* PieChartEntryCell.swift */,
+				5756DE8321D6239800C355EE /* PieChartEntryCell.xib */,
 				571246D8215232040071A29B /* TravelRequest */,
 				573642E22134027900664771 /* CounterpartyApproval */,
 				577A81A720EF80E00006EF0B /* ReleaseOrder */,
@@ -1171,10 +1175,6 @@
 		84759F5420442EE1002F1D7C /* SalesContract */ = {
 			isa = PBXGroup;
 			children = (
-				5715D49021B7EFDE0042C0CB /* PieChartEntryCell.swift */,
-				5715D49121B7EFDE0042C0CB /* PieChartEntryCell.xib */,
-				5715D49421B7EFF50042C0CB /* BarGraphEntryCell.swift */,
-				5715D49521B7EFF50042C0CB /* BarGraphEntryCell.xib */,
 				84759F5720442F13002F1D7C /* SalesContract.storyboard */,
 				5715D48E21B7E65E0042C0CB /* SummaryForApprovalController.swift */,
 				84759F5D20443558002F1D7C /* SalesContractController.swift */,
@@ -1367,7 +1367,7 @@
 				5724DBD12084BD0C00A27237 /* TaskDetails.swift */,
 				576923BB208487C80069D0A6 /* TaskData.swift */,
 				57DA86CB207C9D7C00B1F414 /* FilterData.swift */,
-				5700A81021D4DE06008DBC17 /* ApprovalFilterData.swift */,
+				5700A81021D4DE06008DBC17 /* PASummaryData.swift */,
 				5735F28C207606C900A0A640 /* ARInstrumentsData.swift */,
 				5735F2812074FDD600A0A640 /* ARCounterPartyData.swift */,
 				5727DD5F2074E3A100F4A4A3 /* ARListData.swift */,
@@ -1462,7 +1462,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5715D49321B7EFDE0042C0CB /* PieChartEntryCell.xib in Resources */,
 				57EAD4DF21366E4D003C9910 /* EnterKYCDetailsView.xib in Resources */,
 				B31BE46F2013D04D00F55648 /* LaunchScreen.storyboard in Resources */,
 				571246D7215231FB0071A29B /* TravelReqApproval.storyboard in Resources */,
@@ -1471,6 +1470,7 @@
 				57E2370A21831C860071D285 /* InvoiceAmtCVCell.xib in Resources */,
 				846F26432058D9A700B3F873 /* TradeInvoice.storyboard in Resources */,
 				57BB7F5321BFD99700FF70FF /* SalesProductCell.xib in Resources */,
+				5756DE8521D6239900C355EE /* PieChartEntryCell.xib in Resources */,
 				57CCD9F32071F0A20045E505 /* UploadFileCustomView.xib in Resources */,
 				572CB5F020CFB1D300DE9E30 /* EmployeeClaim.storyboard in Resources */,
 				5783B2AE217E005B00D19A80 /* AccountsPayable.storyboard in Resources */,
@@ -1481,6 +1481,7 @@
 				57F0348C207F815E00DE5056 /* CompanyFilterCell.xib in Resources */,
 				577A81A620EF80D90006EF0B /* ReleaseOrder.storyboard in Resources */,
 				84BDABAE2048075600D0B617 /* TCR.storyboard in Resources */,
+				5756DE8921D6334D00C355EE /* BarGraphEntryCell.xib in Resources */,
 				573487EE2064E46500D2C7F0 /* TopHeaderView.xib in Resources */,
 				842515682056443C00130073 /* AdminReceive.storyboard in Resources */,
 				571065F720FE1693006E7864 /* CargoInfoCell.xib in Resources */,
@@ -1493,7 +1494,6 @@
 				84759F5A20443032002F1D7C /* ContractCell.xib in Resources */,
 				5738C0FC21996657002CA8D3 /* AvblReleases.storyboard in Resources */,
 				571B23D721BE38C300D4A1A7 /* SalesSummary.storyboard in Resources */,
-				5715D49721B7EFF50042C0CB /* BarGraphEntryCell.xib in Resources */,
 				84279FAD205FA0F1006F7BEC /* ARChart.xib in Resources */,
 				572ED50C20A1885800CF2EF1 /* WC_HeaderView.xib in Resources */,
 				84214E622057A91B00A6588D /* Employee.storyboard in Resources */,
@@ -1673,6 +1673,7 @@
 				571DE866213514D400AE6B72 /* KYCViewController.swift in Sources */,
 				57CC7F2021ABCD6D0021538D /* ROWHRData.swift in Sources */,
 				575005E3214B815D0004A1CE /* ItineraryListCell.swift in Sources */,
+				5756DE8821D6334D00C355EE /* BarGraphEntryCell.swift in Sources */,
 				84D0C4D9205159D2000BED53 /* EPRPrimaryController.swift in Sources */,
 				5735F29520765A7F00A0A640 /* SendEmailHeaderView.swift in Sources */,
 				577A81AF20EF895E0006EF0B /* ROProductViewController.swift in Sources */,
@@ -1725,6 +1726,7 @@
 				571B23ED21BE717400D4A1A7 /* SalesSummaryCell.swift in Sources */,
 				84D0C4BD204D0C24000BED53 /* TCRController.swift in Sources */,
 				84251570205684EA00130073 /* ARIViewController.swift in Sources */,
+				5756DE8421D6239900C355EE /* PieChartEntryCell.swift in Sources */,
 				575CA3AF21BE8C8D00D4B56F /* SalesSummData.swift in Sources */,
 				57D731882186F19F000589F8 /* APInvoiceCell.swift in Sources */,
 				571DE87E2135797A00AE6B72 /* InitiationViewController.swift in Sources */,
@@ -1816,7 +1818,6 @@
 				84214E642057A97100A6588D /* EmployeeController.swift in Sources */,
 				576923BC208487C80069D0A6 /* TaskData.swift in Sources */,
 				5758A60220D1079C0064B69D /* ECRBaseViewController.swift in Sources */,
-				5715D49621B7EFF50042C0CB /* BarGraphEntryCell.swift in Sources */,
 				B322700D2015A5C8005FA3B8 /* FilterTransactionManager.swift in Sources */,
 				84D0C4D520501C1D000BED53 /* EPRData.swift in Sources */,
 				846F26492058DC2300B3F873 /* TradeInvoiceAdapter.swift in Sources */,
@@ -1846,11 +1847,10 @@
 				5730377A216C87AA0058ED9A /* TTItineraryListData.swift in Sources */,
 				8425156A205646A500130073 /* AdminReceiveController.swift in Sources */,
 				57CE31D42080727B008319BA /* FilterCollectionViewCell.swift in Sources */,
-				5700A81121D4DE06008DBC17 /* ApprovalFilterData.swift in Sources */,
+				5700A81121D4DE06008DBC17 /* PASummaryData.swift in Sources */,
 				84D0C4DF20515F3A000BED53 /* EPRPaymentController.swift in Sources */,
 				572FABC3215B73AC00E6115B /* TravelTicketCell.swift in Sources */,
 				572FABC1215B5F9000E6115B /* TravelTicketController.swift in Sources */,
-				5715D49221B7EFDE0042C0CB /* PieChartEntryCell.swift in Sources */,
 				57CCD9ED2071EEBD0045E505 /* TravelClaimEditAddController.swift in Sources */,
 				571DE87A213576DF00AE6B72 /* LegalInfoController.swift in Sources */,
 				57DB8C0B214934870007D82A /* ItineraryListController.swift in Sources */,

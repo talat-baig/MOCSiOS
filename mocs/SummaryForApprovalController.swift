@@ -15,10 +15,8 @@ import SwiftyJSON
 class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFilterDelegate {
     
     var pieDataEntry:[PieChartDataEntry] = []
-    var barDataEntry: [BarChartDataEntry] = []
-    var filterObj : [ApprovalFilterData] = []
-    //    var compName: [String] = []
-    //    var bUnit: [String] = []
+
+    var paSummObj : [PASummaryData] = []
     
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -29,8 +27,6 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.tableView.register(UINib(nibName: "SSChartCell", bundle: nil), forCellReuseIdentifier: "bargraph")
         
         self.navigationController?.isNavigationBarHidden = true
         
@@ -46,19 +42,24 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
         vwTopHeader.lblTitle.text = "Delivery Order"
         vwTopHeader.lblSubTitle.isHidden = true
         
+        self.tableView.register(UINib(nibName: "BarGraphEntryCell", bundle: nil), forCellReuseIdentifier: "barcell")
+        self.tableView.register(UINib(nibName: "PieChartEntryCell", bundle: nil), forCellReuseIdentifier: "piecell")
+        
         self.fecthAllSummaryData()
-        self.tableView.reloadData()
     }
     
     
     func cancelFilter(filterString: String) {
-        self.fecthAllSummaryData()
+        pieDataEntry.removeAll()
+        self.paSummObj.removeAll()
     }
     
     func applyFilter(filterString: String) {
         
         if !pieDataEntry.isEmpty  {
             pieDataEntry.removeAll()
+            self.paSummObj.removeAll()
+
         }
         self.fecthAllSummaryData()
     }
@@ -103,7 +104,7 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
                                     Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
-                                    self.parseAndAssignChartData(respJson: url1Resp)
+                                    self.parsePieChartData(respJson: url1Resp)
                                     self.parseBarChartData(respJson: url2Resp)
                                     
                                     self.tableView.tableFooterView = nil
@@ -134,17 +135,15 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
     }
     
     func resetData() {
-        self.barDataEntry.removeAll()
-        self.filterObj.removeAll()
+        self.paSummObj.removeAll()
         self.pieDataEntry.removeAll()
     }
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
     }
-    
-    //  {"Company Code":25,"Company":"Phoenix Global DMCC","Location":"Dubai","Pending Contracts":17}]
-    func parseAndAssignChartData(respJson : JSON) {
+ 
+    func parsePieChartData(respJson : JSON) {
         
         let jsonArr = respJson.arrayObject as! [[String:AnyObject]]
         self.pieDataEntry.removeAll()
@@ -162,58 +161,76 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
         }
     }
     
-    //    {
-    //    "Company Code":25,
-    //    "Company":"Phoenix Global DMCC",
-    //    "Location":"Dubai",
-    //    "CompanyDetails":"[{\"Business Vertical.\":\" Rice\",\"Pending Contract\":\" 17\"}]"
-    //    }
-    //    {
-    //    "Company Code":25,
-    //    "Company":"Phoenix Global DMCC",
-    //    "Location":"Dubai",
-    //    "CompanyDetails":"[{"Business Vertical.":" Rice","Pending Contract":" 17"}]"
-    //    }
-    
+ 
     // chartData
     func parseBarChartData(respJson : JSON) {
         
         let jsonArr = respJson.arrayObject as! [[String:AnyObject]]
-        self.barDataEntry.removeAll()
-        self.filterObj.removeAll()
+        self.paSummObj.removeAll()
 
         if jsonArr.count > 0 {
-            let newFilter = ApprovalFilterData()
+            
             
             for i in 0..<jsonArr.count {
-                let compName = respJson[i]["Company"].stringValue //Comp Name
-                let compLoc = respJson[i]["Location"].stringValue //Comp Location
-                let compDetails = respJson[i]["CompanyDetails"].stringValue
-                
-                let newCompDetailJson = JSON.init(parseJSON: compDetails)
-                let compDetailsArr = newCompDetailJson.arrayValue
+            
+                let pcSummry = PASummaryData()
                 
                 
-                for item in compDetailsArr {
+
+                let cName = respJson[i]["Company"].stringValue //Comp Name
+
+                
+                ///////***************************////////
+                let bUnitStr = respJson[i]["BusinessUnit"].stringValue // bUnit
+                let strArr = bUnitStr.components(separatedBy: ",")
+                
+                var arrFilterString : [String] = []
+                var arrBName : [String] = []
+                var arrBVal : [String] = []
+                var arrDataEntry : [BarChartDataEntry] = []
+
+                for k in 0..<strArr.count {
                     
-                    let bussVertical = item["Business Vertical."].stringValue //BU
-                    let pendApproval = item["Pending Contract"].stringValue //PA
+                    let buArr = strArr[k].components(separatedBy: "+")
                     
-                    let dataEntry = BarChartDataEntry(x: Double(i), y: Double(pendApproval) ?? 0 )
-                    self.barDataEntry.append(dataEntry)
+                    let bName = buArr[0]
+                    let pndApprvl = buArr[1]
+                    let pa = Double(pndApprvl)
                     
-                    newFilter.bUnit = bussVertical
+                    arrBName.append(bName)
+                    arrBVal.append(pndApprvl)
+                    
+                    let dataEntry = BarChartDataEntry(x: Double(k), y: pa ?? 0)
+                    arrDataEntry.append(dataEntry)
+
                 }
                 
-                newFilter.compName = compName
-                newFilter.location = compLoc
-                self.filterObj.append(newFilter)
+                ///////***************************////////
+                let selFilterStr = respJson[i]["SelectedFilter"].stringValue // Filter String in 25+Dubai+06 format
+                let fltrStr = selFilterStr.components(separatedBy: ",")
+                pcSummry.filterString = fltrStr
+                
+                
+                
+                pcSummry.compName = cName
+                pcSummry.bNames = arrBName
+                pcSummry.bValues = arrBVal
+                pcSummry.barDataEntry = arrDataEntry
+
+                self.paSummObj.append(pcSummry)
             }
         }
     }
     
-    
-    
+
+    @objc func openPendingApprovals(sender:UIButton) {
+        
+        let doVC = UIStoryboard(name: "DeliveryOrder", bundle: nil).instantiateViewController(withIdentifier: "DeliveryOrderController") as! DeliveryOrderController
+        
+        doVC.filterString = self.paSummObj[sender.tag].filterString.joined(separator: ",")
+        self.navigationController?.pushViewController(doVC, animated: true)
+        
+    }
     
 }
 
@@ -222,27 +239,19 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
 extension SummaryForApprovalController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if pieDataEntry.count > 0 || filterObj.count > 0 {
+        if self.paSummObj.count > 0  {
             tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
+            return (self.paSummObj.count + 1)
         } else {
             tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
-        }
-        
-        switch section {
-        case 0: return pieDataEntry.count
-            
-        case 1: return filterObj.count
-            
-        default:
             return 0
         }
+        
         
     }
     
@@ -250,11 +259,9 @@ extension SummaryForApprovalController: UITableViewDataSource {
         
         var height : CGFloat = 0.0
         
-        switch indexPath.section {
+        switch indexPath.row {
             
-        case 0: height = 320
-            break
-        case 1:  height = 300
+        case 0: height = 300
             break
             
         default: height = 320
@@ -265,16 +272,24 @@ extension SummaryForApprovalController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "pieentry") as! ARChartCell
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "piecell") as! PieChartEntryCell
             cell.setDataToViews(dataEntry: self.pieDataEntry, strTxt: "Pending Approvals [Company-wise]")
             cell.layer.masksToBounds = true
+            cell.selectionStyle = .none
             cell.layer.cornerRadius = 5
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "bargraph") as! SSChartCell
-            let titleStr = String(format:"Pending Approvals for %@ [Product-wise]",self.filterObj[indexPath.row].compName)
-            cell.setupDataToViews(dataEntry: self.barDataEntry, arrLabel: [self.filterObj[indexPath.row].bUnit], arrValues: [], lblTitle: titleStr )
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "barcell") as! BarGraphEntryCell
+            cell.btnOpenPA.tag = indexPath.row - 1
+            
+            cell.btnOpenPA.addTarget(self, action: #selector(self.openPendingApprovals(sender:)), for: UIControlEvents.touchUpInside)
+
+            let titleStr = String(format:"Pending Approvals for %@ [Product-wise]",self.paSummObj[indexPath.row - 1].compName)
+
+            cell.setupDataToViews(dataEntry: self.paSummObj[indexPath.row - 1 ].barDataEntry, arrLabel: self.paSummObj[indexPath.row - 1].bNames, arrValues: self.paSummObj[indexPath.row - 1].bValues, lblTitle: titleStr )
+            
             cell.selectionStyle = .none
             return cell
         }
@@ -285,6 +300,8 @@ extension SummaryForApprovalController: UITableViewDataSource {
 extension SummaryForApprovalController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
         
     }
 }

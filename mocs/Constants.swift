@@ -21,7 +21,6 @@ struct ApiUrl {
     
     // UAT
     static let URL = "http://172.16.13.12:85/api"
-        //static let URL = "http://172.16.12.12/OCSWebApi/api"
 }
 
 
@@ -183,8 +182,6 @@ struct Constant
         static let GET_PAYMENT_REASON =  ApiUrl.URL + "/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
         
         static let ECR_EPR_ADVANCES =  "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
-        
-        
     }
     
     struct AR {
@@ -680,8 +677,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-//                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

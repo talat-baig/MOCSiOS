@@ -37,7 +37,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
 
         self.tableView.register(UINib(nibName: "SSOverallCell", bundle: nil), forCellReuseIdentifier: "overallcell")
         
-        self.tableView.register(UINib(nibName: "c", bundle: nil), forCellReuseIdentifier: "chartcell")
+        self.tableView.register(UINib(nibName: "SSChartCell", bundle: nil), forCellReuseIdentifier: "chartcell")
         
         self.tableView.register(UINib(nibName: "ARChart", bundle: nil), forCellReuseIdentifier: "cell")
 
@@ -253,19 +253,26 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
         self.barDataEntry.removeAll()
         self.cpNameArr.removeAll()
         self.cpValuesArr.removeAll()
+        
+
 
         if jsonArr.count > 0 {
 
             for i in 0..<jsonArr.count {
                 let name = respJson[i]["CounterParty Name"].stringValue
                 let qtyStr = respJson[i]["Product Quantity"].stringValue
-                let qty = Double(qtyStr)
+//                let qty = Double(qtyStr)
 
+                let editedText = qtyStr.replacingOccurrences(of: ",", with: "")
+                let qty = Double(editedText)
+                
+                let modifiedVal = qtyStr.components(separatedBy: ".").first
+                
                 let dataEntry = BarChartDataEntry(x: Double(i), y: Double(qty!) )
 
                 self.barDataEntry.append(dataEntry)
                 self.cpNameArr.append(name)
-                self.cpValuesArr.append(qtyStr)
+                self.cpValuesArr.append(modifiedVal ?? "0")
             }
         }
     }

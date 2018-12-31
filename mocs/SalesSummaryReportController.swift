@@ -297,13 +297,18 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
             for i in 0..<jsonArr.count {
                 let name = respJson[i]["CounterParty Name"].stringValue
                 let qtyStr = respJson[i]["Product Quantity"].stringValue
-                let qty = Double(qtyStr)
-                
+                //                let qty = Double(qtyStr)
+                let editedText = qtyStr.replacingOccurrences(of: ",", with: "")
+                let qty = Double(editedText)
+               
+                let modifiedVal = qtyStr.components(separatedBy: ".").first
+               
                 let dataEntry = BarChartDataEntry(x: Double(i), y: Double(qty!) )
+                
                 
                 self.cpBarDataEntry.append(dataEntry)
                 self.cpNameArr.append(name)
-                self.cpValuesArr.append(qtyStr)
+                self.cpValuesArr.append(modifiedVal ?? "0")
             }
         }
     }

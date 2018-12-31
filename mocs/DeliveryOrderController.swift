@@ -10,11 +10,12 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate,filterViewDelegate, customPopUpDelegate {
+class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, customPopUpDelegate {
     
     var arrayList:[DeliveryOrderData] = []
     var newArray:[DeliveryOrderData] = []
     
+    var filterString = ""
     var declVw = CustomPopUpView()
     var myView = CustomPopUpView()
     @IBOutlet weak var vwHeader: WC_HeaderView!
@@ -32,13 +33,14 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate,fil
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         srchBar.delegate = self
-        FilterViewController.filterDelegate = self
+//        FilterViewController.filterDelegate = self
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
         self.navigationController?.isNavigationBarHidden = true
         vwHeader.delegate = self
-        vwHeader.btnLeft.isHidden = false
-        vwHeader.btnRight.isHidden = false
+        vwHeader.btnBack.isHidden = false
+        vwHeader.btnLeft.isHidden = true
+        vwHeader.btnRight.isHidden = true
         vwHeader.lblTitle.text = Constant.PAHeaderTitle.DO
         vwHeader.lblSubTitle.isHidden = true
         
@@ -51,23 +53,12 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate,fil
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if FilterViewController.getFilterString() == "" {
+        if self.filterString == "" {
             self.populateList()
         }
-        
     }
     
-    func cancelFilter(filterString: String) {
-        self.populateList()
-    }
-    
-
-    func applyFilter(filterString: String) {
-        if !arrayList.isEmpty {
-            arrayList.removeAll()
-        }
-        self.populateList()
-    }
+  
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         if isApprove {
@@ -87,9 +78,9 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate,fil
     @objc func populateList(){
         if internetStatus != .notReachable{
             let url = String.init(format: Constant.DO.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()))
+                                  Helper.encodeURL(url: filterString))
             self.view.showLoading()
-            print(FilterViewController.getFilterString())
+
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
@@ -100,8 +91,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate,fil
                     self.arrayList.removeAll()
                     
                     if arrayJson.count > 0 {
-//                        self.arrayList.removeAll()
-                        
+
                         for(_,j):(String,JSON) in jsonResponse{
                             let data = DeliveryOrderData()
                             data.refId = j["DO Reference Id"].stringValue

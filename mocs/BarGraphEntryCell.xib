@@ -11,40 +11,52 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="245" id="qYM-xy-gj0" customClass="BarGraphEntryCell" customModule="mocs" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="245"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="280" id="qYM-xy-gj0" customClass="BarGraphEntryCell" customModule="mocs" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="280"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qYM-xy-gj0" id="1X5-V5-9jz">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="244.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="279.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBe-k5-ArO">
-                        <rect key="frame" x="10" y="4" width="355" height="236.5"/>
+                        <rect key="frame" x="10" y="4" width="355" height="271.5"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jr4-Ss-LQw">
+                                <rect key="frame" x="8" y="4" width="339" height="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hQV-UY-jIB" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="8" y="8" width="339" height="190.5"/>
+                                <rect key="frame" x="8" y="29" width="339" height="204.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PVM-ok-ARb">
-                                <rect key="frame" x="8" y="202.5" width="339" height="30"/>
+                                <rect key="frame" x="8" y="237.5" width="339" height="30"/>
                                 <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="hfL-U5-LQo"/>
                                 </constraints>
-                                <state key="normal" title="Pending Approvals for Company">
+                                <state key="normal" title="Open Pending Approvals">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="btnOpenPATapped:" destination="qYM-xy-gj0" eventType="touchUpInside" id="wUq-Qe-XqZ"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="hQV-UY-jIB" firstAttribute="top" secondItem="jr4-Ss-LQw" secondAttribute="bottom" constant="8" id="2YC-1I-qCh"/>
                             <constraint firstAttribute="trailing" secondItem="hQV-UY-jIB" secondAttribute="trailing" constant="8" id="90v-cT-Rc6"/>
                             <constraint firstItem="PVM-ok-ARb" firstAttribute="leading" secondItem="cBe-k5-ArO" secondAttribute="leading" constant="8" id="E2a-IM-z5e"/>
                             <constraint firstItem="PVM-ok-ARb" firstAttribute="top" secondItem="hQV-UY-jIB" secondAttribute="bottom" constant="4" id="MUH-YM-Fv8"/>
+                            <constraint firstAttribute="trailing" secondItem="jr4-Ss-LQw" secondAttribute="trailing" constant="8" id="N2X-It-l0A"/>
                             <constraint firstAttribute="trailing" secondItem="PVM-ok-ARb" secondAttribute="trailing" constant="8" id="RcY-c1-pPR"/>
                             <constraint firstItem="hQV-UY-jIB" firstAttribute="leading" secondItem="cBe-k5-ArO" secondAttribute="leading" constant="8" id="VPA-HB-j4r"/>
-                            <constraint firstItem="hQV-UY-jIB" firstAttribute="top" secondItem="cBe-k5-ArO" secondAttribute="top" constant="8" id="dyL-EV-P9W"/>
                             <constraint firstAttribute="bottom" secondItem="PVM-ok-ARb" secondAttribute="bottom" constant="4" id="im2-EE-sFY"/>
+                            <constraint firstItem="jr4-Ss-LQw" firstAttribute="leading" secondItem="cBe-k5-ArO" secondAttribute="leading" constant="8" id="p6a-wF-6xx"/>
+                            <constraint firstItem="jr4-Ss-LQw" firstAttribute="top" secondItem="cBe-k5-ArO" secondAttribute="top" constant="4" id="sOa-2S-ezZ"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -62,9 +74,11 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="barChartVw" destination="hQV-UY-jIB" id="mHf-D3-sFJ"/>
+                <outlet property="btnOpenPA" destination="PVM-ok-ARb" id="sEI-Qc-Zke"/>
+                <outlet property="lblToptxt" destination="jr4-Ss-LQw" id="JhM-4E-o7X"/>
                 <outlet property="outrVw" destination="cBe-k5-ArO" id="k7s-dU-6ur"/>
             </connections>
-            <point key="canvasLocation" x="48.799999999999997" y="130.88455772113943"/>
+            <point key="canvasLocation" x="48.799999999999997" y="146.62668665667167"/>
         </tableViewCell>
     </objects>
 </document>
