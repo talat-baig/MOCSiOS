@@ -28,7 +28,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var helpDocViewer: UIDocumentInteractionController!
     var wunderPopup = CustomPopUpView()
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request", "Employee Directory","Task Manager" , "2.2.1 Accounts Receivables (AR) Report", "2.2.2 Accounts Payable Report", "2.2.3 Available Release Report", "2.2.4 Sales Summary Report","2.2.5 Purchase Summary Report", "2.2.6 Fund Receipts Summary Report" ]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request", "Employee Directory","Task Manager" , "2.2.1 Accounts Receivables (AR) Report", "2.2.2 Accounts Payable Report", "2.2.3 Available Release Report", "2.2.4 Sales Summary Report","2.2.5 Purchase Summary Report", "2.2.6 Fund Receipts Summary Report", "2.2.7 Fund Payments and Settlement" ]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -64,10 +64,13 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let salesSummRpt = MenuDataObject(name: "2.2.4 Sales Summary Report", storybdNAme: "SalesSummary", vcName: "SalesSummaryReportController", imageName: #imageLiteral(resourceName: "empty"))
         let purchaseSummRpt = MenuDataObject(name: "2.2.5 Purchase Summary Report", storybdNAme: "PurchaseSummry", vcName: "PurchaseSummRptController", imageName: #imageLiteral(resourceName: "empty"))
         
-        let fundsRecpt = MenuDataObject(name: "2.2.6 Fund Receipts Summary Report", storybdNAme: "FundsRecptAllocation", vcName: "FundsRcptController", imageName: #imageLiteral(resourceName: "empty"))
+        let fundsRecpt = MenuDataObject(name: "2.2.6 Fund Receipts and Allocation", storybdNAme: "FundsRecptAllocation", vcName: "FundsRcptController", imageName: #imageLiteral(resourceName: "empty"))
+
+        let fundsPymnt = MenuDataObject(name: "2.2.7 Fund Payments and Settlement", storybdNAme: "FundsPayment", vcName: "FundsPaymentController", imageName: #imageLiteral(resourceName: "empty"))
 
         
-        let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        
+        let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         
         let pc = MenuDataObject(name: "3.1.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))

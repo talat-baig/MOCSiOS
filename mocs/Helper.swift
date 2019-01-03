@@ -23,6 +23,8 @@ enum EmpStateScreen {
     case isSC
     case isPC
     case isFRA
+    case isFPS
+
     case isApprovals
 }
 
@@ -382,6 +384,10 @@ class Helper: UIView {
         case EmpStateScreen.isFRA :
             emptyView.message = "No Funds Receipt Summary Data for the current\nTry by changing filter"
 
+        case EmpStateScreen.isFPS :
+            emptyView.message = "No Funds Payment & Settlement Data for the current\nTry by changing filter"
+
+            
         case EmpStateScreen.isApprovals :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
 

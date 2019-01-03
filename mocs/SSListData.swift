@@ -12,6 +12,10 @@ class SSListData: NSObject {
     var company = String()
     var location = String()
     var bVertical = String()
-    var totalValUSD = String()
+    var totalValUSD = String()   // balance for FPS module
     var totalValue = [AmountDetails]()
+    
+    var totalPaid = String()
+    var totalRequested = String()
+
 }

@@ -294,6 +294,22 @@ struct Constant
 
         static let FRA_CONTRACT_LIST = ApiUrl.URL + "/FundReceiptsAllocation/GetAllocatedContract?apikeyorder=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&referenceid=%@"
     }
+    
+    
+    
+    struct FPS {
+        
+        static let FPS_OVERALL = ApiUrl.URL + "/FundsPayableSettlement/GetFundPayableSettlementOverall?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
+        
+        static let FPS_CHART = ApiUrl.URL + "/FundsPayableSettlement/ShowTop5CPOfFAR?apikeytop=33ddb2ee-59a5-428f-a0a5-7167859b8589&authtop=%@&filter=%@"
+        
+        static let FPS_REF_LIST = ApiUrl.URL + "/FundsPayableSettlement/ShowCPbyRefID?apikeyref=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&filter=%@"
+        
+        static let FPS_PAYMENTS_LIST = ApiUrl.URL + "/FundsPayableSettlement/ShowDetailsbyRefID?apikeyref=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&filter=%@&referenceid=%@"
+    }
+    
+
+    
 
     struct EMPLOYEE {
         /**
@@ -677,8 +693,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-//        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+//                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         
