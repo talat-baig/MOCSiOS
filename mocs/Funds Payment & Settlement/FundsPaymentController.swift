@@ -37,8 +37,8 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         
         self.tableView.register(UINib(nibName: "FPSListCell", bundle: nil), forCellReuseIdentifier: "listcell")
         
-//        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllFPSData))
-//        tableView.addSubview(refreshControl)
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllFPSData))
+        tableView.addSubview(refreshControl)
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
@@ -57,7 +57,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Funds Payment and Settlement"
         vwTopHeader.lblSubTitle.isHidden = true
-        
     }
     
 
@@ -69,7 +68,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
     func applyFilter(filterString: String) {
         
         if fpBarData != nil || fpData != nil  {
-//            barDataEntry.removeAll()
             fpData = nil
             fpBarData = nil
         }
@@ -85,7 +83,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
     func cancelFilter(filterString: String) {
         self.fpData = nil
         self.fpBarData = nil
-//        self.barDataEntry.removeAll()
     }
     
     @objc func fetchAllFPSData() {
@@ -170,16 +167,11 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
     func resetData() {
         self.fpData = nil
         self.fpBarData = nil
-//        self.barDataEntry.removeAll()
-//        self.cpNameArr.removeAll()
-//        self.cpValuesArr.removeAll()
-        
     }
     
     func populateOverallData (respJson : JSON) {
         
         self.fpData = nil
-
         for(_,i):(String,JSON)  in respJson {
             let summ = SSListData()
             summ.company = i["Company"].stringValue
@@ -197,14 +189,9 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         
         let jsonArr = respJson.arrayObject as! [[String:AnyObject]]
         
-        
         if self.fpBarData != nil {
             self.fpBarData = nil
         }
-//        self.barDataEntry.removeAll()
-//        self.cpNameArr.removeAll()
-//        self.balAmtArr.removeAll()
-//        self.paidAmtArr.removeAll()
 
         if jsonArr.count > 0 {
             

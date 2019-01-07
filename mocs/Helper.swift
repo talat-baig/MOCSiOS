@@ -1028,17 +1028,8 @@ extension UIView{
         print(Float(progressTime/180.0))
         
         let dict = progressTimer?.userInfo as! [String : AnyObject]
-        
-        //        let messgTxt =  dict["messg"]  as! String
-        //        let timerTxt  = "\n Estimated Time: " + getTimeString(time: progressTime)
-        //        let attributedString = NSMutableAttributedString(string:messgTxt)
-        //        let attrs = [kCTFontAttributeName : UIFont.boldSystemFont(ofSize: 18)]
-        //        let boldString = NSMutableAttributedString(string: timerTxt, attributes:attrs as [NSAttributedStringKey : Any])
-        //        attributedString.append(boldString)
-        
+       
         lblTimerTxt.text = dict["messg"]  as! String + "\n Estimated Time: " + getTimeString(time: progressTime)
-        
-        //        lblTimerTxt.attributedText = attributedString
         
         if(progressView?.progress == 0.00) {
             progressTime = 180.0

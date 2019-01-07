@@ -24,25 +24,35 @@ class SSChartCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-   
-    
     func setupDataToViews(dataEntry : [BarChartDataEntry] , arrLabel : [String], arrValues : [String], lblTitle : String = "") {
 
         lblToptxt.text = lblTitle
-        barGraphVw.drawValueAboveBarEnabled = false
+        barGraphVw.drawValueAboveBarEnabled = true
         barGraphVw.drawGridBackgroundEnabled = false
         barGraphVw.isUserInteractionEnabled = false
         barGraphVw.leftAxis.drawLimitLinesBehindDataEnabled = false
         barGraphVw.fitBars = true
+        
+//        let xAxis = barGraphVw.xAxis
+//        xAxis.labelPosition = .bottom
+//        xAxis.labelFont = .systemFont(ofSize: 10)
+//        xAxis.granularity = 1
+//        xAxis.labelCount = 7
+//        xAxis.drawGridLinesEnabled = false
+
         
         let xAxis = barGraphVw.xAxis
         xAxis.labelPosition = .bottom
         xAxis.labelFont = .systemFont(ofSize: 10)
         xAxis.granularity = 1
         xAxis.labelCount = 7
-
         xAxis.drawGridLinesEnabled = false
-
+        xAxis.valueFormatter = IndexAxisValueFormatter(values: arrValues)
+//        xAxis.axisMinimum = 0.0
+        xAxis.wordWrapEnabled = true
+        xAxis.avoidFirstLastClippingEnabled = false
+//        xAxis.centerAxisLabelsEnabled = true
+        
         let leftAxisFormatter = NumberFormatter()
         leftAxisFormatter.minimumFractionDigits = 0
         leftAxisFormatter.maximumFractionDigits = 1
@@ -71,7 +81,7 @@ class SSChartCell: UITableViewCell {
         barGraphVw.data = chartData
         barGraphVw.barData?.barWidth = 0.5
         barGraphVw.chartDescription?.enabled = false
-        barGraphVw.xAxis.valueFormatter = IndexAxisValueFormatter(values: arrValues)
+//        barGraphVw.xAxis.valueFormatter = IndexAxisValueFormatter(values: arrValues)
         
         let l = barGraphVw.legend
         l.horizontalAlignment = .left
@@ -144,9 +154,18 @@ class SSChartCell: UITableViewCell {
         barGraphVw.notifyDataSetChanged()
         barGraphVw.data = data
         
+    
         let xAxis = barGraphVw.xAxis
-        xAxis.drawGridLinesEnabled = false
+        xAxis.labelPosition = .bottom
+        xAxis.labelFont = .systemFont(ofSize: 10)
         xAxis.granularity = 1
+        xAxis.labelCount = 7
+        xAxis.drawGridLinesEnabled = true
+        xAxis.valueFormatter = IndexAxisValueFormatter(values: dataPoints)
+        xAxis.axisMinimum = 0.0
+        xAxis.wordWrapEnabled = true
+        xAxis.avoidFirstLastClippingEnabled = false
+        xAxis.centerAxisLabelsEnabled = true
         
         let leftAxisFormatter = NumberFormatter()
         leftAxisFormatter.minimumFractionDigits = 0
@@ -158,9 +177,8 @@ class SSChartCell: UITableViewCell {
         leftAxis.valueFormatter = DefaultAxisValueFormatter(formatter: leftAxisFormatter)
         leftAxis.labelPosition = .outsideChart
         leftAxis.spaceTop = 0.15
-        leftAxis.axisMinimum = 0 // FIXME: HUH?? this replaces startAtZero = YES
         leftAxis.drawGridLinesEnabled = false
-//        leftAxis.drawAxisLineEnabled = false
+        
         
         let rightAxis = barGraphVw.rightAxis
         rightAxis.enabled = false
@@ -169,13 +187,17 @@ class SSChartCell: UITableViewCell {
         rightAxis.drawGridLinesEnabled = false
         rightAxis.drawAxisLineEnabled = false
 
+        let l = barGraphVw.legend
+        l.horizontalAlignment = .left
+        l.verticalAlignment = .bottom
+        
         barGraphVw.drawGridBackgroundEnabled = false
         barGraphVw.drawValueAboveBarEnabled = true
         barGraphVw.isUserInteractionEnabled = false
         barGraphVw.leftAxis.drawLimitLinesBehindDataEnabled = false
         barGraphVw.fitBars = true
         barGraphVw.chartDescription?.enabled = false
-        
+        barGraphVw.extraBottomOffset = 20
     }
     
 }
