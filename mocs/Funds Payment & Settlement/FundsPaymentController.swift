@@ -55,7 +55,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = "Funds Payment and Settlement"
+        vwTopHeader.lblTitle.text = "Funds Payment & Settlement"
         vwTopHeader.lblSubTitle.isHidden = true
     }
     
@@ -290,7 +290,7 @@ extension FundsPaymentController: UITableViewDataSource, UITableViewDelegate {
             return cell
         } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "chartcell") as! SSChartCell
-            cell.setChartBarGroupDataSet(dataPoints: self.fpBarData?.name ?? [], values:  self.fpBarData?.value1 ?? [], values2: self.fpBarData?.value2 ?? [], sortIndex: indexPath.row)
+            cell.setChartBarGroupDataSet(dataPoints: self.fpBarData?.name ?? [], values1:  self.fpBarData?.value1 ?? [], values2: self.fpBarData?.value2 ?? [], sortIndex: indexPath.row)
             cell.selectionStyle = .none
             return cell
         } else {

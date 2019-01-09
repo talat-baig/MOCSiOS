@@ -170,15 +170,11 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
 
         if jsonArr.count > 0 {
             
-            
             for i in 0..<jsonArr.count {
             
                 let pcSummry = PASummaryData()
-                
-                
 
                 let cName = respJson[i]["Company"].stringValue //Comp Name
-
                 
                 ///////***************************////////
                 let bUnitStr = respJson[i]["BusinessUnit"].stringValue // bUnit
@@ -209,8 +205,6 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
                 let selFilterStr = respJson[i]["SelectedFilter"].stringValue // Filter String in 25+Dubai+06 format
                 let fltrStr = selFilterStr.components(separatedBy: ",")
                 pcSummry.filterString = fltrStr
-                
-                
                 
                 pcSummry.compName = cName
                 pcSummry.bNames = arrBName

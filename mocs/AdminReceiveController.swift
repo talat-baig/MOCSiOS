@@ -160,11 +160,10 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
             if text == "" || text == "Enter Comment" {
                 Helper.showMessage(message: "Please Enter Comment")
                 return
-            }else{
+            } else {
                self.declineContract(data: data as! ARIData, comment: text)
                 declView.removeFromSuperviewWithAnimate()
             }
-            
         }
     }
     
@@ -319,7 +318,6 @@ extension AdminReceiveController: WC_HeaderViewDelegate {
     
     func topMenuRightButtonTapped(sender: Any) {
         self.presentRightMenuViewController(sender as AnyObject)
-        
     }
     
 }

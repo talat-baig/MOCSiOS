@@ -13,7 +13,6 @@ import UIKit
 class OpenWunderlistController: UIViewController {
 
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-
     
     override func viewDidLoad() {
         super.viewDidLoad()

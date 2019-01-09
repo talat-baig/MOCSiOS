@@ -19,10 +19,7 @@ class BarGraphEntryCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-//        self.contentView.layer.shadowOpacity = 0.25
-//        self.contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
-//        self.contentView.layer.shadowRadius = 1
-//        self.contentView.layer.shadowColor = UIColor.black.cgColor
+
         self.outrVw.layer.borderColor = UIColor.lightGray.cgColor
         self.outrVw.layer.borderWidth = 0.8
 

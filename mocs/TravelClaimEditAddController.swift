@@ -148,10 +148,11 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         Helper.addBordersToView(view: vwPov)
         Helper.addBordersToView(view: vwCities)
         
-    
-        btnAdvances.layer.cornerRadius = 5
-        btnAdvances.layer.borderWidth = 1
-        btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
+        Helper.addBordersToView(view: btnAdvances)
+
+//        btnAdvances.layer.cornerRadius = 5
+//        btnAdvances.layer.borderWidth = 1
+//        btnAdvances.layer.borderColor = UIColor.lightGray.cgColor
         
     }
     

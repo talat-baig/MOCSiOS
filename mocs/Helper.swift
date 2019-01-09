@@ -151,9 +151,9 @@ class Helper: UIView {
         return UserDefaults.standard.object(forKey: key) != nil
     }
     
-    class func addBordersToView(view : UIView){
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.lightGray.cgColor
+    class func addBordersToView(view : UIView, borderColor : CGColor = UIColor.lightGray.cgColor, borderWidth : CGFloat = 1.0 ){
+        view.layer.borderWidth = borderWidth
+        view.layer.borderColor = borderColor
         view.layer.cornerRadius = 5
         view.layer.masksToBounds = true;
     }

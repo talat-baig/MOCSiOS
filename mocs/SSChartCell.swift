@@ -13,7 +13,6 @@ class SSChartCell: UITableViewCell {
 
     @IBOutlet weak var barGraphVw: BarChartView!
     @IBOutlet weak var outerVw: UIView!
-    
     @IBOutlet weak var lblToptxt: UILabel!
     
     override func awakeFromNib() {
@@ -27,20 +26,7 @@ class SSChartCell: UITableViewCell {
     func setupDataToViews(dataEntry : [BarChartDataEntry] , arrLabel : [String], arrValues : [String], lblTitle : String = "") {
 
         lblToptxt.text = lblTitle
-        barGraphVw.drawValueAboveBarEnabled = true
-        barGraphVw.drawGridBackgroundEnabled = false
-        barGraphVw.isUserInteractionEnabled = false
-        barGraphVw.leftAxis.drawLimitLinesBehindDataEnabled = false
-        barGraphVw.fitBars = true
-        
-//        let xAxis = barGraphVw.xAxis
-//        xAxis.labelPosition = .bottom
-//        xAxis.labelFont = .systemFont(ofSize: 10)
-//        xAxis.granularity = 1
-//        xAxis.labelCount = 7
-//        xAxis.drawGridLinesEnabled = false
-
-        
+       
         let xAxis = barGraphVw.xAxis
         xAxis.labelPosition = .bottom
         xAxis.labelFont = .systemFont(ofSize: 10)
@@ -48,10 +34,8 @@ class SSChartCell: UITableViewCell {
         xAxis.labelCount = 7
         xAxis.drawGridLinesEnabled = false
         xAxis.valueFormatter = IndexAxisValueFormatter(values: arrValues)
-//        xAxis.axisMinimum = 0.0
         xAxis.wordWrapEnabled = true
         xAxis.avoidFirstLastClippingEnabled = false
-//        xAxis.centerAxisLabelsEnabled = true
         
         let leftAxisFormatter = NumberFormatter()
         leftAxisFormatter.minimumFractionDigits = 0
@@ -65,7 +49,6 @@ class SSChartCell: UITableViewCell {
         leftAxis.spaceTop = 0.15
         leftAxis.axisMinimum = 0 // FIXME: HUH?? this replaces startAtZero = YES
         leftAxis.drawGridLinesEnabled = false
-    
         
         let rightAxis = barGraphVw.rightAxis
         rightAxis.enabled = false
@@ -81,8 +64,15 @@ class SSChartCell: UITableViewCell {
         barGraphVw.data = chartData
         barGraphVw.barData?.barWidth = 0.5
         barGraphVw.chartDescription?.enabled = false
-//        barGraphVw.xAxis.valueFormatter = IndexAxisValueFormatter(values: arrValues)
-        
+
+        barGraphVw.drawValueAboveBarEnabled = true
+        barGraphVw.drawGridBackgroundEnabled = false
+        barGraphVw.isUserInteractionEnabled = false
+        barGraphVw.leftAxis.drawLimitLinesBehindDataEnabled = false
+        barGraphVw.fitBars = true
+        barGraphVw.notifyDataSetChanged() // *imp:  need to notify , if not, app will crash
+//        barGraphVw.barData?.setValueFont()
+
         let l = barGraphVw.legend
         l.horizontalAlignment = .left
         l.verticalAlignment = .bottom
@@ -108,18 +98,18 @@ class SSChartCell: UITableViewCell {
         }
         
         l.setCustom(entries: legenEntries)
-        barGraphVw.notifyDataSetChanged() // *imp:  need to notify , if not, app will crash 
+        
     }
     
     
-    func setChartBarGroupDataSet(dataPoints: [String], values: [Double], values2: [Double],sortIndex:Int) {
+    func setChartBarGroupDataSet(dataPoints: [String], values1: [Double], values2: [Double],sortIndex:Int) {
         
-        var dataEntries: [BarChartDataEntry] = []
+        var dataEntries1: [BarChartDataEntry] = []
         var dataEntries2: [BarChartDataEntry] = []
         
         for i in 0..<dataPoints.count {
-            let dataEntry = BarChartDataEntry(x: Double(i), y: values[i] )
-            dataEntries.append(dataEntry)
+            let dataEntry = BarChartDataEntry(x: Double(i), y: values1[i] )
+            dataEntries1.append(dataEntry)
         }
         
         for i in 0..<dataPoints.count {
@@ -127,11 +117,13 @@ class SSChartCell: UITableViewCell {
             dataEntries2.append(dataEntry)
         }
         
-        let chartDataSet1 = BarChartDataSet(values: dataEntries, label: "Amount Paid")
+        let chartDataSet1 = BarChartDataSet(values: dataEntries1, label: "Amount Paid")
         let chartDataSet2 = BarChartDataSet(values: dataEntries2, label: "Balance Remaining")
         chartDataSet1.colors =   [ChartColorTemplates.vordiplom()[0]]
         chartDataSet2.colors = [ChartColorTemplates.vordiplom()[1]]
-        
+        chartDataSet1.valueFont = UIFont.systemFont(ofSize: 6.0)
+        chartDataSet2.valueFont = UIFont.systemFont(ofSize: 6.0)
+
         let dataSets: [BarChartDataSet] = [chartDataSet1,chartDataSet2]
         
         let data = BarChartData(dataSets: dataSets)
@@ -153,7 +145,7 @@ class SSChartCell: UITableViewCell {
         data.groupBars(fromX: Double(startYear), groupSpace: groupSpace, barSpace: barSpace)
         barGraphVw.notifyDataSetChanged()
         barGraphVw.data = data
-        
+
     
         let xAxis = barGraphVw.xAxis
         xAxis.labelPosition = .bottom
@@ -193,6 +185,7 @@ class SSChartCell: UITableViewCell {
         
         barGraphVw.drawGridBackgroundEnabled = false
         barGraphVw.drawValueAboveBarEnabled = true
+        
         barGraphVw.isUserInteractionEnabled = false
         barGraphVw.leftAxis.drawLimitLinesBehindDataEnabled = false
         barGraphVw.fitBars = true

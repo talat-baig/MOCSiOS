@@ -33,7 +33,7 @@ class FPSPaymentListVC: UIViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "Funds Payment"
+        vwTopHeader.lblTitle.text = "Funds Payment [Reference-wise]"
         vwTopHeader.lblSubTitle.text = refId
         
         populateList()
