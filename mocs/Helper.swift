@@ -12,9 +12,10 @@ import SystemConfiguration
 import Lottie
 import NotificationBannerSwift
 import RATreeView
+import SearchTextField
 
 
-enum EmpStateScreen {
+enum ModName {
     
     case isARReport
     case isAPReport
@@ -24,8 +25,10 @@ enum EmpStateScreen {
     case isPC
     case isFRA
     case isFPS
-
+    case isDO
+    case isDefault
     case isApprovals
+    case isLMSApproval
 }
 
 /// Cardview
@@ -354,7 +357,7 @@ class Helper: UIView {
         }
     }
     
-    public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: EmpStateScreen, action:Selector){
+    public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: ModName, action:Selector? = nil){
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
@@ -362,40 +365,42 @@ class Helper: UIView {
         
         switch reports {
             
-        case EmpStateScreen.isARReport :
+        case ModName.isARReport :
             emptyView.message = "No AR Data for the current\nTry by changing filter"
             
-        case EmpStateScreen.isAPReport :
+        case ModName.isAPReport :
             emptyView.message = "No AP Data for the current\nTry by changing filter"
             
-        case EmpStateScreen.isTrvReq :
+        case ModName.isTrvReq :
             emptyView.message = "No Travel Request Data found \nTry again by relaoding"
             emptyView.buttonText = "RELOAD"
             
-        case EmpStateScreen.isCP :
+        case ModName.isCP :
             emptyView.message = "No Counterparty Data found \n Try again by reloading"
             
-        case EmpStateScreen.isSC :
+        case ModName.isSC :
             emptyView.message = "No Sales Summary Data for the current\nTry by changing filter"
             
-        case EmpStateScreen.isPC :
+        case ModName.isPC :
             emptyView.message = "No Purchase Summary Data for the current\nTry by changing filter"
 
-        case EmpStateScreen.isFRA :
+        case ModName.isFRA :
             emptyView.message = "No Funds Receipt Summary Data for the current\nTry by changing filter"
 
-        case EmpStateScreen.isFPS :
+        case ModName.isFPS :
             emptyView.message = "No Funds Payment & Settlement Data for the current\nTry by changing filter"
 
             
-        case EmpStateScreen.isApprovals :
+        case ModName.isApprovals :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
-
+            
+        case ModName.isLMSApproval :
+            emptyView.message = "No Pending Approval Data for the current\nTry going back and changing filter"
         default :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
         
-        emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
+        emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
         tb.tableFooterView = emptyView
         
         emptyView.translatesAutoresizingMaskIntoConstraints = false
@@ -470,6 +475,20 @@ class Helper: UIView {
     //    }
     //
     
+    
+    public static func getNavTitleString(modName : ModName) -> String {
+        
+        switch modName {
+            
+        case ModName.isDO:
+            return Constant.PAHeaderTitle.DO
+            
+        default:
+            return ""
+        }
+        
+    }
+    
     public static func isFileExists(fileName : String) -> Bool {
         
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
@@ -543,6 +562,27 @@ class Helper: UIView {
         emptyView.message = messg
       
         tb.tableFooterView = emptyView
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+    }
+    
+    public static func showEmptyState(vc:UIViewController, messg: String = "" , action:Selector? = nil) -> Void {
+        
+        let emptyView = EmptyState()
+        emptyView.image = UIImage(named: "no_result")!
+        emptyView.message = messg
+        
+        if action != nil{
+            emptyView.button.isHidden = false
+            emptyView.buttonText = "RELOAD"
+            emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
+        }else{
+            emptyView.button.isHidden = true
+        }
+        vc.view.addSubview(emptyView)
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
         emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
@@ -815,6 +855,23 @@ extension NSObject:Utility{
         }
     }
 }
+
+//class TextField: SearchTextField {
+//
+//    let padding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+//
+//    override open func textRect(forBounds bounds: CGRect) -> CGRect {
+//        return UIEdgeInsetsInsetRect(bounds, padding)
+//    }
+//
+//    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+//        return UIEdgeInsetsInsetRect(bounds, padding)
+//    }
+//
+//    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
+//        return UIEdgeInsetsInsetRect(bounds, padding)
+//    }
+//}
 
 //extension UITextView: UITextViewDelegate {
 //
@@ -1089,10 +1146,19 @@ extension String{
         
         return (range(of: from)?.upperBound).flatMap { substringFrom in
             (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
-                String(self[substringFrom..<substringTo])
+                  String(self[substringFrom..<substringTo])
             }
         }
     }
+    
+//    func slice(from: String, to: String) -> String? {
+//
+//        return (range(of: from)?.upperBound).flatMap { substringFrom in
+//            (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
+//                String(self[substringFrom..<substringTo])
+//            }
+//        }
+//    }
     
     /// Check if it is valid email address
     var isValidEmail: Bool {

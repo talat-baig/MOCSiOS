@@ -28,6 +28,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
+    @IBOutlet weak var lblNote: UILabel!
     @IBOutlet weak var collVw: UICollectionView!
     
     @IBOutlet weak var tableView: UITableView!
@@ -127,7 +128,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isPC, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
                         return
                     } else {
 
@@ -140,7 +141,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isPC, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
 
@@ -153,7 +154,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                                 self.refreshControl.endRefreshing()
                                                 self.resetData()
                                                 self.tableView.reloadData()
-                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isPC, action: #selector(self.showFilterMenu))
+                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
                                                 return
                                             } else {
                                                 
@@ -161,6 +162,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                                 self.populateChartData(respJson: chartResponse)
                                                 self.populateProdChartData(respJson: prdChartResp)
 
+                                                self.lblNote.isHidden = false
                                                 self.tableView.tableFooterView = nil
                                                 self.tableView.reloadData()
                                             }
@@ -169,7 +171,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                             self.refreshControl.endRefreshing()
                                             self.resetData()
                                             self.tableView.reloadData()
-                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isPC, action: #selector(self.showFilterMenu))
+                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
                                         }
                                     }))
                                 }
@@ -178,7 +180,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isPC, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
                             }
                         }))
                     }
@@ -187,7 +189,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isPC, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {
@@ -280,6 +282,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
     
     func resetData() {
         self.pcData = nil
+        lblNote.isHidden = true
         self.barDataEntry.removeAll()
         self.cpNameArr.removeAll()
         self.cpValuesArr.removeAll()

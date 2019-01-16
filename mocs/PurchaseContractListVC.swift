@@ -23,6 +23,7 @@ class PurchaseContractListVC: UIViewController, UIGestureRecognizerDelegate,pass
 
     @IBOutlet weak var pcHeaderVw: UIView!
     
+    @IBOutlet weak var lblNote: UILabel!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     

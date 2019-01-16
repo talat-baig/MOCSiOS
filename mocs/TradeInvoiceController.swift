@@ -121,11 +121,11 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
                         //                        self.tableView.reloadData()
                     }else{
                         self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {

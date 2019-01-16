@@ -36,7 +36,8 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
     @IBOutlet weak var collVw: UICollectionView!
     
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var lblNote: UILabel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -133,7 +134,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                         self.resetData()
                         self.tableView.reloadData()
                         
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isSC , action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
                         return
                     } else {
                         
@@ -146,7 +147,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isSC , action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
                                     return
                                 } else {
                                     Alamofire.request(url3).responseData(completionHandler: ({ response in
@@ -158,13 +159,14 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                                 self.refreshControl.endRefreshing()
                                                 self.resetData()
                                                 self.tableView.reloadData()
-                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isSC , action: #selector(self.showFilterMenu))
+                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
                                                 return
                                             } else {
                                                 
                                                 self.populateOverallData(respJson: ovrAllResp)
                                                 self.populateChartData(respJson: chartResponse)
                                                 self.populateProdChartData(respJson: prodChartResp)
+                                                self.lblNote.isHidden = false
 
                                                 self.tableView.tableFooterView = nil
                                                 self.tableView.reloadData()
@@ -174,21 +176,17 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                             self.refreshControl.endRefreshing()
                                             self.resetData()
                                             self.tableView.reloadData()
-                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isSC , action: #selector(self.showFilterMenu))
+                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
                                         }
                                     }))
-                                    
-                                    //                                    self.populateOverallData(respJson: ovrAllResp)
-                                    //                                    self.populateChartData(respJson: chartResponse)
-                                    //                                    self.tableView.tableFooterView = nil
-                                    //                                    self.tableView.reloadData()
+                                   
                                 }
                             } else {
                                 self.view.hideLoadingProgressLoader()
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isSC , action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
                             }
                         }))
                     }
@@ -197,7 +195,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isSC , action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
                 }
             }))
         } else {
@@ -316,6 +314,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
     
     func resetData() {
         self.ssData = nil
+        lblNote.isHidden = true
         self.cpBarDataEntry.removeAll()
         self.cpNameArr.removeAll()
         self.cpValuesArr.removeAll()

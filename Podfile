@@ -6,7 +6,7 @@ target 'mocs' do
     use_frameworks!
     
     # Pods for mocs
-    pod 'Alamofire'
+    pod 'Alamofire', '~> 4.0'
     pod 'SwiftyJSON'
     pod 'Toast-Swift', '~> 3.0.1'
     pod 'ThreeLevelAccordian'

@@ -88,7 +88,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                         self.resetData()
                         self.tableView.reloadData()
                         
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isAPReport, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
                         return
                     } else {
                         
@@ -101,7 +101,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isAPReport, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
                                     
@@ -115,7 +115,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isAPReport, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
                             }
                         }))
                     }
@@ -124,7 +124,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isAPReport, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {

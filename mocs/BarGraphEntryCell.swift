@@ -18,11 +18,9 @@ class BarGraphEntryCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
 
         self.outrVw.layer.borderColor = UIColor.lightGray.cgColor
         self.outrVw.layer.borderWidth = 0.8
-
     }
     
     

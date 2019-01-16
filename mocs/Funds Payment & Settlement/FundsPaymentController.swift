@@ -22,6 +22,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
+    @IBOutlet weak var lblNote: UILabel!
     @IBOutlet weak var collVw: UICollectionView!
     
     @IBOutlet weak var tableView: UITableView!
@@ -116,7 +117,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFPS, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
                         return
                     } else {
                         
@@ -129,12 +130,12 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFPS, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
                                     self.populateOverallData(respJson: ovrAllResp)
                                     self.populateChartData(respJson: chartResponse)
-                                    
+                                    self.lblNote.isHidden = false
                                     self.tableView.tableFooterView = nil
                                     self.tableView.reloadData()
                                 }
@@ -143,7 +144,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFPS, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
                             }
                         }))
                     }
@@ -152,7 +153,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFPS, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {
@@ -167,6 +168,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
     func resetData() {
         self.fpData = nil
         self.fpBarData = nil
+        self.lblNote.isHidden = true
     }
     
     func populateOverallData (respJson : JSON) {

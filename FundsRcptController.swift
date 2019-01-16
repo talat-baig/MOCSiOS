@@ -27,7 +27,8 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
     @IBOutlet weak var collVw: UICollectionView!
     
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var lblNote: UILabel!
+
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
 
     
@@ -119,7 +120,7 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFRA, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
                         return
                     } else {
                         
@@ -132,12 +133,12 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFRA, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
                                     self.populateOverallData(respJson: ovrAllResp)
                                     self.populateChartData(respJson: chartResponse)
-                                    
+                                    self.lblNote.isHidden = false
                                     self.tableView.tableFooterView = nil
                                     self.tableView.reloadData()
                                 }
@@ -146,7 +147,7 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFRA, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
                             }
                         }))
                     }
@@ -155,7 +156,7 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isFRA, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {
@@ -170,6 +171,7 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
     
     func resetData() {
         self.fpData = nil
+        self.lblNote.isHidden = true
         self.barDataEntry.removeAll()
         self.cpNameArr.removeAll()
         self.cpValuesArr.removeAll()

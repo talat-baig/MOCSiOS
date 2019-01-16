@@ -105,7 +105,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="JuO-BI-Axw">
-                                <rect key="frame" x="0.0" y="112" width="375" height="555"/>
+                                <rect key="frame" x="0.0" y="138.5" width="375" height="528.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="overallcell" rowHeight="221" id="tca-pY-OIh">
@@ -138,15 +138,30 @@
                                     <outlet property="delegate" destination="UH6-qU-EHq" id="a6l-29-oXm"/>
                                 </connections>
                             </tableView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Note*: This Report reflects data from last 1 month" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mIm-6o-QRa">
+                                <rect key="frame" x="12" y="116" width="351" height="14.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                <color key="textColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="92e-xd-A5U" firstAttribute="bottom" secondItem="JuO-BI-Axw" secondAttribute="bottom" id="9dc-rp-uck"/>
                             <constraint firstItem="Pfv-Tq-zvW" firstAttribute="trailing" secondItem="92e-xd-A5U" secondAttribute="trailing" id="AgR-Yy-q7y"/>
                             <constraint firstItem="Pfv-Tq-zvW" firstAttribute="top" secondItem="l6Z-J9-LW8" secondAttribute="top" id="BP3-KP-NhJ"/>
-                            <constraint firstItem="JuO-BI-Axw" firstAttribute="top" secondItem="1dM-s6-JvE" secondAttribute="bottom" constant="4" id="BbM-F3-Pac"/>
+                            <constraint firstItem="mIm-6o-QRa" firstAttribute="top" secondItem="1dM-s6-JvE" secondAttribute="bottom" constant="8" id="DI9-a9-Fwz"/>
+                            <constraint firstItem="92e-xd-A5U" firstAttribute="trailing" secondItem="mIm-6o-QRa" secondAttribute="trailing" constant="12" id="FMX-ND-lNZ"/>
+                            <constraint firstItem="JuO-BI-Axw" firstAttribute="top" secondItem="mIm-6o-QRa" secondAttribute="bottom" constant="8" id="RCu-bw-E9v"/>
                             <constraint firstItem="Pfv-Tq-zvW" firstAttribute="leading" secondItem="92e-xd-A5U" secondAttribute="leading" id="RbI-cc-mic"/>
                             <constraint firstItem="92e-xd-A5U" firstAttribute="trailing" secondItem="JuO-BI-Axw" secondAttribute="trailing" id="Vaf-sc-jq8"/>
+                            <constraint firstItem="mIm-6o-QRa" firstAttribute="leading" secondItem="92e-xd-A5U" secondAttribute="leading" constant="12" id="acx-bZ-5AX"/>
                             <constraint firstItem="1dM-s6-JvE" firstAttribute="leading" secondItem="92e-xd-A5U" secondAttribute="leading" constant="8" id="bhw-F8-KjI"/>
                             <constraint firstItem="92e-xd-A5U" firstAttribute="trailing" secondItem="1dM-s6-JvE" secondAttribute="trailing" constant="8" id="gpG-fH-a67"/>
                             <constraint firstItem="1dM-s6-JvE" firstAttribute="top" secondItem="Pfv-Tq-zvW" secondAttribute="bottom" constant="8" id="hH5-EV-RdH"/>
@@ -170,13 +185,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collVw" destination="QSg-U5-2iw" id="hWQ-Ck-VJ7"/>
+                        <outlet property="lblNote" destination="mIm-6o-QRa" id="F48-t3-aFq"/>
                         <outlet property="tableView" destination="JuO-BI-Axw" id="kog-dg-e9p"/>
                         <outlet property="vwTopHeader" destination="Pfv-Tq-zvW" id="BEe-PT-QW4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fBh-To-wBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1447" y="-81"/>
+            <point key="canvasLocation" x="1445.5999999999999" y="-81.409295352323838"/>
         </scene>
         <!--FRAReferenceListController-->
         <scene sceneID="9HT-Q7-jdv">

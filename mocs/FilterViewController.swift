@@ -176,25 +176,37 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                             let comp = Company()
                             comp.compName = company
                             
-                            let compny = company.suffix(5)
-                            let newString = String(compny)
-                            let slicedString = newString.slice(from: "(", to: ")")
-                            comp.compCode = slicedString!
+                            let sliced  = company.slice(from: "(", to: ")")
+                            comp.compCode = sliced ?? "0"
+                            
+                            print(sliced ?? "")
+//                            let compny = company.suffix(5)
+//                            let newString = String(compny)
+//                            let slicedString = newString.slice(from: "(", to: ")")
+//                            comp.compCode = slicedString!
                             
                             
                             let loc = Location()
                             loc.locName = location
                             
                             //  let newBCode = busUnit[l]["BU"].stringValue.slice(from: "(", to: ")")!
-                            let newBUString = busUnit[l]["BU"].stringValue.suffix(5)
-                            let newSubString = String(newBUString)
-                            let slicedBUString = newSubString.slice(from: "(", to: ")")
-                            //                            print(slicedBUString)
                             
+                            
+                            
+                            let newBUString = busUnit[l]["BU"].stringValue
+//                            let newSubString = String(newBUString)
+                            
+                            let buSliced  = newBUString.slice(from: "(", to: ")")
+//                            comp.compCode = sliced ?? "0"
+
+//                            let slicedBUString = newSubString.slice(from: "(", to: ")")
+//                            //                            print(slicedBUString)
+//
+                            print(buSliced!)
                             let newBName = busUnit[l]["BU"].stringValue
                             
                             bu.append(DataObject(name: newBName,
-                                                 code: slicedBUString!,
+                                                 code: buSliced ?? "0",
                                                  children: [],
                                                  company: comp,
                                                  location :loc ))

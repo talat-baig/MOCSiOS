@@ -123,11 +123,11 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                         self.tableView.tableFooterView = nil
                         //                        self.tableView.reloadData()
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isTrvReq, action: #selector(self.populateList))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isTrvReq, action: #selector(self.populateList))
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isTrvReq, action: #selector(self.populateList))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isTrvReq, action: #selector(self.populateList))
                 }
             }))
         } else {

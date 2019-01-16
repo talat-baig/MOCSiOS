@@ -108,7 +108,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vfa-WL-HZS">
-                                <rect key="frame" x="0.0" y="112" width="375" height="555"/>
+                                <rect key="frame" x="0.0" y="130.5" width="375" height="536.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="overallcell" rowHeight="221" id="N5d-qx-EEl">
@@ -149,19 +149,34 @@
                                     <outlet property="delegate" destination="U3E-FE-Yig" id="qsd-0h-yge"/>
                                 </connections>
                             </tableView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Note*: This Report reflects data from last 6 months" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="udS-dt-bJB">
+                                <rect key="frame" x="12" y="112" width="351" height="14.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                <color key="textColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="udS-dt-bJB" firstAttribute="top" secondItem="CwQ-1Y-eTz" secondAttribute="bottom" constant="4" id="1IT-2q-fdd"/>
                             <constraint firstItem="CwQ-1Y-eTz" firstAttribute="top" secondItem="oww-yQ-cca" secondAttribute="bottom" constant="8" id="1qL-Wk-hSZ"/>
                             <constraint firstItem="rfK-be-bLh" firstAttribute="trailing" secondItem="CwQ-1Y-eTz" secondAttribute="trailing" constant="8" id="64i-1H-dnm"/>
                             <constraint firstItem="CwQ-1Y-eTz" firstAttribute="leading" secondItem="rfK-be-bLh" secondAttribute="leading" constant="8" id="Dyv-cc-XDi"/>
                             <constraint firstItem="oww-yQ-cca" firstAttribute="leading" secondItem="rfK-be-bLh" secondAttribute="leading" id="MBu-IE-Ezl"/>
                             <constraint firstItem="oww-yQ-cca" firstAttribute="top" secondItem="tiM-Nm-UwJ" secondAttribute="top" id="O27-Ty-4s4"/>
-                            <constraint firstItem="Vfa-WL-HZS" firstAttribute="top" secondItem="CwQ-1Y-eTz" secondAttribute="bottom" constant="4" id="RA4-zH-9Bx"/>
                             <constraint firstItem="oww-yQ-cca" firstAttribute="trailing" secondItem="rfK-be-bLh" secondAttribute="trailing" id="U4j-ua-KBF"/>
                             <constraint firstItem="rfK-be-bLh" firstAttribute="trailing" secondItem="Vfa-WL-HZS" secondAttribute="trailing" id="Wbr-Zg-y19"/>
+                            <constraint firstItem="rfK-be-bLh" firstAttribute="trailing" secondItem="udS-dt-bJB" secondAttribute="trailing" constant="12" id="XgM-t6-Z4f"/>
+                            <constraint firstItem="Vfa-WL-HZS" firstAttribute="top" secondItem="udS-dt-bJB" secondAttribute="bottom" constant="4" id="Z5Z-gE-upm"/>
                             <constraint firstItem="Vfa-WL-HZS" firstAttribute="leading" secondItem="rfK-be-bLh" secondAttribute="leading" id="g3u-hU-nlm"/>
                             <constraint firstItem="rfK-be-bLh" firstAttribute="bottom" secondItem="Vfa-WL-HZS" secondAttribute="bottom" id="ght-xZ-StU"/>
+                            <constraint firstItem="udS-dt-bJB" firstAttribute="leading" secondItem="rfK-be-bLh" secondAttribute="leading" constant="12" id="kSl-bz-EQh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="rfK-be-bLh"/>
                     </view>
@@ -181,13 +196,14 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collVw" destination="u0d-od-bNx" id="Bre-D8-fYe"/>
+                        <outlet property="lblNote" destination="udS-dt-bJB" id="bPY-P6-jGE"/>
                         <outlet property="tableView" destination="Vfa-WL-HZS" id="0Lw-UF-Eyl"/>
                         <outlet property="vwTopHeader" destination="oww-yQ-cca" id="qrg-uc-n7K"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3nY-n6-RqA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1447" y="-81"/>
+            <point key="canvasLocation" x="1445.5999999999999" y="-81.409295352323838"/>
         </scene>
         <!--SalesContractListVC-->
         <scene sceneID="Ou5-M9-7d9">

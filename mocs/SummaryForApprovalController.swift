@@ -18,6 +18,7 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
 
     var paSummObj : [PASummaryData] = []
     
+    var modName : ModName?
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
@@ -39,7 +40,9 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = "Delivery Order"
+//        vwTopHeader.lblTitle.text =  Helper.getNavTitleString(modName : self.modName ?? ModName.isDefault)
+        vwTopHeader.lblTitle.text =  "Delivery Orders - Approval"
+
         vwTopHeader.lblSubTitle.isHidden = true
         
         self.tableView.register(UINib(nibName: "BarGraphEntryCell", bundle: nil), forCellReuseIdentifier: "barcell")
@@ -47,6 +50,9 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
         
         self.fecthAllSummaryData()
     }
+    
+    
+   
     
     
     func cancelFilter(filterString: String) {
@@ -59,7 +65,6 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
         if !pieDataEntry.isEmpty  {
             pieDataEntry.removeAll()
             self.paSummObj.removeAll()
-
         }
         self.fecthAllSummaryData()
     }
@@ -88,7 +93,7 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
                     if  (url1Resp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                         return
                     } else {
                         Alamofire.request(url2).responseData(completionHandler: ({ response in
@@ -101,7 +106,7 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
                                 if  (url2Resp.arrayObject?.isEmpty)! {
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
                                     self.parsePieChartData(respJson: url1Resp)
@@ -114,7 +119,7 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
                                 self.resetData()
                                 self.refreshControl.endRefreshing()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                             }
                         }))
                         
@@ -123,7 +128,7 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
                     self.resetData()
                     self.refreshControl.endRefreshing()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: EmpStateScreen.isApprovals, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                 }
             }))
         } else {
@@ -220,7 +225,6 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
     @objc func openPendingApprovals(sender:UIButton) {
         
         let doVC = UIStoryboard(name: "DeliveryOrder", bundle: nil).instantiateViewController(withIdentifier: "DeliveryOrderController") as! DeliveryOrderController
-        
         doVC.filterString = self.paSummObj[sender.tag].filterString.joined(separator: ",")
         self.navigationController?.pushViewController(doVC, animated: true)
         

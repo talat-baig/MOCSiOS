@@ -73,13 +73,16 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         
+        
+        
         let pc = MenuDataObject(name: "3.1.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))
         let sc = MenuDataObject(name: "3.1.2 Sales Contract (SC)", storybdNAme: "SalesContract", vcName: "SalesContractController", imageName: #imageLiteral(resourceName: "empty"))
 
 //        let dc = MenuDataObject(name: "3.1.3 Delivery Orders (DO)", storybdNAme: "DeliveryOrder", vcName: "DeliveryOrderController", imageName: #imageLiteral(resourceName: "empty"))
         
-        let dc = MenuDataObject(name: "3.1.3 Delivery Orders (DO)", storybdNAme: "SalesContract", vcName: "SummaryForApprovalController", imageName: #imageLiteral(resourceName: "empty"))
+        let dc = MenuDataObject(name: "3.1.3 Delivery Orders (DO)", modName : ModName.isDO, storybdNAme: "SalesContract", vcName: "SummaryForApprovalController", imageName: #imageLiteral(resourceName: "empty"))
 
+    
         
         let tcr = MenuDataObject(name: "3.1.4 Travel Claims Reimbursement (TCR)", storybdNAme: "TCR", vcName: "TCRController", imageName: #imageLiteral(resourceName: "empty"))
         let ecr = MenuDataObject(name: "3.1.5 Employee Claims & Payments (ECR EPR)", storybdNAme: "EmployeePayment", vcName: "EmployeePaymentController", imageName: #imageLiteral(resourceName: "empty"))
@@ -93,9 +96,17 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let lms = MenuDataObject(name: "3.1.11 Leave Management System", storybdNAme: "LMS", vcName: "LeaveManagmentController", imageName: #imageLiteral(resourceName: "empty"))
 
         
-        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [pc,sc,dc,tcr,ecr,ari,tri,ro,ca,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
+//        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [pc,sc,dc,tcr,ecr,ari,tri,ro,ca,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
         
-//        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [pc,sc,dc,tcr,ecr,ari,tri,ro,ca,trf,lms], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
+        
+        let paAdmin = MenuDataObject(name: "3.1 Admin" , children: [], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        
+        let paBusiness = MenuDataObject(name: "3.1 Business" , children: [pc,sc,dc,tcr,ecr,ari,tri,ro,ca,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        
+        let paHR = MenuDataObject(name: "3.2 HR" , children: [lms], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+
+        
+        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [paBusiness,paHR], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
 
         
         let empDir = MenuDataObject(name: "Employee Directory", children: [], storybdNAme: "Employee", vcName: "EmployeeController", imageName: #imageLiteral(resourceName: "telephone"))

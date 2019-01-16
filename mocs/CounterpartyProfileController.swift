@@ -124,11 +124,11 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                         
                     } else {
                         self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView,  reports: EmpStateScreen.isCP, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView,  reports: ModName.isCP, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView,  reports: EmpStateScreen.isCP, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView,  reports: ModName.isCP, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{

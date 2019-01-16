@@ -142,7 +142,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
                         self.tblVwARReport.reloadData()
                         
                         self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: ModName.isARReport, action: #selector(self.showFilterMenu))
                         return
                     } else {
                         
@@ -155,7 +155,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tblVwARReport.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: ModName.isARReport, action: #selector(self.showFilterMenu))
                                     return
                                 } else {
                                     Alamofire.request(url3).responseData(completionHandler: ({ response in
@@ -167,7 +167,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
                                             self.refreshControl.endRefreshing()
                                             
                                             if  (listResponse.arrayObject?.isEmpty)! {
-                                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: ModName.isARReport, action: #selector(self.showFilterMenu))
                                                 return
                                             } else {
                                                 
@@ -182,7 +182,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
                                             self.refreshControl.endRefreshing()
                                             self.resetData()
                                             self.tblVwARReport.reloadData()
-                                            Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                                            Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: ModName.isARReport, action: #selector(self.showFilterMenu))
                                         }
                                     }))
                                 }
@@ -191,7 +191,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tblVwARReport.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: ModName.isARReport, action: #selector(self.showFilterMenu))
                             }
                         }))
                     }
@@ -200,7 +200,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tblVwARReport.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: EmpStateScreen.isARReport, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tblVwARReport, reports: ModName.isARReport, action: #selector(self.showFilterMenu))
                 }
             }))
             
