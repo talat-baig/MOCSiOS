@@ -8,19 +8,19 @@
 
 struct ApiKey {
     // LIVE
-//    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-        static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+//        static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-//    static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+    static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-    static let URL = "http://172.16.13.12:85/api"
+//    static let URL = "http://172.16.13.12:85/api"
 }
 
 
@@ -696,18 +696,6 @@ struct Constant
         static let GET_LEAVES_BY_NAME = ApiUrl.URL + "/LeaveManagementSystem/GetPendingLeavesByName?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&employee=%@"
 
         static let APPROVE_LEAVES = ApiUrl.URL + "/LeaveManagementSystem/ApprovePendingLeaves?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&Id=%@&status=%@&reason=%@"
-        
-//        ApprovePendingLeaves(string apikey, string authid, int Id, string status, string reason)
-        
-//        Approved
-//        Rejected
-
-//        GetAllPendingLeaves
-//        GetPendingLeaves
-//        GetPendingLeavesByName
-//        ApprovePendingLeaves
-//
-
 
     }
     
@@ -729,8 +717,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-//                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

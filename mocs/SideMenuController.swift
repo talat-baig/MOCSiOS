@@ -18,6 +18,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
     }
     
+    @IBOutlet weak var lblVersionName: UILabel!
     @IBOutlet weak var stckVwHome: UIStackView!
     @IBOutlet weak var vwTreeTable: UIView!
     @IBOutlet weak var lblUserName: UILabel!
@@ -28,7 +29,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var helpDocViewer: UIDocumentInteractionController!
     var wunderPopup = CustomPopUpView()
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.1.1 Purchase Contract (PC)","3.1.2 Sales Contract (SC)" , "3.1.3 Delivery Orders (DO)", "3.1.4 Travel Claims Reimbursement (TCR)", "3.1.5 Employee Claims & Payments (ECR EPR)", "3.1.6 Admin Receive Invoice (ARI)", "3.1.7 Trade Received Invoice (TRI)", "3.1.8 Release Order (RO)", "3.1.9 Counterparty Profile" , "3.1.10 Travel Request", "3.1.11 Leave Management System" , "Employee Directory","Task Manager" , "2.2.1 Accounts Receivables (AR) Report", "2.2.2 Accounts Payable Report", "2.2.3 Available Release Report", "2.2.4 Sales Summary Report","2.2.5 Purchase Summary Report", "2.2.6 Fund Receipts and Allocation", "2.2.7 Fund Payments and Settlement"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.2.1 Purchase Contract (PC)","3.2.2 Sales Contract (SC)" , "3.2.3 Delivery Orders (DO)", "3.2.4 Travel Claims Reimbursement (TCR)", "3.1.2 Employee Claims & Payments (ECR EPR)" , "3.1.1 Admin Receive Invoice (ARI)", "3.2.5 Trade Received Invoice (TRI)", "3.2.6 Release Order (RO)", "3.2.7 Counterparty Profile" , "3.2.8 Travel Request", "3.3.1 Leave Management System" , "Employee Directory","Task Manager" , "2.1.1 Accounts Receivables (AR) Report", "2.1.2 Accounts Payable Report", "2.1.3 Available Release Report", "2.1.4 Sales Summary Report","2.1.5 Purchase Summary Report", "2.1.6 Fund Receipts and Allocation", "2.1.7 Fund Payments and Settlement"]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -41,6 +42,13 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         self.mdataObj = setupTreeViewData()
         setupTreeView()
         lblUserName.text = Session.user
+        
+        treeView.estimatedRowHeight = 55.0
+        treeView.rowHeight = UITableViewAutomaticDimension
+        
+        let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
+        
+        lblVersionName.text =  String(format: "Version : %@",  appVersion!)
     }
     
     func setupTreeViewData() ->  [MenuDataObject] {
@@ -58,55 +66,54 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
         let administrative = MenuDataObject(name: "Administrative", children: [form], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile") )
         
-        let arReport = MenuDataObject(name: "2.2.1 Accounts Receivables (AR) Report", storybdNAme: "ARReport", vcName: "ARReportController", imageName: #imageLiteral(resourceName: "empty"))
-        let apReport = MenuDataObject(name: "2.2.2 Accounts Payable Report", storybdNAme: "AccountsPayable", vcName: "APReportController", imageName: #imageLiteral(resourceName: "empty"))
-        let avlRelReport = MenuDataObject(name: "2.2.3 Available Release Report", storybdNAme: "AvblReleases", vcName: "AvlRelBaseViewController", imageName: #imageLiteral(resourceName: "empty"))
-        let salesSummRpt = MenuDataObject(name: "2.2.4 Sales Summary Report", storybdNAme: "SalesSummary", vcName: "SalesSummaryReportController", imageName: #imageLiteral(resourceName: "empty"))
-        let purchaseSummRpt = MenuDataObject(name: "2.2.5 Purchase Summary Report", storybdNAme: "PurchaseSummry", vcName: "PurchaseSummRptController", imageName: #imageLiteral(resourceName: "empty"))
+        let arReport = MenuDataObject(name: "2.1.1 Accounts Receivables (AR) Report", storybdNAme: "ARReport", vcName: "ARReportController", imageName: #imageLiteral(resourceName: "empty"))
+        let apReport = MenuDataObject(name: "2.1.2 Accounts Payable Report", storybdNAme: "AccountsPayable", vcName: "APReportController", imageName: #imageLiteral(resourceName: "empty"))
+        let avlRelReport = MenuDataObject(name: "2.1.3 Available Release Report", storybdNAme: "AvblReleases", vcName: "AvlRelBaseViewController", imageName: #imageLiteral(resourceName: "empty"))
+        let salesSummRpt = MenuDataObject(name: "2.1.4 Sales Summary Report", storybdNAme: "SalesSummary", vcName: "SalesSummaryReportController", imageName: #imageLiteral(resourceName: "empty"))
+        let purchaseSummRpt = MenuDataObject(name: "2.1.5 Purchase Summary Report", storybdNAme: "PurchaseSummry", vcName: "PurchaseSummRptController", imageName: #imageLiteral(resourceName: "empty"))
         
-        let fundsRecpt = MenuDataObject(name: "2.2.6 Fund Receipts and Allocation", storybdNAme: "FundsRecptAllocation", vcName: "FundsRcptController", imageName: #imageLiteral(resourceName: "empty"))
+        let fundsRecpt = MenuDataObject(name: "2.1.6 Fund Receipts and Allocation", storybdNAme: "FundsRecptAllocation", vcName: "FundsRcptController", imageName: #imageLiteral(resourceName: "empty"))
 
-        let fundsPymnt = MenuDataObject(name: "2.2.7 Fund Payments and Settlement", storybdNAme: "FundsPayment", vcName: "FundsPaymentController", imageName: #imageLiteral(resourceName: "empty"))
+        let fundsPymnt = MenuDataObject(name: "2.1.7 Fund Payments and Settlement", storybdNAme: "FundsPayment", vcName: "FundsPaymentController", imageName: #imageLiteral(resourceName: "empty"))
 
         
         
-        let reports = MenuDataObject(name: "2.2 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let reports = MenuDataObject(name: "2.1 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         
         
         
-        let pc = MenuDataObject(name: "3.1.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))
-        let sc = MenuDataObject(name: "3.1.2 Sales Contract (SC)", storybdNAme: "SalesContract", vcName: "SalesContractController", imageName: #imageLiteral(resourceName: "empty"))
+        let pc = MenuDataObject(name: "3.2.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))
+        let sc = MenuDataObject(name: "3.2.2 Sales Contract (SC)", storybdNAme: "SalesContract", vcName: "SalesContractController", imageName: #imageLiteral(resourceName: "empty"))
 
-//        let dc = MenuDataObject(name: "3.1.3 Delivery Orders (DO)", storybdNAme: "DeliveryOrder", vcName: "DeliveryOrderController", imageName: #imageLiteral(resourceName: "empty"))
         
-        let dc = MenuDataObject(name: "3.1.3 Delivery Orders (DO)", modName : ModName.isDO, storybdNAme: "SalesContract", vcName: "SummaryForApprovalController", imageName: #imageLiteral(resourceName: "empty"))
+        let dc = MenuDataObject(name: "3.2.3 Delivery Orders (DO)", modName : ModName.isDO, storybdNAme: "SalesContract", vcName: "SummaryForApprovalController", imageName: #imageLiteral(resourceName: "empty"))
 
     
         
-        let tcr = MenuDataObject(name: "3.1.4 Travel Claims Reimbursement (TCR)", storybdNAme: "TCR", vcName: "TCRController", imageName: #imageLiteral(resourceName: "empty"))
-        let ecr = MenuDataObject(name: "3.1.5 Employee Claims & Payments (ECR EPR)", storybdNAme: "EmployeePayment", vcName: "EmployeePaymentController", imageName: #imageLiteral(resourceName: "empty"))
-        let ari = MenuDataObject(name: "3.1.6 Admin Receive Invoice (ARI)", storybdNAme: "AdminReceive", vcName: "AdminReceiveController", imageName: #imageLiteral(resourceName: "empty"))
-        let tri = MenuDataObject(name: "3.1.7 Trade Received Invoice (TRI)", storybdNAme: "TradeInvoice", vcName: "TradeInvoiceController", imageName: #imageLiteral(resourceName: "empty"))
-        let ro = MenuDataObject(name: "3.1.8 Release Order (RO)", storybdNAme: "ReleaseOrder", vcName: "ReleaseOrderController", imageName: #imageLiteral(resourceName: "empty"))
+        let tcr = MenuDataObject(name: "3.2.4 Travel Claims Reimbursement (TCR)", storybdNAme: "TCR", vcName: "TCRController", imageName: #imageLiteral(resourceName: "empty"))
+        let ecr = MenuDataObject(name: "3.1.2 Employee Claims & Payments (ECR EPR)", storybdNAme: "EmployeePayment", vcName: "EmployeePaymentController", imageName: #imageLiteral(resourceName: "empty"))
+        let ari = MenuDataObject(name: "3.1.1 Admin Receive Invoice (ARI)", storybdNAme: "AdminReceive", vcName: "AdminReceiveController", imageName: #imageLiteral(resourceName: "empty"))
+        let tri = MenuDataObject(name: "3.2.5 Trade Received Invoice (TRI)", storybdNAme: "TradeInvoice", vcName: "TradeInvoiceController", imageName: #imageLiteral(resourceName: "empty"))
+        let ro = MenuDataObject(name: "3.2.6 Release Order (RO)", storybdNAme: "ReleaseOrder", vcName: "ReleaseOrderController", imageName: #imageLiteral(resourceName: "empty"))
 
-        let ca = MenuDataObject(name: "3.1.9 Counterparty Profile", storybdNAme: "CounterpartyApproval", vcName: "CounterpartyProfileController", imageName: #imageLiteral(resourceName: "empty"))
-        let trf = MenuDataObject(name: "3.1.10 Travel Request", storybdNAme: "TravelReqApproval", vcName: "TravelReqApprovalVC", imageName: #imageLiteral(resourceName: "empty"))
+        let ca = MenuDataObject(name: "3.2.7 Counterparty Profile", storybdNAme: "CounterpartyApproval", vcName: "CounterpartyProfileController", imageName: #imageLiteral(resourceName: "empty"))
+        let trf = MenuDataObject(name: "3.2.8 Travel Request", storybdNAme: "TravelReqApproval", vcName: "TravelReqApprovalVC", imageName: #imageLiteral(resourceName: "empty"))
 
-        let lms = MenuDataObject(name: "3.1.11 Leave Management System", storybdNAme: "LMS", vcName: "LeaveManagmentController", imageName: #imageLiteral(resourceName: "empty"))
+        let lms = MenuDataObject(name: "3.3.1 Leave Management System", storybdNAme: "LMS", vcName: "LeaveManagmentController", imageName: #imageLiteral(resourceName: "empty"))
 
         
 //        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [pc,sc,dc,tcr,ecr,ari,tri,ro,ca,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
         
         
-        let paAdmin = MenuDataObject(name: "3.1 Admin" , children: [], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let paAdmin = MenuDataObject(name: "3.1 Admin" , children: [ari, ecr], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile"))
         
-        let paBusiness = MenuDataObject(name: "3.1 Business" , children: [pc,sc,dc,tcr,ecr,ari,tri,ro,ca,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let paBusiness = MenuDataObject(name: "3.2 Business" , children: [pc,sc,dc,tcr,tri,ro,ca,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         
-        let paHR = MenuDataObject(name: "3.2 HR" , children: [lms], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let paHR = MenuDataObject(name: "3.3 HR" , children: [lms], storybdNAme: "", vcName: "", imageName:#imageLiteral(resourceName: "hr"))
 
         
-        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [paBusiness,paHR], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
+        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [paAdmin,paBusiness,paHR], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
 
         
         let empDir = MenuDataObject(name: "Employee Directory", children: [], storybdNAme: "Employee", vcName: "EmployeeController", imageName: #imageLiteral(resourceName: "telephone"))
@@ -266,7 +273,6 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
             return levelOne
         } else {
             
-           
             levelTwo.selectionStyle = .none
             levelTwo.setupCellViews(title: item.name!)
             return levelTwo
@@ -292,63 +298,41 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     
     func treeView(_ treeView: RATreeView, heightForRowForItem item: Any) -> CGFloat {
         
-        let item = item as! MenuDataObject
+//        let item = item as! MenuDataObject
+//
+//        let width = item.name?.count
+//
+//        print( item.name, item.name?.count)
+////        print(item., width ?? 0)
+//        if width! >= 42 {
+//            return 93
+//        } else if width! <= 39 {
+//            return 75
+//        } else {
+//            return 60
+//        }
+//
+         let level = treeView.levelForCell(forItem: item)
         
-        let width = item.name?.count
         
-        if width! >= 42 {
-//            print("93")
-            return 93
-        } else if width == 38 {
-//            print("75")
-            return 75
+        
+        if level == 2 {
+            
+            return UITableViewAutomaticDimension
+            
         } else {
-//            print("60")
-            return 60
+             return 60
         }
+//        return UITableViewAutomaticDimension
     }
     
-//    func schemeAvailable(scheme: String) -> Bool {
-//        if let url = URL(string: scheme) {
-//            return UIApplication.shared.canOpenURL(url)
-//        }
-//        return false
-//    }
-//
-//    func open(scheme: String) {
-//        if let url = URL(string: scheme) {
-//            UIApplication.shared.open(url, options: [:], completionHandler: {
-//                (success) in
-//                print("Open \(scheme): \(success)")
-//            })
-//        }
-//    }
-//
-//    func openInstallAppPopup() {
-//
-//        self.wunderPopup = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
-//        self.wunderPopup.setDataToCustomView(title: "Wunderlist App Not Found", description: "Download it from App Store", leftButton: "NO", rightButton: "YES", isTxtVwHidden: true, isApprove: false, isFromSideMenu: true)
-//        self.wunderPopup.wunderDelegate = self
-//        self.wunderPopup.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-//        self.view.window?.addSubview(self.wunderPopup)
-//    }
-//
-//    func checkWunderListAppInstalled() {
-//
-//        let wunderList = schemeAvailable(scheme: "wunderlist://")
-//
-//        if wunderList {
-//            open(scheme: "wunderlist://")
-//        } else {
-//            self.openInstallAppPopup()
-//        }
-//    }
-//
-//
+
     func downloadFile(destinationUrl : URL) {
+        
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             return (destinationUrl, [.removePreviousFile, .createIntermediateDirectories])
         }
+        
         self.view.makeToast("Please wait while downloading...")
         Alamofire.download(Constant.HelpDoc.LINK, to: destination)
             .response (completionHandler : { (response) in
@@ -397,22 +381,8 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let mainPage: UIViewController = storyBoard.instantiateViewController(withIdentifier: "loginController")
         self.present(mainPage, animated: false, completion: nil)
     }
-    
 }
 
-//extension SideMenuController: wunderlistPopupDelegate {
-//
-//    func onRightBtnTap() {
-//        let urlStr = "itms://itunes.apple.com/in/app/wunderlist-to-do-list-tasks/id406644151?mt=8"
-//        if #available(iOS 10.0, *) {
-//            UIApplication.shared.open(URL(string: urlStr)!, options: [:], completionHandler: nil)
-//        } else {
-//            UIApplication.shared.openURL(URL(string: urlStr)!)
-//        }
-//        self.wunderPopup.removeFromSuperviewWithAnimate()
-//    }
-//
-//}
 
 extension SideMenuController: UIDocumentInteractionControllerDelegate {
     

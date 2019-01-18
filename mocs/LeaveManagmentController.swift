@@ -19,19 +19,19 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     var fromDate = Date()
     var toDate = Date()
-
-//    var arrEmpName : [String] = []
+    
+    //    var arrEmpName : [String] = []
     
     var lmsData : [LMSEmpData] = []
     var lmsAllData : [LMSEmpData] = []
-
+    
     
     @IBOutlet weak var lblCount: UILabel!
     @IBOutlet weak var vwOuter: UIView!
     @IBOutlet weak var vwEmpHeader: UIView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var txtFldEmpName: SearchTextField!
-
+    
     @IBOutlet weak var btnTotalLeaves: UIButton!
     @IBOutlet weak var btnSubmit: UIButton!
     @IBOutlet weak var btnReset: UIButton!
@@ -44,15 +44,13 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     @IBOutlet weak var vwDept: UIView!
     @IBOutlet weak var vwFilter: UIView!
     
-    @IBOutlet weak var lblCompny: UILabel!
-    @IBOutlet weak var lblEmpName: UILabel!
-    @IBOutlet weak var lblEmail: UILabel!
-
+    
+    
     @IBOutlet var datePickerTool: UIView!
     
     @IBOutlet weak var datePicker: UIDatePicker!
     weak var currentTxtFld: UITextField? = nil
-
+    
     
     override func viewDidLoad() {
         
@@ -69,24 +67,16 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         vwTopHeader.btnRight.isHidden = true  // Hides filter button on the top right
         vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.LMS
         vwTopHeader.lblSubTitle.isHidden = true
-
         
-        getPendingLeaves()
-//        self.getPendingLeavesByFilter { (res) in
-//            if res {
-//                self.vwOuter.isHidden = false
-//                self.initialSetup()
-//                self.txtFldEmpName.filterStrings(self.lmsData.map { $0.empName })
-//            } else {
-//                self.vwOuter.isHidden = true
-//                Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
-//            }
-//        }
-
+        self.initialSetup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.handleTap()
+        //        self.initialSetup()
+        self.getPendingLeaves()
+    }
     
-
     
     func initialSetup() {
         
@@ -95,8 +85,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         Helper.addBordersToView(view: txtFldTo, borderColor : AppColor.lightGray.cgColor, borderWidth : 1)
         Helper.addBordersToView(view: txtFldEmpName, borderColor : AppColor.lightGray.cgColor, borderWidth : 1)
         
-        btnTotalLeaves.layer.cornerRadius = 5.0
-        btnTotalLeaves.contentHorizontalAlignment = .center
         btnSubmit.layer.cornerRadius = 5.0
         btnReset.layer.cornerRadius = 5.0
         btnDept.contentHorizontalAlignment = .left
@@ -105,12 +93,15 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         vwEmpHeader.layer.shadowOffset = CGSize(width: 0, height: 2)
         vwEmpHeader.layer.shadowRadius = 1
         vwEmpHeader.layer.shadowColor = UIColor.gray.cgColor
-
+        
+        btnTotalLeaves.layer.cornerRadius = 5.0
         btnTotalLeaves.layer.shadowOpacity = 0.25
         btnTotalLeaves.layer.shadowOffset = CGSize(width: 0, height: 2)
         btnTotalLeaves.layer.shadowRadius = 1
         btnTotalLeaves.layer.shadowColor = UIColor.gray.cgColor
-        
+        btnTotalLeaves.contentHorizontalAlignment = .center
+        btnTotalLeaves.titleLabel?.textAlignment = .center
+
         txtFldEmpName.theme.font = UIFont.systemFont(ofSize: 14)
         txtFldEmpName.theme.borderColor = UIColor (red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
         txtFldEmpName.theme.borderWidth = 1.0
@@ -128,7 +119,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         
         txtFldFrom.delegate = self
         txtFldTo.delegate = self
-
+        
         txtFldFrom.inputView = datePickerTool
         txtFldTo.inputView = datePickerTool
         
@@ -145,23 +136,25 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     @objc func getPendingLeaves() {
         
+        
         self.getAllPendingLeaves { (res1) in
             if res1 {
-                self.getPendingLeavesByFilter { (res2) in
+                self.getPendingLeavesByFilter { (res2, tpl) in
                     if res2 {
-                        self.vwOuter.isHidden = false
-                        self.initialSetup()
-                        self.lblCount.text = String(format: "%d", self.lmsAllData.count)
+                        //                        self.vwOuter.isHidden = false
+                        //                        self.initialSetup()
+                        self.lblCount.text = String(format: "%d", tpl)
                         self.txtFldEmpName.filterStrings(self.lmsData.map { $0.empName })
                     } else {
-                        self.vwOuter.isHidden = true
-                        Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
+                        //                        self.vwOuter.isHidden = true
+                        //                        self.initialSetup()
+                        //                        Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
                     }
                 }
             } else {
-                self.vwOuter.isHidden = true
-                Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
-
+                //                self.vwOuter.isHidden = true
+                //                Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
+                
             }
         }
     }
@@ -191,9 +184,9 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                             data.empName = j["Employee Name"].stringValue
                             
                             if j["Reason"].stringValue == "" {
-                                  data.reason =  "-"
+                                data.reason =  "-"
                             } else {
-                                  data.reason =  j["Reason"].stringValue
+                                data.reason =  j["Reason"].stringValue
                             }
                             
                             data.empId = j["Employee Code"].stringValue
@@ -220,7 +213,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     }
     
     
-    @objc func getPendingLeavesByFilter( emp : String = "" , dept : String = "" , from : String = ""  , to : String = "" ,comp : @escaping(Bool) -> ()) {
+    @objc func getPendingLeavesByFilter( emp : String = "" , dept : String = "" , from : String = ""  , to : String = "" ,comp : @escaping(Bool, Int) -> ()) {
         
         if internetStatus != .notReachable {
             
@@ -238,7 +231,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
                     if array.count > 0 {
-                        
+                        var totalCount : Int = 0
                         for(_,json):(String,JSON) in jsonResponse {
                             
                             let lmsDta = LMSEmpData()
@@ -246,6 +239,9 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                             let dept = json["Department"].stringValue
                             lmsDta.empName = empName
                             lmsDta.dept = dept
+                            
+                            let totalCnt = json["Total Pending Leaves"].stringValue
+                            totalCount =  Int(totalCnt) ?? 0
                             
                             lmsDta.noOfLeaves = json["Applied Leaves"].stringValue
                             lmsDta.empId = json["Employee Code"].stringValue
@@ -269,18 +265,18 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                         
                         self.arrDept = uniqueOrdered as! [String]
                         
-                        comp(true)
+                        comp(true, totalCount)
                     } else {
-                        comp(false)
+                        comp(false, 0)
                     }
                 } else {
-                    comp(false)
+                    comp(false, 0)
                 }
             }))
             
         } else {
             Helper.showNoInternetMessg()
-            comp(false)
+            comp(false, 0)
         }
     }
     
@@ -309,10 +305,16 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     @IBAction func btnTotalLeavesTapped(_ sender: Any) {
         
-        let lmsEmpList = self.storyboard?.instantiateViewController(withIdentifier: "LMSEmployeeListVC") as! LMSEmployeeListVC
-        lmsEmpList.arrayList = self.lmsAllData
-        self.navigationController?.pushViewController(lmsEmpList, animated: true)
-
+        if self.lmsAllData.count == 0 {
+            self.view.makeToast("No Employee Leave data found")
+        } else {
+            
+            
+            let lmsEmpList = self.storyboard?.instantiateViewController(withIdentifier: "LMSEmployeeListVC") as! LMSEmployeeListVC
+            lmsEmpList.arrayList = self.lmsAllData
+            self.navigationController?.pushViewController(lmsEmpList, animated: true)
+        }
+        
     }
     
     @IBAction func btnResetTapped(_ sender: Any) {
@@ -355,7 +357,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         let toDate = txtFldTo?.text ?? ""
         
         if empName.isEmpty && dept.isEmpty && fromDate.isEmpty && toDate.isEmpty {
-            Helper.showMessage(message: "Please Enter at least one Filter")
+            self.view.makeToast("Please Enter at least one Filter")
             return
         } else {
             
@@ -368,17 +370,17 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     func getEmpListAndNavigate( empNAme : String = "" , dept : String = "" , from : String = "", to : String = ""  ) {
         
-        self.getPendingLeavesByFilter(emp :empNAme , dept : dept , from : from, to : to, comp: {(res) in
+        self.getPendingLeavesByFilter(emp :empNAme , dept : dept , from : from, to : to, comp: { res,cnt in
+            
             if res {
-                  let lmsEmpList = self.storyboard?.instantiateViewController(withIdentifier: "LMSEmployeeListVC") as! LMSEmployeeListVC
-                  lmsEmpList.arrayList = self.lmsData
-                  self.navigationController?.pushViewController(lmsEmpList, animated: true)
-
+                let lmsEmpList = self.storyboard?.instantiateViewController(withIdentifier: "LMSEmployeeListVC") as! LMSEmployeeListVC
+                lmsEmpList.arrayList = self.lmsData
+                self.navigationController?.pushViewController(lmsEmpList, animated: true)
+            } else {
+                self.view.makeToast("No Employee Leave data found. Try by changing filter")
             }
             
         })
-        
-        
     }
     
     

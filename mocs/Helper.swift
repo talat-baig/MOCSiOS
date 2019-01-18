@@ -29,6 +29,7 @@ enum ModName {
     case isDefault
     case isApprovals
     case isLMSApproval
+    case isLMSApprovalDetails
 }
 
 /// Cardview
@@ -176,7 +177,30 @@ class Helper: UIView {
         case .success:
             let jsonResponse = JSON.init(parseJSON: response.value!)
             debugPrint("Response",jsonResponse)
-            if jsonResponse.dictionaryObject != nil {
+            
+            if jsonResponse.arrayObject is [[String:AnyObject]] {
+                
+                let data = jsonResponse.arrayObject as! [[String:AnyObject]]
+                
+                if data.count > 0 {
+                    
+                    for(_,j):(String,JSON) in jsonResponse {
+                        
+                        switch j["ServerMsg"] != JSON.null ? j["ServerMsg"].stringValue : "" {
+                            
+                        case "Success":
+                            isValid = true
+                            break
+                        default:
+                            isValid = false
+                            NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
+                            break
+                        }
+                    }
+                } else {
+                    isValid = true
+                }
+            } else if jsonResponse.dictionaryObject != nil {
                 
                 let data = jsonResponse.dictionaryObject
                 
@@ -231,7 +255,7 @@ class Helper: UIView {
         case .success:
             let jsonResponse = JSON(response.value!)
             debugPrint("Response",jsonResponse)
-            if jsonResponse.arrayObject is [[String:AnyObject]]{
+            if jsonResponse.arrayObject is [[String:AnyObject]] {
                 let data = jsonResponse.arrayObject as! [[String:AnyObject]]
                 if data.count > 0 { 
                     for(_,j):(String,JSON) in jsonResponse {
@@ -396,6 +420,10 @@ class Helper: UIView {
             
         case ModName.isLMSApproval :
             emptyView.message = "No Pending Approval Data for the current\nTry going back and changing filter"
+        case ModName.isLMSApprovalDetails :
+            emptyView.message = "No Leave Data Found for the current employee"
+            emptyView.buttonText = "RELOAD"
+
         default :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }

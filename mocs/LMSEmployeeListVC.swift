@@ -11,13 +11,11 @@ import Alamofire
 import SwiftyJSON
 
 class LMSEmployeeListVC: UIViewController {
-
   
     var arrayList : [LMSEmpData] = []
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,13 +57,12 @@ class LMSEmployeeListVC: UIViewController {
         self.navigationController?.pushViewController(lmsDetail, animated: true)
     }
     
-   
 }
 
 extension LMSEmployeeListVC : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 245
+        return 215
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

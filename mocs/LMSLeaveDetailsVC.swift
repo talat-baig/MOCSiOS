@@ -12,12 +12,12 @@ import Alamofire
 
 
 class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpDelegate {
-   
+    
     var arrayList : [LMSLeaveData] = []
     var empName = ""
     var empId = ""
     var dept = ""
-
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
@@ -27,21 +27,21 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = self.empName
         vwTopHeader.lblSubTitle.text = empId + "-" + dept
-
+        
         self.tableView.separatorStyle = .none
         self.tableView.register(UINib(nibName: "LMSLeaveDetailsCell", bundle: nil), forCellReuseIdentifier: "cell")
-
+        
         populateList()
     }
     
-
+    
     @objc func populateList() {
         
         if internetStatus != .notReachable {
@@ -59,68 +59,72 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
                     let jsonResponse = JSON(response.result.value!)
                     let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    for i in 0..<jsonArr.count {
+                    if jsonArr.count > 0 {
                         
-                        let lmsData = LMSLeaveData()
- 
-                        lmsData.reqId  = jsonResponse[i]["LeaveApplicationID"].stringValue
-                        
-                        if jsonResponse[i]["To Date"].stringValue == "" {
-                            lmsData.toDate  = "-"
-                        } else {
-                            lmsData.toDate = jsonResponse[i]["From Date"].stringValue
+                        for i in 0..<jsonArr.count {
+                            
+                            let lmsData = LMSLeaveData()
+                            
+                            lmsData.reqId  = jsonResponse[i]["LeaveApplicationID"].stringValue
+                            
+                            if jsonResponse[i]["To Date"].stringValue == "" {
+                                lmsData.toDate  = "-"
+                            } else {
+                                lmsData.toDate = jsonResponse[i]["From Date"].stringValue
+                            }
+                            
+                            if jsonResponse[i]["From Date"].stringValue == "" {
+                                lmsData.fromDate  = "-"
+                            } else {
+                                lmsData.fromDate = jsonResponse[i]["To Date"].stringValue
+                            }
+                            
+                            if jsonResponse[i]["No Of Days"].stringValue == "" {
+                                lmsData.noOfDays  = "-"
+                            } else {
+                                lmsData.noOfDays = jsonResponse[i]["No Of Days"].stringValue
+                            }
+                            
+                            if jsonResponse[i]["Reporting Manager Status"].stringValue == "" {
+                                lmsData.status  = "-"
+                            } else {
+                                lmsData.status = jsonResponse[i]["Reporting Manager Status"].stringValue
+                            }
+                            
+                            if jsonResponse[i]["Requested Date"].stringValue == "" {
+                                lmsData.reqDate  = "-"
+                            } else {
+                                lmsData.reqDate = jsonResponse[i]["Requested Date"].stringValue
+                            }
+                            
+                            
+                            
+                            if jsonResponse[i]["Type Of Leave"].stringValue == "" {
+                                lmsData.type  = "-"
+                            } else {
+                                lmsData.type = jsonResponse[i]["Type Of Leave"].stringValue
+                            }
+                            
+                            if jsonResponse[i]["Reason"].stringValue == "" {
+                                lmsData.reason  = "-"
+                            } else {
+                                lmsData.reason = jsonResponse[i]["Reason"].stringValue
+                            }
+                            
+                            if jsonResponse[i]["Contact on Leave"].stringValue == "" {
+                                lmsData.contact  = "-"
+                            } else {
+                                lmsData.contact = jsonResponse[i]["Contact on Leave"].stringValue
+                            }
+                            
+                            newData.append(lmsData)
                         }
-                        
-                        if jsonResponse[i]["From Date"].stringValue == "" {
-                            lmsData.fromDate  = "-"
-                        } else {
-                            lmsData.fromDate = jsonResponse[i]["To Date"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["No Of Days"].stringValue == "" {
-                            lmsData.noOfDays  = "-"
-                        } else {
-                            lmsData.noOfDays = jsonResponse[i]["No Of Days"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Reporting Manager Status"].stringValue == "" {
-                            lmsData.status  = "-"
-                        } else {
-                            lmsData.status = jsonResponse[i]["Reporting Manager Status"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Requested Date"].stringValue == "" {
-                            lmsData.reqDate  = "-"
-                        } else {
-                            lmsData.reqDate = jsonResponse[i]["Requested Date"].stringValue
-                        }
-                        
-                        
-                        
-                        
-                        
-                        if jsonResponse[i]["Type Of Leave"].stringValue == "" {
-                            lmsData.type  = "-"
-                        } else {
-                            lmsData.type = jsonResponse[i]["Type Of Leave"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Reason"].stringValue == "" {
-                            lmsData.reason  = "-"
-                        } else {
-                            lmsData.reason = jsonResponse[i]["Reason"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Contact on Leave"].stringValue == "" {
-                            lmsData.contact  = "-"
-                        } else {
-                            lmsData.contact = jsonResponse[i]["Contact on Leave"].stringValue
-                        }
-
-                        newData.append(lmsData)
+                        self.arrayList = newData
+                    } else {
+                        self.showEmptyState()
                     }
-                    self.arrayList = newData
                     self.tableView.reloadData()
+                    
                 }
             }))
         } else {
@@ -128,9 +132,14 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
         }
     }
     
+    func showEmptyState() {
+//        Helper.showNoFilterState(vc: self, tb: tableView, reports: ModName.isLMSApproval)
+        Helper.showNoFilterState(vc: self, tb: tableView, reports: ModName.isLMSApprovalDetails, action: #selector(self.populateList) )
 
+    }
+    
     func approveOrDeclineLeave( status : String, data:LMSLeaveData, comment:String) {
-
+        
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.LMS.APPROVE_LEAVES, Session.authKey, data.reqId, status , Helper.encodeURL(url:comment))
@@ -148,7 +157,7 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
         } else {
             
         }
-    
+        
     }
     
     func showSuccessAlert() {
@@ -156,8 +165,8 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
         let alert = UIAlertController(title: "Success", message: "Leave Request Successfully Approved", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
-            self.populateList()
-            
+//            self.populateList()
+            self.navigationController?.popToRootViewController(animated: true)
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -166,8 +175,8 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
         let alert = UIAlertController(title: "Success", message: "Leave Request Successfully Declined", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
-            self.populateList()
-            
+//            self.populateList()
+            self.navigationController?.popToRootViewController(animated: true)
         }))
         self.present(alert, animated: true, completion: nil)
     }

@@ -112,7 +112,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         btnSDNListChk.layer.borderWidth = 1
         btnSDNListChk.layer.borderColor = AppColor.lightGray.cgColor
         
-        
         btnKYCContctType.setTitle("Tap to Select", for: .normal)
         btnKYCRequired.setTitle("Tap to Select", for: .normal)
         btnSDNListChk.setTitle("Tap to Select", for: .normal)
@@ -204,11 +203,9 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     
     func approveOrDeclineCP( event : Int, cpData:CPListData, comment:String){
         
-        
         let kycReq = btnKYCRequired.titleLabel?.text
         let sdnList = btnSDNListChk.titleLabel?.text
 
-        
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.CP.CP_APPROVE, Session.authKey,
@@ -233,7 +230,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                                 
                                 if kycReq == "Yes" && sdnList == "No" {
                                     self.approveKYCForCP(data: cpData, fileName: self.docFileName , docRefId: self.newDate, url: self.docUrlStr )
-
                                 } else {
                                     self.showSuccessAlert()
                                 }
@@ -241,7 +237,6 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
                                 
                             default:
                                 NotificationBanner(title: data!["ServerMsg"] as! String   ,style: .danger).show()
-                                
                                 break
                             }
                         }
@@ -329,7 +324,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
 
         
         if isApprove {
-            self.approveOrDeclineCP(event: 1, cpData: data as! CPListData, comment: text)
+            self.approveOrDeclineCP(event: 1, cpData: data as! CPListData, comment: commnt)
             myView.removeFromSuperviewWithAnimate()
         } else {
             

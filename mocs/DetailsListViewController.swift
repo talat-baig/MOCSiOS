@@ -366,25 +366,7 @@ class DetailsListViewController: UIViewController {
             }
             
             self?.initialSetup() // *
-            //            if self?.isFromVesselAndProduct ?? false {
-            //                self?.fetchProductWiseROList(vesslName: self?.vesselStr ?? "", prodName: self?.titleStr ?? "" )
-            //            }
-            //
-            //            if self?.isFromVessel ?? false {
-            //                self?.fetchVesselWiseProducts(vesslName : item)
-            //            }
-            //
-            //            if self?.isFromProduct ?? false {
-            //                self?.fetchProductWiseROList(vesslName: item, prodName: self?.titleStr ?? "" )
-            //            }
-            //
-            //            if self?.isFromWarehouse ?? false {
-            //                self?.fetchWarehouseWiseProduct(wareName: self?.titleStr ?? "", vesslName: item)
-            //            }
-            //
-            //            if self?.isFromWarehouseAndProduct ?? false {
-            //                self?.fetchProductWiseROList(vesslName: item, prodName: self?.titleStr ?? "" , warehouseName: self?.wareHousStr ?? "")
-            //            }
+          
         }
         dropDown.show()
     }

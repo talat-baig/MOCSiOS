@@ -12,7 +12,7 @@ class LMSEmpDataCell: UITableViewCell {
 
     @IBOutlet weak var lblDept: UILabel!
     @IBOutlet weak var lblLeaves: UILabel!
-    @IBOutlet weak var lblReason: UILabel!
+//    @IBOutlet weak var lblReason: UILabel!
     @IBOutlet weak var lblStatus: UILabel!
     @IBOutlet weak var lblEmpId: UILabel!
     @IBOutlet weak var btnView: UIButton!
@@ -47,7 +47,7 @@ class LMSEmpDataCell: UITableViewCell {
         let empId = data?.empId ?? ""
         
         lblEmpId.text  = empName + "-" + empId 
-        lblReason.text = data?.reason
+//        lblReason.text = data?.reason
         lblLeaves.text = data?.noOfLeaves
         lblStatus.text = data?.status
 
