@@ -29,7 +29,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var helpDocViewer: UIDocumentInteractionController!
     var wunderPopup = CustomPopUpView()
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "3.2.1 Purchase Contract (PC)","3.2.2 Sales Contract (SC)" , "3.2.3 Delivery Orders (DO)", "3.2.4 Travel Claims Reimbursement (TCR)", "3.1.2 Employee Claims & Payments (ECR EPR)" , "3.1.1 Admin Receive Invoice (ARI)", "3.2.5 Trade Received Invoice (TRI)", "3.2.6 Release Order (RO)", "3.2.7 Counterparty Profile" , "3.2.8 Travel Request", "3.3.1 Leave Management System" , "Employee Directory","Task Manager" , "2.1.1 Accounts Receivables (AR) Report", "2.1.2 Accounts Payable Report", "2.1.3 Available Release Report", "2.1.4 Sales Summary Report","2.1.5 Purchase Summary Report", "2.1.6 Fund Receipts and Allocation", "2.1.7 Fund Payments and Settlement"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "1.1.5 Leave Management System (LMS) Form", "3.2.1 Purchase Contract (PC)","3.2.2 Sales Contract (SC)" , "3.2.3 Delivery Orders (DO)", "3.2.4 Travel Claims Reimbursement (TCR)", "3.1.2 Employee Claims & Payments (ECR EPR)" , "3.1.1 Admin Receive Invoice (ARI)", "3.2.5 Trade Received Invoice (TRI)", "3.2.6 Release Order (RO)", "3.2.7 Counterparty Profile" , "3.2.8 Travel Request", "3.3.1 Leave Management System" , "Employee Directory","Task Manager" , "2.1.1 Accounts Receivables (AR) Report", "2.1.2 Accounts Payable Report", "2.1.3 Available Release Report", "2.1.4 Sales Summary Report","2.1.5 Purchase Summary Report", "2.1.6 Fund Receipts and Allocation", "2.1.7 Fund Payments and Settlement"]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -61,8 +61,10 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
 
         let trvl_tkct = MenuDataObject(name: "1.1.4 Travel Ticket", storybdNAme: "TravelTicket", vcName: "TravelTicketController", imageName: #imageLiteral(resourceName: "task_tick"))
 
+        let lms_req = MenuDataObject(name: "1.1.5 Leave Management System (LMS) Form", storybdNAme: "LMSReq", vcName: "LMSReqController", imageName: #imageLiteral(resourceName: "task_tick"))
+
         
-        let form = MenuDataObject(name: "1.1 Forms" , children: [tcr_form, ecr_form, trf_form, trvl_tkct], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "document"))
+        let form = MenuDataObject(name: "1.1 Forms" , children: [tcr_form, ecr_form, trf_form, trvl_tkct,lms_req], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "document"))
         
         let administrative = MenuDataObject(name: "Administrative", children: [form], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile") )
         

@@ -13,8 +13,6 @@ import SwiftyJSON
 
 class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, onTTSubmit {
     
-    
-    
     var arrayList: [TravelTicketData] = []
     
     var newArray : [TravelTicketData] = []
@@ -23,9 +21,7 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
     
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +33,6 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
         tableView.addSubview(refreshControl)
         
-        
-        //        self.title = "Travel Claims"
         srchBar.delegate = self
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
@@ -50,7 +44,6 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
         vwTopHeader.lblSubTitle.isHidden = true
         
         populateList()
-        
     }
     
     override func didReceiveMemoryWarning() {

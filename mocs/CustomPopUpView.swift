@@ -118,7 +118,6 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     
     /// Action method for right button tapped
     @IBAction func btnRightTapped(_ sender: Any) {
-       
         
         if isFromSideMenu {
             
