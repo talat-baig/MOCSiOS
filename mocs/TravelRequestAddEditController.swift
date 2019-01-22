@@ -632,51 +632,6 @@ extension TravelRequestAddEditController : UITextViewDelegate {
 }
 
 
-//extension TravelRequestAddEditController : UITableViewDelegate, UITableViewDataSource {
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        print("heightForRowAt")
-//        return 42
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//
-//        print( "numberOfRowsInSection")
-//        return arrTravelType.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//        print("cellForRowAt")
-//        let view = tableView.dequeueReusableCell(withIdentifier: "cell" , for: indexPath)
-//        view.textLabel?.text = arrTravelType[indexPath.row]
-//        view.imageView?.image = #imageLiteral(resourceName: "unchecked_black")
-//        view.imageView?.tag = indexPath.row
-//        view.textLabel?.font = UIFont.systemFont(ofSize: 14)
-//        view.textLabel?.numberOfLines = 0
-//
-//
-//        return view
-//
-//    }
-//
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//
-//        print("didSelectRowAt")
-//
-//        let cell = tableView.cellForRow(at: indexPath)
-//
-//        if cell?.imageView?.image == #imageLiteral(resourceName: "checked_black") {
-//            cell?.imageView?.image = #imageLiteral(resourceName: "unchecked_black")
-//        } else {
-//            cell?.imageView?.image = #imageLiteral(resourceName: "checked_black")
-//        }
-//
-//    }
-//
-//
-//}
 
 extension TravelRequestAddEditController: WC_HeaderViewDelegate {
     

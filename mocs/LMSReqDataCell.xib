@@ -56,6 +56,9 @@
                                                     <constraint firstAttribute="width" constant="35" id="nq1-1l-5V5"/>
                                                 </constraints>
                                                 <state key="normal" image="ic_more"/>
+                                                <connections>
+                                                    <action selector="moreClick:" destination="j8G-wQ-rji" eventType="touchUpInside" id="juu-h2-Eqd"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -273,6 +276,18 @@
                     <constraint firstItem="Uqa-AH-ZQg" firstAttribute="top" secondItem="YAh-Z3-u3u" secondAttribute="top" constant="8" id="x5m-kH-r9K"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="btnMenu" destination="lPn-Pq-w83" id="CR0-ke-Lpi"/>
+                <outlet property="lblDateApplied" destination="M5T-yy-v2t" id="YKt-zq-ylP"/>
+                <outlet property="lblDept" destination="rbM-hg-rVx" id="eCH-0B-2d5"/>
+                <outlet property="lblFrom" destination="X0b-sJ-wQm" id="GWG-lj-K40"/>
+                <outlet property="lblNoOfDays" destination="dyh-kL-quM" id="LUE-CY-KI5"/>
+                <outlet property="lblReason" destination="tyl-tI-qP5" id="WO8-FF-1S1"/>
+                <outlet property="lblRef" destination="HRg-Lw-AvK" id="MWp-tH-Qg7"/>
+                <outlet property="lblStatus" destination="NMR-7r-OID" id="Rzj-mq-7ye"/>
+                <outlet property="lblTo" destination="Knx-fI-ez5" id="Wbz-gW-uHp"/>
+                <outlet property="vwOuter" destination="Uqa-AH-ZQg" id="v9h-De-hFO"/>
+            </connections>
             <point key="canvasLocation" x="-1.6000000000000001" y="123.68815592203899"/>
         </tableViewCell>
     </objects>

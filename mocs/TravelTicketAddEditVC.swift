@@ -49,8 +49,6 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     @IBOutlet weak var mySubVw: UIView!
     @IBOutlet weak var btnTrvllerName: UIButton!
     
-    @IBOutlet weak var vwTravName: UIView!
-    
     @IBOutlet weak var txtFldTrvlName: UITextField!
     @IBOutlet weak var swtchGuest: UISwitch!
     

@@ -416,7 +416,6 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         dropDown.anchorView = btnBVertical
         dropDown.dataSource = [Session.department]
         dropDown.show()
-        
         self.handleTap()
     }
     

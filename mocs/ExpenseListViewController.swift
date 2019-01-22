@@ -136,30 +136,7 @@ class ExpenseListViewController: UIViewController, IndicatorInfoProvider, onSubm
         }
     }
     
-//    func getCurrency(comp : @escaping(Bool) ->()) {
-//        if Session.currency == "" {
-//            if internetStatus != .notReachable {
-//                let url = String.init(format: Constant.API.CURRENCY_TYPE, Session.authKey)
-//                self.view.showLoading()
-//                Alamofire.request(url).responseData(completionHandler: ({ response in
-//                    self.view.hideLoading()
-//                    if Helper.isResponseValid(vc: self, response: response.result){
-//                        let jsonString = JSON(response.result.value!)
-//                        Session.currency = jsonString.rawString()!
-//                        comp(true)
-//                    } else {
-//                        comp(false)
-//                    }
-//                }))
-//                
-//            } else {
-//                
-//                comp(false)
-//            }
-//        }
-//         comp(true)
-//    }
-            
+
     
     func getCurrencyAndOpenVC(eplData: ExpenseListData?) {
         if Session.currency == "" {

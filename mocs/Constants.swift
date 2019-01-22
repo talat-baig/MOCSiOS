@@ -193,6 +193,32 @@ struct Constant
         static let GET_PAYMENT_REASON =  ApiUrl.URL + "/ECR/GetAccountChargeHead?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&EPRtype=%@&type=%@&referenceid=%@"
         
         static let ECR_EPR_ADVANCES =  "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ECRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
+        
+        /************************ LMS Request *****************************/
+        static let LMS_LIST = ApiUrl.URL + "/LeaveManagementSystem/GetLeaveTypes?apikeyhist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+        
+        static let LMS_SUMMARY = ApiUrl.URL + "/LeaveManagementSystem/GetLeaveSummary?apikeysumm=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+
+        static let LMS_ATTACHMENT = ApiUrl.URL + "/LeaveManagementSystem/GetLeaveAttachment?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&SNO=%@"
+        
+        static let LMS_LEAVE_TYPES = ApiUrl.URL + "/LeaveManagementSystem/GetLeaveTypes?apikeytype=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+
+        
+        
+
+//        GetLeaveSummary(string apikeysumm, string authid)
+        
+//        GetLeaveAttachment(string apikey, string authid, int SNO)
+        
+        
+
+        
+//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+
     }
     
     struct AR {

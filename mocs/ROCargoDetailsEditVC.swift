@@ -136,12 +136,6 @@ extension ROCargoDetailsEditVC: WC_HeaderViewDelegate {
 
 extension ROCargoDetailsEditVC: UITableViewDelegate, UITableViewDataSource, onRRcptMoreClickListener, onRRcptItemClickListener  {
     
-//    func onOkClick() {
-//        self.populateList()
-////        self.getCargoDetails(refId: whrData.roID)
-//    }
-    
-    
     func onClick(optionMenu: UIViewController, sender: UIButton) {
         self.present(optionMenu, animated: true, completion: nil)
     }

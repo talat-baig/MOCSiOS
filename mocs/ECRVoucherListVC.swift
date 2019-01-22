@@ -29,6 +29,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     var moduleName = String()
     
     var ecrData = EmployeeClaimData()
+    weak var lmsData : LMSReqData?
     
     var uf_delegate:uploadFileDelegate?
     
@@ -51,7 +52,12 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     @IBOutlet weak var tableView: UITableView!
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "VOUCHERS")
+        if self.lmsData != nil {
+            return IndicatorInfo(title: "ATTACHMENTS")
+        } else {
+            return IndicatorInfo(title: "VOUCHERS")
+        }
+        
     }
     
     override func viewDidLoad() {
@@ -130,7 +136,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         
     }
     
-   
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -142,7 +148,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     }
     
     @objc func populateList(response : Data?) {
-
+        
         guard response != nil else {
             return
         }
@@ -212,23 +218,34 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     
     @objc func getVouchersData() {
         
+        
         let docRefId = String(format: "%@D%d",self.ecrData.headRef ,self.ecrData.counter)
         
         if internetStatus != .notReachable {
             
             var url = String()
             
-            if(ecrData.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame) {
-                url =  String.init(format: Constant.DROPBOX.LIST,
-                                   Session.authKey,
-                                   Helper.encodeURL(url: self.moduleName),
-                                   Helper.encodeURL(url: docRefId))
-            } else {
-                url =  String.init(format: Constant.DROPBOX.LIST,
-                                   Session.authKey,
-                                   Helper.encodeURL(url: self.moduleName),
-                                   Helper.encodeURL(url: self.ecrData.headRef))
+            if self.lmsData != nil {
                 
+                url =  String.init(format: Constant.API.LMS_ATTACHMENT,
+                                   Session.authKey,
+                                   Helper.encodeURL(url: lmsData?.srNo ?? ""))
+                
+            } else {
+                
+                if(ecrData.headStatus.caseInsensitiveCompare("draft") == ComparisonResult.orderedSame) {
+                    
+                    url =  String.init(format: Constant.DROPBOX.LIST,
+                                       Session.authKey,
+                                       Helper.encodeURL(url: self.moduleName),
+                                       Helper.encodeURL(url: docRefId))
+                } else {
+                    url =  String.init(format: Constant.DROPBOX.LIST,
+                                       Session.authKey,
+                                       Helper.encodeURL(url: self.moduleName),
+                                       Helper.encodeURL(url: self.ecrData.headRef))
+                    
+                }
             }
             
             self.view.showLoading()
@@ -613,7 +630,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-     
+        
         
         let newVoucher = arrayList[indexPath.row]
         
@@ -632,7 +649,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
         if newVoucher.isFileUploading {
             cellView.progressBar.isHidden = false
             cellView.progressBar.progress = 0.0
-
+            
             cellView.btnDelete.isHidden = true
             cellView.contentView.backgroundColor = AppColor.univVoucherCell
             

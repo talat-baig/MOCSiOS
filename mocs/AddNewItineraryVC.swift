@@ -130,9 +130,7 @@ class AddNewItineraryVC: UIViewController {
         
         if currentTxtFld == txtFldDeptDate {
             txtFldDeptDate.text = dateFormatter.string(from: datePicker.date) as String
-            //             let startDate = dateFormatter.date(from: txtFldDeptDate.text!)!
         }
-        
         
         if currentTxtFld == txtFldRetDate {
             txtFldRetDate.text = dateFormatter.string(from: datePicker.date) as String

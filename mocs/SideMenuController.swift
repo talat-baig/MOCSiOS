@@ -299,33 +299,15 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     }
     
     func treeView(_ treeView: RATreeView, heightForRowForItem item: Any) -> CGFloat {
-        
-//        let item = item as! MenuDataObject
-//
-//        let width = item.name?.count
-//
-//        print( item.name, item.name?.count)
-////        print(item., width ?? 0)
-//        if width! >= 42 {
-//            return 93
-//        } else if width! <= 39 {
-//            return 75
-//        } else {
-//            return 60
-//        }
-//
-         let level = treeView.levelForCell(forItem: item)
-        
-        
-        
+
+        let level = treeView.levelForCell(forItem: item)
+
         if level == 2 {
-            
             return UITableViewAutomaticDimension
-            
         } else {
              return 60
         }
-//        return UITableViewAutomaticDimension
+        
     }
     
 

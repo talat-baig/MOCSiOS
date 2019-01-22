@@ -295,7 +295,8 @@ class Helper: UIView {
                             
                         default:
                             isValid = false
-                            NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
+//                            NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
+                            NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
                         }
                     }
                 }else{

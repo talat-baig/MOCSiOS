@@ -31,6 +31,7 @@ class Session {
         static let FILTERLIST = "filterlist"
         static let COMPANIES = "companylist"
         static let CITIES = "cities"
+        static let LEAVETYPES = "leaveTypes"
 
 
     }
@@ -188,6 +189,15 @@ class Session {
         }
         set(cities){
             UserDefaults.standard.set(cities, forKey: Veriable.CITIES)
+        }
+    }
+    
+    public static var leaveTypes: String {
+        get{
+            return UserDefaults.standard.string(forKey: Veriable.LEAVETYPES) ?? ""
+        }
+        set(leaveTypes){
+            UserDefaults.standard.set(leaveTypes, forKey: Veriable.LEAVETYPES)
         }
     }
     

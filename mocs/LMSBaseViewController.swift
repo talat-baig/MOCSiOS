@@ -9,13 +9,15 @@
 import UIKit
 import  XLPagerTabStrip
 
-class LMSBaseViewController: ButtonBarPagerTabStripViewController {
+class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyComplete {
     
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     var isFromView : Bool = false
-    
+    var lmsReqData : LMSReqData?
+    var notifyChilds : notifyChilds_UC?
+
     override func viewDidLoad() {
         
         settings.style.buttonBarBackgroundColor = .white
@@ -53,54 +55,47 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController {
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         
         var viewArray:[UIViewController] = []
+//        var isEdit : Bool = false
         
+ 
+        let lmsAttachmnt = self.storyboard?.instantiateViewController(withIdentifier: "ECRVoucherListVC") as! ECRVoucherListVC
+        lmsAttachmnt.isFromView = isFromView
+        lmsAttachmnt.lmsData = self.lmsReqData
+        lmsAttachmnt.moduleName = Constant.MODULES.LMS
+        lmsAttachmnt.ucNotifyDelegate = self
         
-        if isFromView {
-            //            let tcNonEditVC = self.storyboard?.instantiateViewController(withIdentifier: "TravelClaimNonEditController") as! LMSAddEditController
-            //            tcNonEditVC.response = response
-            //            self.notifyChilds = tcNonEditVC
-            //            viewArray.append(tcNonEditVC)
-        } else {
-            let lmsAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "LMSAddEditController") as! LMSAddEditController
-            //            tcAddEditVC.response = response
-            //            tcAddEditVC.tcrNo = tcrData.headRef
-            //            tcAddEditVC.okTCRSubmit = self
-            //            self.notifyChilds = tcAddEditVC
-            //            tcAddEditVC.counter = tcrData.counter
-            viewArray.append(lmsAddEditVC)
-        }
-        
-        
-//                let tcVouchersVC = self.storyboard?.instantiateViewController(withIdentifier: "VouchersListViewController") as! VouchersListViewController
-        //        tcVouchersVC.tcrData = tcrData
-        //        tcVouchersVC.isFromView = isFromView
-        //        tcVouchersVC.moduleName = Constant.MODULES.LMS
-        //        tcVouchersVC.vouchResponse = voucherResponse
-        //        tcVouchersVC.ucNotifyDelegate = self
-        
-        //        viewArray.append(lmsAddEditVC)
-        //        viewArray.append(tcVouchersVC)
-        //
-                return viewArray
-            }
+        let lmsAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "LMSAddEditController") as! LMSAddEditController
+        lmsAddEditVC.isFromView = isFromView
+        lmsAddEditVC.lmsReqData = self.lmsReqData
+        viewArray.append(lmsAddEditVC)
+        viewArray.append(lmsAttachmnt)
+
+        return viewArray
+    }
     
     
-}
-    extension LMSBaseViewController: WC_HeaderViewDelegate {
-        
-        func backBtnTapped(sender: Any) {
-            
-        }
-        
-        func topMenuLeftButtonTapped(sender: Any) {
-            self.presentLeftMenuViewController(sender as AnyObject)
-        }
-        
-        func topMenuRightButtonTapped(sender: Any) {
-            self.presentRightMenuViewController(sender as AnyObject)
-            
-        }
-        
-}
+    
+    func notifyUCVouchers(messg: String, success: Bool) {
 
-
+        if let d = notifyChilds {
+            d.notifyChild(messg: messg, success : success)
+        }
+    }
+    
+}
+extension LMSBaseViewController: WC_HeaderViewDelegate {
+    
+    func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func topMenuLeftButtonTapped(sender: Any) {
+        self.presentLeftMenuViewController(sender as AnyObject)
+    }
+    
+    func topMenuRightButtonTapped(sender: Any) {
+        self.presentRightMenuViewController(sender as AnyObject)
+        
+    }
+    
+}

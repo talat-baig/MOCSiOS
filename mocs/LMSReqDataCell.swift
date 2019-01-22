@@ -8,15 +8,98 @@
 
 import UIKit
 
-class LMSReqDataCell: UITableViewCell {
+protocol onLMSOptionClickListener: NSObjectProtocol {
+    func onViewClick(data:LMSReqData) -> Void
+    func onEditClick(data:LMSReqData) -> Void
+    func onDeleteClick(data:LMSReqData) -> Void
 
+}
+
+class LMSReqDataCell: UITableViewCell {
+    
+    @IBOutlet weak var lblStatus: UILabel!
+    @IBOutlet weak var lblRef: UILabel!
+    @IBOutlet weak var lblDateApplied: UILabel!
+    @IBOutlet weak var lblDept: UILabel!
+    @IBOutlet weak var lblFrom: UILabel!
+    @IBOutlet weak var lblTo: UILabel!
+    @IBOutlet weak var lblNoOfDays: UILabel!
+    @IBOutlet weak var lblReason: UILabel!
+    
+    @IBOutlet weak var btnMenu: UIButton!
+    
+    @IBOutlet weak var vwOuter: UIView!
+    
+    weak var delegate:onMoreClickListener?
+    weak var optionClickListener:onLMSOptionClickListener?
+
+    
+    var data : LMSReqData!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        vwOuter.layer.shadowOpacity = 0.25
+        vwOuter.layer.shadowOffset = CGSize(width: 0, height: 2)
+        vwOuter.layer.shadowRadius = 1
+        vwOuter.layer.shadowColor = UIColor.black.cgColor
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
+    func setDataToViews(data : LMSReqData) {
+        
+        lblRef.text = data.srNo
+        lblTo.text = data.to
+        lblFrom.text = data.from
+        lblDept.text = data.dept
+        lblReason.text = data.reason
+        lblStatus.text = data.appStatus
+        lblNoOfDays.text = data.noOfDays
+        lblDateApplied.text = data.appliedDate
+        
+        self.data = data
+    }
+    
+    
+    
+    @IBAction func moreClick(_ sender: UIButton) {
+        
+        let optionMenu = UIAlertController(title: nil, message: data.srNo, preferredStyle: .actionSheet)
+        
+        let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
+            if (self.optionClickListener?.responds(to: Selector(("onEditClick:"))) != nil){
+                self.optionClickListener?.onEditClick(data: self.data)
+            }
+        })
+        
+        let viewAction = UIAlertAction(title: "View", style: .default, handler: { (alert:UIAlertAction!)-> Void in
+            if (self.optionClickListener?.responds(to: Selector(("onViewClick:"))) != nil){
+                self.optionClickListener?.onViewClick(data: self.data)
+            }
+        })
+        
+        let delAction = UIAlertAction(title: "Delete", style: .default, handler: { (alert:UIAlertAction!)-> Void in
+            if (self.optionClickListener?.responds(to: Selector(("onDeleteClick:"))) != nil){
+                self.optionClickListener?.onDeleteClick(data: self.data)
+            }
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in
+        })
+        
+        optionMenu.addAction(editAction)
+        optionMenu.addAction(viewAction)
+        optionMenu.addAction(delAction)
+        
+        optionMenu.addAction(cancelAction)
+        
+        if ((delegate?.responds(to: Selector(("onClick:")))) != nil) {
+            delegate?.onClick(optionMenu: optionMenu , sender: sender)
+        }
+        
+        
+    }
 }
