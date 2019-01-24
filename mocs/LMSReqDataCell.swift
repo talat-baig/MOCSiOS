@@ -40,10 +40,14 @@ class LMSReqDataCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        self.layer.cornerRadius = 3
+//        vwOuter.layer.masksToBounds = true
         vwOuter.layer.shadowOpacity = 0.25
         vwOuter.layer.shadowOffset = CGSize(width: 0, height: 2)
         vwOuter.layer.shadowRadius = 1
         vwOuter.layer.shadowColor = UIColor.black.cgColor
+        
+       
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

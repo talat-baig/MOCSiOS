@@ -70,13 +70,13 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
                             if jsonResponse[i]["To Date"].stringValue == "" {
                                 lmsData.toDate  = "-"
                             } else {
-                                lmsData.toDate = jsonResponse[i]["From Date"].stringValue
+                                lmsData.toDate = jsonResponse[i]["To Date"].stringValue
                             }
                             
                             if jsonResponse[i]["From Date"].stringValue == "" {
                                 lmsData.fromDate  = "-"
                             } else {
-                                lmsData.fromDate = jsonResponse[i]["To Date"].stringValue
+                                lmsData.fromDate = jsonResponse[i]["From Date"].stringValue
                             }
                             
                             if jsonResponse[i]["No Of Days"].stringValue == "" {

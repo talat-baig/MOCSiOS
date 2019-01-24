@@ -9,7 +9,12 @@
 import UIKit
 import  XLPagerTabStrip
 
-class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyComplete {
+protocol onLMSUpdate {
+    func onLMSUpdateClick()
+}
+
+class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyComplete, onTRFSubmit {
+  
     
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
@@ -18,6 +23,7 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyCom
     var lmsReqData : LMSReqData?
     var notifyChilds : notifyChilds_UC?
     var attachmntVC : ECRVoucherListVC?
+    var lmsUpdateDelgte: onLMSUpdate?
 
     override func viewDidLoad() {
         
@@ -46,8 +52,8 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyCom
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "Leave Request"
-        vwTopHeader.lblSubTitle.text = ""
+        vwTopHeader.lblTitle.text = "LMS-Request"
+        vwTopHeader.lblSubTitle.isHidden = true
         self.navigationController?.isNavigationBarHidden = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
@@ -79,6 +85,13 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyCom
     func saveVocuherListRef(vc: ECRVoucherListVC){
         self.attachmntVC = vc
     }
+    
+    func onOkClick() {
+        if let d = self.lmsUpdateDelgte {
+            d.onLMSUpdateClick()
+        }
+    }
+    
     
     func notifyUCVouchers(messg: String, success: Bool) {
 

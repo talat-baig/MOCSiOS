@@ -1179,8 +1179,17 @@ extension String{
             let regex = try NSRegularExpression(pattern: pattern, options: .caseInsensitive)
             let range = NSMakeRange(0, self.count)
             self = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replaceWith)
-        }catch{
+        } catch {
             return
+        }
+    }
+    
+    
+    var stripped: String {
+        let okayChars = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890")
+        return self.filter {
+            okayChars.contains($0)
+            
         }
     }
     

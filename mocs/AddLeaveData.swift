@@ -20,7 +20,6 @@ struct AddLeaveData: Codable {
     var noOfDays : String = ""
     var leaveContact : String = ""
     var remarks : String = ""
-//    var approvingMngr : String = ""
     var supportDoc : [TTVoucher] = []
     var delegation : String = ""
 
@@ -33,9 +32,8 @@ struct AddLeaveData: Codable {
         case toDate = "LeaveApplicationToDate"
         case noOfDays = "LeaveApplicationDaysCount"
         case leaveContact = "LeaveApplicationLeaveContact"
-//        case approvingMngr = "LeaveApplicationLeaveContact"
         case remarks = "LeaveApplicationRemarks"
-        case supportDoc = "LeaveApplicationSupportingDoc"
+        case supportDoc = "SupportedDoc"
         case delegation = "LeaveApplicationDelegationWork"
     }
 }

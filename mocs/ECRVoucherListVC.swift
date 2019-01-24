@@ -16,6 +16,7 @@ import Alamofire
 import SwiftyJSON
 import FileBrowser
 import MaterialShowcase
+import NotificationBannerSwift
 
 
 protocol UCECR_NotifyComplete {
@@ -134,9 +135,17 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
             }
         } else {
             floaty.isHidden = false
-            showEmptyState()
-            tableView.addSubview(refreshControl)
+            
+            if moduleName == Constant.MODULES.LMS && lmsData == nil {
+                showLMSEmptyState()
+
+            } else {
+                showEmptyState()
+                tableView.addSubview(refreshControl)
+
+            }
         }
+        
         self.uf_delegate = self
         
     }
@@ -219,6 +228,10 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     
     func showEmptyState(){
         Helper.showNoItemState(vc:self , messg: "List is Empty\nTry to load by tapping below button" , tb:tableView,  action:#selector(getVouchersData))
+    }
+    
+    func showLMSEmptyState(){
+        Helper.showNoItemState(vc:self , messg: "List is Empty\nTo add an attachment tap on (+) button" , tb:tableView)
     }
     
     @objc func getVouchersData() {
@@ -500,8 +513,6 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                 GlobalVariables.shared.uploadQueue.removeAll()
                 self.getVouchersData()
             }
-            
-            
         })
         
     }
@@ -509,7 +520,6 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     func permissionPrimeCameraAccess() {
         
         let appName =  Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? ""
-        
         let alert = UIAlertController( title: appName + " Would Like To Access the Camera", message: "Please grant permission to use the Camera", preferredStyle: .alert )
         let allowAction = UIAlertAction(title: "Allow", style: .default, handler: { (alert) -> Void in
             self.showCameraPicker()
@@ -548,6 +558,43 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         }
         
     }
+    
+    
+    func deleteLMSDocFromServer(docId :  String) {
+        
+        if self.internetStatus != .notReachable {
+            
+            self.view.showLoading()
+            let url = String.init(format: Constant.API.LMS_DELETE_ATTACHMENT, Session.authKey)
+            print(url)
+            
+            let newData = ["DocumentID": docId, "IsDeleted": "1"] as [String : Any]
+            
+            Alamofire.request(url, method: .post, parameters: newData, encoding: JSONEncoding.default)
+                .responseString(completionHandler: {  response in
+                    self.view.hideLoading()
+                    debugPrint(response.result.value as Any)
+                    
+                    if Helper.isPostResponseValid(vc: self, response: response.result) {
+                        self.view.makeToast("File Deleted")
+                        
+                        if let index = self.arrayList.index(where: {$0.documentID == docId}) {
+                            self.arrayList.remove(at: index)
+                        }
+                        self.tableView.reloadData()
+                        if self.arrayList.count == 0 {
+                            print("Zeroooooooo")
+                            self.showEmptyState()
+                        }
+                    }
+                })
+        } else {
+             Helper.showNoInternetMessg()
+        }
+    }
+    
+    
+    
     
     
     func deleteItemFromServer(docId : String, comp : @escaping(Bool) -> ()){
@@ -600,9 +647,58 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         
     }
     
+    @objc func deleteLMSFileTapped(sender : UIButton) {
+        
+        
+        let buttonRow = sender.tag
+        let vouchrItem = self.arrayList[buttonRow]
+
+//            self.deleteLMSDocFromServer(docId: self.arrayList[buttonRow].documentID, comp: { (result) in
+//                if result {
+//                    self.arrayList.remove(at: buttonRow)
+//                    self.tableView.reloadData()
+//                    if self.arrayList.count == 0 {
+//                        print("Zeroooooooo")
+//                        self.showEmptyState()
+//                    }
+//                } else {
+//                    Helper.showMessage(message: "No Internet Available, Please check your connection")
+//                }
+//            })
+
+            
+        let deleteAlert = UIAlertController(title: "Delete?", message: "Are you sure you want to delete the voucher?", preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: "YES", style: .default, handler: { (action) -> Void in
+            
+            if vouchrItem.documentID != "" {
+                self.deleteLMSDocFromServer(docId : vouchrItem.documentID)
+                
+            } else {
+                // remove item at index
+                self.arrayList.remove(at: buttonRow)
+                self.tableView.reloadData()
+                if self.arrayList.count == 0 {
+                    print("Zeroooooooo")
+//                    self.showEmptyState()
+                    self.showLMSEmptyState()
+                }
+            }
+        })
+        
+        let cancel = UIAlertAction(title: "GO BACK", style: .destructive, handler: { (action) -> Void in })
+        deleteAlert.addAction(cancel)
+        deleteAlert.addAction(yesAction)
+        
+        present(deleteAlert, animated: true, completion: nil)
+        
+        
+        
+    }
+    
     @objc func deleteFileTapped(sender:UIButton) {
         
         let buttonRow = sender.tag
+        
         
         if GlobalVariables.shared.isUploadingSomething {
             self.view.makeToast("File uploading is in progress, Please wait..")
@@ -627,7 +723,6 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         })
         
         let cancel = UIAlertAction(title: "GO BACK", style: .destructive, handler: { (action) -> Void in })
-        
         deleteAlert.addAction(cancel)
         deleteAlert.addAction(yesAction)
         
@@ -642,10 +737,7 @@ extension ECRVoucherListVC: UIImagePickerControllerDelegate, UINavigationControl
         self.imagePicker.dismiss(animated: true, completion: { () -> Void in
             self.view.showLoading()
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                //                let imgData = UIImagePNGRepresentation(image)
                 let compressData = UIImageJPEGRepresentation(image, 0.5) //max value is 1.0 and minimum is 0.0
-                //                let compressedImage = UIImage(data: compressData!)
-                
                 let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
                 myView.frame = (self.navigationController?.view.frame)!
                 myView.data = compressData
@@ -702,12 +794,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
             
             self.addRowWithCell(fileInfo : uploadFileData)
         }
-        
-        
-        
-        
     }
-    
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -728,7 +815,6 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
         let newVoucher = arrayList[indexPath.row]
         
         let cellView = tableView.dequeueReusableCell(withIdentifier: "cell") as! AttachmentCell
@@ -741,8 +827,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
             cellView.fileDesc.isHidden = false
             cellView.fileDesc.text = newVoucher.documentDesc
         }
-        
-        
+
         if newVoucher.isFileUploading {
             cellView.progressBar.isHidden = false
             cellView.progressBar.progress = 0.0
@@ -753,7 +838,6 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
         } else {
             cellView.progressBar.isHidden = true
             cellView.contentView.backgroundColor = UIColor.clear
-            
             
             if isFromView {
                 cellView.btnDelete.isHidden = true
@@ -770,11 +854,14 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
             cellView.btnStatus.setImage(#imageLiteral(resourceName: "view"), for: .normal)
         }
         
-        
         cellView.btnStatus.tag = indexPath.row
         cellView.btnDelete.tag = indexPath.row
         
-        cellView.btnDelete.addTarget(self, action: #selector(self.deleteFileTapped(sender:)), for: UIControlEvents.touchUpInside)
+        if moduleName == Constant.MODULES.LMS {
+            cellView.btnDelete.addTarget(self, action: #selector(self.deleteLMSFileTapped(sender:)), for: UIControlEvents.touchUpInside)
+        } else {
+            cellView.btnDelete.addTarget(self, action: #selector(self.deleteFileTapped(sender:)), for: UIControlEvents.touchUpInside)
+        }
         
         return cellView
     }

@@ -445,7 +445,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
             if vouchrItem.documentID != "" {
                 self.deleteVoucher(docId : vouchrItem.documentID)
             } else {
-                
                 // remove item at index
                 self.arrayList.remove(at: buttonRow)
                 self.tableView.reloadData()
@@ -454,8 +453,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                     self.showEmptyState()
                 }
             }
-            
-          
         })
         
         let cancel = UIAlertAction(title: "GO BACK", style: .destructive, handler: { (action) -> Void in })

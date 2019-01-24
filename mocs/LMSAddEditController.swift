@@ -25,7 +25,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     //    var lmsAttachmnts : [TTVoucher] = []
     
     weak var currentTxtFld: UITextField? = nil
-    
+    weak var okLMSSubmit : onTCRSubmit?
+
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     @IBOutlet weak var vwLeaveType: UIView!
@@ -85,7 +86,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         let lmsDocArray = lmsDocVC.arrayList
         
         self.arrLMSAttachmnt = lmsDocArray
-        
+//        self.checkForLeaveType()
     }
     
     func assignDataToViews() {
@@ -114,14 +115,11 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                 
                 if res {
                     if self.lmsReqData != nil {
-                        
                         self.btnLeaveType.setTitle( self.lmsReqData?.leaveType , for: .normal)
                         self.btnSubmit.setTitle("UPDATE", for: .normal)
                     } else {
-                        
                         self.btnLeaveType.setTitle( self.arrLeaveTypes[0] , for: .normal)
                         self.btnSubmit.setTitle("APPLY", for: .normal)
-                        
                     }
                 } else {
                     self.btnLeaveType.setTitle( "" , for: .normal)
@@ -139,7 +137,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             txtFldContact.text = lmsReqData?.contact
             txtFldNoOfDays.text = lmsReqData?.noOfDays
             txtFldApprovingMngr.text = lmsReqData?.mngrName
-             self.btnLeaveType.setTitle( self.lmsReqData?.leaveType , for: .normal)
+            self.btnLeaveType.setTitle( self.lmsReqData?.leaveType , for: .normal)
+//            self.checkForLeaveType() // check leave type for UI elements enable/disable
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -161,6 +160,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             }
             
         } else {
+            txtFldApprovingMngr.text = Session.reportMngr
         }
         
     }
@@ -268,10 +268,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         self.txtVwReason.layer.masksToBounds = true;
         self.txtVwReason.layer.borderWidth = 0.6
         
-        //        self.txtFldDelegation.layer.borderColor = UIColor.lightGray.cgColor
-        //        self.txtFldDelegation.layer.masksToBounds = true;
-        //        self.txtFldDelegation.layer.borderWidth = 0.6
-        
+   
         self.txtFldFrom.inputView = datePickerTool
         self.txtFldTo.inputView = datePickerTool
         
@@ -320,6 +317,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                 
                 var newItem = TTVoucher()
                 
+                newItem.docRefNum = item.documentID
                 newItem.docName = item.documentName
                 newItem.docDesc = item.documentDesc
                 newItem.docPath = item.documentPath
@@ -336,15 +334,12 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         
         let arrAttachments = self.getAttachmentsData(voucherArray: self.arrLMSAttachmnt)
         
-        
-        
         guard let leaveType = self.btnLeaveType.titleLabel?.text , !leaveType.isEmpty else {
             Helper.showMessage(message: "Please enter Leave Type")
             return
         }
         
-        
-        guard let fromDate = self.txtFldTo?.text, !fromDate.isEmpty else {
+        guard let fromDate = self.txtFldFrom?.text, !fromDate.isEmpty else {
             Helper.showMessage(message: "Please enter From Date")
             return
         }
@@ -359,6 +354,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             return
         }
         
+        let newContact = contact.stripped
+        
         guard let reason = self.txtVwReason?.text , !reason.isEmpty else {
             Helper.showMessage(message: "Please enter Reason for leave")
             return
@@ -368,7 +365,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         let noOfDays = txtFldNoOfDays.text
         
         
-        let leaveReqObj = AddLeaveData(leavId:  lmsReqData != nil ? lmsReqData?.srNo ?? "" : ""  , shortName: leaveType, fromDate : fromDate , toDate : toDate , noOfDays : noOfDays ?? "" , leaveContact : contact , remarks : reason ,  supportDoc : arrAttachments , delegation : delegation ?? "" )
+        let leaveReqObj = AddLeaveData(leavId:  lmsReqData != nil ? lmsReqData?.srNo ?? "" : ""  , shortName: leaveType, fromDate : fromDate , toDate : toDate , noOfDays : noOfDays ?? "" , leaveContact : newContact , remarks : Helper.encodeURL(url: reason) ,  supportDoc : arrAttachments , delegation : Helper.encodeURL(url: delegation ?? ""))
         
         var newDict: [String: Any]?
         let jsonEncoder = JSONEncoder()
@@ -409,6 +406,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     
     func submitLeaveReq( leaveReq : [String: Any]?) {
         
+        self.handleTap()
+        
         if self.internetStatus != .notReachable {
             
             self.view.showLoading()
@@ -436,9 +435,10 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     let success = UIAlertController(title: "Success", message: messg, preferredStyle: .alert)
                     success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                         
-                        //                        if let d = self.ttSubmitDelgte {
-                        //                            d.onTTSubmitClick()
-                        //                        }
+                        if let d = self.okLMSSubmit {
+                            d.onOkClick()
+                        }
+                        
                         self.navigationController?.popViewController(animated: true)
                     }))
                     self.present(success, animated: true, completion: nil)
@@ -454,15 +454,37 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     
     @IBAction func btnLeaveTypeTapped(_ sender: Any) {
         
+        self.handleTap()
+        
         let leaveTyp = DropDown()
         leaveTyp.anchorView = btnLeaveType
         leaveTyp.dataSource = self.arrLeaveTypes
         leaveTyp.selectionAction = { [weak self] (index, item) in
             self?.btnLeaveType.setTitle( item , for: .normal)
+            
+            self?.checkForLeaveType(leaveType : item)
         }
         leaveTyp.show()
     }
     
+    
+    func checkForLeaveType(leaveType : String = "") {
+        
+        if leaveType == "HAPL" {
+            txtFldTo.isEnabled = false
+            txtFldTo.text = "-"
+            txtFldNoOfDays.text = "0.5"
+        } else {
+            txtFldTo.isEnabled = true
+            
+            if lmsReqData != nil {
+                txtFldNoOfDays.text = lmsReqData?.noOfDays
+            } else {
+                txtFldNoOfDays.text = ""
+            }
+        }
+        
+    }
     
     func makePrefix() {
         let attributedString = NSMutableAttributedString(string: "+")

@@ -205,7 +205,7 @@ struct Constant
 
         static let LMS_CANCEL_LEAVE = ApiUrl.URL + "/LeaveManagementSystem/CancelPendingLeave?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&Id=%@"
 
-        static let LMS_ADD_UPDATE = ApiUrl.URL + "/LeaveManagementSystem/AddUpdateLeave?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+        static let LMS_ADD_UPDATE = ApiUrl.URL + "/LeaveManagementSystem/AddUpdateLeave?apikeyadd=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidadd=%@"
 
         static let LMS_DELETE_ATTACHMENT = ApiUrl.URL + "/LeaveManagementSystem/UpdateDeleteDocument?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
 

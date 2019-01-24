@@ -10,7 +10,8 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class LMSReqController: UIViewController {
+class LMSReqController: UIViewController , onLMSUpdate {
+    
     
     var arrayGridList : [LMSGridData] = []
     var lmsSummry = LMSSummaryData()
@@ -19,7 +20,8 @@ class LMSReqController: UIViewController {
     //    @IBOutlet weak var collVw: UICollectionView!
     //    @IBOutlet weak var gridTableVw: UITableView!
     @IBOutlet weak var tableView: UITableView!
-    
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+
     //    @IBOutlet weak var btnApplyLeave: UIButton!
     //    @IBOutlet weak var scrlVw: UIScrollView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -33,7 +35,7 @@ class LMSReqController: UIViewController {
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblTitle.text = "LMS Requests"
+        vwTopHeader.lblTitle.text = "Leave Request"
         vwTopHeader.lblSubTitle.isHidden = true
         
         
@@ -41,6 +43,10 @@ class LMSReqController: UIViewController {
         
         self.tableView.register(UINib(nibName: "LMSCustomHeader", bundle: nil), forCellReuseIdentifier: "summarycell")
         self.tableView.separatorStyle = .none
+        
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateReqList))
+        tableView.addSubview(refreshControl)
+
         populateReqList()
     }
     
@@ -63,7 +69,7 @@ class LMSReqController: UIViewController {
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.hideLoading()
-                //                self.refreshControl.endRefreshing()
+                self.refreshControl.endRefreshing()
                 
                 if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView) {
                     
@@ -78,39 +84,48 @@ class LMSReqController: UIViewController {
                             lmsReq.leaveType = json["Leave Type"].stringValue
 
                             lmsReq.from = json["From Date"].stringValue
+                            
                             lmsReq.to = json["To Date"].stringValue
                             
                             lmsReq.noOfDays = json["Leave Days"].stringValue
+                            
                             lmsReq.appliedDate = json["Added Date"].stringValue
+                            
                             lmsReq.contact = json["Contact While On Leave"].stringValue
+                            
                             lmsReq.empCode = json["Employee Code"].stringValue
+                            
                             lmsReq.empName = json["Employee Name"].stringValue
+                            
                             lmsReq.dept = json["Department"].stringValue
+                            
                             lmsReq.reason = json["Reason"].stringValue
+                            
                             lmsReq.leaveReason = json["Leave Reason"].stringValue
+                            
                             lmsReq.appStatus = json["Leave Application Status"].stringValue
+                            
                             lmsReq.delegation = json["Delegation Work"].stringValue
-                            lmsReq.mngrName = json["Reporting Manager"].stringValue
-                            lmsReq.mngrName = json["Manager Name"].stringValue
 
+                            if json["Manager Name"].stringValue == "" {
+                                lmsReq.mngrName  = "-"
+                            } else {
+                                lmsReq.mngrName = json["Manager Name"].stringValue
+                            }
                             
                             data.append(lmsReq)
                         }
                         self.arrayList = data
-                        //                        self.newArray = data
                         self.tableView.tableFooterView = nil
                         self.tableView.reloadData()
-                        //                        self.tblHeight.constant = self.tableView.contentSize.height
                     } else {
                         // show empty state
-                        //                        Helper.showEmptyState(vc: <#UIViewController#>)
                     }
                 }
             }))
         } else {
             Helper.showNoInternetMessg()
             Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateReqList))
-            //            self.refreshControl.endRefreshing()
         }
         
     }
@@ -121,8 +136,10 @@ class LMSReqController: UIViewController {
     }
     
     
-    
-    
+    func onLMSUpdateClick() {
+        
+        self.populateReqList()
+    }
     
     
     @objc func btnApplyTapped( sender: UIButton) {
@@ -130,6 +147,7 @@ class LMSReqController: UIViewController {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "LMSBaseViewController") as! LMSBaseViewController
         vc.isFromView = false
         vc.lmsReqData = nil
+        vc.lmsUpdateDelgte = self
         self.navigationController!.pushViewController(vc, animated: true)
     }
     
@@ -157,7 +175,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.section == 0 {
-            return 360
+            return 400
         } else {
             return 210
         }
@@ -224,6 +242,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "LMSBaseViewController") as! LMSBaseViewController
         vc.isFromView = isFromView
         vc.lmsReqData = data
+        vc.lmsUpdateDelgte = self
         self.navigationController!.pushViewController(vc, animated: true)
         
     }
