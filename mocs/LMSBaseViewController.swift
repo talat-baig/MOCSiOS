@@ -13,7 +13,7 @@ protocol onLMSUpdate {
     func onLMSUpdateClick()
 }
 
-class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyComplete, onTRFSubmit {
+class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyComplete,  onTCRSubmit {
   
     
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
@@ -75,6 +75,7 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyCom
         
         let lmsAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "LMSAddEditController") as! LMSAddEditController
         lmsAddEditVC.isFromView = isFromView
+        lmsAddEditVC.okLMSSubmit = self
         lmsAddEditVC.lmsReqData = self.lmsReqData
         viewArray.append(lmsAddEditVC)
         viewArray.append(lmsAttachmnt)

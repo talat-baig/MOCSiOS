@@ -39,6 +39,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     
     @IBOutlet weak var btnLeaveType: UIButton!
     
+    
     @IBOutlet weak var scrlVw: UIScrollView!
     
     @IBOutlet weak var mySubVw: UIView!
@@ -109,7 +110,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             self.btnLeaveType.isUserInteractionEnabled = true
             btnSubmit.isHidden = false
             
-            self.makePrefix()
+           
             
             self.getLeaveTypes { (res) in
                 
@@ -134,7 +135,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             
             txtVwReason.text = lmsReqData?.reason
             txtFldDelegation.text = lmsReqData?.delegation
-            txtFldContact.text = lmsReqData?.contact
+            txtFldContact.text = lmsReqData?.contact.stripped
             txtFldNoOfDays.text = lmsReqData?.noOfDays
             txtFldApprovingMngr.text = lmsReqData?.mngrName
             self.btnLeaveType.setTitle( self.lmsReqData?.leaveType , for: .normal)
@@ -162,7 +163,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         } else {
             txtFldApprovingMngr.text = Session.reportMngr
         }
-        
+       
+//         self.makePrefix()
     }
     
     func getLeaveTypes( comp : @escaping(Bool)-> ()) {
@@ -273,6 +275,17 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         self.txtFldTo.inputView = datePickerTool
         
         btnLeaveType.contentHorizontalAlignment = .left
+        
+        let imgVwPlus = UIImageView(image: UIImage(named: "plus"))
+//        if let size = imgVwPlus.image?.size {
+            imgVwPlus.frame = CGRect(x: 0.0, y: 0.0, width: 8.0, height: 8 )
+//        }
+        imgVwPlus.contentMode = UIViewContentMode.center
+        txtFldContact.leftViewMode = UITextFieldViewMode.always
+        txtFldContact.leftView = imgVwPlus
+        
+        
+        btnSubmit.layer.cornerRadius = 5.0
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
