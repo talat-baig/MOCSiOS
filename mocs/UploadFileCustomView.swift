@@ -138,7 +138,6 @@ extension UploadFileCustomView: UITextFieldDelegate {
             txtFileDesc.becomeFirstResponder()
             
         case txtFileDesc:
-//            btnUpload.sendActions(for: .touchUpInside)
             self.endEditing(true)
             
         default:

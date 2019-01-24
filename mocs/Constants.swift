@@ -203,22 +203,43 @@ struct Constant
         
         static let LMS_LEAVE_TYPES = ApiUrl.URL + "/LeaveManagementSystem/GetLeaveTypes?apikeytype=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
 
-        
-        
+        static let LMS_CANCEL_LEAVE = ApiUrl.URL + "/LeaveManagementSystem/CancelPendingLeave?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&Id=%@"
 
+        static let LMS_ADD_UPDATE = ApiUrl.URL + "/LeaveManagementSystem/AddUpdateLeave?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+
+        static let LMS_DELETE_ATTACHMENT = ApiUrl.URL + "/LeaveManagementSystem/UpdateDeleteDocument?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
+
+        
+        
+//        GetLeaveTypes(string apikeytype, string authid)
+//        GetLeaveHistory(string apikeyhist, string authid)
 //        GetLeaveSummary(string apikeysumm, string authid)
-        
 //        GetLeaveAttachment(string apikey, string authid, int SNO)
-        
-        
-
-        
-//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-//        static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
-
+//        AddUpdateLeave(string apikey, string authid, LeaveManagementSystem LMS)
+//        UpdateDeleteDocument(string apikey, string authid, LeaveApplicationSupportingDoc document)
+//        CancelPendingLeave(string apikey, string authid, int Id)
+//
+//
+//        LMS-public Int32? LeaveApplicationID { get; set; }
+//        public string LeaveApplicationLeaveShortName { get; set; }
+//        public DateTime LeaveApplicationFromDate { get; set; }
+//        public DateTime LeaveApplicationToDate { get; set; }
+//        public double LeaveApplicationDaysCount { get; set; }
+//        public string LeaveApplicationLeaveContact { get; set; }
+//        public string LeaveApplicationRemarks { get; set; }
+//        public List<LeaveApplicationSupportingDoc> SupportedDoc { get; set; }
+//        public string LeaveApplicationDelegationWork { get; set; }
+//        public string LeaveApplicationStatus { get; set; }
+//        public string CancelledBy { get; set; }
+//        public string LastEditedBy { get; set; }
+//
+//
+//        SupportedDoc -  public Int32? ID { get; set; }
+//        public Int32? DocumentID { get; set; }
+//        public string DocumentName { get; set; }
+//        public string DocumentDescription { get; set; }
+//        public string DocumentPhysicalPath { get; set; }
+//        public bool IsDeleted { get; set; }
     }
     
     struct AR {

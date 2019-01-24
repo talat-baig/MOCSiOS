@@ -15,6 +15,8 @@ class Session {
         static let USER = "user"
         static let EMAIL = "email"
         static let COMPANY = "company"
+        static let COMPANYCODE = "compCode"
+
 //        static let PRODUCTS = "products"
 
         static let LOCATION = "location"
@@ -78,6 +80,15 @@ class Session {
         }
         set(company){
             UserDefaults.standard.set(company, forKey: Veriable.COMPANY)
+        }
+    }
+    
+    public static var compCode: String{
+        get{
+            return UserDefaults.standard.object(forKey: Veriable.COMPANYCODE) as? String ?? ""
+        }
+        set(compCode){
+            UserDefaults.standard.set(compCode, forKey: Veriable.COMPANYCODE)
         }
     }
     

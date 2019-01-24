@@ -40,9 +40,7 @@ class LMSReqController: UIViewController {
         self.tableView.register(UINib(nibName: "LMSReqDataCell", bundle: nil), forCellReuseIdentifier: "datacell")
         
         self.tableView.register(UINib(nibName: "LMSCustomHeader", bundle: nil), forCellReuseIdentifier: "summarycell")
-        
-        
-        
+        self.tableView.separatorStyle = .none
         populateReqList()
     }
     
@@ -93,6 +91,9 @@ class LMSReqController: UIViewController {
                             lmsReq.appStatus = json["Leave Application Status"].stringValue
                             lmsReq.delegation = json["Delegation Work"].stringValue
                             lmsReq.mngrName = json["Reporting Manager"].stringValue
+                            lmsReq.mngrName = json["Manager Name"].stringValue
+
+                            
                             data.append(lmsReq)
                         }
                         self.arrayList = data
@@ -158,7 +159,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             return 360
         } else {
-            return 240
+            return 210
         }
     }
     
@@ -193,6 +194,29 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
 
     func deleteLeave(data:LMSReqData) {
         
+        if internetStatus != .notReachable {
+            self.view.showLoading()
+            
+            let url = String.init(format: Constant.API.LMS_CANCEL_LEAVE, Session.authKey, data.srNo)
+            
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
+                
+                self.view.hideLoading()
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
+                    
+                    let alert = UIAlertController(title: "Success", message: "Request successfully cancelled", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {(AlertAction) ->  Void in
+                        if let index = self.arrayList.index(where: {$0 === data}) {
+                            self.arrayList.remove(at: index)
+                        }
+                        self.tableView.reloadData()
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
     
     func viewLeave(data:LMSReqData, isFromView : Bool){

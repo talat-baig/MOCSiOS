@@ -17,6 +17,7 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyCom
     var isFromView : Bool = false
     var lmsReqData : LMSReqData?
     var notifyChilds : notifyChilds_UC?
+    var attachmntVC : ECRVoucherListVC?
 
     override func viewDidLoad() {
         
@@ -62,6 +63,8 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyCom
         lmsAttachmnt.isFromView = isFromView
         lmsAttachmnt.lmsData = self.lmsReqData
         lmsAttachmnt.moduleName = Constant.MODULES.LMS
+        self.saveVocuherListRef(vc: lmsAttachmnt)
+        lmsAttachmnt.vouchResponse = nil
         lmsAttachmnt.ucNotifyDelegate = self
         
         let lmsAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "LMSAddEditController") as! LMSAddEditController
@@ -73,7 +76,9 @@ class LMSBaseViewController: ButtonBarPagerTabStripViewController , UC_NotifyCom
         return viewArray
     }
     
-    
+    func saveVocuherListRef(vc: ECRVoucherListVC){
+        self.attachmntVC = vc
+    }
     
     func notifyUCVouchers(messg: String, success: Bool) {
 

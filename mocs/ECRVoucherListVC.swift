@@ -52,7 +52,8 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
     @IBOutlet weak var tableView: UITableView!
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        if self.lmsData != nil {
+        
+        if moduleName == Constant.MODULES.LMS {
             return IndicatorInfo(title: "ATTACHMENTS")
         } else {
             return IndicatorInfo(title: "VOUCHERS")
@@ -126,7 +127,11 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         
         if isFromView {
             floaty.isHidden = true
-            self.populateList(response: vouchResponse)
+            if vouchResponse != nil {
+                self.populateList(response: vouchResponse)
+            } else {
+                
+            }
         } else {
             floaty.isHidden = false
             showEmptyState()
@@ -225,7 +230,7 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
             
             var url = String()
             
-            if self.lmsData != nil {
+            if moduleName ==  Constant.MODULES.LMS {
                 
                 url =  String.init(format: Constant.API.LMS_ATTACHMENT,
                                    Session.authKey,
@@ -338,8 +343,9 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         GlobalVariables.shared.isUploadingSomething = true
         
         let docRefId = String(format: "%@D%d",self.ecrData.headRef ,self.ecrData.counter)
-        
+      
         let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "/" + Constant.MODULES.EPRECR + "/" + Session.company + "/" + Session.location + "/"  + Session.user + "/" + docRefId + "/" + fileInfo.fName + "." + fileInfo.fExtension)
+        
         
         DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
         dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
@@ -348,10 +354,12 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                 
                 DispatchQueue.main.async() {
                     if let response = response {
+               
                         self.addItemToServer(dModName: Constant.MODULES.EPRECR, company: Session.company, location: Session.location, bUnit: Session.user, docRefId: docRefId, docName: fileInfo.fName, docDesc: fileInfo.fDesc, docFilePath: Helper.getOCSFriendlyaPath(path: response.pathDisplay!), compHandler: { result in
                             
                             comp(result, "")
                         })
+                        
                     } else if error != nil {
                         comp(false, (error?.description)!)
                     }
@@ -362,6 +370,66 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                 self.updateCellProgressvalue(selectedIndexPath: fileInfo.notifInfo.notifIdentifier, withProgress: Float(progressData.fractionCompleted))
         }
     }
+    
+    func uploadLMSImageData( fileInfo : FileInfo, comp : @escaping(Bool, String)-> ()) {
+        
+        GlobalVariables.shared.isUploadingSomething = true
+        
+        let code = Session.compCode
+        let cName = Session.company
+        let compStr =  String(format: "%@ (%@)", cName, code )
+        
+        
+        let path = Helper.getModifiedPath( path: Constant.DROPBOX.DROPBOX_BASE_PATH + "\\" + Constant.MODULES.LMS  + "\\" + compStr + "\\" + Session.location + "\\"  + Session.empCode + "\\" + fileInfo.fName + "." + fileInfo.fExtension)
+        
+        DropboxClientsManager.authorizedClient = DropboxClient.init(accessToken: Session.dbtoken)
+        dbRequest = DropboxClientsManager.authorizedClient?.files.upload(path: path, input: fileInfo.fData!)
+            .response { response, error in
+                
+                DispatchQueue.main.async() {
+                    if let response = response {
+                        
+                        guard let path = response.pathDisplay else {
+                            comp(false,"")
+                            Helper.showMessage(message: "Unable to upload file.")
+                            return
+                        }
+                        let newPath = Helper.getOCSFriendlyaPath(path: path)
+                        print(newPath)
+                        let modifiedPath = Helper.getModifiedVoucherPath(path : newPath)
+                        
+                        let newVoucher = VoucherData()
+                        newVoucher.documentID = ""
+                        newVoucher.documentName = fileInfo.fName
+                        newVoucher.documentDesc = fileInfo.fDesc
+                        newVoucher.documentPath = modifiedPath
+                        newVoucher.companyName = compStr
+                        newVoucher.location = "NA"
+                        newVoucher.businessUnit = "NA"
+                        newVoucher.documentCategory = ""
+                        newVoucher.documentType = ""
+                        newVoucher.moduleName = Constant.MODULES.LMS
+                        
+                        let addDate = Date()
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "yyyy-MM-dd"
+                        let newDate = formatter.string(from: addDate)
+                        
+                        newVoucher.addDate = newDate
+                        self.arrayList.append(newVoucher)
+                        
+                        // add item to server
+                        comp(true, "")
+                    } else if error != nil {
+                        comp(false, (error?.description)!)
+                    }
+                }
+            }
+            .progress { progressData in
+                
+        }
+    }
+    
     
     func updateCellProgressvalue(selectedIndexPath: IndexPath, withProgress: Float) {
         
@@ -597,18 +665,47 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func uploadFile(data: Data, fileName: String, ext: String, fileDesc: String) {
         
-        self.view.makeToast("Your file upload is in progress, we'll notify when uploaded")
+        if moduleName == Constant.MODULES.LMS {
+            
+            self.view.makeToast("Your file upload is in progress..")
+            self.view.showLoading()
+            
+            let uploadFileData = FileInfo()
+            uploadFileData.fData = data
+            uploadFileData.fName = fileName
+            uploadFileData.fDesc = fileDesc
+            uploadFileData.fExtension = ext
+            
+            self.uploadLMSImageData(fileInfo: uploadFileData,  comp: {result,str  in
+                self.view.hideLoading()
+                if result {
+                    self.view.makeToast("File Uploaded successfully")
+                    
+                    self.tableView.tableFooterView = nil
+                    self.tableView.reloadData()
+                } else {
+                    self.view.makeToast("Sorry! Unable to Upload file")
+                }
+            })
+        } else {
+            
+            self.view.makeToast("Your file upload is in progress, we'll notify when uploaded")
+            
+            let uploadFileData = FileInfo()
+            
+            uploadFileData.fData = data
+            uploadFileData.fName = fileName
+            uploadFileData.fDesc = fileDesc
+            uploadFileData.fExtension = ext
+            
+            GlobalVariables.shared.uploadQueue.append(uploadFileData)
+            
+            self.addRowWithCell(fileInfo : uploadFileData)
+        }
         
-        let uploadFileData = FileInfo()
         
-        uploadFileData.fData = data
-        uploadFileData.fName = fileName
-        uploadFileData.fDesc = fileDesc
-        uploadFileData.fExtension = ext
         
-        GlobalVariables.shared.uploadQueue.append(uploadFileData)
         
-        self.addRowWithCell(fileInfo : uploadFileData)
     }
     
     
@@ -619,7 +716,7 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if arrayList.count > 0{
+        if arrayList.count > 0 {
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
         } else {
@@ -685,10 +782,20 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if GlobalVariables.shared.isUploadingSomething {
-            self.view.makeToast("File uploading is in progress, Please wait..")
-            return
+        if moduleName == Constant.MODULES.LMS {
+            
+        } else {
+            if GlobalVariables.shared.isUploadingSomething {
+                self.view.makeToast("File uploading is in progress, Please wait..")
+                return
+            }
         }
+        
+        
+//        if GlobalVariables.shared.isUploadingSomething {
+//            self.view.makeToast("File uploading is in progress, Please wait..")
+//            return
+//        }
         
         if Helper.isFileExists(fileName: arrayList[indexPath.row].documentName + "." + URL(fileURLWithPath: arrayList[indexPath.row].documentPath).pathExtension) {
             
@@ -703,6 +810,8 @@ extension ECRVoucherListVC: UITableViewDataSource, UITableViewDelegate, uploadFi
         } else {
             
             Helper.showLoading(vc: self)
+            self.view.makeToast("Please wait while downloading...")
+
             self.downloadFile(path: arrayList[indexPath.row].documentPath, fileName : arrayList[indexPath.row].documentName, comp: { result in
                 Helper.hideLoading(vc: self)
                 if result {

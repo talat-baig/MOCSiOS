@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Foundation
 
 class APListData: NSObject {
 

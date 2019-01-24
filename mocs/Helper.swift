@@ -167,6 +167,20 @@ class Helper: UIView {
         
         let components =  Calendar.current.dateComponents([.day], from: startDate, to: endDate).day
         return components!
+        
+    }
+    
+    
+    class func daysBetweenDays2(startDate : Date, endDate : Date) -> Int {
+        
+        let calendar = Calendar.current
+        
+        // Replace the hour (time) of both dates with 00:00
+        let date1 = calendar.startOfDay(for: startDate)
+        let date2 = calendar.startOfDay(for: endDate)
+        
+        let components = calendar.dateComponents([.day], from: date1, to: date2).day! + 1
+        return components
     }
     
     public static func isPostResponseValid(vc: UIViewController, response : Result<String>, tv:UITableView? = nil)-> Bool{
@@ -223,7 +237,6 @@ class Helper: UIView {
                         isValid = true
                     }
                 }
-                
             } else {
                 NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
             }
@@ -295,8 +308,8 @@ class Helper: UIView {
                             
                         default:
                             isValid = false
-//                            NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
-                            NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
+                            NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
+//                            NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
                         }
                     }
                 }else{

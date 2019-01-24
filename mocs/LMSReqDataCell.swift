@@ -18,9 +18,9 @@ protocol onLMSOptionClickListener: NSObjectProtocol {
 class LMSReqDataCell: UITableViewCell {
     
     @IBOutlet weak var lblStatus: UILabel!
-    @IBOutlet weak var lblRef: UILabel!
+//    @IBOutlet weak var lblRef: UILabel!
     @IBOutlet weak var lblDateApplied: UILabel!
-    @IBOutlet weak var lblDept: UILabel!
+    @IBOutlet weak var lblTOF: UILabel!
     @IBOutlet weak var lblFrom: UILabel!
     @IBOutlet weak var lblTo: UILabel!
     @IBOutlet weak var lblNoOfDays: UILabel!
@@ -30,6 +30,7 @@ class LMSReqDataCell: UITableViewCell {
     
     @IBOutlet weak var vwOuter: UIView!
     
+    @IBOutlet weak var imgVwStatus: UIImageView!
     weak var delegate:onMoreClickListener?
     weak var optionClickListener:onLMSOptionClickListener?
 
@@ -51,14 +52,30 @@ class LMSReqDataCell: UITableViewCell {
     
     func setDataToViews(data : LMSReqData) {
         
-        lblRef.text = data.srNo
+//        lblRef.text = data.srNo
         lblTo.text = data.to
         lblFrom.text = data.from
-        lblDept.text = data.dept
+        lblTOF.text = data.leaveType
         lblReason.text = data.reason
         lblStatus.text = data.appStatus
         lblNoOfDays.text = data.noOfDays
         lblDateApplied.text = data.appliedDate
+        
+        if data.appStatus == "Approved" {
+            imgVwStatus.image = #imageLiteral(resourceName: "approve")
+            
+        } else if data.appStatus == "Rejected" {
+            
+            imgVwStatus.image = #imageLiteral(resourceName: "decline")
+            
+        } else if data.appStatus == "Pending"  {
+            
+            imgVwStatus.image = #imageLiteral(resourceName: "pending")
+            
+        } else {
+            
+            imgVwStatus.image = #imageLiteral(resourceName: "cancelled")
+        }
         
         self.data = data
     }
@@ -81,7 +98,7 @@ class LMSReqDataCell: UITableViewCell {
             }
         })
         
-        let delAction = UIAlertAction(title: "Delete", style: .default, handler: { (alert:UIAlertAction!)-> Void in
+        let delAction = UIAlertAction(title: "Cancel", style: .default, handler: { (alert:UIAlertAction!)-> Void in
             if (self.optionClickListener?.responds(to: Selector(("onDeleteClick:"))) != nil){
                 self.optionClickListener?.onDeleteClick(data: self.data)
             }
@@ -90,9 +107,15 @@ class LMSReqDataCell: UITableViewCell {
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (UIAlertAction) -> Void in
         })
         
-        optionMenu.addAction(editAction)
+        
+        if data.appStatus.caseInsensitiveCompare("pending") == ComparisonResult.orderedSame {
+            
+            optionMenu.addAction(editAction)
+            optionMenu.addAction(delAction)
+        }
+//        optionMenu.addAction(editAction)
         optionMenu.addAction(viewAction)
-        optionMenu.addAction(delAction)
+//        optionMenu.addAction(delAction)
         
         optionMenu.addAction(cancelAction)
         

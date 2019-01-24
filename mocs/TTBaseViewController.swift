@@ -552,7 +552,9 @@ class TTBaseViewController: ButtonBarPagerTabStripViewController , getRepMngrDel
     
     
     func getTrvlerEMPId(item : String) -> String {
+     
         let trvlrObj = self.trvticktAddEditVC?.arrTravlrData.filter{ $0.fullName == item }.first
+    
         guard let refId = trvlrObj?.refId else {
             return ""
         }

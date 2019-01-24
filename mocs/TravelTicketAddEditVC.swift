@@ -728,8 +728,6 @@ extension TravelTicketAddEditVC: UITextFieldDelegate {
         var val : Bool = true
         
         switch textField {
-            
-            
         case txtCompny :
             addDropDownToCompnyTextFld()
             val = false

@@ -69,12 +69,14 @@ class ViewController: UIViewController {
                     Session.empCode = subjson["EmployeeCode"].stringValue
                     Session.reportMngr = subjson["ReportingManager"].stringValue
                     Session.designation = subjson["Designation"].stringValue
+                    Session.compCode = subjson["ComapnyCode"].stringValue
 
                     self.getCurrency()
                     debugPrint(Session.authKey)
                     debugPrint(Session.empCode)
                     debugPrint(Session.reportMngr)
                     debugPrint(Session.designation)
+                    debugPrint(Session.compCode)
 
                     let storyBoard: UIStoryboard = UIStoryboard(name:"Home",bundle:nil)
                     let mainPage = storyBoard.instantiateViewController(withIdentifier: "rootController") as! RootViewController
