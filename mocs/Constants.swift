@@ -209,7 +209,9 @@ struct Constant
 
         static let LMS_DELETE_ATTACHMENT = ApiUrl.URL + "/LeaveManagementSystem/UpdateDeleteDocument?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
 
-        
+        static let LMS_LEAVE_POLICY = ApiUrl.URL + "/LeaveManagementSystem/GetLeavePolicy?apikeypolicy=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidpolicy=%@"
+
+//        GetLeavePolicy(string apikeypolicy, string authidpolicy)
         
 //        GetLeaveTypes(string apikeytype, string authid)
 //        GetLeaveHistory(string apikeyhist, string authid)

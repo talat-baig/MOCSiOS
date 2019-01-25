@@ -26,6 +26,8 @@ class LMSReqController: UIViewController , onLMSUpdate {
     //    @IBOutlet weak var scrlVw: UIScrollView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
+    @IBOutlet weak var lblNoHistory: UILabel!
+    @IBOutlet weak var vwLvHistory: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,9 +115,11 @@ class LMSReqController: UIViewController , onLMSUpdate {
                         self.tableView.reloadData()
                     } else {
 
+                        self.showLeaveHistoryEmptyState()
+
                     }
                 } else {
-                    
+                     self.showLeaveHistoryEmptyState()
                 }
             }))
             
@@ -234,80 +238,83 @@ class LMSReqController: UIViewController , onLMSUpdate {
     
     
     
-    @objc func populateReqList() {
-        
-        var data: [LMSReqData] = []
-        
-        if internetStatus != .notReachable {
-            
-            self.showLoading()
-            let url:String = String.init(format: Constant.API.LMS_LIST, Session.authKey)
-            
-            Alamofire.request(url).responseData(completionHandler: ({ response in
-                self.hideLoading()
-                self.refreshControl.endRefreshing()
-                
-                if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView) {
-                    
-                    let jsonResponse = JSON(response.result.value!)
-                    let array = jsonResponse.arrayObject as! [[String:AnyObject]]
-                    if array.count > 0 {
-                        self.arrayList.removeAll()
-                        
-                        for(_,json):(String,JSON) in jsonResponse {
-                            
-                            let lmsReq = LMSReqData()
-                            
-                            lmsReq.srNo = json["SNO"].stringValue
-                            
-                            lmsReq.leaveType = json["Leave Type"].stringValue
-                            
-                            lmsReq.from = json["From Date"].stringValue
-                            
-                            lmsReq.to = json["To Date"].stringValue
-                            
-                            lmsReq.noOfDays = json["Leave Days"].stringValue
-                            
-                            lmsReq.appliedDate = json["Added Date"].stringValue
-                            
-                            lmsReq.contact = json["Contact While On Leave"].stringValue
-                            
-                            lmsReq.empCode = json["Employee Code"].stringValue
-                            
-                            lmsReq.empName = json["Employee Name"].stringValue
-                            
-                            lmsReq.dept = json["Department"].stringValue
-                            
-                            lmsReq.reason = json["Reason"].stringValue
-                            
-                            lmsReq.leaveReason = json["Leave Reason"].stringValue
-                            
-                            lmsReq.appStatus = json["Leave Application Status"].stringValue
-                            
-                            lmsReq.delegation = json["Delegation Work"].stringValue
-                            
-                            if json["Manager Name"].stringValue == "" {
-                                lmsReq.mngrName  = "-"
-                            } else {
-                                lmsReq.mngrName = json["Manager Name"].stringValue
-                            }
-                            
-                            data.append(lmsReq)
-                        }
-                        self.arrayList = data
-                        self.tableView.tableFooterView = nil
-                        self.tableView.reloadData()
-                    } else {
-                        // show empty state
-                    }
-                }
-            }))
-        } else {
-            Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateReqList))
-        }
-        
-    }
+//    @objc func populateReqList() {
+//
+//        var data: [LMSReqData] = []
+//
+//        if internetStatus != .notReachable {
+//
+//            self.showLoading()
+//            let url:String = String.init(format: Constant.API.LMS_LIST, Session.authKey)
+//
+//            Alamofire.request(url).responseData(completionHandler: ({ response in
+//                self.hideLoading()
+//                self.refreshControl.endRefreshing()
+//
+//                if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView) {
+//
+//                    let jsonResponse = JSON(response.result.value!)
+//                    let array = jsonResponse.arrayObject as! [[String:AnyObject]]
+//                    if array.count > 0 {
+//                        self.arrayList.removeAll()
+//
+//                        for(_,json):(String,JSON) in jsonResponse {
+//
+//                            let lmsReq = LMSReqData()
+//
+//                            lmsReq.srNo = json["SNO"].stringValue
+//
+//                            lmsReq.leaveType = json["Leave Type"].stringValue
+//
+//                            lmsReq.from = json["From Date"].stringValue
+//
+//                            lmsReq.to = json["To Date"].stringValue
+//
+//                            lmsReq.noOfDays = json["Leave Days"].stringValue
+//
+//                            lmsReq.appliedDate = json["Added Date"].stringValue
+//
+//                            lmsReq.contact = json["Contact While On Leave"].stringValue
+//
+//                            lmsReq.empCode = json["Employee Code"].stringValue
+//
+//                            lmsReq.empName = json["Employee Name"].stringValue
+//
+//                            lmsReq.dept = json["Department"].stringValue
+//
+//                            lmsReq.reason = json["Reason"].stringValue
+//
+//                            lmsReq.leaveReason = json["Leave Reason"].stringValue
+//
+//                            lmsReq.appStatus = json["Leave Application Status"].stringValue
+//
+//                            lmsReq.delegation = json["Delegation Work"].stringValue
+//
+//                            if json["Manager Name"].stringValue == "" {
+//                                lmsReq.mngrName  = "-"
+//                            } else {
+//                                lmsReq.mngrName = json["Manager Name"].stringValue
+//                            }
+//
+//                            data.append(lmsReq)
+//                        }
+//                        self.arrayList = data
+//                        self.tableView.tableFooterView = nil
+//                        self.tableView.reloadData()
+//                    } else {
+//                        self.showLeaveHistoryEmptyState()
+//                    }
+//                } else {
+//                    self.showLeaveHistoryEmptyState()
+//                }
+//            }))
+//        } else {
+//            Helper.showNoInternetMessg()
+//            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateReqList))
+//        }
+//
+//    }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -330,7 +337,14 @@ class LMSReqController: UIViewController , onLMSUpdate {
         self.navigationController!.pushViewController(vc, animated: true)
     }
     
-    
+    func showLeaveHistoryEmptyState() {
+        
+        if self.arrayList.count > 0 {
+            self.vwLvHistory.isHidden = true
+        } else {
+            self.vwLvHistory.isHidden = false
+        }
+    }
 }
 
 
@@ -347,20 +361,12 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         } else {
             
             if self.arrayList.count > 0 {
-                self.tableView.restore()
                 return self.arrayList.count
             } else {
-                self.tableView.setEmptyView(title: "No History Found", message: "")
             }
             return self.arrayList.count
         }
-        
-        
-//        if names.count == 0 {
-//        }
-//        else {
-//            tableView.restore()
-//        }
+
         
     }
     

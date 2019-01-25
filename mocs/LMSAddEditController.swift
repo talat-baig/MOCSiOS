@@ -141,7 +141,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             txtFldDelegation.text = lmsReqData?.delegation
             txtFldContact.text = lmsReqData?.contact.stripped
             txtFldNoOfDays.text = lmsReqData?.noOfDays
-            txtFldApprovingMngr.text = lmsReqData?.mngrName
+            txtFldApprovingMngr.text = Session.reportMngr
             self.btnLeaveType.setTitle( self.lmsReqData?.leaveType , for: .normal)
 //            self.checkForLeaveType() // check leave type for UI elements enable/disable
             
@@ -367,10 +367,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             return
         }
         
-        //        if !Helper.isValidPhone(value: contact) {
-        //            Helper.showMessage(message: "Please provide proper phone number with country code")
-//            return
-//        }
+  
 
         let newContact = contact.stripped
         

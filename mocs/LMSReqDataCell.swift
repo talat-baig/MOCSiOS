@@ -55,7 +55,7 @@ class LMSReqDataCell: UITableViewCell {
         lblTo.text = data.to
         lblFrom.text = data.from
         lblTOF.text = data.leaveType
-        lblReason.text = data.reason
+        lblReason.text = data.leaveReason
         lblStatus.text = data.appStatus
         lblNoOfDays.text = data.noOfDays
         lblDateApplied.text = data.appliedDate

@@ -53,7 +53,7 @@ class LMSCustomHeader: UITableViewCell {
         empCode.text = Session.empCode
         repMngr.text = Session.reportMngr
         self.arrayList = data
-//        self.tblVwSummary.reloadData()
+
         if self.arrayList.count > 0 {
             tblVwSummary.reloadData()
         }
@@ -80,8 +80,6 @@ extension LMSCustomHeader : UITableViewDelegate, UITableViewDataSource {
         
         if self.arrayList.count > 0 {
             
-            self.tblVwSummary.restore()
-            
             if section == 0 {
                 return 1
             } else {
@@ -90,7 +88,6 @@ extension LMSCustomHeader : UITableViewDelegate, UITableViewDataSource {
             
         } else {
 
-            self.tblVwSummary.setEmptyView(title: "No Leave Summary Found", message: "")
         }
         return self.arrayList.count
     }

@@ -154,6 +154,15 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tcm-vc-PTA">
                                     <rect key="frame" x="0.0" y="240" width="343" height="180"/>
                                     <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Leave Summary Found" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bia-YF-xaW">
+                                            <rect key="frame" x="73" y="75" width="197" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="sBa-Pe-AXt"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                            <color key="textColor" red="0.93940646329999999" green="0.2146090008" blue="0.17080729280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XSF-GN-chC" customClass="LMSGridTableView" customModule="mocs" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="8" width="343" height="164"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -165,8 +174,10 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
+                                        <constraint firstItem="Bia-YF-xaW" firstAttribute="centerX" secondItem="Tcm-vc-PTA" secondAttribute="centerX" id="A1b-7I-BRs"/>
                                         <constraint firstAttribute="trailing" secondItem="XSF-GN-chC" secondAttribute="trailing" id="Awr-Ez-yY0"/>
                                         <constraint firstAttribute="bottom" secondItem="XSF-GN-chC" secondAttribute="bottom" constant="8" id="OQG-qz-aPQ"/>
+                                        <constraint firstItem="Bia-YF-xaW" firstAttribute="centerY" secondItem="Tcm-vc-PTA" secondAttribute="centerY" id="cdN-ay-VlA"/>
                                         <constraint firstItem="XSF-GN-chC" firstAttribute="top" secondItem="Tcm-vc-PTA" secondAttribute="top" constant="8" id="lfd-6a-R5n"/>
                                         <constraint firstItem="XSF-GN-chC" firstAttribute="leading" secondItem="Tcm-vc-PTA" secondAttribute="leading" id="z7J-B8-wBg"/>
                                     </constraints>
