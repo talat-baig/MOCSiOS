@@ -136,8 +136,14 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         } else {
             floaty.isHidden = false
             
-            if moduleName == Constant.MODULES.LMS && lmsData == nil {
-                showLMSEmptyState()
+            if moduleName == Constant.MODULES.LMS {
+                
+                if lmsData == nil {
+                    showLMSEmptyState()
+
+                } else {
+                    showEmptyState()
+                }
 
             } else {
                 showEmptyState()

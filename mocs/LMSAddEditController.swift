@@ -75,6 +75,10 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         self.assignDataToViews()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.handleTap()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         
         let lmsBaseVC = self.parent as? LMSBaseViewController
@@ -227,11 +231,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             lmsLeavTyp.append(newLeaveTyp)
         }
         
-        
         let filteredLeaveType = lmsLeavTyp.map { $0.leaveTypeShortName }
-        
         return filteredLeaveType
-        
     }
     
     
@@ -270,21 +271,12 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         self.txtVwReason.layer.masksToBounds = true;
         self.txtVwReason.layer.borderWidth = 0.6
         
-   
         self.txtFldFrom.inputView = datePickerTool
         self.txtFldTo.inputView = datePickerTool
         
         btnLeaveType.contentHorizontalAlignment = .left
         
-        let imgVwPlus = UIImageView(image: UIImage(named: "plus"))
-//        if let size = imgVwPlus.image?.size {
-            imgVwPlus.frame = CGRect(x: 0.0, y: 0.0, width: 8.0, height: 8 )
-//        }
-        imgVwPlus.contentMode = UIViewContentMode.center
-        txtFldContact.leftViewMode = UITextFieldViewMode.always
-        txtFldContact.leftView = imgVwPlus
-        
-        
+        txtFldContact.setLeftIcon(icon:#imageLiteral(resourceName: "plus"))
         btnSubmit.layer.cornerRadius = 5.0
     }
     
@@ -312,7 +304,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 700)
+        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 750.0)
         print(scrlVw.contentSize)
     }
     
@@ -331,7 +323,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                 var newItem = TTVoucher()
                 
                 newItem.docRefNum = item.documentID
-                newItem.docName = item.documentName
+                let docName = item.documentName
+                newItem.docName = Helper.encodeURL(url: docName)
                 newItem.docDesc = item.documentDesc
                 newItem.docPath = item.documentPath
                 newItem.docType = item.documentType
@@ -342,35 +335,49 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         }
         return newVouchrArry
     }
-    
+ 
     @IBAction func btnSubmitTapped(_ sender: Any) {
+        
+        self.handleTap()
         
         let arrAttachments = self.getAttachmentsData(voucherArray: self.arrLMSAttachmnt)
         
         guard let leaveType = self.btnLeaveType.titleLabel?.text , !leaveType.isEmpty else {
-            Helper.showMessage(message: "Please enter Leave Type")
+            Helper.showMessage(message: "Please enter leave type")
             return
         }
         
         guard let fromDate = self.txtFldFrom?.text, !fromDate.isEmpty else {
-            Helper.showMessage(message: "Please enter From Date")
+            Helper.showMessage(message: "Please select from date")
             return
         }
         
         guard let toDate = self.txtFldTo?.text , !toDate.isEmpty else {
-            Helper.showMessage(message: "Please enter To Date")
+            Helper.showMessage(message: "Please select to Date")
             return
         }
         
         guard let contact = self.txtFldContact?.text , !contact.isEmpty else {
-            Helper.showMessage(message: "Please enter Contact Number")
+            Helper.showMessage(message: "Please provide proper phone number with country code")
             return
         }
         
+        if contact.count < 12 {
+            Helper.showMessage(message: "Please provide proper phone number with country code")
+            return
+        }
+        
+        //        if !Helper.isValidPhone(value: contact) {
+        //            Helper.showMessage(message: "Please provide proper phone number with country code")
+//            return
+//        }
+
         let newContact = contact.stripped
         
+        
+        
         guard let reason = self.txtVwReason?.text , !reason.isEmpty else {
-            Helper.showMessage(message: "Please enter Reason for leave")
+            Helper.showMessage(message: "Please enter reason for leave")
             return
         }
         
@@ -400,11 +407,11 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         var titleMsg = ""
         
         if lmsReqData != nil {
-            titleMsg = "Update Leave Request?"
-            messg = "Are you sure you want to Update this Request?"
+            titleMsg = "Update?"
+            messg = "Are you sure you want to update the leave?"
         } else {
-            messg = "Are you sure you want to Submit this Request?"
-            titleMsg = "Apply For Leave?"
+            messg = "Are you sure you want to apply for the leave?"
+            titleMsg = "Apply?"
         }
         
         let alert = UIAlertController(title: titleMsg , message: messg , preferredStyle: .alert)
@@ -432,7 +439,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                 
                 self.view.hideLoading()
                 debugPrint(response.result.value as Any)
-                
+//                debugPrint(response.response?.statusCode as Any)
+
                 let jsonResponse = JSON.init(parseJSON: response.result.value!)
                 
                 if jsonResponse["ServerMsg"].stringValue == "Success" {
@@ -442,7 +450,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     if self.lmsReqData != nil {
                         messg = "Leave Request has been Updated Successfully"
                     } else {
-                        messg = "Leave Request  has been Submitted Successfully"
+                        messg = "Leave Request has been Submitted Successfully"
                     }
                     
                     let success = UIAlertController(title: "Success", message: messg, preferredStyle: .alert)
@@ -451,12 +459,11 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                         if let d = self.okLMSSubmit {
                             d.onOkClick()
                         }
-                        
                         self.navigationController?.popViewController(animated: true)
                     }))
                     self.present(success, animated: true, completion: nil)
                 }  else {
-                    NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
+                    NotificationBanner(title: jsonResponse["ServerMsg"].stringValue ,style: .danger).show()
                 }
             })
         } else {
@@ -485,7 +492,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         
         if leaveType == "HAPL" {
             txtFldTo.isEnabled = false
-            txtFldTo.text = "-"
+            txtFldTo.text = txtFldFrom.text
             txtFldNoOfDays.text = "0.5"
         } else {
             txtFldTo.isEnabled = true
@@ -562,26 +569,26 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
     
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        let protectedRange = NSMakeRange(0, 1)
+
+        let protectedRange = NSMakeRange(0, 0)
         let intersection = NSIntersectionRange(protectedRange, range)
-        
+
         if textField == txtFldContact {
-            
+
             if intersection.length > 0 {
                 return false
             }
-            if range.location == 12 {
+            if range.location == 11 {
                 return true
             }
-            
-            if range.location + range.length > 12 {
+
+            if range.location + range.length > 11 {
                 return false
             }
-            
+
         }
         return true
-        
+
     }
     
     

@@ -14,14 +14,14 @@ class LMSReqController: UIViewController , onLMSUpdate {
     
     
     var arrayGridList : [LMSGridData] = []
-    var lmsSummry = LMSSummaryData()
-
+    //    var lmsSummry = LMSSummaryData()
+    
     var arrayList : [LMSReqData] = []
     //    @IBOutlet weak var collVw: UICollectionView!
     //    @IBOutlet weak var gridTableVw: UITableView!
     @IBOutlet weak var tableView: UITableView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
-
+    
     //    @IBOutlet weak var btnApplyLeave: UIButton!
     //    @IBOutlet weak var scrlVw: UIScrollView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -43,11 +43,13 @@ class LMSReqController: UIViewController , onLMSUpdate {
         
         self.tableView.register(UINib(nibName: "LMSCustomHeader", bundle: nil), forCellReuseIdentifier: "summarycell")
         self.tableView.separatorStyle = .none
+        self.tableView.estimatedRowHeight = 88.0
+        self.tableView.rowHeight = UITableViewAutomaticDimension
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateReqList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateLMSData))
         tableView.addSubview(refreshControl)
-
-        populateReqList()
+        
+        populateLMSData()
     }
     
     func showLoading(){
@@ -57,6 +59,180 @@ class LMSReqController: UIViewController , onLMSUpdate {
     func hideLoading(){
         self.view.hideLoading()
     }
+    
+    
+    
+    @objc func populateLMSData() {
+        
+        
+        if internetStatus != .notReachable {
+            
+            let url1 = String.init(format: Constant.API.LMS_SUMMARY, Session.authKey)
+            let url2 = String.init(format: Constant.API.LMS_LIST, Session.authKey)
+            
+            self.view.showLoading()
+            
+            let group = DispatchGroup()
+            self.view.showLoading()
+            group.enter()
+            
+            Alamofire.request(url1).responseData(completionHandler: ({ summResposne in
+//                self.view.hideLoading()
+//                self.refreshControl.endRefreshing()
+                 group.leave()
+                
+                if Helper.isResponseValid(vc: self, response: summResposne.result) {
+                    
+                    let responseJson = JSON(summResposne.result.value!)
+                    let arrSumm = responseJson.arrayObject as! [[String:AnyObject]]
+                    
+                    if (arrSumm.count > 0) {
+                        self.parseAndAssignSummary(response:summResposne.result.value)
+                        self.tableView.reloadData()
+                    } else {
+                        
+                    }
+                }
+            }))
+            
+            
+            group.enter()
+            Alamofire.request(url2).responseData(completionHandler: ({ historyResp in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                 group.leave()
+                
+                if Helper.isResponseValid(vc: self, response: historyResp.result) {
+                    
+                    let responseJson = JSON(historyResp.result.value!)
+                    let arrHistory = responseJson.arrayObject as! [[String:AnyObject]]
+                    
+                    if (arrHistory.count > 0) {
+                        self.tableView.tableFooterView = nil
+                        self.parseAndAssignHistory(response:historyResp.result.value )
+                        self.tableView.reloadData()
+                    } else {
+
+                    }
+                } else {
+                    
+                }
+            }))
+            
+            group.notify(queue: .main) {
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+               
+            }
+            
+        }
+    }
+    
+    
+    func parseAndAssignHistory(response : Data?) {
+        
+        var data: [LMSReqData] = []
+        let jsonResponse = JSON(response!)
+        
+        for(_,json):(String,JSON) in jsonResponse {
+            
+            let lmsReq = LMSReqData()
+            
+            lmsReq.srNo = json["SNO"].stringValue
+            
+            lmsReq.leaveType = json["Leave Type"].stringValue
+            
+            lmsReq.from = json["From Date"].stringValue
+            
+            lmsReq.to = json["To Date"].stringValue
+            
+            lmsReq.noOfDays = json["Leave Days"].stringValue
+            
+            lmsReq.appliedDate = json["Added Date"].stringValue
+            
+            lmsReq.contact = json["Contact While On Leave"].stringValue
+            
+            lmsReq.empCode = json["Employee Code"].stringValue
+            
+            lmsReq.empName = json["Employee Name"].stringValue
+            
+            lmsReq.dept = json["Department"].stringValue
+            
+            lmsReq.reason = json["Reason"].stringValue
+            
+            lmsReq.leaveReason = json["Leave Reason"].stringValue
+            
+            lmsReq.appStatus = json["Leave Application Status"].stringValue
+            
+            lmsReq.delegation = json["Delegation Work"].stringValue
+            
+            if json["Manager Name"].stringValue == "" {
+                lmsReq.mngrName  = "-"
+            } else {
+                lmsReq.mngrName = json["Manager Name"].stringValue
+            }
+            
+            data.append(lmsReq)
+        }
+        self.arrayList = data
+        
+        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+        }
+    }
+    
+    func parseAndAssignSummary(response : Data?) {
+        
+        
+        var data: [LMSGridData] = []
+        let jsonResponse = JSON(response!)
+        
+        for(_,json):(String,JSON) in jsonResponse {
+            
+            let lmsGrid = LMSGridData()
+            
+            lmsGrid.leaveBalId = json["LeaveBalanceID"].stringValue
+            
+            if json["Leave Type"].stringValue == "" {
+                lmsGrid.typeOfLeave  = "-"
+            } else {
+                lmsGrid.typeOfLeave = json["Leave Type"].stringValue
+            }
+            
+            if json["Utilized"].stringValue == "" {
+                lmsGrid.utilized   = "-"
+            } else {
+                lmsGrid.utilized  = json["Utilized"].stringValue
+            }
+            
+            if json["Available Leave"].stringValue == "" {
+                lmsGrid.available   = "-"
+            } else {
+                lmsGrid.available  = json["Available Leave"].stringValue
+            }
+            
+            if json["Total Leave"].stringValue == "" {
+                lmsGrid.total  = "-"
+            } else {
+                lmsGrid.total = json["Total Leave"].stringValue
+            }
+            
+            lmsGrid.lapseStatus = json["LeaveBalanceLapseStatus"].stringValue
+            
+            
+            lmsGrid.isActive = json["IsActive"].stringValue
+            
+            
+            
+            data.append(lmsGrid)
+        }
+        self.arrayGridList = data
+        
+        
+    }
+    
+    
     
     @objc func populateReqList() {
         
@@ -78,11 +254,14 @@ class LMSReqController: UIViewController , onLMSUpdate {
                     if array.count > 0 {
                         self.arrayList.removeAll()
                         
-                        for(_,json):(String,JSON) in jsonResponse{
+                        for(_,json):(String,JSON) in jsonResponse {
+                            
                             let lmsReq = LMSReqData()
+                            
                             lmsReq.srNo = json["SNO"].stringValue
+                            
                             lmsReq.leaveType = json["Leave Type"].stringValue
-
+                            
                             lmsReq.from = json["From Date"].stringValue
                             
                             lmsReq.to = json["To Date"].stringValue
@@ -106,7 +285,7 @@ class LMSReqController: UIViewController , onLMSUpdate {
                             lmsReq.appStatus = json["Leave Application Status"].stringValue
                             
                             lmsReq.delegation = json["Delegation Work"].stringValue
-
+                            
                             if json["Manager Name"].stringValue == "" {
                                 lmsReq.mngrName  = "-"
                             } else {
@@ -138,7 +317,7 @@ class LMSReqController: UIViewController , onLMSUpdate {
     
     func onLMSUpdateClick() {
         
-        self.populateReqList()
+        self.populateLMSData()
     }
     
     
@@ -167,15 +346,28 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
             return 1
         } else {
             
+            if self.arrayList.count > 0 {
+                self.tableView.restore()
+                return self.arrayList.count
+            } else {
+                self.tableView.setEmptyView(title: "No History Found", message: "")
+            }
             return self.arrayList.count
         }
+        
+        
+//        if names.count == 0 {
+//        }
+//        else {
+//            tableView.restore()
+//        }
         
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.section == 0 {
-            return 400
+            return UITableViewAutomaticDimension
         } else {
             return 210
         }
@@ -188,7 +380,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         var tableCell: UITableViewCell?
         
         if indexPath.section == 0 {
-            let data = self.lmsSummry
+            let data = self.arrayGridList
             let cell = tableView.dequeueReusableCell(withIdentifier: "summarycell") as! LMSCustomHeader
             cell.setDataToViews(data: data )
             cell.btnApply.addTarget(self, action: #selector(self.btnApplyTapped(sender:)), for: UIControlEvents.touchUpInside)
@@ -209,7 +401,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         return tableCell!
     }
     
-
+    
     func deleteLeave(data:LMSReqData) {
         
         if internetStatus != .notReachable {
@@ -246,12 +438,12 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         self.navigationController!.pushViewController(vc, animated: true)
         
     }
-
-   
+    
+    
 }
 
 extension LMSReqController: onLMSOptionClickListener, onMoreClickListener {
- 
+    
     func onViewClick(data: LMSReqData) {
         self.viewLeave(data: data, isFromView: true)
     }

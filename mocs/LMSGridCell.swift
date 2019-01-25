@@ -24,4 +24,26 @@ class LMSGridCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    func setStaticData() {
+        
+        lbl1.text = "Leave Type"
+        lbl2.text = "Available"
+        lbl3.text = "Utilised"
+        lbl4.text = "Total"
+        lbl2.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        lbl1.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        lbl3.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        lbl4.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+
+    }
+    
+    func setDataToView(gridData : LMSGridData) {
+//        lbl1.text = gridData
+        lbl1.text = gridData.typeOfLeave
+        lbl2.text = gridData.available
+        lbl3.text = gridData.utilized
+        lbl4.text = gridData.total
+
+    }
+    
 }

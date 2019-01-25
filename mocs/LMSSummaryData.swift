@@ -14,5 +14,5 @@ class LMSSummaryData: NSObject {
     var empCode = ""
     var repMngrName = ""
     var dept = ""
-    var arrSummary : [String] = []
+    var arrSummary : [LMSGridData] = []
 }

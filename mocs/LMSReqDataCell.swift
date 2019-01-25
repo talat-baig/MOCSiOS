@@ -18,36 +18,32 @@ protocol onLMSOptionClickListener: NSObjectProtocol {
 class LMSReqDataCell: UITableViewCell {
     
     @IBOutlet weak var lblStatus: UILabel!
-//    @IBOutlet weak var lblRef: UILabel!
     @IBOutlet weak var lblDateApplied: UILabel!
     @IBOutlet weak var lblTOF: UILabel!
     @IBOutlet weak var lblFrom: UILabel!
     @IBOutlet weak var lblTo: UILabel!
     @IBOutlet weak var lblNoOfDays: UILabel!
     @IBOutlet weak var lblReason: UILabel!
-    
     @IBOutlet weak var btnMenu: UIButton!
-    
     @IBOutlet weak var vwOuter: UIView!
-    
     @IBOutlet weak var imgVwStatus: UIImageView!
+    
+    @IBOutlet weak var vwHeader: UIView!
+    var data : LMSReqData!
     weak var delegate:onMoreClickListener?
     weak var optionClickListener:onLMSOptionClickListener?
-
     
-    var data : LMSReqData!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         vwOuter.layer.cornerRadius = 3
-//        vwOuter.layer.masksToBounds = true
         vwOuter.layer.shadowOpacity = 0.25
         vwOuter.layer.shadowOffset = CGSize(width: 0, height: 2)
         vwOuter.layer.shadowRadius = 1
         vwOuter.layer.shadowColor = UIColor.black.cgColor
         
-       
+        vwHeader.layer.masksToBounds = false
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -56,7 +52,6 @@ class LMSReqDataCell: UITableViewCell {
     
     func setDataToViews(data : LMSReqData) {
         
-//        lblRef.text = data.srNo
         lblTo.text = data.to
         lblFrom.text = data.from
         lblTOF.text = data.leaveType
@@ -88,7 +83,7 @@ class LMSReqDataCell: UITableViewCell {
     
     @IBAction func moreClick(_ sender: UIButton) {
         
-        let optionMenu = UIAlertController(title: nil, message: data.srNo, preferredStyle: .actionSheet)
+        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
         
         let editAction = UIAlertAction(title: "Edit", style: .default, handler: { (UIAlertAction) -> Void in
             if (self.optionClickListener?.responds(to: Selector(("onEditClick:"))) != nil){

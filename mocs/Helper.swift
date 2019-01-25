@@ -55,6 +55,39 @@ class CardView: UIView {
     }
 }
 
+extension UITableView {
+    
+    func setEmptyView(title: String, message: String) {
+        
+        let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
+        let titleLabel = UILabel()
+        let messageLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.textColor = UIColor.black
+        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
+        messageLabel.textColor = UIColor.lightGray
+        messageLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 17)
+        emptyView.addSubview(titleLabel)
+        emptyView.addSubview(messageLabel)
+        titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
+        messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
+        messageLabel.leftAnchor.constraint(equalTo: emptyView.leftAnchor, constant: 20).isActive = true
+        messageLabel.rightAnchor.constraint(equalTo: emptyView.rightAnchor, constant: -20).isActive = true
+        titleLabel.text = title
+        messageLabel.text = message
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        // The only tricky part is here:
+        self.backgroundView = emptyView
+        self.separatorStyle = .none
+    }
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
+    }
+}
 
 extension UINavigationBar {
     
@@ -260,6 +293,12 @@ class Helper: UIView {
     }
     
     
+    public static func isValidPhone(value: String) -> Bool {
+        let PHONE_REGEX = "^((\\)|(00))[0-9]{6,14}$"
+        let phoneTest = NSPredicate(format: "SELF MATCHES %@", PHONE_REGEX)
+        let result =  phoneTest.evaluate(with: value)
+        return result
+    }
 
     public static func isResponseValid(vc: UIViewController, response:Result<Data>, tv:UITableView? = nil)-> Bool{
         var isValid: Bool = false
@@ -451,6 +490,8 @@ class Helper: UIView {
         emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
         emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
     }
+    
+    
     
     
     //    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, isSC : Bool = false, action:Selector){
@@ -1173,7 +1214,25 @@ extension UIView{
 }
 
 
-extension String{
+extension UITextField {
+    
+    /// set icon of 20x20 with left padding of 8px
+    func setLeftIcon( icon: UIImage) {
+        
+        let padding = 5
+        let size = 10
+        
+        let outerView = UIView(frame: CGRect(x: 0, y: 0, width: size+padding, height: size) )
+        let iconView  = UIImageView(frame: CGRect(x: padding, y: 0, width: size, height: size))
+        iconView.image = icon
+        outerView.addSubview(iconView)
+        iconView.contentMode = .scaleAspectFit
+        leftView = outerView
+        leftViewMode = .always
+    }
+}
+
+extension String {
     mutating func removingRegexMatches(pattern:String,replaceWith:String = ""){
         do{
             let regex = try NSRegularExpression(pattern: pattern, options: .caseInsensitive)

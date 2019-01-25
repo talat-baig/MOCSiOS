@@ -154,9 +154,13 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tcm-vc-PTA">
                                     <rect key="frame" x="0.0" y="240" width="343" height="180"/>
                                     <subviews>
-                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XSF-GN-chC">
+                                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XSF-GN-chC" customClass="LMSGridTableView" customModule="mocs" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="8" width="343" height="164"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <connections>
+                                                <outlet property="dataSource" destination="-1" id="PVO-6n-hHJ"/>
+                                                <outlet property="delegate" destination="-1" id="RQU-Jf-5Rt"/>
+                                            </connections>
                                         </tableView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -203,7 +207,7 @@
                 <outlet property="empCode" destination="4Sm-uQ-zhG" id="NEV-XW-Tr2"/>
                 <outlet property="empName" destination="e3e-eP-Bnc" id="NeW-ga-UVG"/>
                 <outlet property="repMngr" destination="YiH-qV-cMR" id="TPA-xj-nY6"/>
-                <outlet property="tblVwSummary" destination="XSF-GN-chC" id="Xva-3V-Yp9"/>
+                <outlet property="tblVwSummary" destination="XSF-GN-chC" id="jGb-Fw-81e"/>
                 <outlet property="vwOuter" destination="ALD-C0-UIP" id="Dh6-lp-3AX"/>
             </connections>
             <point key="canvasLocation" x="232.80000000000001" y="-34.182908545727138"/>

@@ -9,7 +9,6 @@
 import UIKit
 
 class FPSListCell: UITableViewCell {
-
     
     @IBOutlet weak var vwInner: UIView!
     

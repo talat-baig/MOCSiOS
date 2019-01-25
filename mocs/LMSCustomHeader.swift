@@ -17,7 +17,10 @@ class LMSCustomHeader: UITableViewCell {
     @IBOutlet weak var repMngr: UILabel!
     @IBOutlet weak var empCode: UILabel!
     @IBOutlet weak var btnApply: UIButton!
-    @IBOutlet weak var tblVwSummary: UITableView!
+    @IBOutlet weak var tblVwSummary: LMSGridTableView!
+    
+    var data : LMSGridData?
+    var arrayList : [LMSGridData] = []
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,17 +38,91 @@ class LMSCustomHeader: UITableViewCell {
         btnApply.layer.shadowOpacity = 0.20
         btnApply.layer.masksToBounds = false
         btnApply.layer.shadowOffset =  CGSize.init(width: 0, height: 2)
+        
+        self.tblVwSummary.register(UINib(nibName: "LMSGridCell", bundle: nil), forCellReuseIdentifier: "cell")
+        self.tblVwSummary.separatorStyle = .none
+//
+        tblVwSummary.delegate = self
+        tblVwSummary.dataSource = self
 
     }
     
-    func setDataToViews(data : LMSSummaryData) {
+    func setDataToViews(data : [LMSGridData]) {
         empName.text = Session.user
         dept.text = Session.department
         empCode.text = Session.empCode
         repMngr.text = Session.reportMngr
+        self.arrayList = data
+//        self.tblVwSummary.reloadData()
+        if self.arrayList.count > 0 {
+            tblVwSummary.reloadData()
+        }
     }
     
     
     
     
 }
+
+extension LMSCustomHeader {
+    
+//    func setTableViewDatasourceDelegate <D: UITableViewDelegate & UITableViewDataSource> (_ dataSourceDelegate : D,forRow row :Int) {
+//
+//        tblVwSummary.delegate = dataSourceDelegate
+//        tblVwSummary.dataSource = dataSourceDelegate
+//        tblVwSummary.reloadData()
+//    }
+}
+
+extension LMSCustomHeader : UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if self.arrayList.count > 0 {
+            
+            self.tblVwSummary.restore()
+            
+            if section == 0 {
+                return 1
+            } else {
+                return self.arrayList.count
+            }
+            
+        } else {
+
+            self.tblVwSummary.setEmptyView(title: "No Leave Summary Found", message: "")
+        }
+        return self.arrayList.count
+    }
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 30
+    }
+    
+
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell =  tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! LMSGridCell
+        cell.selectionStyle =  .none
+        
+        
+        if indexPath.section == 0 {
+            cell.setStaticData()
+        } else {
+            let gridData = self.arrayList[indexPath.row]
+            cell.setDataToView(gridData: gridData)
+        }
+        return cell
+        
+    }
+    
+}
+
+
+
