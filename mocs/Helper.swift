@@ -54,40 +54,12 @@ class CardView: UIView {
         layer.masksToBounds = true
     }
 }
-
-extension UITableView {
-    
-//    func setEmptyView(title: String, message: String) {
-//
-//        let emptyView = UIView(frame: CGRect(x: self.center.x, y: self.center.y, width: self.bounds.size.width, height: self.bounds.size.height))
-//        let titleLabel = UILabel()
-//        let messageLabel = UILabel()
-//        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-//        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-//        titleLabel.textColor = UIColor.black
-//        titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 18)
-//        messageLabel.textColor = UIColor.lightGray
-//        messageLabel.font = UIFont(name: "HelveticaNeue-Regular", size: 17)
-//        emptyView.addSubview(titleLabel)
-//        emptyView.addSubview(messageLabel)
-//        titleLabel.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor).isActive = true
-//        titleLabel.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor).isActive = true
-//        messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
-//        messageLabel.leftAnchor.constraint(equalTo: emptyView.leftAnchor, constant: 20).isActive = true
-//        messageLabel.rightAnchor.constraint(equalTo: emptyView.rightAnchor, constant: -20).isActive = true
-//        titleLabel.text = title
-//        messageLabel.text = message
-//        messageLabel.numberOfLines = 0
-//        messageLabel.textAlignment = .center
-//        // The only tricky part is here:
-//        self.backgroundView = emptyView
-//        self.separatorStyle = .none
-//    }
-//    func restore() {
-//        self.backgroundView = nil
-//        self.separatorStyle = .singleLine
-//    }
+extension Date {
+    func dayNumberOfWeek() -> Int? {
+        return Calendar.current.dateComponents([.weekday], from: self).weekday
+    }
 }
+
 
 extension UINavigationBar {
     
@@ -107,7 +79,6 @@ class GlobalVariables : NSObject {
     private override init() {}
     
     static let shared = GlobalVariables()
-    
     /// For Voucher Upload
     var isUploadingSomething = Bool()
     
@@ -176,7 +147,6 @@ class Helper: UIView {
         return -1
     }
     
-    
     class func getUserDefaultForString(forkey: String) -> String {
         if self.isKeyPresentInUserDefaults(key: forkey) {
             return UserDefaults.standard.string(forKey: forkey)!
@@ -195,12 +165,26 @@ class Helper: UIView {
         view.layer.masksToBounds = true;
     }
     
+    class func getDatesFromString(strArr : [String]) -> [Date] {
+        
+        var phDate : [Date] = []
+        
+        for newDate in strArr {
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd" //Your date format
+            dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
+            dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+            let finalDate = dateFormatter.date(from: newDate)
+            phDate.append(finalDate!)
+        }
+        return phDate
+    }
+    
     
     class func daysBetweenDates(startDate: Date, endDate: Date) -> Int {
-        
         let components =  Calendar.current.dateComponents([.day], from: startDate, to: endDate).day
         return components!
-        
     }
     
     
@@ -216,6 +200,124 @@ class Helper: UIView {
         return components
     }
     
+    //    class func getWorkOffDays(startDate : Date, endDate : Date) -> (Int) {
+    //
+    //        guard startDate < endDate else {
+    //            return (0)
+    //        }
+    //
+    //        var weekendDays = 0
+    //        var workingDays = 0
+    //        var date = startDate.noon
+    //        repeat {
+    //            if date.isDateInWeekend {
+    //                weekendDays +=  1
+    //            } else {
+    //                workingDays += 1
+    //            }
+    //            date = date.tomorrow
+    //        } while date <= endDate
+    //        return (workingDays + 1)
+    //    }
+    
+    
+    class func getWorkingDays(startDate : Date, endDate : Date, publicHolidays : [String], workOff : [String], workOffPolicy: [String]) -> Int {
+        
+        let calendar = Calendar.current
+        
+        let date1 = calendar.startOfDay(for: startDate)
+        let date2 = calendar.startOfDay(for: endDate)
+        let totalDays = calendar.dateComponents([.day], from: date1, to: date2).day! + 1
+        
+        //publicHolidays //[2019-02-02,2019-02-03]
+        // workOff // [sat, sun]
+        // workOffPolicy // [Wo,PH]
+        
+        let allDatesBetween = self.getAllDatesBetweenDates(startDate: startDate, endDate: endDate)
+        
+        var testDate = date1
+        var workOffRemovedDates : [String] = []
+        var counter = 0
+        let fmt = DateFormatter()
+        fmt.dateFormat = "yyyy-MM-dd"
+
+        if workOffPolicy.contains("WO") {
+            
+            repeat {
+                let todayNumber = testDate.dayNumberOfWeek()
+                if workOff.contains(self.getDayOfWeekString(today: todayNumber ?? 0 ) ?? "") {
+                    counter += 1
+                    let dateString = fmt.string(from: testDate)
+                    workOffRemovedDates.append(dateString)
+                }
+                testDate = testDate.tomorrow
+            } while testDate <= date2
+        }
+        
+        
+        if workOffPolicy.contains("PH") {
+            
+            for newDate in allDatesBetween {
+                
+                if publicHolidays.contains(newDate) {
+                    
+                    if !workOffRemovedDates.contains(newDate) {
+                        counter += 1
+                    }
+                }
+            }
+        }
+        let finalDays = totalDays - counter
+        print(finalDays)
+        return finalDays
+        
+    }
+    
+    // returns an integer from 1 - 7, with 1 being Sunday and 7 being Saturday
+    class func getDayOfWeekString(today:Int)->String? {
+        
+        switch today {
+        case 1:
+            return "Sun"
+        case 2:
+            return "Mon"
+        case 3:
+            return "Tue"
+        case 4:
+            return "Wed"
+        case 5:
+            return "Thu"
+        case 6:
+            return "Fri"
+        case 7:
+            return "Sat"
+        default:
+            print("Error fetching days")
+            return ""
+        }
+    }
+    
+    class func getAllDatesBetweenDates(startDate : Date , endDate : Date) -> [String] {
+        
+        var mydates : [String] = []
+
+        // Formatter for printing the date, adjust it according to your needs:
+        let fmt = DateFormatter()
+        fmt.dateFormat = "yyyy-MM-dd"
+        
+        var fromDate = startDate
+        
+        while fromDate <= endDate {
+            mydates.append(fmt.string(from: fromDate))
+            fromDate = Calendar.current.date(byAdding: .day, value: 1, to: fromDate)!
+        }
+        
+        print(mydates) // Your Result
+        return mydates
+        
+    }
+    
+   
     public static func isPostResponseValid(vc: UIViewController, response : Result<String>, tv:UITableView? = nil)-> Bool{
         
         var isValid: Bool = false
@@ -285,7 +387,7 @@ class Helper: UIView {
             } else if error._code == -1009 {
                 Helper.showNoInternetMessg()
             } else {
-                NotificationBanner(title: "Opps!",subtitle:"Unexpected error occurred, Please try again later", style: .warning).show()
+                NotificationBanner(title: "Oops!",subtitle:"Unexpected error occurred, Please try again later", style: .warning).show()
             }
             break
         }
@@ -299,7 +401,7 @@ class Helper: UIView {
         let result =  phoneTest.evaluate(with: value)
         return result
     }
-
+    
     public static func isResponseValid(vc: UIViewController, response:Result<Data>, tv:UITableView? = nil)-> Bool{
         var isValid: Bool = false
         
@@ -348,7 +450,7 @@ class Helper: UIView {
                         default:
                             isValid = false
                             NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
-//                            NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
+                            //                            NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
                         }
                     }
                 }else{
@@ -368,7 +470,7 @@ class Helper: UIView {
             } else if error._code == -1009 {
                 Helper.showNoInternetMessg()
             } else {
-                NotificationBanner(title: "Opps!",subtitle:"Unexpected error occurred, Please try again later", style: .warning).show()
+                NotificationBanner(title: "Oops!",subtitle:"Unexpected error occurred, Please try again later", style: .warning).show()
             }
             break
         }
@@ -387,20 +489,21 @@ class Helper: UIView {
         //return url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         //return String(utf8String: url.cString(using: String.Encoding.utf8)!)!
         
-        let str = CFURLCreateStringByAddingPercentEscapes(
-            nil,
-            url.trimmingCharacters(in: .whitespaces) as CFString,
-            nil,
-            "!*'();:@&=+$,/?%#[]" as CFString,
-            CFStringBuiltInEncodings.UTF8.rawValue
-        )
-        return str! as String
+        let encodedHost = url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+
+//        let str = CFURLCreateStringByAddingPercentEscapes(
+//            nil,
+//            url.trimmingCharacters(in: .whitespaces) as CFString,
+//            nil,
+//            "!*'();:@&=+$,/?%#[]" as CFString,
+//            CFStringBuiltInEncodings.UTF8.rawValue
+//        )
+        return encodedHost! as String
     }
     
     public static func encodeLocString(url: String) -> String {
         
         let newStr = url.replacingOccurrences(of: " ", with: "+")
-        
         return newStr
     }
     
@@ -408,7 +511,6 @@ class Helper: UIView {
     public static func encodeWhiteSpaces(url: String) -> String {
         
         let newStr = url.trimmingCharacters(in: .whitespacesAndNewlines)
-        
         return newStr
     }
     
@@ -460,13 +562,13 @@ class Helper: UIView {
             
         case ModName.isPC :
             emptyView.message = "No Purchase Summary Data for the current\nTry by changing filter"
-
+            
         case ModName.isFRA :
             emptyView.message = "No Funds Receipt Summary Data for the current\nTry by changing filter"
-
+            
         case ModName.isFPS :
             emptyView.message = "No Funds Payment & Settlement Data for the current\nTry by changing filter"
-
+            
             
         case ModName.isApprovals :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
@@ -476,7 +578,7 @@ class Helper: UIView {
         case ModName.isLMSApprovalDetails :
             emptyView.message = "No Leave Data Found for the current employee"
             emptyView.buttonText = "RELOAD"
-
+            
         default :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
@@ -598,12 +700,12 @@ class Helper: UIView {
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_wifi")!
         if (action != nil){
-            emptyView.message = "Opps! Seems you're not connected\nPlease check your connection"
+            emptyView.message = "Oops! Seems you're not connected\nPlease check your connection"
             emptyView.button.isHidden = false
             emptyView.buttonText = "TRY AGAIN"
             emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
         }else{
-            emptyView.message = "Opps! Seems you're not connected\nPlease Swipe Down to Try Again"
+            emptyView.message = "Oops! Seems you're not connected\nPlease Swipe Down to Try Again"
             emptyView.button.isHidden = true
         }
         treeVw.treeFooterView = emptyView
@@ -620,12 +722,12 @@ class Helper: UIView {
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_wifi")!
         if (action != nil){
-            emptyView.message = "Opps! Seems you're not connected\nPlease check your connection"
+            emptyView.message = "Oops! Seems you're not connected\nPlease check your connection"
             emptyView.button.isHidden = false
             emptyView.buttonText = "TRY AGAIN"
             emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
         }else{
-            emptyView.message = "Opps! Seems you're not connected\nPlease Swipe Down to Try Again"
+            emptyView.message = "Oops! Seems you're not connected\nPlease Swipe Down to Try Again"
             emptyView.button.isHidden = true
         }
         tb.tableFooterView = emptyView
@@ -643,7 +745,7 @@ class Helper: UIView {
         emptyView.image = UIImage(named: "no_result")!
         
         emptyView.message = messg
-      
+        
         tb.tableFooterView = emptyView
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
@@ -887,10 +989,37 @@ class Helper: UIView {
         return nil
     }
     
+    
+    
+    
 }
 protocol Utility {
     
 }
+
+
+extension Calendar {
+    static let iso8601 = Calendar(identifier: .iso8601)
+}
+
+
+
+extension Date {
+    var isDateInWeekend: Bool {
+        return Calendar.iso8601.isDateInWeekend(self)
+    }
+    var tomorrow: Date {
+        return Calendar.iso8601.date(byAdding: .day, value: 1, to: noon)!
+    }
+    var noon: Date {
+        return Calendar.iso8601.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
+    }
+    
+    func isBetween(_ date1: Date, and date2: Date) -> Bool {
+        return (min(date1, date2) ... max(date1, date2)).contains(self)
+    }
+}
+
 
 extension NSObject:Utility{
     enum ReachabilityStatus {
@@ -1168,7 +1297,7 @@ extension UIView{
         print(Float(progressTime/180.0))
         
         let dict = progressTimer?.userInfo as! [String : AnyObject]
-       
+        
         lblTimerTxt.text = dict["messg"]  as! String + "\n Estimated Time: " + getTimeString(time: progressTime)
         
         if(progressView?.progress == 0.00) {
@@ -1219,8 +1348,8 @@ extension UITextField {
     /// set icon of 20x20 with left padding of 8px
     func setLeftIcon( icon: UIImage) {
         
-        let padding = 5
-        let size = 10
+        let padding = 6
+        let size = 8
         
         let outerView = UIView(frame: CGRect(x: 0, y: 0, width: size+padding, height: size) )
         let iconView  = UIImageView(frame: CGRect(x: padding, y: 0, width: size, height: size))
@@ -1256,19 +1385,19 @@ extension String {
         
         return (range(of: from)?.upperBound).flatMap { substringFrom in
             (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
-                  String(self[substringFrom..<substringTo])
+                String(self[substringFrom..<substringTo])
             }
         }
     }
     
-//    func slice(from: String, to: String) -> String? {
-//
-//        return (range(of: from)?.upperBound).flatMap { substringFrom in
-//            (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
-//                String(self[substringFrom..<substringTo])
-//            }
-//        }
-//    }
+    //    func slice(from: String, to: String) -> String? {
+    //
+    //        return (range(of: from)?.upperBound).flatMap { substringFrom in
+    //            (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
+    //                String(self[substringFrom..<substringTo])
+    //            }
+    //        }
+    //    }
     
     /// Check if it is valid email address
     var isValidEmail: Bool {

@@ -17,11 +17,14 @@ class LMSReqController: UIViewController , onLMSUpdate {
     //    var lmsSummry = LMSSummaryData()
     
     var arrayList : [LMSReqData] = []
+    
+    
     //    @IBOutlet weak var collVw: UICollectionView!
     //    @IBOutlet weak var gridTableVw: UITableView!
     @IBOutlet weak var tableView: UITableView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
+    @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
     //    @IBOutlet weak var btnApplyLeave: UIButton!
     //    @IBOutlet weak var scrlVw: UIScrollView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -52,6 +55,12 @@ class LMSReqController: UIViewController , onLMSUpdate {
         tableView.addSubview(refreshControl)
         
         populateLMSData()
+    }
+    
+    
+    override func updateViewConstraints() {
+        tableViewHeight.constant = tableView.contentSize.height
+        super.updateViewConstraints()
     }
     
     func showLoading(){
@@ -165,11 +174,19 @@ class LMSReqController: UIViewController , onLMSUpdate {
             
             lmsReq.reason = json["Reason"].stringValue
             
-            lmsReq.leaveReason = json["Leave Reason"].stringValue
+//            lmsReq.leaveReason = json["Leave Reason"].stringValue
             
             lmsReq.appStatus = json["Leave Application Status"].stringValue
             
             lmsReq.delegation = json["Delegation Work"].stringValue
+            
+          
+            
+            if json["Leave Reason"].stringValue == "" {
+                lmsReq.leaveReason  = "-"
+            } else {
+                lmsReq.leaveReason = json["Leave Reason"].stringValue
+            }
             
             if json["Manager Name"].stringValue == "" {
                 lmsReq.mngrName  = "-"
@@ -375,7 +392,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             return UITableViewAutomaticDimension
         } else {
-            return 210
+            return 205
         }
     }
     
@@ -459,7 +476,7 @@ extension LMSReqController: onLMSOptionClickListener, onMoreClickListener {
     }
     
     func onDeleteClick(data: LMSReqData) {
-        let alert = UIAlertController(title: "Delete Leave?", message: "Are you sure you want to delete this claim? After deleting you'll not be able to rollback", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Cancel?", message: "Are you sure you want to cancel the leave?", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
@@ -489,7 +506,6 @@ extension LMSReqController: WC_HeaderViewDelegate {
     
     func topMenuRightButtonTapped(sender: Any) {
         self.presentRightMenuViewController(sender as AnyObject)
-        
     }
     
 }

@@ -72,7 +72,6 @@ class LMSReqDataCell: UITableViewCell {
             imgVwStatus.image = #imageLiteral(resourceName: "pending")
             
         } else {
-            
             imgVwStatus.image = #imageLiteral(resourceName: "cancelled")
         }
         
@@ -112,10 +111,7 @@ class LMSReqDataCell: UITableViewCell {
             optionMenu.addAction(editAction)
             optionMenu.addAction(delAction)
         }
-//        optionMenu.addAction(editAction)
         optionMenu.addAction(viewAction)
-//        optionMenu.addAction(delAction)
-        
         optionMenu.addAction(cancelAction)
         
         if ((delegate?.responds(to: Selector(("onClick:")))) != nil) {

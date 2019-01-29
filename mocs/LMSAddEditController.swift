@@ -22,6 +22,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     
     var lmsReqData : LMSReqData?
     var arrLMSAttachmnt : [VoucherData] = []
+    var arrayWorkOff : [WorkOffData] = []
+
     //    var lmsAttachmnts : [TTVoucher] = []
     
     weak var currentTxtFld: UITextField? = nil
@@ -130,6 +132,20 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     self.btnLeaveType.setTitle( "" , for: .normal)
                 }
             }
+            
+            self.getWorkPolicy{ (arr, res)  in
+                
+                if res {
+                   
+                    if arr.count > 0 {
+                        self.arrayWorkOff = arr
+//                        self.checkWorkOffDays()
+                    }
+                    
+                } else {
+                }
+            }
+            
         }
         
         
@@ -304,7 +320,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 750.0)
+        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 680.0)
         print(scrlVw.contentSize)
     }
     
@@ -366,12 +382,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             Helper.showMessage(message: "Please provide proper phone number with country code")
             return
         }
-        
-  
 
         let newContact = contact.stripped
-        
-        
         
         guard let reason = self.txtVwReason?.text , !reason.isEmpty else {
             Helper.showMessage(message: "Please enter reason for leave")
@@ -382,7 +394,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         let noOfDays = txtFldNoOfDays.text
         
         
-        let leaveReqObj = AddLeaveData(leavId:  lmsReqData != nil ? lmsReqData?.srNo ?? "" : ""  , shortName: leaveType, fromDate : fromDate , toDate : toDate , noOfDays : noOfDays ?? "" , leaveContact : newContact , remarks : Helper.encodeURL(url: reason) ,  supportDoc : arrAttachments , delegation : Helper.encodeURL(url: delegation ?? ""))
+        let leaveReqObj = AddLeaveData(leavId:  lmsReqData != nil ? lmsReqData?.srNo ?? "" : ""  , shortName: leaveType, fromDate : fromDate , toDate : toDate , noOfDays : noOfDays ?? "" , leaveContact : newContact , remarks : reason ,  supportDoc : arrAttachments , delegation :  delegation ?? "")
         
         var newDict: [String: Any]?
         let jsonEncoder = JSONEncoder()
@@ -460,7 +472,15 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     }))
                     self.present(success, animated: true, completion: nil)
                 }  else {
-                    NotificationBanner(title: jsonResponse["ServerMsg"].stringValue ,style: .danger).show()
+                    let servrMsg = jsonResponse["ServerMsg"].stringValue
+                    
+                    if servrMsg == "" {
+//                        NotificationBanner(title: "Something went wrong", style: .danger).show()
+                        NotificationBanner(title: "Oops!",subtitle:"Unexpected error occurred, Please try again later", style: .danger).show()
+
+                    } else {
+                        NotificationBanner(title: servrMsg ,style: .danger).show()
+                    }
                 }
             })
         } else {
@@ -489,25 +509,87 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         
         if leaveType == "HAPL" {
             txtFldTo.isEnabled = false
-            txtFldTo.text = txtFldFrom.text
-            txtFldNoOfDays.text = "0.5"
+            txtFldTo.text = ""
+            txtFldFrom.text = ""
+            txtFldNoOfDays.text = ""
         } else {
             txtFldTo.isEnabled = true
             
             if lmsReqData != nil {
                 txtFldNoOfDays.text = lmsReqData?.noOfDays
             } else {
-                txtFldNoOfDays.text = ""
+                //txtFldNoOfDays.text = ""
             }
         }
-        
     }
     
-    func makePrefix() {
-        let attributedString = NSMutableAttributedString(string: "+")
-        attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black, range: NSMakeRange(0,1))
-        txtFldContact.attributedText = attributedString
+    func getWorkPolicy( comp : @escaping([WorkOffData],Bool)-> ()) {
+    
+        if internetStatus != .notReachable {
+            
+            var newData:[WorkOffData] = []
+            
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.API.LMS_LEAVE_POLICY, Session.authKey)
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result) {
+                    
+                    let jsonResponse = JSON(response.result.value!)
+                    let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
+                    
+                    if jsonArr.count > 0 {
+                        
+                        for i in 0..<jsonArr.count {
+
+                            let wrkOff = WorkOffData()
+                            wrkOff.woDays  = jsonResponse[i]["WorkOff Day"].stringValue
+                            wrkOff.woPolicy  = jsonResponse[i]["WorkOff Policy"].stringValue
+                            wrkOff.woDates  = jsonResponse[i]["PHDates"].stringValue
+                            newData.append(wrkOff)
+                        }
+                        
+                        comp(newData,true)
+                    } else {
+                        comp([],false)
+                    }
+                } else {
+                     comp([],false)
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+             comp([],false)
+        }
+        print("work Off Count : %d",self.arrayWorkOff.count)
     }
+    
+    
+    func checkWorkOffDays(startDate : Date , endDate : Date) -> Int {
+        
+        var workingDays : Int = 0
+//        var phDate : [Date] = []
+        
+        let workOff = self.arrayWorkOff[0].woDays // {sat,sun}
+        let arrWO = workOff.components(separatedBy: ",")
+
+        let publicOff = self.arrayWorkOff[0].woDates // {2019-01-04,2019-03-02}
+        let arrPO = publicOff.components(separatedBy: ",")
+
+        let workPolicy = self.arrayWorkOff[0].woPolicy // {WO,PH}
+        let arrPolicy = workPolicy.components(separatedBy: ",")
+
+        workingDays =  Helper.getWorkingDays(startDate: startDate, endDate: endDate, publicHolidays: arrPO , workOff:arrWO , workOffPolicy:arrPolicy)
+        return workingDays
+       
+    }
+    
+//    func makePrefix() {
+//        let attributedString = NSMutableAttributedString(string: "+")
+//        attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black, range: NSMakeRange(0,1))
+//        txtFldContact.attributedText = attributedString
+//    }
     
     @IBAction func btnCancelTapped(_ sender: Any) {
         
@@ -519,7 +601,9 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        
+        dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+
         if currentTxtFld == txtFldFrom {
             
             if txtFldTo.text != "" {
@@ -533,8 +617,16 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     txtFldFrom.text =  dateFormatter.string(from: fromDte) as String
                 }
             } else {
+               
                 txtFldFrom.text = dateFormatter.string(from: datePicker.date) as String
+                
+                if txtFldTo.isEnabled == false {
+                    txtFldTo.text = txtFldFrom.text
+                    txtFldNoOfDays.text = "0.5"
+                }
             }
+            
+            
         }
         
         if currentTxtFld == txtFldTo {
@@ -543,11 +635,13 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             
             let toDate = dateFormatter.date(from: txtFldTo.text!)!
             
-            let estDays =  Helper.daysBetweenDays2(startDate:fromDate , endDate: toDate)
-            txtFldNoOfDays.text = String(format: "%d", estDays)
+//            let estDays =  Helper.daysBetweenDays2(startDate:fromDate , endDate: toDate) //*Old
+//            txtFldNoOfDays.text = String(format: "%d", estDays) //*Old
+//            let (weekend, working) =  Helper.daysBetweenDaysWithWorkPolicy(startDate:fromDate , endDate: toDate)
+
+            let working = self.checkWorkOffDays(startDate: fromDate, endDate: toDate)
+            txtFldNoOfDays.text = String(format: "%d", working)
         }
-        
-        
         self.view.endEditing(true)
     }
     
@@ -594,13 +688,26 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
         var val = true
         currentTxtFld = textField
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone =  TimeZone(abbreviation: "GMT+0:00")
+        
         switch textField {
             
         case txtFldFrom :
             datePickerTool.isHidden = false
-            datePicker.maximumDate = Date.distantFuture
+
             datePicker.minimumDate = Date.distantPast
+            datePicker.maximumDate =  Date.distantFuture
             
+            if txtFldFrom.text == "" {
+                datePicker.date = Date()
+            } else {
+                let currDate: Date = dateFormatter.date(from: txtFldFrom.text!)!
+                datePicker.date = currDate
+            }
+
         case txtFldTo :
             
             let fromDte = txtFldFrom.text
@@ -609,12 +716,17 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
                 txtFldTo.reloadInputViews()
                 datePickerTool.isHidden = false
                 
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                
                 let newfromDte = dateFormatter.date(from: fromDte!)
                 datePicker.minimumDate = newfromDte
                 datePicker.maximumDate = Date.distantFuture
+                
+                if txtFldTo.text == "" {
+                    datePicker.date = Date()
+                } else {
+                    let currDate: Date = dateFormatter.date(from: txtFldTo.text!)!
+                    datePicker.date = currDate
+                }
+                
             } else {
                 
                 self.view.makeToast("Please Select From Date First")

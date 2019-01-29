@@ -59,7 +59,7 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = "Funds Receipts and Allocation"
+        vwTopHeader.lblTitle.text = "Funds Receipt and Allocation"
         vwTopHeader.lblSubTitle.isHidden = true
     }
     
