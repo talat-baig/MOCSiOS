@@ -440,20 +440,17 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         if self.internetStatus != .notReachable {
             
             self.view.showLoading()
-            var url = String()
             
-            url = String.init(format: Constant.API.LMS_ADD_UPDATE, Session.authKey)
+            let url = String.init(format: Constant.API.LMS_ADD_UPDATE, Session.authKey)
             
             Alamofire.request(url, method: .post, parameters: leaveReq, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 
                 self.view.hideLoading()
                 debugPrint(response.result.value as Any)
-//                debugPrint(response.response?.statusCode as Any)
 
                 let jsonResponse = JSON.init(parseJSON: response.result.value!)
                 
                 if jsonResponse["ServerMsg"].stringValue == "Success" {
-                    
                     var messg = String()
                     
                     if self.lmsReqData != nil {
@@ -602,20 +599,27 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+        dateFormatter.timeZone =  TimeZone(abbreviation: "GMT+0:00")
 
         if currentTxtFld == txtFldFrom {
             
             if txtFldTo.text != "" {
-                let toDate = dateFormatter.date(from: txtFldTo.text!)!
                 
+                let toDate = dateFormatter.date(from: txtFldTo.text!)!
                 let fromDte = datePicker.date
                 
                 if fromDte > toDate {
                     Helper.showMessage(message: "From date can't be greater than To date")
                 } else {
                     txtFldFrom.text =  dateFormatter.string(from: fromDte) as String
+                    
+                    let fromDate = dateFormatter.date(from: txtFldFrom.text!)!
+                    let toDate = dateFormatter.date(from: txtFldTo.text!)!
+                    
+                    let working = self.checkWorkOffDays(startDate: fromDate, endDate: toDate)
+                    txtFldNoOfDays.text = String(format: "%d", working)
                 }
+                
             } else {
                
                 txtFldFrom.text = dateFormatter.string(from: datePicker.date) as String
@@ -623,22 +627,17 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                 if txtFldTo.isEnabled == false {
                     txtFldTo.text = txtFldFrom.text
                     txtFldNoOfDays.text = "0.5"
+                } else  {
                 }
             }
-            
-            
         }
         
         if currentTxtFld == txtFldTo {
             txtFldTo.text = dateFormatter.string(from: datePicker.date) as String
-            let fromDate = dateFormatter.date(from: txtFldFrom.text!)!
             
+            let fromDate = dateFormatter.date(from: txtFldFrom.text!)!
             let toDate = dateFormatter.date(from: txtFldTo.text!)!
             
-//            let estDays =  Helper.daysBetweenDays2(startDate:fromDate , endDate: toDate) //*Old
-//            txtFldNoOfDays.text = String(format: "%d", estDays) //*Old
-//            let (weekend, working) =  Helper.daysBetweenDaysWithWorkPolicy(startDate:fromDate , endDate: toDate)
-
             let working = self.checkWorkOffDays(startDate: fromDate, endDate: toDate)
             txtFldNoOfDays.text = String(format: "%d", working)
         }

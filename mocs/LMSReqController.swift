@@ -18,15 +18,11 @@ class LMSReqController: UIViewController , onLMSUpdate {
     
     var arrayList : [LMSReqData] = []
     
-    
-    //    @IBOutlet weak var collVw: UICollectionView!
-    //    @IBOutlet weak var gridTableVw: UITableView!
     @IBOutlet weak var tableView: UITableView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     @IBOutlet weak var tableViewHeight: NSLayoutConstraint!
-    //    @IBOutlet weak var btnApplyLeave: UIButton!
-    //    @IBOutlet weak var scrlVw: UIScrollView!
+
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     @IBOutlet weak var lblNoHistory: UILabel!
@@ -125,7 +121,6 @@ class LMSReqController: UIViewController , onLMSUpdate {
                     } else {
 
                         self.showLeaveHistoryEmptyState()
-
                     }
                 } else {
                      self.showLeaveHistoryEmptyState()
@@ -135,8 +130,6 @@ class LMSReqController: UIViewController , onLMSUpdate {
             group.notify(queue: .main) {
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
-                
-               
             }
             
         }
@@ -241,16 +234,13 @@ class LMSReqController: UIViewController , onLMSUpdate {
             
             lmsGrid.lapseStatus = json["LeaveBalanceLapseStatus"].stringValue
             
-            
             lmsGrid.isActive = json["IsActive"].stringValue
-            
             
             
             data.append(lmsGrid)
         }
         self.arrayGridList = data
-        
-        
+
     }
     
     
@@ -459,9 +449,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
         vc.lmsReqData = data
         vc.lmsUpdateDelgte = self
         self.navigationController!.pushViewController(vc, animated: true)
-        
     }
-    
     
 }
 
@@ -476,8 +464,8 @@ extension LMSReqController: onLMSOptionClickListener, onMoreClickListener {
     }
     
     func onDeleteClick(data: LMSReqData) {
-        let alert = UIAlertController(title: "Cancel?", message: "Are you sure you want to cancel the leave?", preferredStyle: .alert)
         
+        let alert = UIAlertController(title: "Cancel?", message: "Are you sure you want to cancel the leave?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (UIAlertAction) -> Void in
             self.deleteLeave(data: data)
@@ -488,8 +476,6 @@ extension LMSReqController: onLMSOptionClickListener, onMoreClickListener {
     func onClick(optionMenu: UIViewController, sender: UIButton) {
         self.present(optionMenu, animated: true, completion: nil)
     }
-    
-    
     
 }
 

@@ -68,6 +68,7 @@ struct Constant
         static let CP = "Counterparty - Approval"
         static let TR = "Travel Request - Approval"
         static let LMS = "LMS - Approval"
+        static let ALL = "Pending Approvals"
 
     }
     
@@ -101,9 +102,6 @@ struct Constant
         static let NEWS = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCSLP?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
         /// Filter List
-//        static let FILTER_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TACApp2?apiKey="+ApiKey.KEY+"&AuthID=%@"   /// Old changed at 9-01-2019
-        
-        
         static let FILTER_LIST =  ApiUrl.URL +  "/CompanyFilter/GetCompanyFilter?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
         
         
@@ -211,38 +209,7 @@ struct Constant
 
         static let LMS_LEAVE_POLICY = ApiUrl.URL + "/LeaveManagementSystem/GetLeavePolicy?apikeypolicy=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidpolicy=%@"
 
-        
-//        GetLeavePolicy(string apikeypolicy, string authidpolicy)
-        
-//        GetLeaveTypes(string apikeytype, string authid)
-//        GetLeaveHistory(string apikeyhist, string authid)
-//        GetLeaveSummary(string apikeysumm, string authid)
-//        GetLeaveAttachment(string apikey, string authid, int SNO)
-//        AddUpdateLeave(string apikey, string authid, LeaveManagementSystem LMS)
-//        UpdateDeleteDocument(string apikey, string authid, LeaveApplicationSupportingDoc document)
-//        CancelPendingLeave(string apikey, string authid, int Id)
-//
-//
-//        LMS-public Int32? LeaveApplicationID { get; set; }
-//        public string LeaveApplicationLeaveShortName { get; set; }
-//        public DateTime LeaveApplicationFromDate { get; set; }
-//        public DateTime LeaveApplicationToDate { get; set; }
-//        public double LeaveApplicationDaysCount { get; set; }
-//        public string LeaveApplicationLeaveContact { get; set; }
-//        public string LeaveApplicationRemarks { get; set; }
-//        public List<LeaveApplicationSupportingDoc> SupportedDoc { get; set; }
-//        public string LeaveApplicationDelegationWork { get; set; }
-//        public string LeaveApplicationStatus { get; set; }
-//        public string CancelledBy { get; set; }
-//        public string LastEditedBy { get; set; }
-//
-//
-//        SupportedDoc -  public Int32? ID { get; set; }
-//        public Int32? DocumentID { get; set; }
-//        public string DocumentName { get; set; }
-//        public string DocumentDescription { get; set; }
-//        public string DocumentPhysicalPath { get; set; }
-//        public bool IsDeleted { get; set; }
+       
     }
     
     struct AR {

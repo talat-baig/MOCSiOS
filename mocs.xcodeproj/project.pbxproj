@@ -267,6 +267,11 @@
 		57DB8C092149208A0007D82A /* TravelRequestAddEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DB8C082149208A0007D82A /* TravelRequestAddEditController.swift */; };
 		57DB8C0B214934870007D82A /* ItineraryListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DB8C0A214934870007D82A /* ItineraryListController.swift */; };
 		57DC1E6721D38ECF00901A95 /* SalesSummaryReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DC1E6621D38ECF00901A95 /* SalesSummaryReportController.swift */; };
+		57DCB4902201B42C004DE9A5 /* PendingApproval.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57DCB48F2201B42C004DE9A5 /* PendingApproval.storyboard */; };
+		57DCB4942201B63E004DE9A5 /* PendingApprovalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DCB4932201B63E004DE9A5 /* PendingApprovalCell.swift */; };
+		57DCB4962201B678004DE9A5 /* PendingApprovalCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57DCB4952201B678004DE9A5 /* PendingApprovalCell.xib */; };
+		57DCB4982201B9EF004DE9A5 /* PendingApprovalsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DCB4972201B9EF004DE9A5 /* PendingApprovalsController.swift */; };
+		57DCB49A2201C577004DE9A5 /* PAData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DCB4992201C577004DE9A5 /* PAData.swift */; };
 		57E0254C21187F540048D49F /* WHRListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E0254B21187F540048D49F /* WHRListData.swift */; };
 		57E23706218319160071D285 /* InvoiceAmtCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E23705218319160071D285 /* InvoiceAmtCVCell.swift */; };
 		57E2370A21831C860071D285 /* InvoiceAmtCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57E2370921831C860071D285 /* InvoiceAmtCVCell.xib */; };
@@ -665,6 +670,11 @@
 		57DB8C082149208A0007D82A /* TravelRequestAddEditController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelRequestAddEditController.swift; sourceTree = "<group>"; };
 		57DB8C0A214934870007D82A /* ItineraryListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryListController.swift; sourceTree = "<group>"; };
 		57DC1E6621D38ECF00901A95 /* SalesSummaryReportController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SalesSummaryReportController.swift; sourceTree = "<group>"; };
+		57DCB48F2201B42C004DE9A5 /* PendingApproval.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PendingApproval.storyboard; sourceTree = "<group>"; };
+		57DCB4932201B63E004DE9A5 /* PendingApprovalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingApprovalCell.swift; sourceTree = "<group>"; };
+		57DCB4952201B678004DE9A5 /* PendingApprovalCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PendingApprovalCell.xib; sourceTree = "<group>"; };
+		57DCB4972201B9EF004DE9A5 /* PendingApprovalsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingApprovalsController.swift; sourceTree = "<group>"; };
+		57DCB4992201C577004DE9A5 /* PAData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAData.swift; sourceTree = "<group>"; };
 		57E0254B21187F540048D49F /* WHRListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WHRListData.swift; sourceTree = "<group>"; };
 		57E23705218319160071D285 /* InvoiceAmtCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceAmtCVCell.swift; sourceTree = "<group>"; };
 		57E2370921831C860071D285 /* InvoiceAmtCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InvoiceAmtCVCell.xib; sourceTree = "<group>"; };
@@ -1106,6 +1116,7 @@
 		577A81A720EF80E00006EF0B /* ReleaseOrder */ = {
 			isa = PBXGroup;
 			children = (
+				84759F5920443032002F1D7C /* ContractCell.xib */,
 				57520327211968B6006718B0 /* RRcptData.swift */,
 				57E0254B21187F540048D49F /* WHRListData.swift */,
 				57480434211471DB00A87CDA /* RecordRcptData.swift */,
@@ -1265,6 +1276,10 @@
 		8443BFCE203AB89900F09DE0 /* Approval */ = {
 			isa = PBXGroup;
 			children = (
+				57DCB48F2201B42C004DE9A5 /* PendingApproval.storyboard */,
+				57DCB4972201B9EF004DE9A5 /* PendingApprovalsController.swift */,
+				57DCB4932201B63E004DE9A5 /* PendingApprovalCell.swift */,
+				57DCB4952201B678004DE9A5 /* PendingApprovalCell.xib */,
 				5773436E21E35A5F00C3D302 /* LMS */,
 				5756DE8621D6334C00C355EE /* BarGraphEntryCell.swift */,
 				5756DE8721D6334D00C355EE /* BarGraphEntryCell.xib */,
@@ -1282,7 +1297,6 @@
 				840A9862203D781100ACCA3F /* Interface.swift */,
 				8443BFCF203AB8A300F09DE0 /* PurchaseContract */,
 				840C01BE20404D230012ED65 /* AttachmentCell.xib */,
-				84759F5920443032002F1D7C /* ContractCell.xib */,
 				84759F5B2044305A002F1D7C /* ContractCell.swift */,
 				84D0C4C0204D44B0000BED53 /* ExpenseCell.swift */,
 				84D0C4C2204D44C6000BED53 /* ExpenseCell.xib */,
@@ -1496,6 +1510,7 @@
 		B3C93AC0201E045100505273 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				57DCB4992201C577004DE9A5 /* PAData.swift */,
 				57FE014221F6EE2A00B96C6E /* LeaveType.swift */,
 				57C8424D21ECAB3800AFACE6 /* LMSLeaveData.swift */,
 				57C8424321EC927800AFACE6 /* LMSEmpData.swift */,
@@ -1639,6 +1654,7 @@
 				B3DB258F202866A300FA176D /* ocs_loading.json in Resources */,
 				57CD32C421DE0E5B00B041C5 /* FPSOverallCell.xib in Resources */,
 				5773437021E35A7800C3D302 /* LMS.storyboard in Resources */,
+				57DCB4962201B678004DE9A5 /* PendingApprovalCell.xib in Resources */,
 				84279FAB205FA09A006F7BEC /* AROverall.xib in Resources */,
 				57D8A701217EF30600F0855C /* APOverallCell.xib in Resources */,
 				57D731892186F19F000589F8 /* APInvoiceCell.xib in Resources */,
@@ -1704,6 +1720,7 @@
 				57C81B48219D3E12003657C7 /* AvlRelListCell.xib in Resources */,
 				5765DC2420846460002494E6 /* TaskManager.storyboard in Resources */,
 				5736D67421CCC74F006CDA58 /* FundsRecptAllocation.storyboard in Resources */,
+				57DCB4902201B42C004DE9A5 /* PendingApproval.storyboard in Resources */,
 				5736D67F21CD1396006CDA58 /* FRARefCell.xib in Resources */,
 				575005EA214BCCEF0004A1CE /* TermsCondistionsView.xib in Resources */,
 				57D8A712217F45BB00F0855C /* APCounterpartyCell.xib in Resources */,
@@ -1870,6 +1887,7 @@
 				571DE882213579B200AE6B72 /* KYCAttachmentController.swift in Sources */,
 				57EAD4DD21366E01003C9910 /* EnterKYCDetailsView.swift in Sources */,
 				5724FB0620DCD9E7001860C6 /* ECRClaimData.swift in Sources */,
+				57DCB4982201B9EF004DE9A5 /* PendingApprovalsController.swift in Sources */,
 				572ED50D20A1885800CF2EF1 /* WC_HeaderView.swift in Sources */,
 				571DE86A21351D0600AE6B72 /* AddressViewController.swift in Sources */,
 				840C01BD203FFB770012ED65 /* VoucherData.swift in Sources */,
@@ -2046,6 +2064,7 @@
 				57455DC821DCB79000FB7A62 /* FPSPaymentCell.swift in Sources */,
 				571DE87A213576DF00AE6B72 /* LegalInfoController.swift in Sources */,
 				57DB8C0B214934870007D82A /* ItineraryListController.swift in Sources */,
+				57DCB4942201B63E004DE9A5 /* PendingApprovalCell.swift in Sources */,
 				57D0A51D219C4ACA00DBD45C /* WarehouseListViewController.swift in Sources */,
 				5735F27A2074EF5700A0A640 /* ARCounterPartyController.swift in Sources */,
 				5736D67921CD05ED006CDA58 /* FRAReferenceListController.swift in Sources */,
@@ -2107,6 +2126,7 @@
 				57F0348F207F815E00DE5056 /* BusinessUnitFilterCell.swift in Sources */,
 				5735F2822074FDD600A0A640 /* ARCounterPartyData.swift in Sources */,
 				575FA6002154D19600F8F48D /* TravelReqApprovalVC.swift in Sources */,
+				57DCB49A2201C577004DE9A5 /* PAData.swift in Sources */,
 				571B23E621BE41A800D4A1A7 /* SSChartCell.swift in Sources */,
 				84251574205695FF00130073 /* ARIAllocationController.swift in Sources */,
 				5786A8D92084737D00E24B4D /* TaskListViewController.swift in Sources */,

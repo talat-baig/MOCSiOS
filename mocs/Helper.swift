@@ -193,10 +193,10 @@ class Helper: UIView {
         let calendar = Calendar.current
         
         // Replace the hour (time) of both dates with 00:00
-        let date1 = calendar.startOfDay(for: startDate)
-        let date2 = calendar.startOfDay(for: endDate)
+//        let date1 = calendar.startOfDay(for: startDate)
+//        let date2 = calendar.startOfDay(for: endDate)
         
-        let components = calendar.dateComponents([.day], from: date1, to: date2).day! + 1
+        let components = calendar.dateComponents([.day], from: startDate, to: endDate).day! + 1
         return components
     }
     
@@ -225,8 +225,13 @@ class Helper: UIView {
         
         let calendar = Calendar.current
         
-        let date1 = calendar.startOfDay(for: startDate)
-        let date2 = calendar.startOfDay(for: endDate)
+//        let date1 = calendar.startOfDay(for: startDate)
+//        let date2 = calendar.startOfDay(for: endDate)
+
+        let date1 = startDate
+        let date2 = endDate
+
+        
         let totalDays = calendar.dateComponents([.day], from: date1, to: date2).day! + 1
         
         //publicHolidays //[2019-02-02,2019-02-03]
@@ -489,16 +494,14 @@ class Helper: UIView {
         //return url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         //return String(utf8String: url.cString(using: String.Encoding.utf8)!)!
         
-        let encodedHost = url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-
-//        let str = CFURLCreateStringByAddingPercentEscapes(
-//            nil,
-//            url.trimmingCharacters(in: .whitespaces) as CFString,
-//            nil,
-//            "!*'();:@&=+$,/?%#[]" as CFString,
-//            CFStringBuiltInEncodings.UTF8.rawValue
-//        )
-        return encodedHost! as String
+        let str = CFURLCreateStringByAddingPercentEscapes(
+            nil,
+            url.trimmingCharacters(in: .whitespaces) as CFString,
+            nil,
+            "!*'();:@&=+$,/?%#[]" as CFString,
+            CFStringBuiltInEncodings.UTF8.rawValue
+        )
+        return str! as String
     }
     
     public static func encodeLocString(url: String) -> String {

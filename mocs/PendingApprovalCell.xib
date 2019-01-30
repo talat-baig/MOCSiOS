@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PendingApprovalCell" customModule="mocs" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="97"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oal-b8-YWS">
+                    <rect key="frame" x="8" y="10" width="359" height="77"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o3V-ow-cdK">
+                            <rect key="frame" x="0.0" y="0.0" width="359" height="77"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1uP-ve-NPr">
+                                    <rect key="frame" x="0.0" y="0.0" width="283" height="77"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pending Leave Request" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SEh-vU-ynR" userLabel="Pending Leave Request">
+                                            <rect key="frame" x="8" y="0.0" width="267" height="77"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="SEh-vU-ynR" firstAttribute="top" secondItem="1uP-ve-NPr" secondAttribute="top" id="723-XO-UO1"/>
+                                        <constraint firstAttribute="trailing" secondItem="SEh-vU-ynR" secondAttribute="trailing" constant="8" id="K6L-fQ-h1D"/>
+                                        <constraint firstAttribute="bottom" secondItem="SEh-vU-ynR" secondAttribute="bottom" id="cBF-Lp-fv3"/>
+                                        <constraint firstItem="SEh-vU-ynR" firstAttribute="leading" secondItem="1uP-ve-NPr" secondAttribute="leading" constant="8" id="soh-fW-xig"/>
+                                    </constraints>
+                                </view>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Pending Leave Request" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FyR-KN-3Xt" userLabel="Pending Leave Request">
+                                    <rect key="frame" x="283" y="0.0" width="1" height="77"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="1" id="CVZ-us-fWx"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gjC-Qa-XrL" userLabel="Pending Leave Request">
+                                    <rect key="frame" x="284" y="0.0" width="75" height="77"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="75" id="7qL-sd-iuf"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="o3V-ow-cdK" firstAttribute="leading" secondItem="oal-b8-YWS" secondAttribute="leading" id="39F-HY-vJZ"/>
+                        <constraint firstAttribute="bottom" secondItem="o3V-ow-cdK" secondAttribute="bottom" id="cfn-Fn-Ixc"/>
+                        <constraint firstAttribute="trailing" secondItem="o3V-ow-cdK" secondAttribute="trailing" id="hrb-uL-FqX"/>
+                        <constraint firstItem="o3V-ow-cdK" firstAttribute="top" secondItem="oal-b8-YWS" secondAttribute="top" id="usK-dg-bok"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="oal-b8-YWS" secondAttribute="bottom" constant="10" id="0I8-y9-5ke"/>
+                <constraint firstItem="oal-b8-YWS" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="Vwx-mQ-qaX"/>
+                <constraint firstItem="oal-b8-YWS" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="ovg-8I-Wf2"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="oal-b8-YWS" secondAttribute="trailing" constant="8" id="v9S-yg-WTa"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="lblCount" destination="gjC-Qa-XrL" id="1VK-er-BRt"/>
+                <outlet property="lblModName" destination="SEh-vU-ynR" id="tVE-rI-rOJ"/>
+                <outlet property="outrVw" destination="oal-b8-YWS" id="DhR-jU-DwH"/>
+            </connections>
+            <point key="canvasLocation" x="61.600000000000001" y="-206.44677661169416"/>
+        </view>
+    </objects>
+</document>

@@ -44,7 +44,6 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     var wunderDelegate: wunderlistPopupDelegate?
     
     var isFromSideMenu = false
-
     
     
      /// Object of type AnyObject

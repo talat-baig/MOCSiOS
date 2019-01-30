@@ -128,10 +128,13 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         
         if isFromView {
             floaty.isHidden = true
-            if vouchResponse != nil {
-                self.populateList(response: vouchResponse)
+            
+            if moduleName == Constant.MODULES.LMS {
+                self.getVouchersData()
             } else {
-                
+                if vouchResponse != nil {
+                    self.populateList(response: vouchResponse)
+                }
             }
         } else {
             floaty.isHidden = false

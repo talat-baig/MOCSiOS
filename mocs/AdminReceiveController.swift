@@ -236,7 +236,7 @@ extension AdminReceiveController: UISearchBarDelegate {
 extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onButtonClickListener{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 305
+        return 268
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
