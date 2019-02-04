@@ -27,7 +27,9 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
-    
+    @IBOutlet weak var btnMore: UIButton!
+    var currentPage : Int = 1
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +43,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.isNavigationBarHidden = true
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         
         vwTopHeader.delegate = self
@@ -63,13 +65,23 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     }
     
     
-    @objc func populateList() {
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
+    
+    @objc func populateList(currentPage: Int = 1) {
         
         var data: [TravelRequestData] = []
         
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.TRF.TRF_APPROVAL_LIST, Session.authKey)
+            let url = String.init(format: Constant.TRF.TRF_APPROVAL_LIST, Session.authKey,self.currentPage)
             print("TRF URL", url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -80,7 +92,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                     
                     let jsonResponse = JSON(response.result.value!)
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
-                    self.arrayList.removeAll()
+//                    self.arrayList.removeAll()
                     
                     if array.count > 0 {
                         
@@ -120,22 +132,32 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                             }
                             data.append(trfData)
                         }
-                        self.arrayList = data
-                        self.newArray = data
+                        self.arrayList.append(contentsOf: data)
+                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
-                        //                        self.tableView.reloadData()
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isTrvReq, action: #selector(self.populateList))
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isTrvReq, action: #selector(self.populateList))
+                    print("Invalid Reponse")
                 }
             }))
         } else {
+          
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
         
     }
@@ -235,6 +257,19 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         self.present(alert, animated: true, completion: nil)
     }
     
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
+    
 }
 
 extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
@@ -259,17 +294,17 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let data = arrayList[indexPath.row]
         let view = tableView.dequeueReusableCell(withIdentifier: "cell") as! TravelRequestAdapter
         view.btnMore.tag = indexPath.row
         
-        view.setDataToView(data: data, isFromApprove : true)
+        if arrayList.count > 0{
+            let data = arrayList[indexPath.row]
+            view.setDataToView(data: data, isFromApprove : true)
+        }
         view.isFromApprov = true
         view.delegate = self
         view.trfApprvListener = self
         return view
-        
-        
     }
     
 }

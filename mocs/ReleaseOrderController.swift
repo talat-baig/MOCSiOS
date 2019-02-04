@@ -90,10 +90,10 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         populateList(currentPage: self.currentPage)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.populateList()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        self.populateList()
+//    }
     
     
     @objc func showFilterMenu(){
