@@ -21,7 +21,6 @@ class PendingApprovalCell: UITableViewCell {
         outrVw.layer.shadowOffset = CGSize(width: 0, height: 2)
         outrVw.layer.shadowRadius = 1.5
         outrVw.layer.shadowColor = UIColor.gray.cgColor
-        // Initialization code
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -29,13 +28,13 @@ class PendingApprovalCell: UITableViewCell {
     }
     
     func setDataToView(data : PAData){
-        
+        lblCount.text = data.paCount
+        lblModName.text =  data.modName
     }
     
     func setDataToView(title : String, count : String){
         lblCount.text = count
         lblModName.text = title
-        
     }
     
 }

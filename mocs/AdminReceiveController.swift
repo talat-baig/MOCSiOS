@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, filterViewDelegate, customPopUpDelegate {
-
+    
     /// Table view
     @IBOutlet weak var tableView: UITableView!
     
@@ -19,7 +19,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     
     /// Array List of type ARIData elements
     var newArray:[ARIData] = []
-    
+    var navTitle = ""
     var myView = CustomPopUpView()
     
     /// CustonPopUpView for decline pop-up
@@ -31,31 +31,39 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     /// Top Header
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
+    @IBOutlet weak var btnMore: UIButton!
     /// Refresh Control
     var refreshControl:UIRefreshControl = UIRefreshControl()
+    
+    var currentPage : Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         FilterViewController.filterDelegate = self
-
+        
         self.navigationController?.isNavigationBarHidden = true
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.ARI
+        vwTopHeader.btnBack.isHidden = false
+        vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
         self.view.addGestureRecognizer(gestureRecognizer)
         srchBar.delegate = self
+        
         populateList()
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        
     }
-
+    
     /// filterViewDelegate delegate method to cancel filter
     /// - Parameter filterString: Filter String
     func cancelFilter(filterString: String) {
@@ -74,28 +82,42 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
     /// Method to fetch list of ARI through API call and populate table view with the fetched response
-    @objc func populateList() {
+    @objc func populateList(currentPage: Int = 1) {
+        
+        var arrData : [ARIData] = []
         
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.ARI.LIST, Session.authKey,
-                                  Helper.encodeURL(url:FilterViewController.getFilterString()))
+                                  Helper.encodeURL(url:FilterViewController.getFilterString()), self.currentPage)
             self.view.showLoading()
+//            self.isLoadingList = true
+            
             Alamofire.request(url).responseData(completionHandler: ({ response in
+                
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
+                
                 if Helper.isResponseValid(vc: self, response: response.result, tv: self.tableView){
                     var jsonResponse = JSON(response.result.value!);
                     let arrayJson = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    self.arrayList.removeAll()
-                    if arrayJson.count > 0{
+                    //                        self.arrayList.removeAll()
+                    if arrayJson.count > 0 {
                         
-//                        self.arrayList.removeAll()
-                        
-                        for(_,j):(String,JSON) in jsonResponse{
+                        for(_,j):(String,JSON) in jsonResponse {
+                            
                             let data = ARIData()
                             data.refId = j["ARI Reference ID"].stringValue
                             data.company = j["Company Name"].stringValue
@@ -107,26 +129,48 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                             data.requestAmtUSD = j["Requested Amount (USD)"].stringValue
                             data.fxRate = j["FX Rate,"].stringValue
                             data.allocationItem = j["Allocation Items"].stringValue
-                            self.arrayList.append(data)
+                            arrData.append(data)
                         }
+                        
+                        self.arrayList.append(contentsOf: arrData)
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
-//                        self.tableView.reloadData()
-                    }else{
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    } else {
+                        
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
-                     self.tableView.reloadData()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    print("Invalid Reponse")
                 }
             }))
         } else {
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
+            
         }
     }
-   
+    
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        
+//        self.isLoadingList = true
+        self.loadMoreItemsForList()
+    }
+    
     /// Method to Show filter menu
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
@@ -161,7 +205,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                 Helper.showMessage(message: "Please Enter Comment")
                 return
             } else {
-               self.declineContract(data: data as! ARIData, comment: text)
+                self.declineContract(data: data as! ARIData, comment: text)
                 declView.removeFromSuperviewWithAnimate()
             }
         }
@@ -189,7 +233,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
             Helper.showNoInternetMessg()
         }
     }
-
+    
     func declineContract(data:ARIData, comment:String){
         if internetStatus != .notReachable{
             let url = String.init(format: Constant.ARI.DECLINE, Session.authKey,
@@ -208,13 +252,37 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                 }
             }))
         }else{
-           Helper.showNoInternetMessg()
+            Helper.showNoInternetMessg()
         }
     }
+    
     
     @objc func handleTap() {
         self.view.endEditing(true)
     }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //        let height = scrollView.frame.size.height
+        //        let contentYoffset = scrollView.contentOffset.y + 100
+        //        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
+        //
+        //        if distanceFromBottom <= height {
+        //            btnMore.isHidden = false
+        //            print(" you reached end of the table")
+        //        } else {
+        //            btnMore.isHidden = true
+        //        }
+        
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0
+        {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
+    
 }
 
 
@@ -257,8 +325,24 @@ extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onB
         cell.setDataToView(data: data)
         cell.selectionStyle = .none
         cell.delegate = self
+        
         return cell
     }
+    
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        //        if (indexPath.row == self.arrayList.count - 1) {
+        //            btnMore.isHidden = false
+        //            print("Last row reached")
+        //        } else {
+        //            btnMore.isHidden = false
+        //        }
+        //
+        
+    }
+    
+    
     
     func onViewClick(data: AnyObject) {
         
@@ -289,18 +373,16 @@ extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onB
         myView.data = data
         myView.cpvDelegate = self
         self.view.addMySubview(myView)
-
     }
     
     func onDeclineClick(data: AnyObject) {
-      
+        
         self.handleTap()
         declView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
         declView.setDataToCustomView(title: "Decline?", description: "Are you sure you want to decline this Invoice? You can't revert once declined", leftButton: "GO BACK", rightButton: "DECLINE", isTxtVwHidden: false, isApprove:  false)
         declView.data = data
         declView.cpvDelegate = self
         self.view.addMySubview(declView)
-  
     }
     
     
@@ -309,7 +391,7 @@ extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onB
 extension AdminReceiveController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

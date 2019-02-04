@@ -21,6 +21,7 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     var myView = CustomPopUpView()
     var newArray : [PurchaseContractData] = []
     var arrayList:[PurchaseContractData] = []
+    var navTitle = ""
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     
@@ -54,9 +55,10 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.PC
+        vwTopHeader.btnBack.isHidden = false
+        vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
         FilterViewController.filterDelegate = self

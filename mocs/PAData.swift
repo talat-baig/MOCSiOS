@@ -10,6 +10,8 @@ import UIKit
 
 class PAData: NSObject {
 
-    var title = ""
-    var count = ""
+    var modName = ""
+    var paCount = ""
+    var menuNames = ""
+
 }

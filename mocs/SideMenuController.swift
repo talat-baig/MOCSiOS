@@ -29,7 +29,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     var helpDocViewer: UIDocumentInteractionController!
     var wunderPopup = CustomPopUpView()
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "1.1.5 Leave Request Form", "3.2.1 Purchase Contract (PC)","3.2.2 Sales Contract (SC)" , "3.2.3 Delivery Orders (DO)", "3.1.1 Travel Claims Reimbursement (TCR)", "3.1.2 Employee Claims & Payments (ECR EPR)" , "3.1.3 Admin Receive Invoice (ARI)", "3.2.4 Trade Received Invoice (TRI)", "3.2.5 Release Order (RO)", "3.2.6 Counterparty Profile" , "3.1.5 Travel Request", "3.1.4 Leave Management System (LMS)" , "Pending Approvals1" , "Employee Directory","Task Manager" , "2.1.1 Accounts Receivables (AR) Report", "2.1.2 Accounts Payable Report", "2.1.3 Available Release Report", "2.1.4 Sales Summary Report","2.1.5 Purchase Summary Report", "2.1.6 Funds Receipt and Allocation", "2.1.7 Funds Payment & Settlement"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "1.1.5 Leave Request Form", "3.2.1 Purchase Contract (PC)","3.2.2 Sales Contract (SC)" , "3.2.3 Delivery Orders (DO)", "3.1.1 Travel Claims Reimbursement (TCR)", "3.1.2 Employee Claims & Payments (ECR EPR)" , "3.1.3 Admin Receive Invoice (ARI)", "3.2.4 Trade Received Invoice (TRI)", "3.2.5 Release Order (RO)", "3.2.6 Counterparty Profile" , "3.1.5 Travel Request", "3.1.4 Leave Management System (LMS)" , "Pending Approvals" , "Employee Directory","Task Manager" , "2.1.1 Accounts Receivables (AR) Report", "2.1.2 Accounts Payable Report", "2.1.3 Available Release Report", "2.1.4 Sales Summary Report","2.1.5 Purchase Summary Report", "2.1.6 Funds Receipt and Allocation", "2.1.7 Funds Payment & Settlement"]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -93,41 +93,40 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
         /************************* Pending Approvals *****************************/
         
+//        
+//        let tcr = MenuDataObject(name: "3.1.1 Travel Claims Reimbursement (TCR)", storybdNAme: "TCR", vcName: "TCRController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let ecr = MenuDataObject(name: "3.1.2 Employee Claims & Payments (ECR EPR)", storybdNAme: "EmployeePayment", vcName: "EmployeePaymentController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let ari = MenuDataObject(name: "3.1.3 Admin Receive Invoice (ARI)", storybdNAme: "AdminReceive", vcName: "AdminReceiveController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let lms = MenuDataObject(name: "3.1.4 Leave Management System (LMS)", storybdNAme: "LMS", vcName: "LeaveManagmentController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let trf = MenuDataObject(name: "3.1.5 Travel Request", storybdNAme: "TravelReqApproval", vcName: "TravelReqApprovalVC", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let paAdmin = MenuDataObject(name: "3.1 Admin" , children: [tcr, ecr, ari,lms,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile"))
+//
+//        let pc = MenuDataObject(name: "3.2.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let sc = MenuDataObject(name: "3.2.2 Sales Contract (SC)", storybdNAme: "SalesContract", vcName: "SalesContractController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let dO = MenuDataObject(name: "3.2.3 Delivery Orders (DO)", modName : ModName.isDO, storybdNAme: "SalesContract", vcName: "SummaryForApprovalController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let tri = MenuDataObject(name: "3.2.4 Trade Received Invoice (TRI)", storybdNAme: "TradeInvoice", vcName: "TradeInvoiceController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let ro = MenuDataObject(name: "3.2.5 Release Order (RO)", storybdNAme: "ReleaseOrder", vcName: "ReleaseOrderController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let ca = MenuDataObject(name: "3.2.6 Counterparty Profile", storybdNAme: "CounterpartyApproval", vcName: "CounterpartyProfileController", imageName: #imageLiteral(resourceName: "empty"))
+//
+//        let paBusiness = MenuDataObject(name: "3.2 Business" , children: [pc,sc,dO,tri,ro,ca], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+//
+//        let pendgApprvl1 = MenuDataObject(name: "Pending Approvals1", children: [paAdmin,paBusiness], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
+//
+//
+        /************************* Pending Approvals *****************************/
+
         
-        let tcr = MenuDataObject(name: "3.1.1 Travel Claims Reimbursement (TCR)", storybdNAme: "TCR", vcName: "TCRController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let ecr = MenuDataObject(name: "3.1.2 Employee Claims & Payments (ECR EPR)", storybdNAme: "EmployeePayment", vcName: "EmployeePaymentController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let ari = MenuDataObject(name: "3.1.3 Admin Receive Invoice (ARI)", storybdNAme: "AdminReceive", vcName: "AdminReceiveController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let lms = MenuDataObject(name: "3.1.4 Leave Management System (LMS)", storybdNAme: "LMS", vcName: "LeaveManagmentController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let trf = MenuDataObject(name: "3.1.5 Travel Request", storybdNAme: "TravelReqApproval", vcName: "TravelReqApprovalVC", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let paAdmin = MenuDataObject(name: "3.1 Admin" , children: [tcr, ecr, ari,lms,trf], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile"))
-        
-        let pc = MenuDataObject(name: "3.2.1 Purchase Contract (PC)", storybdNAme: "PurchaseContract", vcName: "PurchaseContractController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let sc = MenuDataObject(name: "3.2.2 Sales Contract (SC)", storybdNAme: "SalesContract", vcName: "SalesContractController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let dO = MenuDataObject(name: "3.2.3 Delivery Orders (DO)", modName : ModName.isDO, storybdNAme: "SalesContract", vcName: "SummaryForApprovalController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let tri = MenuDataObject(name: "3.2.4 Trade Received Invoice (TRI)", storybdNAme: "TradeInvoice", vcName: "TradeInvoiceController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let ro = MenuDataObject(name: "3.2.5 Release Order (RO)", storybdNAme: "ReleaseOrder", vcName: "ReleaseOrderController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let ca = MenuDataObject(name: "3.2.6 Counterparty Profile", storybdNAme: "CounterpartyApproval", vcName: "CounterpartyProfileController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        let paBusiness = MenuDataObject(name: "3.2 Business" , children: [pc,sc,dO,tri,ro,ca], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
-        
-        let pendgApprvl = MenuDataObject(name: "Pending Approvals", children: [paAdmin,paBusiness], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "pencil"))
-        
-        
-        /************************* Emp Directory *****************************/
-//        let ep = MenuDataObject(name: "3.2.6 Counterparty Profile", storybdNAme: "CounterpartyApproval", vcName: "CounterpartyProfileController", imageName: #imageLiteral(resourceName: "empty"))
-        
-        
-        let pendgApprvl2 = MenuDataObject(name: "Pending Approvals1",children: [], storybdNAme: "PendingApproval", vcName: "PendingApprovalsController", imageName: #imageLiteral(resourceName: "pencil"))
+        let pendgApprvl = MenuDataObject(name: "Pending Approvals",children: [], storybdNAme: "PendingApproval", vcName: "PendingApprovalsController", imageName: #imageLiteral(resourceName: "pencil"))
 
         
         /************************* Emp Directory *****************************/
@@ -142,7 +141,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
         let help = MenuDataObject(name: "Help", children: [], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "info"))
         
-        return [administrative, business, pendgApprvl2, pendgApprvl, empDir, taskMngr, help]
+        return [administrative, business, pendgApprvl, empDir, taskMngr, help]
     }
     
     
@@ -260,7 +259,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
                 levelZero.imgArrow.image = #imageLiteral(resourceName: "rightarrow")
             }
             
-            if item.name == "Employee Directory" || item.name == "Task Manager" || item.name == "Help" {
+            if item.name == "Employee Directory" || item.name == "Task Manager" || item.name == "Help" || item.name == "Pending Approvals"{
                 levelZero.imgArrow.image = #imageLiteral(resourceName: "empty")
             }
             

@@ -23,12 +23,15 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     var lmsReqData : LMSReqData?
     var arrLMSAttachmnt : [VoucherData] = []
     var arrayWorkOff : [WorkOffData] = []
-
+    
+    //    var selDate : Date?
     //    var lmsAttachmnts : [TTVoucher] = []
+    //    var startDate = Date()
+    //    var endDate = Date()
     
     weak var currentTxtFld: UITextField? = nil
     weak var okLMSSubmit : onTCRSubmit?
-
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     @IBOutlet weak var vwLeaveType: UIView!
@@ -93,7 +96,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         let lmsDocArray = lmsDocVC.arrayList
         
         self.arrLMSAttachmnt = lmsDocArray
-//        self.checkForLeaveType()
+        //        self.checkForLeaveType()
     }
     
     func assignDataToViews() {
@@ -116,7 +119,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             self.btnLeaveType.isUserInteractionEnabled = true
             btnSubmit.isHidden = false
             
-           
+            
             
             self.getLeaveTypes { (res) in
                 
@@ -136,10 +139,10 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             self.getWorkPolicy{ (arr, res)  in
                 
                 if res {
-                   
+                    
                     if arr.count > 0 {
                         self.arrayWorkOff = arr
-//                        self.checkWorkOffDays()
+                        //                        self.checkWorkOffDays()
                     }
                     
                 } else {
@@ -159,7 +162,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             txtFldNoOfDays.text = lmsReqData?.noOfDays
             txtFldApprovingMngr.text = Session.reportMngr
             self.btnLeaveType.setTitle( self.lmsReqData?.leaveType , for: .normal)
-//            self.checkForLeaveType() // check leave type for UI elements enable/disable
+            //            self.checkForLeaveType() // check leave type for UI elements enable/disable
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -183,8 +186,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         } else {
             txtFldApprovingMngr.text = Session.reportMngr
         }
-       
-//         self.makePrefix()
+        
+        //         self.makePrefix()
     }
     
     func getLeaveTypes( comp : @escaping(Bool)-> ()) {
@@ -207,7 +210,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     }
                 }))
             } else {
-                
                 Helper.showNoInternetMessg()
                 comp(false)
             }
@@ -290,10 +292,19 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         self.txtFldFrom.inputView = datePickerTool
         self.txtFldTo.inputView = datePickerTool
         
+        datePicker.addTarget(self, action: #selector(self.datePickerValueChanged), for: UIControlEvents.valueChanged)
+        
         btnLeaveType.contentHorizontalAlignment = .left
         
         txtFldContact.setLeftIcon(icon:#imageLiteral(resourceName: "plus"))
         btnSubmit.layer.cornerRadius = 5.0
+    }
+    
+    
+    @objc func datePickerValueChanged() {
+        
+        //        selDate = self.datePicker.date
+        
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -351,7 +362,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         }
         return newVouchrArry
     }
- 
+    
     @IBAction func btnSubmitTapped(_ sender: Any) {
         
         self.handleTap()
@@ -382,7 +393,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             Helper.showMessage(message: "Please provide proper phone number with country code")
             return
         }
-
+        
         let newContact = contact.stripped
         
         guard let reason = self.txtVwReason?.text , !reason.isEmpty else {
@@ -447,7 +458,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                 
                 self.view.hideLoading()
                 debugPrint(response.result.value as Any)
-
+                
                 let jsonResponse = JSON.init(parseJSON: response.result.value!)
                 
                 if jsonResponse["ServerMsg"].stringValue == "Success" {
@@ -472,9 +483,9 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     let servrMsg = jsonResponse["ServerMsg"].stringValue
                     
                     if servrMsg == "" {
-//                        NotificationBanner(title: "Something went wrong", style: .danger).show()
+                        //                        NotificationBanner(title: "Something went wrong", style: .danger).show()
                         NotificationBanner(title: "Oops!",subtitle:"Unexpected error occurred, Please try again later", style: .danger).show()
-
+                        
                     } else {
                         NotificationBanner(title: servrMsg ,style: .danger).show()
                     }
@@ -495,7 +506,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         leaveTyp.dataSource = self.arrLeaveTypes
         leaveTyp.selectionAction = { [weak self] (index, item) in
             self?.btnLeaveType.setTitle( item , for: .normal)
-            
             self?.checkForLeaveType(leaveType : item)
         }
         leaveTyp.show()
@@ -521,7 +531,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     }
     
     func getWorkPolicy( comp : @escaping([WorkOffData],Bool)-> ()) {
-    
+        
         if internetStatus != .notReachable {
             
             var newData:[WorkOffData] = []
@@ -539,7 +549,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     if jsonArr.count > 0 {
                         
                         for i in 0..<jsonArr.count {
-
+                            
                             let wrkOff = WorkOffData()
                             wrkOff.woDays  = jsonResponse[i]["WorkOff Day"].stringValue
                             wrkOff.woPolicy  = jsonResponse[i]["WorkOff Policy"].stringValue
@@ -552,12 +562,12 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                         comp([],false)
                     }
                 } else {
-                     comp([],false)
+                    comp([],false)
                 }
             }))
         } else {
             Helper.showNoInternetMessg()
-             comp([],false)
+            comp([],false)
         }
         print("work Off Count : %d",self.arrayWorkOff.count)
     }
@@ -566,27 +576,21 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     func checkWorkOffDays(startDate : Date , endDate : Date) -> Int {
         
         var workingDays : Int = 0
-//        var phDate : [Date] = []
         
         let workOff = self.arrayWorkOff[0].woDays // {sat,sun}
         let arrWO = workOff.components(separatedBy: ",")
-
+        
         let publicOff = self.arrayWorkOff[0].woDates // {2019-01-04,2019-03-02}
         let arrPO = publicOff.components(separatedBy: ",")
-
+        
         let workPolicy = self.arrayWorkOff[0].woPolicy // {WO,PH}
         let arrPolicy = workPolicy.components(separatedBy: ",")
-
+        
         workingDays =  Helper.getWorkingDays(startDate: startDate, endDate: endDate, publicHolidays: arrPO , workOff:arrWO , workOffPolicy:arrPolicy)
         return workingDays
-       
     }
     
-//    func makePrefix() {
-//        let attributedString = NSMutableAttributedString(string: "+")
-//        attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black, range: NSMakeRange(0,1))
-//        txtFldContact.attributedText = attributedString
-//    }
+    
     
     @IBAction func btnCancelTapped(_ sender: Any) {
         
@@ -598,20 +602,20 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.locale =  Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone =  TimeZone(abbreviation: "GMT+0:00")
-
+        
         if currentTxtFld == txtFldFrom {
             
             if txtFldTo.text != "" {
                 
                 let toDate = dateFormatter.date(from: txtFldTo.text!)!
                 let fromDte = datePicker.date
+                txtFldFrom.text =  dateFormatter.string(from: fromDte) as String
                 
                 if fromDte > toDate {
-                    Helper.showMessage(message: "From date can't be greater than To date")
+                    
+                    txtFldTo.text = ""
+                    txtFldNoOfDays.text = ""
                 } else {
-                    txtFldFrom.text =  dateFormatter.string(from: fromDte) as String
                     
                     let fromDate = dateFormatter.date(from: txtFldFrom.text!)!
                     let toDate = dateFormatter.date(from: txtFldTo.text!)!
@@ -619,9 +623,8 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                     let working = self.checkWorkOffDays(startDate: fromDate, endDate: toDate)
                     txtFldNoOfDays.text = String(format: "%d", working)
                 }
-                
             } else {
-               
+                
                 txtFldFrom.text = dateFormatter.string(from: datePicker.date) as String
                 
                 if txtFldTo.isEnabled == false {
@@ -659,26 +662,26 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
     
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
+        
         let protectedRange = NSMakeRange(0, 0)
         let intersection = NSIntersectionRange(protectedRange, range)
-
+        
         if textField == txtFldContact {
-
+            
             if intersection.length > 0 {
                 return false
             }
             if range.location == 11 {
                 return true
             }
-
+            
             if range.location + range.length > 11 {
                 return false
             }
-
+            
         }
         return true
-
+        
     }
     
     
@@ -696,7 +699,7 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
             
         case txtFldFrom :
             datePickerTool.isHidden = false
-
+            
             datePicker.minimumDate = Date.distantPast
             datePicker.maximumDate =  Date.distantFuture
             
@@ -706,7 +709,7 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
                 let currDate: Date = dateFormatter.date(from: txtFldFrom.text!)!
                 datePicker.date = currDate
             }
-
+            
         case txtFldTo :
             
             let fromDte = txtFldFrom.text
@@ -720,7 +723,7 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
                 datePicker.maximumDate = Date.distantFuture
                 
                 if txtFldTo.text == "" {
-                    datePicker.date = Date()
+                    datePicker.date = newfromDte!
                 } else {
                     let currDate: Date = dateFormatter.date(from: txtFldTo.text!)!
                     datePicker.date = currDate
@@ -744,6 +747,7 @@ extension LMSAddEditController: UITextFieldDelegate, UITextViewDelegate {
         }
         return val
     }
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         
@@ -772,3 +776,4 @@ extension LMSAddEditController: WC_HeaderViewDelegate {
     }
     
 }
+

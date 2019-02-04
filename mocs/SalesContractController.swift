@@ -17,7 +17,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var srchBar: UISearchBar!
-    
+    var navTitle = ""
     var declVw = CustomPopUpView()
     var myView = CustomPopUpView()
     
@@ -42,9 +42,10 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
         self.navigationController?.isNavigationBarHidden = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         vwHeader.delegate = self
-        vwHeader.btnLeft.isHidden = false
+        vwHeader.btnLeft.isHidden = true
+        vwHeader.btnBack.isHidden = false
         vwHeader.btnRight.isHidden = false
-        vwHeader.lblTitle.text = Constant.PAHeaderTitle.SC
+        vwHeader.lblTitle.text = navTitle
         vwHeader.lblSubTitle.isHidden = true
         
         populateList()

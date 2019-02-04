@@ -13,6 +13,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
 
     var arrayList:[EPRData] = []
     var newArray:[EPRData] = []
+    var navTitle = ""
 
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
@@ -36,9 +37,10 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
 
         self.navigationController?.isNavigationBarHidden = true
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.ECR
+        vwTopHeader.btnBack.isHidden = false
+        vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
         self.populateList()

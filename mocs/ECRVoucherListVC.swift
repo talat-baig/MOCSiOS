@@ -147,11 +147,9 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                 } else {
                     showEmptyState()
                 }
-
             } else {
                 showEmptyState()
                 tableView.addSubview(refreshControl)
-
             }
         }
         

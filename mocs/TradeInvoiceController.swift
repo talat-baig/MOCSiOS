@@ -20,6 +20,7 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
     /// Top Header
     @IBOutlet weak var vwHeader: WC_HeaderView!
     
+    var navTitle = ""
     /// Custom Pop-up View
     var declVw = CustomPopUpView()
     
@@ -47,9 +48,11 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         FilterViewController.filterDelegate = self
         
         vwHeader.delegate = self
-        vwHeader.btnLeft.isHidden = false
+        vwHeader.btnLeft.isHidden = true
+        vwHeader.btnBack.isHidden = false
+
         vwHeader.btnRight.isHidden = false
-        vwHeader.lblTitle.text = Constant.PAHeaderTitle.TRI
+        vwHeader.lblTitle.text = navTitle
         vwHeader.lblSubTitle.isHidden = true
         
         srchBar.delegate = self

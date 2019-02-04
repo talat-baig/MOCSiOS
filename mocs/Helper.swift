@@ -221,22 +221,66 @@ class Helper: UIView {
     //    }
     
     
+//    class func getWorkingDays(startDate : Date, endDate : Date, publicHolidays : [String], workOff : [String], workOffPolicy: [String]) -> Int {
+//
+//        let calendar = Calendar.current
+//
+//        let date1 = startDate
+//        let date2 = endDate
+//
+//
+//        let totalDays = calendar.dateComponents([.day], from: date1, to: date2).day! + 1
+//
+//        let allDatesBetween = self.getAllDatesBetweenDates(startDate: startDate, endDate: endDate)
+//
+//        var testDate = date1
+//        var workOffRemovedDates : [String] = []
+//        var counter = 0
+//        let fmt = DateFormatter()
+//        fmt.dateFormat = "yyyy-MM-dd"
+//
+//        if workOffPolicy.contains("WO") {
+//
+//            repeat {
+//                let todayNumber = testDate.dayNumberOfWeek()
+//                if workOff.contains(self.getDayOfWeekString(today: todayNumber ?? 0 ) ?? "") {
+//                    counter += 1
+//                    let dateString = fmt.string(from: testDate)
+//                    workOffRemovedDates.append(dateString)
+//                }
+//                testDate = testDate.tomorrow
+//            } while testDate < date2.tomorrow
+//        }
+//
+//
+//        if workOffPolicy.contains("PH") {
+//
+//            for newDate in allDatesBetween {
+//
+//                if publicHolidays.contains(newDate) {
+//
+//                    if !workOffRemovedDates.contains(newDate) {
+//                        counter += 1
+//                    }
+//                }
+//            }
+//        }
+//        let finalDays = totalDays - counter
+//        print(finalDays)
+//        return finalDays
+//
+//    }
+    
+    
     class func getWorkingDays(startDate : Date, endDate : Date, publicHolidays : [String], workOff : [String], workOffPolicy: [String]) -> Int {
         
         let calendar = Calendar.current
         
-//        let date1 = calendar.startOfDay(for: startDate)
-//        let date2 = calendar.startOfDay(for: endDate)
-
         let date1 = startDate
         let date2 = endDate
-
+        
         
         let totalDays = calendar.dateComponents([.day], from: date1, to: date2).day! + 1
-        
-        //publicHolidays //[2019-02-02,2019-02-03]
-        // workOff // [sat, sun]
-        // workOffPolicy // [Wo,PH]
         
         let allDatesBetween = self.getAllDatesBetweenDates(startDate: startDate, endDate: endDate)
         
@@ -245,7 +289,7 @@ class Helper: UIView {
         var counter = 0
         let fmt = DateFormatter()
         fmt.dateFormat = "yyyy-MM-dd"
-
+        
         if workOffPolicy.contains("WO") {
             
             repeat {
@@ -256,7 +300,7 @@ class Helper: UIView {
                     workOffRemovedDates.append(dateString)
                 }
                 testDate = testDate.tomorrow
-            } while testDate <= date2
+            } while testDate < date2.tomorrow
         }
         
         
@@ -1158,13 +1202,18 @@ extension NSObject:Utility{
 //    }
 //
 //}
+//extension UIViewController {
+//    
+//    var navTitle = ""
+//}
+
 
 var progressTimer: Timer?
 var progressTime = 180.0
 var progressView: UIProgressView?
 var lblTimerTxt = UILabel()
 
-extension UIView{
+extension UIView {
     
     func loadNib() -> UIView {
         let bundle = Bundle(for: type(of: self))

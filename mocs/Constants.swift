@@ -208,9 +208,13 @@ struct Constant
         static let LMS_DELETE_ATTACHMENT = ApiUrl.URL + "/LeaveManagementSystem/UpdateDeleteDocument?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
 
         static let LMS_LEAVE_POLICY = ApiUrl.URL + "/LeaveManagementSystem/GetLeavePolicy?apikeypolicy=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidpolicy=%@"
-
-       
     }
+    
+    struct PAData {
+        static let PA_GET_ALL = ApiUrl.URL + "/PendingMenu/GetAllPendingData?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&IsAndroid=%@"
+    }
+    
+    
     
     struct AR {
         /**
@@ -394,8 +398,10 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg com+loc+bu)*
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
+        static let LIST =  ApiUrl.URL + "/SalesContract/GetAllPendingSalesContract?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+
         
         /**
          *View Sales Contract*
@@ -608,8 +614,16 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg Com+loc+bu)*
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARILFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARILFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
+        
+        static let LIST =  ApiUrl.URL + "/ARI/GetAllPendingARI?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+
+//        static let TT_GET_TRAVEL_AGENT = ApiUrl.URL + "/TravelTickets/LoadTravelAgent?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%@"
+//        GetAllPendingARI(string apikey, string authid, string filter,int PageNo)
+        
+        
+
         /**
          *View ARI Details*
          - 1: AuthID
@@ -637,7 +651,6 @@ struct Constant
     
     struct RO {
         
-        //        http://ocsmis.phoenixgroup.net/MOCS_API/api/
         static let LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
         
         static let VIEW = ApiUrl.URL + "/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"

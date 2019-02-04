@@ -20,7 +20,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
     var arrayList:[ROData] = []
     
     var newArray : [ROData] = []
-    
+    var navTitle = ""
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -39,9 +39,10 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         tableView.addSubview(refreshControl)
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.RO
+        vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
         populateList()
@@ -277,7 +278,6 @@ extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, on
     func onMailClick(data: ROData) {
         self.handleTap()
         let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
-        
         alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
             self.sendEmail(refId: data.refId)

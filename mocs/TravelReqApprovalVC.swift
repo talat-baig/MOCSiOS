@@ -18,6 +18,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
+    var navTitle = ""
     var arrayList:[TravelRequestData] = []
     
     var newArray : [TravelRequestData] = []
@@ -44,9 +45,10 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         tableView.addSubview(refreshControl)
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.TR
+        vwTopHeader.btnBack.isHidden = false
+        vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
         populateList()
@@ -61,7 +63,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     }
     
     
-    @objc func populateList(){
+    @objc func populateList() {
         
         var data: [TravelRequestData] = []
         

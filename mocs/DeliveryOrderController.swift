@@ -14,7 +14,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
     
     var arrayList:[DeliveryOrderData] = []
     var newArray:[DeliveryOrderData] = []
-    
+    var navTitle = ""
     var filterString = ""
     var declVw = CustomPopUpView()
     var myView = CustomPopUpView()
@@ -40,8 +40,8 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         vwHeader.delegate = self
         vwHeader.btnBack.isHidden = false
         vwHeader.btnLeft.isHidden = true
-        vwHeader.btnRight.isHidden = true
-        vwHeader.lblTitle.text = Constant.PAHeaderTitle.DO
+        vwHeader.btnRight.isHidden = false
+        vwHeader.lblTitle.text = navTitle
         vwHeader.lblSubTitle.isHidden = true
         
         self.populateList()
@@ -216,7 +216,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
     }
     
 }
-extension DeliveryOrderController:UITableViewDelegate, UITableViewDataSource, onButtonClickListener{
+extension DeliveryOrderController: UITableViewDelegate, UITableViewDataSource, onButtonClickListener{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 318

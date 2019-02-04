@@ -48,9 +48,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         }
         
         populateList(response: respValue)
-
         getAccountCharge(ecrData: ecrData)
-        
         
     }
     
@@ -87,7 +85,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
                 expList.vendor = k["EPRItemsVendorName"].stringValue
                 expList.reason = k["EPRItemsAccountChargeHead"].stringValue
                 expList.eprItemsId = k["EmployeePaymentRequestItemsID"].stringValue
-
+                
                 data.append(expList)
             }
             
@@ -123,7 +121,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         }
     }
     
-
+    
     func getAccountCharge(ecrData: EmployeeClaimData) {
         
         if internetStatus != .notReachable {
@@ -151,14 +149,14 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
             Helper.showNoInternetMessg()
         }
     }
-
+    
     
     @IBAction func btnAddExpenseTapped(_ sender: Any) {
         
         let expAddEditVC = self.storyboard?.instantiateViewController(withIdentifier: "EmpClaimExpenseAddEditVC") as! EmpClaimExpenseAddEditVC
         expAddEditVC.ecrExpListData = nil
         expAddEditVC.arrAccChrg = self.categoryArr
-
+        
         expAddEditVC.ecrData = self.ecrData
         expAddEditVC.okPymntDelegate = self
         self.navigationController?.pushViewController(expAddEditVC, animated: true)
@@ -170,7 +168,7 @@ class ECRExpenseListVC: UIViewController, IndicatorInfoProvider, onMoreClickList
         expAddEditVC.ecrExpListData = data
         expAddEditVC.arrAccChrg = self.categoryArr
         expAddEditVC.ecrData = self.ecrData
-
+        
         expAddEditVC.okPymntDelegate = self
         self.navigationController?.pushViewController(expAddEditVC, animated: true)
     }

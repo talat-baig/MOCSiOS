@@ -19,8 +19,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     var fromDate = Date()
     var toDate = Date()
-    
-    //    var arrEmpName : [String] = []
+    var navTitle = ""
     
     var lmsData : [LMSEmpData] = []
     var lmsAllData : [LMSEmpData] = []
@@ -43,7 +42,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     @IBOutlet weak var vwDept: UIView!
     @IBOutlet weak var vwFilter: UIView!
-    
     
     
     @IBOutlet var datePickerTool: UIView!
@@ -154,7 +152,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
             } else {
                 //                self.vwOuter.isHidden = true
                 //                Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
-                
+                print("")
             }
         }
     }
@@ -199,9 +197,8 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                         }
                         self.lmsAllData = newLMSData
                         comp(true)
-                    } else {
-                        comp(false)
                     }
+                    comp(true)
                 } else {
                     comp(false)
                 }
@@ -267,7 +264,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                         
                         comp(true, totalCount)
                     } else {
-                        comp(false, 0)
+                        comp(true, 0)
                     }
                 } else {
                     comp(false, 0)
@@ -308,7 +305,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         if self.lmsAllData.count == 0 {
             self.view.makeToast("No Employee Leave data found")
         } else {
-            
             
             let lmsEmpList = self.storyboard?.instantiateViewController(withIdentifier: "LMSEmployeeListVC") as! LMSEmployeeListVC
             lmsEmpList.arrayList = self.lmsAllData

@@ -12,9 +12,7 @@ import SwiftyJSON
 
 class LMSReqController: UIViewController , onLMSUpdate {
     
-    
     var arrayGridList : [LMSGridData] = []
-    //    var lmsSummry = LMSSummaryData()
     
     var arrayList : [LMSReqData] = []
     
@@ -70,7 +68,6 @@ class LMSReqController: UIViewController , onLMSUpdate {
     
     
     @objc func populateLMSData() {
-        
         
         if internetStatus != .notReachable {
             

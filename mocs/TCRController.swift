@@ -15,6 +15,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
     
     var arrayList:[TravelClaimData] = []
     var newArray : [TravelClaimData] = []
+    var navTitle = ""
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var srchBar: UISearchBar!
@@ -31,16 +32,18 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         self.view.addGestureRecognizer(gestureRecognizer)
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
-        
         srchBar.delegate = self
         tableView.addSubview(refreshControl)
+        
         FilterViewController.filterDelegate = self
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.navigationBar.isHidden = true
+        
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
-        vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.TCR
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
+        vwTopHeader.btnRight.isHidden = true
+        vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
         self.populateList()
@@ -308,7 +311,7 @@ extension TCRController:UITableViewDelegate, UITableViewDataSource,onButtonClick
 extension TCRController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

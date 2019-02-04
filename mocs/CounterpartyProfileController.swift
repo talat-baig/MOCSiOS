@@ -12,6 +12,8 @@ import SwiftyJSON
 
 class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelegate , onCPApprove  , onCPUpdate {
   
+    var navTitle = ""
+
     @IBOutlet weak var srchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
@@ -44,9 +46,11 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         self.view.addGestureRecognizer(gestureRecognizer)
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.CP
+        vwTopHeader.btnBack.isHidden = false
+
+        vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
         populateList()
