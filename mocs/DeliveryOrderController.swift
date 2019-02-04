@@ -10,30 +10,35 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, customPopUpDelegate {
+class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, customPopUpDelegate, filterViewDelegate {
+  
     
     var arrayList:[DeliveryOrderData] = []
     var newArray:[DeliveryOrderData] = []
     var navTitle = ""
-    var filterString = ""
+//    var filterString = ""
     var declVw = CustomPopUpView()
     var myView = CustomPopUpView()
     @IBOutlet weak var vwHeader: WC_HeaderView!
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
+    var currentPage : Int = 1
+
+    @IBOutlet weak var btnMore: UIButton!
+    
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         srchBar.delegate = self
-//        FilterViewController.filterDelegate = self
+        FilterViewController.filterDelegate = self
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
         self.navigationController?.isNavigationBarHidden = true
@@ -44,6 +49,9 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         vwHeader.lblTitle.text = navTitle
         vwHeader.lblSubTitle.isHidden = true
         
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        
         self.populateList()
     }
     
@@ -53,12 +61,17 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.filterString == "" {
-            self.populateList()
-        }
     }
     
-  
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         if isApprove {
@@ -75,24 +88,30 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         }
     }
     
-    @objc func populateList(){
-        if internetStatus != .notReachable{
+    @objc func populateList(currentPage: Int = 1){
+        
+        var arrData : [DeliveryOrderData] = []
+
+        if internetStatus != .notReachable {
+            
             let url = String.init(format: Constant.DO.LIST, Session.authKey,
-                                  Helper.encodeURL(url: filterString))
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
             self.view.showLoading()
 
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
                 if Helper.isResponseValid(vc: self, response: response.result){
+                    
                     let jsonResponse = JSON(response.result.value!)
                     let arrayJson = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    self.arrayList.removeAll()
+//                    self.arrayList.removeAll()
                     
                     if arrayJson.count > 0 {
 
                         for(_,j):(String,JSON) in jsonResponse{
+                            
                             let data = DeliveryOrderData()
                             data.refId = j["DO Reference Id"].stringValue
                             data.company = j["Company"].stringValue
@@ -103,24 +122,34 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                             data.value = j["DOValue"].stringValue
                             data.creditLimit = j["DOCreditLimit"].stringValue
                             data.products = j["Products"].stringValue
-                            self.arrayList.append(data)
+                            arrData.append(data)
                         }
+                        self.arrayList.append(contentsOf: arrData)
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    print("Invalid Reponse")
                 }
                 
             }))
-        }else{
+        } else {
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: self.tableView, action: #selector(self.populateList))
-            
             self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
     }
     
@@ -215,6 +244,32 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         self.view.endEditing(true)
     }
     
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
+    
+    func applyFilter(filterString: String) {
+        if !arrayList.isEmpty {
+            arrayList.removeAll()
+        }
+        self.populateList()
+    }
+    
+    func cancelFilter(filterString: String) {
+         self.populateList()
+    }
+    
+    
 }
 extension DeliveryOrderController: UITableViewDelegate, UITableViewDataSource, onButtonClickListener{
     
@@ -234,13 +289,19 @@ extension DeliveryOrderController: UITableViewDelegate, UITableViewDataSource, o
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = arrayList[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! DeliveryOrderAdapter
-        cell.setDataToView(data: data)
+        
+        if self.arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         cell.selectionStyle = .none
         cell.delegate = self
         return cell
     }
+    
+    
     
     func onViewClick(data: AnyObject) {
         viewContract(refId: (data as! DeliveryOrderData).refId)

@@ -15,10 +15,13 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     var newArray:[EPRData] = []
     var navTitle = ""
 
+    var currentPage : Int = 1
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
     var refreshControl: UIRefreshControl = UIRefreshControl()
     
+    @IBOutlet weak var btnMore: UIButton!
+
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var srchBar: UISearchBar!
@@ -27,9 +30,12 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
+        
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         srchBar.delegate = self
@@ -43,6 +49,9 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        
         self.populateList()
     }
 
@@ -50,6 +59,15 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         super.didReceiveMemoryWarning()
     }
     
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
     
     func cancelFilter(filterString: String) {
         self.populateList()
@@ -62,21 +80,24 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         self.populateList()
     }
     
-    @objc func populateList() {
+    @objc func populateList(currentPage : Int = 1) {
+        
         var newData :[EPRData] = []
+        
         if internetStatus != .notReachable {
-            let url = String.init(format: Constant.EPR.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString(noBU: true)))
             
+            let url = String.init(format: Constant.EPR.LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString(noBU: true)), self.currentPage)
             print(url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
+                
                 if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
                     let jsornResponse = JSON(response.result.value!)
                     let arrayJson = jsornResponse.arrayObject as! [[String:AnyObject]]
-                    self.arrayList.removeAll()
+//                    self.arrayList.removeAll()
                     
                     if arrayJson.count > 0 {
                         
@@ -93,22 +114,33 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                             data.status = j["Status"].stringValue
                             newData.append(data)
                         }
-                        self.newArray = newData
-                        self.arrayList = newData
+                        self.arrayList.append(contentsOf: newData)
+                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
-
-                    }else{
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    } else {
+                        
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
                      self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                     print("Invalid Reponse")
                 }
             }))
-        }else{
+        } else {
+            
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
     }
     
@@ -128,8 +160,10 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         }
     }
     
-    func viewClaim(refId:String){
-        if internetStatus != .notReachable{
+    func viewClaim(refId:String) {
+        
+        if internetStatus != .notReachable {
+            
             let url = String.init(format: Constant.EPR.VIEW, Session.authKey,
                                   refId)
             self.view.showLoading()
@@ -143,7 +177,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                     self.navigationController?.pushViewController(viewClaim, animated: true)
                 }
             }))
-        }else{
+        } else {
             Helper.showNoInternetMessg()
         }
     }
@@ -219,6 +253,10 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     @objc func handleTap() {
         self.view.endEditing(true)
     }
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
+    }
 }
 
 extension EmployeePaymentController: UISearchBarDelegate {
@@ -256,9 +294,11 @@ extension EmployeePaymentController: UITableViewDelegate, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = arrayList[indexPath.row]
         let viewCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! EmployeePaymentAdapter
-        viewCell.setViewToData(data)
+        if arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            viewCell.setViewToData(data)
+        }
         viewCell.selectionStyle = .none
         viewCell.delegate = self
         return viewCell

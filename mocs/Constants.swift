@@ -47,8 +47,6 @@ struct AppColor {
     static let redFalg = UIColor(red: 239.0/255.0, green: 35.0/255.0, blue: 35.0/255.0, alpha: 1.0)
     
     static let placeholderColor = UIColor(red: 0, green: 0, blue: 0.0980392, alpha: 0.22)
-
-    
 }
 
 
@@ -364,7 +362,12 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg. comp+loc+bu)*
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&CompLocnBU=%@"
+        static let LIST =  ApiUrl.URL + "/PurchaseContract/GetAllPendingPurchaseContract?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+        
+        static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&CompLocnBU=%@"
+
+        
+//        GetAllPendingPurchaseContract(string apikey, string authid, string filter, int PageNo)  PurchaseContract
         
         /**
          *View Purchase Contract*
@@ -433,8 +436,11 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg Com+loc+bu)*
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        static let LIST =  ApiUrl.URL + "/DOApproval/GetAllDOPendingContracts?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&filter=%@&pageno=%d"
         
+        static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+
+//        GetAllDOPendingContracts(string api, string auth, string filter,int pageno)
         
         /**
          *View Delivery Order*
@@ -579,8 +585,10 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg Com+loc+bu)*
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_EPRFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        static let LIST = ApiUrl.URL + "/EPR/GetAllPendingEPR?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
         
+        static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_EPRFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+//        GetAllPendingEPR(string apikey, string authid, string filter, int PageNo)
         
         /**
          *View Employee Payment Details*
@@ -607,6 +615,8 @@ struct Constant
         static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_EPRMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&EPRRefNo=%@&Comments=%@"
         
     }
+    
+    
     
     struct ARI {
         /**
@@ -651,7 +661,13 @@ struct Constant
     
     struct RO {
         
-        static let LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
+        static let roNotificationKey = "com.tech.releaseorder"
+        
+        static let LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@&pageno=%d"
+        
+        static let OLD_LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
+
+//        GetAllRO(string apikey, string filter, string authid, int pageno)
         
         static let VIEW = ApiUrl.URL + "/RequestOrder/GetROByID?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@"
         

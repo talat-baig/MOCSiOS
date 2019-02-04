@@ -55,12 +55,13 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
         vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        
         self.view.addGestureRecognizer(gestureRecognizer)
         srchBar.delegate = self
         
         populateList()
-        btnMore.isHidden = true
-        btnMore.layer.cornerRadius = 5.0
         
     }
     
@@ -102,7 +103,6 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
             let url = String.init(format: Constant.ARI.LIST, Session.authKey,
                                   Helper.encodeURL(url:FilterViewController.getFilterString()), self.currentPage)
             self.view.showLoading()
-//            self.isLoadingList = true
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 
@@ -113,7 +113,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                     var jsonResponse = JSON(response.result.value!);
                     let arrayJson = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    //                        self.arrayList.removeAll()
+                    //     self.arrayList.removeAll()
                     if arrayJson.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse {
@@ -127,7 +127,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                             data.date = j["ARI Date"].stringValue
                             data.requestAmt = j["Requested Amount"].stringValue
                             data.requestAmtUSD = j["Requested Amount (USD)"].stringValue
-                            data.fxRate = j["FX Rate,"].stringValue
+                            data.fxRate = j["FX Rate"].stringValue
                             data.allocationItem = j["Allocation Items"].stringValue
                             arrData.append(data)
                         }
@@ -139,15 +139,15 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                         
                         if self.arrayList.isEmpty {
                             self.btnMore.isHidden = true
-                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
                         } else {
                             self.currentPage -= 1
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         self.tableView.reloadData()
-                    }
+//                    }
                 } else {
                     print("Invalid Reponse")
                 }
@@ -166,8 +166,6 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     
     
     @IBAction func btnMoreTapped(_ sender: Any) {
-        
-//        self.isLoadingList = true
         self.loadMoreItemsForList()
     }
     
@@ -229,13 +227,14 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                     self.present(alert, animated: true, completion: nil)
                 }
             }))
-        }else{
+        } else {
             Helper.showNoInternetMessg()
         }
     }
     
-    func declineContract(data:ARIData, comment:String){
-        if internetStatus != .notReachable{
+    func declineContract(data:ARIData, comment:String) {
+        
+        if internetStatus != .notReachable {
             let url = String.init(format: Constant.ARI.DECLINE, Session.authKey,
                                   data.refId,
                                   Helper.encodeURL(url: comment))
@@ -251,7 +250,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                     self.present(alert, animated: true, completion: nil)
                 }
             }))
-        }else{
+        } else {
             Helper.showNoInternetMessg()
         }
     }
@@ -263,20 +262,8 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //        let height = scrollView.frame.size.height
-        //        let contentYoffset = scrollView.contentOffset.y + 100
-        //        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
-        //
-        //        if distanceFromBottom <= height {
-        //            btnMore.isHidden = false
-        //            print(" you reached end of the table")
-        //        } else {
-        //            btnMore.isHidden = true
-        //        }
         
-        
-        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0
-        {
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
             btnMore.isHidden = false
         } else {
             btnMore.isHidden = true
@@ -320,26 +307,15 @@ extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onB
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! AdminReceiveAdapter
-        cell.setDataToView(data: data)
+        if arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         cell.selectionStyle = .none
         cell.delegate = self
         
         return cell
-    }
-    
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-        //        if (indexPath.row == self.arrayList.count - 1) {
-        //            btnMore.isHidden = false
-        //            print("Last row reached")
-        //        } else {
-        //            btnMore.isHidden = false
-        //        }
-        //
-        
     }
     
     

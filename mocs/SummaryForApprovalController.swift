@@ -225,7 +225,7 @@ class SummaryForApprovalController: UIViewController, filterViewDelegate,clearFi
     @objc func openPendingApprovals(sender:UIButton) {
         
         let doVC = UIStoryboard(name: "DeliveryOrder", bundle: nil).instantiateViewController(withIdentifier: "DeliveryOrderController") as! DeliveryOrderController
-        doVC.filterString = self.paSummObj[sender.tag].filterString.joined(separator: ",")
+//        doVC.filterString = self.paSummObj[sender.tag].filterString.joined(separator: ",")
         self.navigationController?.pushViewController(doVC, animated: true)
         
     }

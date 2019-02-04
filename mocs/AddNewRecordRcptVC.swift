@@ -105,10 +105,17 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(doThisWhenNotify),
+                                               name: NSNotification.Name(rawValue: Constant.RO.roNotificationKey),
+                                               object: nil)
         
     }
     
+    @objc func doThisWhenNotify() {
+        print("Populated RO List")
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -169,7 +176,12 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
 //                            if let d = self.okSubmitDelegate {
 //                                d.onOkClick()
 //                            }
-                            self.navigationController?.popToRootViewController(animated: true)
+//                            self.navigationController?.popToRootViewController(animated: true)
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: Constant.RO.roNotificationKey), object: self)
+
+                            if let viewController = self.navigationController?.viewControllers.first(where: {$0 is ReleaseOrderController}) {
+                                self.navigationController?.popToViewController(viewController, animated: false)
+                            }
                         }))
                         self.present(success, animated: true, completion: nil)
                     } else if jsonResponse["ServerMsg"].stringValue == "Sorry you cannot Process this request, Receipt Qty is greater than the Received Quantity, please check" {

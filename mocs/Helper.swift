@@ -618,7 +618,7 @@ class Helper: UIView {
             
             
         case ModName.isApprovals :
-            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
+            emptyView.message = " No data for the current Filter "
             
         case ModName.isLMSApproval :
             emptyView.message = "No Pending Approval Data for the current\nTry going back and changing filter"
@@ -630,7 +630,16 @@ class Helper: UIView {
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
         
-        emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
+        if action != nil{
+//            emptyView.message = "You have no task to do! Add task by tapping on add button"
+            emptyView.button.isHidden = false
+            emptyView.buttonText = "LOAD ITEM"
+            emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
+        } else {
+//            emptyView.message = "You have no task to do! Add task by tapping on add button"
+            emptyView.button.isHidden = true
+        }
+//        emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
         tb.tableFooterView = emptyView
         
         emptyView.translatesAutoresizingMaskIntoConstraints = false
@@ -866,7 +875,7 @@ class Helper: UIView {
     
     lazy var refreshControl:UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(PurchaseContractController.handleRefresh(_:)), for: .valueChanged)
+//        refreshControl.addTarget(self, action: #selector(PurchaseContractController.handleRefresh(_:)), for: .valueChanged)
         refreshControl.tintColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
         return refreshControl
     }()

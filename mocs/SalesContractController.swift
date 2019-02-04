@@ -22,14 +22,19 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
     var myView = CustomPopUpView()
     
     @IBOutlet weak var vwHeader: WC_HeaderView!
+    @IBOutlet weak var btnMore: UIButton!
+    
     var arrayList:[PurchaseContractData] = []
     var newArray:[PurchaseContractData] = []
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
+    var currentPage : Int = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        //        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         tableView.register(UINib(nibName: "ContractCell", bundle: nil), forCellReuseIdentifier: "cell")
         srchBar.delegate = self
@@ -47,6 +52,9 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
         vwHeader.btnRight.isHidden = false
         vwHeader.lblTitle.text = navTitle
         vwHeader.lblSubTitle.isHidden = true
+        
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
         
         populateList()
     }
@@ -70,20 +78,37 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
         // Dispose of any resources that can be recreated.
     }
     
-    @objc func populateList(){
-        if internetStatus != .notReachable{
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
+    
+    @objc func populateList(currentPage: Int = 1){
+        
+        var arrData : [PurchaseContractData] = []
+        
+        if internetStatus != .notReachable {
+            
             let url = String.init(format: Constant.SC.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()))
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
+            
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
+                
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
+                
                 if Helper.isResponseValid(vc: self, response: response.result){
                     var jsonResponse = JSON(response.result.value!)
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
-                    self.arrayList.removeAll()
+                    //                    self.arrayList.removeAll()
                     
-                    if array.count > 0{
+                    if array.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse{
                             let sc = PurchaseContractData()
@@ -95,22 +120,37 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                             sc.commodity = j["Commodity"].stringValue
                             sc.supplier = j["Supplier"].stringValue
                             sc.contractValue = j["Contract Value"].stringValue
-                            self.arrayList.append(sc)
+                            arrData.append(sc)
                         }
+                        
+                        self.arrayList.append(contentsOf: arrData)
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
-                    self.tableView.reloadData()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    print("Invalid Reponse")
                 }
             }))
-        }else{
+        } else {
+            
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
     }
     
@@ -218,6 +258,22 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
     @objc func handleTap() {
         self.view.endEditing(true)
     }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height + 40 ) && self.arrayList.count > 0  {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        
+        self.loadMoreItemsForList()
+    }
+    
 }
 
 extension SalesContractController: UISearchBarDelegate {
@@ -242,10 +298,11 @@ extension SalesContractController: UITableViewDataSource, UITableViewDelegate, o
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if arrayList.count > 0{
+        
+        if arrayList.count > 0 {
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
-        }else{
+        } else {
             tableView.backgroundView?.isHidden = false
             tableView.separatorStyle = .none
         }
@@ -253,9 +310,13 @@ extension SalesContractController: UITableViewDataSource, UITableViewDelegate, o
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = arrayList[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ContractCell
-        cell.setDataToView(data: data)
+        
+        if self.arrayList.count > 0{
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         cell.selectionStyle = .none
         cell.delegate = self
         return cell

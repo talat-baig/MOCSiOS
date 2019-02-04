@@ -18,16 +18,22 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
     
     /// Array of TRIData elements
     var arrayList:[ROData] = []
-    
     var newArray : [ROData] = []
+    var currentPage : Int = 1
+
     var navTitle = ""
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
+    @IBOutlet weak var btnMore: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
         srchBar.delegate = self
-        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(refreshList),
+                                               name: NSNotification.Name(rawValue: Constant.RO.roNotificationKey),
+                                               object: nil) 
+    
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
@@ -35,7 +41,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.isNavigationBarHidden = true
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.refreshList))
         tableView.addSubview(refreshControl)
         
         vwTopHeader.delegate = self
@@ -44,6 +50,9 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
+        
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
         
         populateList()
     }
@@ -71,6 +80,15 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         self.populateList()
     }
     
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -90,10 +108,12 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         Helper.showNoItemState(vc:self ,  tb:tableView)
     }
     
-    @objc func populateList(){
+    @objc func populateList(currentPage : Int = 1){
+        
+        var arrData : [ROData] = []
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url:  FilterViewController.getFilterString()), Session.authKey)
+            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url:  FilterViewController.getFilterString()), Session.authKey,self.currentPage)
             print("RO URL", url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -105,7 +125,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                     let jsonResponse = JSON(response.result.value!);
                     let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    self.arrayList.removeAll()
+//                    self.arrayList.removeAll()
                     if jsonArray.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse {
@@ -136,28 +156,47 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                                 data.rcptDate = j["ROReceiveReceiptDate"].stringValue
                             }
                             
-                            self.arrayList.append(data)
+                            arrData.append(data)
                         }
+                        self.arrayList.append(contentsOf: arrData)
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                         
                     }else{
-                        self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                        
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
+//                        self.refreshControl.endRefreshing()
+//                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    
+                    print("Invalid Reponse")
+//                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
-            
+          
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
-            refreshControl.endRefreshing()
+            self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
     }
     
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
+    }
     
     func viewRO(data : ROData) {
         
@@ -241,6 +280,16 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         }
         
     }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
 }
 
 
@@ -308,14 +357,16 @@ extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, on
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "ROListCell") as! ROListCell
-        cell.setDataToView(data: data)
+        if arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         cell.roMenuDelegate = self
         cell.roOptionItemDelegate = self
         cell.btnMore.tag = indexPath.row
         
-        return cell;
+        return cell
     }
     
 }

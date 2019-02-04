@@ -36,26 +36,45 @@
                                 <color key="barTintColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gJI-Yi-d4S">
-                                <rect key="frame" x="8" y="141" width="359" height="526"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="U8u-qN-OMM" id="0yl-Gx-Ves"/>
-                                    <outlet property="delegate" destination="U8u-qN-OMM" id="EpB-pi-Wxk"/>
-                                </connections>
-                            </tableView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="FJ6-Ge-b45">
+                                <rect key="frame" x="8" y="138" width="359" height="521"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gJI-Yi-d4S">
+                                        <rect key="frame" x="0.0" y="0.0" width="359" height="481"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="U8u-qN-OMM" id="0yl-Gx-Ves"/>
+                                            <outlet property="delegate" destination="U8u-qN-OMM" id="EpB-pi-Wxk"/>
+                                        </connections>
+                                    </tableView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SZO-Sq-uSW">
+                                        <rect key="frame" x="0.0" y="481" width="359" height="40"/>
+                                        <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="v4i-vi-2cm"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                        <state key="normal" title="Load More">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btnMoreTapped:" destination="U8u-qN-OMM" eventType="touchUpInside" id="kOk-GM-Iba"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Bnp-QN-e3L" secondAttribute="trailing" id="3Hw-bT-quH"/>
-                            <constraint firstItem="o73-Ga-zKV" firstAttribute="top" secondItem="gJI-Yi-d4S" secondAttribute="bottom" id="6XJ-cW-YdB"/>
+                            <constraint firstAttribute="trailing" secondItem="FJ6-Ge-b45" secondAttribute="trailing" constant="8" id="8Js-ML-g0R"/>
                             <constraint firstItem="Bnp-QN-e3L" firstAttribute="leading" secondItem="GdX-0h-5t9" secondAttribute="leading" id="Aef-lH-i9U"/>
                             <constraint firstItem="ggp-5n-oRj" firstAttribute="leading" secondItem="GdX-0h-5t9" secondAttribute="leading" id="Dfe-Lz-Gqk"/>
+                            <constraint firstItem="FJ6-Ge-b45" firstAttribute="top" secondItem="Bnp-QN-e3L" secondAttribute="bottom" constant="12" id="JSU-DS-IFM"/>
                             <constraint firstItem="ggp-5n-oRj" firstAttribute="bottom" secondItem="Bnp-QN-e3L" secondAttribute="top" id="Lng-ev-oax"/>
-                            <constraint firstAttribute="trailing" secondItem="gJI-Yi-d4S" secondAttribute="trailing" constant="8" id="Ouk-iG-TfY"/>
-                            <constraint firstItem="gJI-Yi-d4S" firstAttribute="top" secondItem="Bnp-QN-e3L" secondAttribute="bottom" constant="15" id="Rys-YK-g1a"/>
-                            <constraint firstItem="gJI-Yi-d4S" firstAttribute="leading" secondItem="GdX-0h-5t9" secondAttribute="leading" constant="8" id="kML-zU-vld"/>
+                            <constraint firstItem="FJ6-Ge-b45" firstAttribute="leading" secondItem="GdX-0h-5t9" secondAttribute="leading" constant="8" id="PXj-XR-aNQ"/>
                             <constraint firstAttribute="trailing" secondItem="ggp-5n-oRj" secondAttribute="trailing" id="qHK-oi-GGf"/>
+                            <constraint firstAttribute="bottom" secondItem="FJ6-Ge-b45" secondAttribute="bottom" constant="8" id="wlR-FT-7ml"/>
                             <constraint firstItem="ggp-5n-oRj" firstAttribute="top" secondItem="GdX-0h-5t9" secondAttribute="top" id="ylD-NR-FBW"/>
                         </constraints>
                     </view>
@@ -74,6 +93,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="btnMore" destination="SZO-Sq-uSW" id="0Lt-xv-NXU"/>
                         <outlet property="srchBar" destination="Bnp-QN-e3L" id="o3S-wb-Jil"/>
                         <outlet property="tableView" destination="gJI-Yi-d4S" id="qpp-39-oF7"/>
                         <outlet property="vwHeader" destination="ggp-5n-oRj" id="ERm-OQ-Du3"/>

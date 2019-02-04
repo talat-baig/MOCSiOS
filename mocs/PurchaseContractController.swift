@@ -17,13 +17,21 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
-    var declView = CustomPopUpView()
-    var myView = CustomPopUpView()
-    var newArray : [PurchaseContractData] = []
-    var arrayList:[PurchaseContractData] = []
-    var navTitle = ""
-    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+    @IBOutlet weak var btnMore: UIButton!
     
+    var declView = CustomPopUpView()
+    
+    var myView = CustomPopUpView()
+    
+    var newArray : [PurchaseContractData] = []
+    
+    var arrayList:[PurchaseContractData] = []
+    
+    var navTitle = ""
+    
+    var currentPage : Int = 1
+    
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     func cancelFilter(filterString: String) {
         self.populateList()
@@ -39,13 +47,12 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
+        self.tableView.addSubview(self.refreshControl)
         
         self.tableView.register(UINib(nibName: "ContractCell", bundle: nil), forCellReuseIdentifier: "cell")
-        self.tableView.addSubview(self.refreshControl)
      
         srchBar.delegate = self
-        
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
@@ -61,38 +68,56 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
         vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        
+        tableView.separatorStyle = .none
+        
         FilterViewController.filterDelegate = self
         
         populateList()
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl){
-        populateList()
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
     }
     
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
     
-    @objc func populateList(){
+//    @objc func handleRefresh(_ refreshControl: UIRefreshControl){
+//        populateList()
+//    }
+    
+    
+    @objc func populateList(currentPage: Int = 1){
         
         var newData: [PurchaseContractData] = []
         
         if(internetStatus != .notReachable){
+            
             self.view.showLoading()
-            let url = String.init(format: Constant.PC.LIST, Session.authKey,Helper.encodeURL(url: FilterViewController.getFilterString()))
+            
+            let url = String.init(format: Constant.PC.LIST, Session.authKey,Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
+                
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
+                
                 if Helper.isResponseValid(vc: self, response: response.result){
                     let jsonResponse = JSON(response.value!)
                     let data = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    self.arrayList.removeAll()
-                    
+//                    self.arrayList.removeAll()
+                    print("responseValid : %d", data.count)
                     if data.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse{
@@ -107,38 +132,58 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                             pc.contractValue = j["Contract Value"].stringValue
                             newData.append(pc)
                         }
-                        
-                        self.arrayList = newData
-                        self.newArray = newData
-                        
-                        /// Modified
+                        self.arrayList.append(contentsOf: newData)
+//                        self.arrayList = newData
+                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
-                    
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
-
+                     print("Invalid Reponse")
                 }
             }))
         }else{
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: self.tableView, action: #selector(self.populateList))
+            self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+            }
         }
     }
     
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
+    }
+    
     func view(data:PurchaseContractData){
-        if internetStatus != .notReachable{
+        
+        if internetStatus != .notReachable {
+            
             let url = String.init(format: Constant.PC.VIEW, Session.authKey,data.RefNo)
             self.view.showLoading()
+            
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
+                
                 if Helper.isResponseValid(vc: self, response: response.result){
+                    
                     let responseJson = JSON(response.result.value!)
                     let arrData = responseJson.arrayObject as! [[String:AnyObject]]
+                    
                     if (arrData.count > 0){
+                        
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "PCViewViewController") as! PCViewViewController
                         vc.response = response.result.value
                         vc.title = data.RefNo
@@ -155,7 +200,9 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     }
     
     func sendEmail(data:PurchaseContractData){
+        
         if internetStatus != .notReachable{
+            
             let url = String.init(format: Constant.API.SEND_EMAIL, Session.authKey,
                                   Helper.encodeURL(url: Constant.MODULES.PC),
                                   Helper.encodeURL(url: data.RefNo))
@@ -168,10 +215,9 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                     self.present(alert, animated: true, completion: nil)
                 }
             }))
-        }else{
+        } else {
             Helper.showMessage(message: "No Internet Available, Please Try Aagain")
         }
-        
     }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
@@ -229,8 +275,7 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                     self.present(alert, animated: true, completion: nil)
                 }
             }))
-            
-        }else{
+        } else {
             Helper.showNoInternetMessg()
         }
     }
@@ -243,6 +288,14 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
         self.view.endEditing(true)
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
 }
 
 extension PurchaseContractController: UISearchBarDelegate {
@@ -270,23 +323,27 @@ extension PurchaseContractController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if arrayList.count > 0{
-            tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
-        }else{
-            tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
-        }
+//        if arrayList.count > 0 {
+//            tableView.backgroundView?.isHidden = true
+//            tableView.separatorStyle = .singleLine
+//        }else{
+//            tableView.backgroundView?.isHidden = false
+//            tableView.separatorStyle = .none
+//        }
+        print("numbrOfrows - %d",self.arrayList.count)
         return arrayList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = arrayList[indexPath.row]
+        print("cellforRows - %d",self.arrayList.count)
+//        let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ContractCell
-        cell.setDataToView(data: data)
+        if arrayList.count > 0 {
+            cell.setDataToView(data: arrayList[indexPath.row])
+        }
         cell.selectionStyle = .none
         cell.delegate = self
-        return cell;
+        return cell
     }
     
     func onViewClick(data: AnyObject) {
