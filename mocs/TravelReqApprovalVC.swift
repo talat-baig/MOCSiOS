@@ -188,26 +188,25 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        var commnt = ""
-        if text == "" || text == "Enter Comment"  {
-            commnt = ""
-        } else {
-            commnt = text
+        //        var commnt = ""
+        //        if text == "" || text == "Enter Comment"  {
+        //            commnt = ""
+        //        } else {
+        //            commnt = text
+        //        }
+        
+        if text == "" || text == "Enter Comment" {
+            Helper.showMessage(message: "Please Enter Comment")
+            return
         }
         
         if isApprove {
-            
-            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: commnt)
+            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: text)
             myView.removeFromSuperviewWithAnimate()
         } else {
             
-            if text == "" || text == "Enter Comment" {
-                Helper.showMessage(message: "Please Enter Comment")
-                return
-            } else {
-                self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: commnt)
-                declView.removeFromSuperviewWithAnimate()
-            }
+            self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: text)
+            declView.removeFromSuperviewWithAnimate()
         }
     }
     
@@ -241,7 +240,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         let alert = UIAlertController(title: "Success", message: "Travel Request Successfully Approved", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
-            self.populateList()
+            self.refreshList()
             
         }))
         self.present(alert, animated: true, completion: nil)
@@ -251,8 +250,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         let alert = UIAlertController(title: "Success", message: "Travel Request Successfully Declined", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
-            self.populateList()
-            
+            self.refreshList()
         }))
         self.present(alert, animated: true, completion: nil)
     }

@@ -85,18 +85,17 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
+        if text == "" || text == "Enter Comment"  {
+            Helper.showMessage(message: "Please Enter Comment")
+            return
+        }
+        
         if isApprove {
             self.approveClaim(data: (data as! TravelClaimData), comment: text)
             myView.removeFromSuperviewWithAnimate()
         } else {
-            
-            if text == "" || text == "Enter Comment"  {
-                Helper.showMessage(message: "Please Enter Comment")
-                return
-            } else {
-                self.declineClaim(data: data as! TravelClaimData, comment: text)
-                declVw.removeFromSuperviewWithAnimate()
-            }
+            self.declineClaim(data: data as! TravelClaimData, comment: text)
+            declVw.removeFromSuperviewWithAnimate()
         }
     }
     
@@ -208,17 +207,17 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                                   data.headRef,
                                   Helper.encodeURL(url: comment))
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Claim Successfully Approved", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         }else{
             Helper.showNoInternetMessg()
         }
@@ -230,17 +229,17 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                                   data.headRef,
                                   Helper.encodeURL(url: comment))
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Claim Successfully Declined", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         }else{
             Helper.showNoInternetMessg()
         }

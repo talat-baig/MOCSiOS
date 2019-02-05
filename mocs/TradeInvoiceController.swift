@@ -204,17 +204,16 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
             let url = String.init(format: Constant.TRI.APPROVE, Session.authKey,
                                   refId)
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Invoice Successfully Approved", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
-                    
                 }
-            }))
+            })
         } else {
             Helper.showNoInternetMessg()
         }
@@ -225,16 +224,16 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
             let url = String.init(format: Constant.TRI.DECLINE, Session.authKey,
                                   data.refId)
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Invoice Successfully Declined", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         }else{
             Helper.showNoInternetMessg()
         }

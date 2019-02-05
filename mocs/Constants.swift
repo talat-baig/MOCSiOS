@@ -148,12 +148,16 @@ struct Constant
          */
         static let TCR_INSERT = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFITCR?apiKey="+ApiKey.KEY+"&AuthId=%@&TravelType=%@&BusinessPurpose=%@&PlacesVisited=%@&DateFrom=%@&DateTo=%@&EPRRef=%@"
         
-        static let EXPENSE_TYPE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLET?apiKey="+ApiKey.KEY+"&AuthId=%@"
+        static let EXPENSE_TYPE =  ApiUrl.URL + "/TCR/GetExpenseType?apikeytype=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidtype=%@"
         
+        static let OLD_EXPENSE_TYPE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLET?apiKey="+ApiKey.KEY+"&AuthId=%@"
+
         
-        static let CURRENCY_TYPE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLC?apiKey="+ApiKey.KEY+"&AuthId=%@"
+        static let OLD_CURRENCY_TYPE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLC?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
+        static let CURRENCY_TYPE = ApiUrl.URL + "/TCR/GetAllCurrency?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
         
+
         static let EXPENSE_ADD = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFITCREI?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefId=%@&ItemExpenseDate=%@&ItemExpenseCategory=%@&ItemExpenseSubCategory=%@&ItemExpenseVendor=%@&ItemExpensePaymentType=%@&ItemExpenseCurrency=%@&ItemExpenseAmount=%@&ItemExpenseComments=%@&TEXRefCounter=%d"
         
         
@@ -163,6 +167,7 @@ struct Constant
         static let EXPENSE_DELETE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFDTCREI?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&ExpenseId=%@&TEXCounter=%d"
         
         static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        
         
         static let ECR_ADD = ApiUrl.URL + "/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
         
@@ -517,7 +522,10 @@ struct Constant
          - 2: RefNo.
          - 3: Comment
          */
-        static let APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&Comments=%@"
+        static let OLD_APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&Comments=%@"
+        
+        static let APPROVE = ApiUrl.URL + "/TCR/TCRMAA?apiapp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidapp=%@&TCRRefNo=%@&Comments=%@"
+
         
         /**
          *Decline Delivery Order*
@@ -525,8 +533,10 @@ struct Constant
          - 2: RefNo.
          - 3: Comment
          */
-        static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&Comments=%@"
+        static let OLD_DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&Comments=%@"
         
+        static let DECLINE = ApiUrl.URL + "/TCR/TCRMAD?apidec=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdec=%@&TCRRefNo=%@&Comments=%@"
+
         
         static let TCR_EPR_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLOEPR?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
@@ -558,7 +568,6 @@ struct Constant
         
         
         static let TRF_APPROVAL_LIST = ApiUrl.URL + "/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@&pageno=%d"
-//GetBusinessTravelListingForApproval(string apiget, string authget, int pageno)
         
         static let TRF_APPROVE = ApiUrl.URL + "/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&check=%d&Reason=%@"
         
@@ -761,19 +770,24 @@ struct Constant
          */
         static let VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRISD?apiKey="+ApiKey.KEY+"&AuthId=%@&TRIRefNo=%@"
         
+
         /**
          *Approve Trade Invoice*
          - 1: AuthID
          - 2: RefNo
          */
-        static let APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRIMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&TRIRefNo=%@"
+        static let APPROVE =  ApiUrl.URL + "/TRI/TRIMAA?apiapp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidapp=%@&TRIRefNo=%@"
+        
+        static let OLD_APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRIMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&TRIRefNo=%@"
         
         /**
          *Decline Trade Invoice*
          - 1: AuthID
          - 2: RefNo
          */
-        static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRIMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&TRIRefNo=%@"
+        static let DECLINE =  ApiUrl.URL + "/TRI/TRIMAD?apidec=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdec=%@&TRIRefNo=%@"
+
+        static let OLD_DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRIMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&TRIRefNo=%@"
     }
     
     struct LMS {

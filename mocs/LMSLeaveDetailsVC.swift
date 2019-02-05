@@ -166,7 +166,10 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
 //            self.populateList()
-            self.navigationController?.popToRootViewController(animated: true)
+            if let viewController = self.navigationController?.viewControllers.first(where: {$0 is LeaveManagmentController}) {
+                self.navigationController?.popToViewController(viewController, animated: false)
+            }
+//            self.navigationController?.popToRootViewController(animated: true)
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -176,7 +179,10 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
 //            self.populateList()
-            self.navigationController?.popToRootViewController(animated: true)
+            if let viewController = self.navigationController?.viewControllers.first(where: {$0 is LeaveManagmentController}) {
+                self.navigationController?.popToViewController(viewController, animated: false)
+            }
+//            self.navigationController?.popToRootViewController(animated: true)
         }))
         self.present(alert, animated: true, completion: nil)
     }

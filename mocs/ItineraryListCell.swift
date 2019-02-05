@@ -61,7 +61,7 @@ class ItineraryListCell: UITableViewCell {
         lblDepDate.text = data.depDate
         lblRetDate.text = data.retDate
         lblEstDays.text = data.estDays
-        lblDate.text = data.createdDate
+//        lblDate.text = data.createdDate
         self.data = data
     }
     

@@ -167,21 +167,20 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     }
     
     func onOkClick() {
-        self.populateList()
+        self.refreshList()
     }
     
     func onOkCPClick() {
-        self.populateList()
+        self.refreshList()
     }
     
     func onCPUpdateClick() {
-        self.populateList()
+        self.refreshList()
     }
     
     
     @IBAction func btnMoreTapped(_ sender: Any) {
         self.loadMoreItemsForList()
-        
     }
     
     func viewClaim(data:CPListData) {

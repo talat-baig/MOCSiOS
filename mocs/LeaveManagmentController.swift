@@ -61,8 +61,9 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true  // Hides filter button on the top right
+        vwTopHeader.btnBack.isHidden = false  // Hides filter button on the top right
         vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.LMS
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -174,6 +175,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                     let jsonResponse = JSON(response.result.value!)
                     let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
+                    self.lmsAllData.removeAll()
                     if jsonArray.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse{

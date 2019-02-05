@@ -214,7 +214,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                      let alert = UIAlertController(title: "Success", message: "Claim Successfully Approved", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -236,7 +236,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                     let alert = UIAlertController(title: "Success", message: "Claim Successfully Declined", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
@@ -278,15 +278,15 @@ extension EmployeePaymentController: UITableViewDelegate, UITableViewDataSource,
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 330
+        return 295
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
   
-        if arrayList.count > 0{
+        if arrayList.count > 0 {
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
-        }else{
+        } else {
             tableView.backgroundView?.isHidden = false
             tableView.separatorStyle = .none
         }
@@ -328,7 +328,6 @@ extension EmployeePaymentController: UITableViewDelegate, UITableViewDataSource,
         myView.cpvDelegate = self
         myView.isApprove = true
         self.view.addMySubview(myView)
-
     }
     
     func onDeclineClick(data: AnyObject) {
@@ -340,7 +339,6 @@ extension EmployeePaymentController: UITableViewDelegate, UITableViewDataSource,
         declView.isApprove = false
         declView.cpvDelegate = self
         self.view.addMySubview(declView)
-
     }
 }
 
@@ -357,7 +355,6 @@ extension EmployeePaymentController: WC_HeaderViewDelegate {
     
     func topMenuRightButtonTapped(sender: Any) {
         self.presentRightMenuViewController(sender as AnyObject)
-        
     }
     
 }

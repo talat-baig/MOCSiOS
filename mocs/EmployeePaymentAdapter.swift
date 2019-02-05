@@ -19,11 +19,15 @@ class EmployeePaymentAdapter: UITableViewCell {
     @IBOutlet weak var requestedAmount: UILabel!
     @IBOutlet weak var status: UILabel!
     
+    @IBOutlet weak var headrVw: UIView!
+    @IBOutlet weak var outrVw: UIView!
     weak var delegate:onButtonClickListener?
     var data:EPRData?
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        self.outrVw.layer.borderWidth = 1
+        self.outrVw.layer.borderColor = AppColor.universalHeaderColor.cgColor
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
