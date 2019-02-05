@@ -189,7 +189,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
         var commnt = ""
-        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
+        if text == "" || text == "Enter Comment"  {
             commnt = ""
         } else {
             commnt = text
@@ -297,7 +297,7 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
         let view = tableView.dequeueReusableCell(withIdentifier: "cell") as! TravelRequestAdapter
         view.btnMore.tag = indexPath.row
         
-        if arrayList.count > 0{
+        if arrayList.count > 0 {
             let data = arrayList[indexPath.row]
             view.setDataToView(data: data, isFromApprove : true)
         }

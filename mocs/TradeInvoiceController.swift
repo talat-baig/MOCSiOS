@@ -27,9 +27,12 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
     /// Array of TRIData elements
     var arrayList:[TRIData] = []
     
+    var currentPage : Int = 1
     /// Array of TRIData elements
     var newArray:[TRIData] = []
     
+    @IBOutlet weak var btnMore: UIButton!
+
     // Refresh Control
     var refreshControl:UIRefreshControl = UIRefreshControl()
     
@@ -39,7 +42,7 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.isNavigationBarHidden = true
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -50,10 +53,12 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         vwHeader.delegate = self
         vwHeader.btnLeft.isHidden = true
         vwHeader.btnBack.isHidden = false
-
         vwHeader.btnRight.isHidden = false
         vwHeader.lblTitle.text = navTitle
         vwHeader.lblSubTitle.isHidden = true
+        
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
         
         srchBar.delegate = self
         populateList()
@@ -83,11 +88,24 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         self.populateList()
     }
     
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
+    
     /// Fetch the list of TRI data and populate table view according to the list
-    @objc func populateList(){
-        if internetStatus != .notReachable{
+    @objc func populateList(currentPage : Int = 1){
+        
+        var arrData : [TRIData] = []
+        if internetStatus != .notReachable {
+            
             let url = String.init(format: Constant.TRI.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()))
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -96,12 +114,11 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
                     let jsonResponse = JSON(response.result.value!);
                     let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    self.arrayList.removeAll()
+//                    self.arrayList.removeAll()
                     if jsonArray.count > 0{
                         
-                        //                        self.arrayList.removeAll()
-                        
                         for(_,j):(String,JSON) in jsonResponse{
+                            
                             let data = TRIData()
                             data.refId = j["TRI Reference ID"].stringValue
                             data.company = j["Company Name"].stringValue
@@ -117,30 +134,39 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
                             data.requestAmountGrossUSD = j["Requested Gross Amount (USD)"].stringValue
                             data.fxRate = j["FX Rate"].stringValue
                             data.allocatedItems = j["Allocated Invoice Items"].stringValue
-                            self.arrayList.append(data)
+                            arrData.append(data)
                         }
+                        self.arrayList.append(contentsOf: arrData)
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
-                        //                        self.tableView.reloadData()
+
                     }else{
-                        self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    print("Invalid Reponse")
                 }
             }))
         } else {
-            
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
-            refreshControl.endRefreshing()
+            Helper.showNoInternetMessg()
+            self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
     }
     
-    
-    func showEmptyState(){
-        Helper.showNoItemState(vc:self ,  tb:tableView)
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
     }
     
     
@@ -217,6 +243,15 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
     @objc func handleTap() {
         self.view.endEditing(true)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
 }
 
 /// Mark: - UITableViewDataSource and UITableViewDelagete, onButtonClickListener methods
@@ -227,7 +262,7 @@ extension TradeInvoiceController:UITableViewDataSource, UITableViewDelegate, onB
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 352
+        return 356
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -242,9 +277,11 @@ extension TradeInvoiceController:UITableViewDataSource, UITableViewDelegate, onB
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! TradeInvoiceAdapter
-        cell.setDataToView(data: data)
+        if arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         cell.selectionStyle = .none
         cell.delegate = self
         return cell

@@ -222,17 +222,17 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
+        if text == "" || text == "Enter Comment" {
+            Helper.showMessage(message: "Please Enter Comment")
+            return
+        }
+        
         if isApprove {
             self.approveContract(data: data as! PurchaseContractData, remark: text)
             myView.removeFromSuperviewWithAnimate()
         } else {
-            if text == "" || text == "Enter Comment" {
-                Helper.showMessage(message: "Please Enter Comment")
-                return
-            } else {
-                self.declineContract(data: data as! PurchaseContractData, comment: text)
-                declView.removeFromSuperviewWithAnimate()
-            }
+            self.declineContract(data: data as! PurchaseContractData, comment: text)
+            declView.removeFromSuperviewWithAnimate()
         }
     }
     
@@ -241,18 +241,19 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
             let url = String.init(format: Constant.PC.APPROVE, Session.authKey,
                                   data.RefNo,
                                   Helper.encodeURL(url: remark))
+            print(url)
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Contract Successfully Approved", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         } else {
             Helper.showNoInternetMessg()
         }
@@ -264,17 +265,19 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                                   data.RefNo,
                                   Helper.encodeURL(url: comment))
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            print(url)
+
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Contract Successfully Declined", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         } else {
             Helper.showNoInternetMessg()
         }

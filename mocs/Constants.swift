@@ -374,7 +374,10 @@ struct Constant
          - 1: AuthID
          - 2: RefID
          */
-        static let VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCSD?apiKey="+ApiKey.KEY+"&AuthId=%@&PCRefNo=%@"
+        static let OLD_VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCSD?apiKey="+ApiKey.KEY+"&AuthId=%@&PCRefNo=%@"
+        
+        static let VIEW = ApiUrl.URL + "/PurchaseContract/PCShowDetails?apidet=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdet=%@&PCRefNo=%@"
+
         
         /**
          *Approve Purchase Contract*
@@ -382,8 +385,11 @@ struct Constant
          - 2: RefNo
          - 3: Comment
          */
-        static let APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&PCRefNo=%@&Comments=%@"
         
+        static let APPROVE =  ApiUrl.URL + "/PurchaseContract/PCMAA?apiapp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidapp=%@&PCRefNo=%@&ApproveComments=%@"
+
+        static let OLD_APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&PCRefNo=%@&Comments=%@"
+
         
         /**
          *Decline Purchase Contract*
@@ -391,7 +397,10 @@ struct Constant
          - 2: RefNo
          - 3: Comment
          */
-        static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&PCRefNo=%@&DeleteComments=%@"
+        static let DECLINE =   ApiUrl.URL + "/PurchaseContract/PCMAD?apidec=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdec=%@&PCRefNo=%@&DeleteComments=%@"
+        
+        static let OLD_DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&PCRefNo=%@&DeleteComments=%@"
+
     }
     
     struct SC {
@@ -411,23 +420,30 @@ struct Constant
          - 1: AuthID
          - 2: RefId
          */
-        static let VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCSD2?apiKey="+ApiKey.KEY+"&AuthId=%@&SCRefNo=%@"
+        static let VIEW = ApiUrl.URL + "/SalesContract/SCShowDetails?apidet=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdet=%@&SCRefNo=%@"
+        
+        static let OLD_VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCSD2?apiKey="+ApiKey.KEY+"&AuthId=%@&SCRefNo=%@"
+
         
         /**
          *Approve Sales Contract*
          - 1: AuthID
          - 2: RefNo
          */
-        static let APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&SCRefNo=%@"
+        static let OLD_APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&SCRefNo=%@"
         
-        
+        static let APPROVE = ApiUrl.URL + "/SalesContract/SCMAA?apiapp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidapp=%@&SCRefNo=%@"
+
         /**
          *Decline Sales Contract*
          - 1: AuthID
          - 2: RefNo.
          - 3: Comment
          */
-        static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&SCRefNo=%@&DeleteComments=%@"
+        static let OLD_DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&SCRefNo=%@&DeleteComments=%@"
+        
+        static let DECLINE = ApiUrl.URL + "/SalesContract/SCMAD?apidec=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdec=%@&SCRefNo=%@&DeleteComments=%@"
+
     }
     
     struct DO {
@@ -447,24 +463,28 @@ struct Constant
          - 1: AuthID
          - 2: RefID
          */
-        static let VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOSD?apiKey="+ApiKey.KEY+"&AuthId=%@&DORefNo=%@"
+        static let VIEW = ApiUrl.URL + "/DOApproval/DOShowDetails?apikeysd=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidsd=%@&DORefNo=%@"
         
-        
+        static let OLD_VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOSD?apiKey="+ApiKey.KEY+"&AuthId=%@&DORefNo=%@"
+
         /**
          *Approve Delivery Order*
          - 1: AuthID
          - 2: RefNo.
          - 3: Comment
          */
-        static let APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&DoRefNo=%@&Comments=%@"
-        
+        static let APPROVE = ApiUrl.URL + "/DOApproval/DOMAA?apiapp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidapp=%@&DORefNo=%@&Comments=%@"
+        static let OLD_APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&DoRefNo=%@&Comments=%@"
+
         /**
          *Decline Delivery Order*
          - 1: AuthID
          - 2: RefNo.
          - 3: Comment
          */
-        static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&DORefNo=%@&Comments=%@"
+        static let DECLINE = ApiUrl.URL + "/DOApproval/DOMAD?apidec=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdec=%@&DORefNo=%@&Comments=%@"
+        
+        static let OLD_DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&DORefNo=%@&Comments=%@"
         
         static let DO_SUMMARY_COMPANIES =  ApiUrl.URL + "/DOApproval/GetDOPendingContracts?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
         
@@ -477,15 +497,20 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg Com+loc+bu)*
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        static let LIST = ApiUrl.URL + "/TCR/GetAllPendingTCR?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authId=%@&filter=%@&PageNo=%d"
+
+        static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+
         
         /**
          *View Travel Claim*
          - 1: AuthID
          - 2: RefNo.
          */
-        static let VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRSD?apiKey="+ApiKey.KEY+"&AuthID=%@&TCRRefNo=%@&TEXCounter=%d"
-        
+        static let VIEW = ApiUrl.URL + "/TCR/GetTCRDetails?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&TCRRefNo=%@&TEXCounter=%d"
+
+        static let OLD_VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRSD?apiKey="+ApiKey.KEY+"&AuthID=%@&TCRRefNo=%@&TEXCounter=%d"
+
         /**
          *Approve Delivery Order*
          - 1: AuthID
@@ -578,7 +603,6 @@ struct Constant
         static let TT_MAIL_TRAVELTICKET = ApiUrl.URL + "/TravelTickets/MailTravelTicket?mailapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authmail=%@&refID=%@&travellerid=%d"
         
         static let TT_DELETE_VOUCHER = ApiUrl.URL + "/TravelTickets/DeleteTravelItineryVoucher?voapi=33ddb2ee-59a5-428f-a0a5-7167859b8589&authvo=%@&docID=%@"
-        
     }
     
     
@@ -643,7 +667,12 @@ struct Constant
          - 1: AuthID
          - 2: RefId
          */
-        static let VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_APRSD?apiKey="+ApiKey.KEY+"&AuthID=%@&ARIRefNo=%@"
+        static let VIEW =  ApiUrl.URL + "/ARI/ARIShowDetails?apidet=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdet=%@&ARIRefNo=%@"
+        
+        static let OLD_VIEW = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_APRSD?apiKey="+ApiKey.KEY+"&AuthID=%@&ARIRefNo=%@"
+
+        
+//        ARIShowDetails(string apidet, string authdet, string ARIRefNo)
         
         /**
          *Approve Admin Receive Invoice*
@@ -651,15 +680,19 @@ struct Constant
          - 2: RefNo.
          - 3: Comment
          */
-        static let APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARIMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&ARIRefNo=%@&Comments=%@"
+        static let OLD_APPROVE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARIMAA?apiKey="+ApiKey.KEY+"&AuthId=%@&ARIRefNo=%@&Comments=%@"
         
+        static let APPROVE = ApiUrl.URL + "/ARI/ARIMAA?apiapp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidapp=%@&ARIRefNo=%@&Comments=%@"
+
         /**
          *Decline Admin Receive Invoice*
          - 1: AuthID
          - 2: RefNo.
          - 3: Comment
          */
-        static let DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARIMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&ARIRefNo=%@&Comments=%@"
+        static let OLD_DECLINE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARIMAD?apiKey="+ApiKey.KEY+"&AuthId=%@&ARIRefNo=%@&Comments=%@"
+        
+        static let DECLINE = ApiUrl.URL + "/ARI/ARIMAD?apidec=33ddb2ee-59a5-428f-a0a5-7167859b8589&authdec=%@&ARIRefNo=%@&Comments=%@"
     }
     
     
@@ -687,8 +720,10 @@ struct Constant
     
     struct CP {
         
-        static let LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+        static let LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&pageno=%d"
         
+        static let OLD_LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
+
         static let VIEW = ApiUrl.URL + "/CounterParty/GetCounterPartyByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustomID=%@"
         
         static let BANK_DETAILS = ApiUrl.URL + "/CounterParty/GetCounterPartyBankDetailsByID?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CustID=%@"
@@ -714,8 +749,11 @@ struct Constant
          - 1: AuthID
          - 2: Filter
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRILFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
+        static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRILFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
+        static let LIST = ApiUrl.URL + "/TRI/GetAllPendingTRI?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+
+//        GetAllPendingTRI(string apikey, string authid, string filter, int PageNo)
         /**
          *View Trade Receive Invoice Details*
          - 1: AuthID

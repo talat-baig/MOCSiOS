@@ -145,9 +145,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-//                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-//                    }
+                    self.tableView.reloadData()
                 } else {
                     print("Invalid Reponse")
                 }
@@ -196,16 +194,18 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
+        
+        if text == "" || text == "Enter Comment" {
+            Helper.showMessage(message: "Please Enter Comment")
+            return
+        }
+        
         if isApprove {
             self.approveContract(data: data as! ARIData, comment: text)
+            myView.removeFromSuperview()
         } else {
-            if text == "" || text == "Enter Comment" {
-                Helper.showMessage(message: "Please Enter Comment")
-                return
-            } else {
-                self.declineContract(data: data as! ARIData, comment: text)
-                declView.removeFromSuperviewWithAnimate()
-            }
+            self.declineContract(data: data as! ARIData, comment: text)
+            declView.removeFromSuperviewWithAnimate()
         }
     }
     
@@ -216,17 +216,17 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                                   data.refId,
                                   comment)
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Invoice Successfully Approved", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         } else {
             Helper.showNoInternetMessg()
         }
@@ -239,17 +239,17 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                                   data.refId,
                                   Helper.encodeURL(url: comment))
             self.view.hideLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.showLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Invoice Successfully Declined", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         } else {
             Helper.showNoInternetMessg()
         }

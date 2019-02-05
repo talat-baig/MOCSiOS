@@ -16,9 +16,12 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
     var arrayList:[TravelClaimData] = []
     var newArray : [TravelClaimData] = []
     var navTitle = ""
-    
+    var currentPage : Int = 1
+
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var srchBar: UISearchBar!
+    @IBOutlet weak var btnMore: UIButton!
+
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     var declVw = CustomPopUpView()
@@ -31,7 +34,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         srchBar.delegate = self
         tableView.addSubview(refreshControl)
         
@@ -46,11 +49,24 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
         
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        
         self.populateList()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
     }
     
     func cancelFilter(filterString: String) {
@@ -84,12 +100,12 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         }
     }
     
-    @objc func populateList(){
+    @objc func populateList(currentPage : Int = 1){
         var newData: [TravelClaimData] = []
         
         if internetStatus != .notReachable{
             let url = String.init(format: Constant.TCR.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()))
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -98,7 +114,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                     var responseJson = JSON(response.result.value!)
                     let arrayJson = responseJson.arrayObject as! [[String:AnyObject]]
                     
-                    self.arrayList.removeAll()
+//                    self.arrayList.removeAll()
                     if arrayJson.count > 0 {
                         
                         for(_,j):(String,JSON) in responseJson{
@@ -115,22 +131,36 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                             data.counter = j["Counter"].intValue
                             newData.append(data)
                         }
-                        self.arrayList = newData
-                        self.newArray = newData
+                        self.arrayList.append(contentsOf: newData)
+                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     }else{
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
+                    print("Invalid Reponse")
                 }
             }))
         }else{
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
             self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
+    }
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
     }
     
     func viewClaim(data:TravelClaimData) {
@@ -224,6 +254,15 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
     @objc func handleTap() {
         self.view.endEditing(true)
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
 }
 
 extension TCRController: UISearchBarDelegate {
@@ -259,9 +298,12 @@ extension TCRController:UITableViewDelegate, UITableViewDataSource,onButtonClick
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = arrayList[indexPath.row]
+        
         let view = tableView.dequeueReusableCell(withIdentifier: "cell") as! TCRAdapter
-        view.setDataToView(data)
+        if arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            view.setDataToView(data)
+        }
         view.selectionStyle = .none
         view.delegate = self
         return view

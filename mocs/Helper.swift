@@ -389,6 +389,11 @@ class Helper: UIView {
                         case "Success":
                             isValid = true
                             break
+                        case "Email Sent...","Success. Please click on List Vouchers", "New List Added","New Task Added" ,"Note Updated" , "Purchase Contract marked as declined","Sales Contract marked as approved","Sales Contract marked as declined","ARI marked as declined", "ARI marked as approved","TRI marked as approved","TRI marked as declined","TCR marked as Declined","TCR marked as Approved","EPR | ECR marked as Declined","EPR | ECR claim marked as Approved","DO marked as Approved","DO marked as Declined":
+                            isValid = true
+                            break
+                            
+                   
                         default:
                             isValid = false
                             NotificationBanner(title: j["ServerMsg"].stringValue,style: .danger).show()
@@ -406,11 +411,20 @@ class Helper: UIView {
                     
                     if (data?.count)! > 0 {
                         
+                        guard data!["ServerMsg"] != nil else {
+                            NotificationBanner(title: "Oops!",subtitle:"Unexpected error occurred, Please try again later", style: .danger).show()
+                            return false
+                        }
+                        
+                        
                         switch data!["ServerMsg"] as! String {
                         case "Success":
                             isValid = true
                             break
                             
+                        case "Email Sent...","Success. Please click on List Vouchers", "New List Added","New Task Added" ,"Note Updated" , "Purchase Contract marked as declined","Sales Contract marked as approved","Sales Contract marked as declined","ARI marked as declined", "ARI marked as approved","TRI marked as approved","TRI marked as declined","TCR marked as Declined","TCR marked as Approved","EPR | ECR marked as Declined","EPR | ECR claim marked as Approved","DO marked as Approved","DO marked as Declined":
+                            isValid = true
+                            break
                             
                         default:
                             isValid = false
@@ -426,6 +440,9 @@ class Helper: UIView {
             }
             
             break
+            
+       
+        
         case .failure(let error):
             if error._code == NSURLErrorTimedOut{
                 isValid = false

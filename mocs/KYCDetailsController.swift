@@ -316,7 +316,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
      
         var commnt = ""
-        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
+        if text == "" || text == "Enter Comment" {
             commnt = ""
         } else {
             commnt = text

@@ -41,11 +41,15 @@ class PendingApprovalsController: UIViewController {
         getAllPAData()
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        getAllPAData()
+    }
+    
     @objc func getAllPAData() {
         
         var arrData: [PAData] = []
         
-//         self.arrayList.removeAll()
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.PAData.PA_GET_ALL, Session.authKey, "0")

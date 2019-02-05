@@ -203,17 +203,17 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                                   Helper.encodeURL(url: data.refId),
                                   Helper.encodeURL(url: comment))
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Order Successfully Approved", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         }else{
            Helper.showNoInternetMessg()
         }
@@ -224,17 +224,17 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         if internetStatus != .notReachable {
             let url = String.init(format: Constant.DO.DECLINE, Session.authKey,data.refId,comment)
             self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
+            Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
-                if Helper.isResponseValid(vc: self, response: response.result){
+                if Helper.isPostResponseValid(vc: self, response: response.result) {
                     let alert = UIAlertController(title: "Success", message: "Order Successfully Declined", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
                         (UIAlertAction) -> Void in
-                        self.populateList()
+                        self.refreshList()
                     }))
                     self.present(alert, animated: true, completion: nil)
                 }
-            }))
+            })
         }else{
             Helper.showMessage(message: "No Internet Available, Please Try Again")
         }

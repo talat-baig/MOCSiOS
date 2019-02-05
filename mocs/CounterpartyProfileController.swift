@@ -11,19 +11,21 @@ import Alamofire
 import SwiftyJSON
 
 class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelegate , onCPApprove  , onCPUpdate {
-  
+    
     var navTitle = ""
-
+    var currentPage : Int = 1
+    
     @IBOutlet weak var srchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
+    @IBOutlet weak var btnMore: UIButton!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
-//    var myView = CustomPopUpView()
-//    var declView = CustomPopUpView()
+    //    var myView = CustomPopUpView()
+    //    var declView = CustomPopUpView()
     
     var arrayList:[CPListData] = []
     var newArray : [CPListData] = []
@@ -38,7 +40,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         
         self.navigationController?.isNavigationBarHidden = true
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.refreshList))
         tableView.addSubview(refreshControl)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -49,9 +51,10 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.btnBack.isHidden = false
-
         vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
         
         populateList()
         
@@ -70,11 +73,21 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         self.sideMenuViewController?.presentRightMenuViewController()
     }
     
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.populateList()
+    }
     
-    @objc func populateList(){
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList(currentPage: self.currentPage)
+    }
+    
+    @objc func populateList(currentPage: Int = 1){
+        var arrData : [CPListData] = []
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.CP.LIST, Session.authKey)
+            let url = String.init(format: Constant.CP.LIST, Session.authKey, self.currentPage)
             
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -87,7 +100,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                     let jsonResponse = JSON(response.result.value!);
                     let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    self.arrayList.removeAll()
+                    //                    self.arrayList.removeAll()
                     if jsonArray.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse {
@@ -121,25 +134,35 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                             data.kycValidDate = j["KYCValidUntilDate"].stringValue
                             data.kycContactType = j["KYCContactType"].stringValue
                             
-                            self.arrayList.append(data)
+                            arrData.append(data)
                         }
+                        self.arrayList.append(contentsOf: arrData)
                         self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                         
                     } else {
-                        self.refreshControl.endRefreshing()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView,  reports: ModName.isCP, action: #selector(self.showFilterMenu))
+                        
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
                     }
                     self.tableView.reloadData()
                 } else {
-                    Helper.showNoFilterState(vc: self, tb: self.tableView,  reports: ModName.isCP, action: #selector(self.showFilterMenu))
+                    print("Invalid Reponse")
                 }
             }))
         }else{
-            
             Helper.showNoInternetMessg()
-            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
-            refreshControl.endRefreshing()
+            self.refreshControl.endRefreshing()
+            if self.currentPage == 1 {
+                self.refreshList()
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+            }
         }
     }
     
@@ -156,6 +179,10 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     }
     
     
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
+        
+    }
     
     func viewClaim(data:CPListData) {
         
@@ -241,7 +268,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         if internetStatus != .notReachable{
             let url = String.init(format: Constant.CP.CP_MAIL, Session.authKey, refId)
             self.view.showLoading()
-          
+            
             Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
                 
@@ -257,44 +284,14 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     }
     
     
-//    func approveOrDeclineCP( event : Int, data:CPListData, comment:String){
-//
-//        if internetStatus != .notReachable {
-//            let url = String.init(format: Constant.CP.CP_APPROVE, Session.authKey,
-//                                  Helper.encodeURL(url: data.custId), event, data.kycContactType, data.kycRequired, data.refId )
-//            self.view.showLoading()
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//                    let alert = UIAlertController(title: "Success", message: "Counterparty Successfully Approved", preferredStyle: .alert)
-//                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
-//                        (UIAlertAction) -> Void in
-//                        self.populateList()
-//                    }))
-//                    self.present(alert, animated: true, completion: nil)
-//                }
-//            }))
-//        } else {
-//            Helper.showNoInternetMessg()
-//        }
-//    }
-    
-    
-//    func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
-//        if isApprove {
-//            self.approveOrDeclineCP(event: 0, data: data as! CPListData, comment: text)
-//            myView.removeFromSuperviewWithAnimate()
-//        } else {
-//
-//            if text == "" || text == "Enter Comment" {
-//                Helper.showMessage(message: "Please Enter Comment")
-//                return
-//            } else {
-//                self.approveOrDeclineCP(event: 1, data: data as! CPListData , comment: text)
-//                declView.removeFromSuperviewWithAnimate()
-//            }
-//        }
-//    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+            btnMore.isHidden = false
+        } else {
+            btnMore.isHidden = true
+        }
+    }
     
 }
 
@@ -303,7 +300,7 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
     
     func onClick(optionMenu: UIViewController, sender: UIButton) {
         self.handleTap()
-         self.present(optionMenu, animated: true, completion: nil)
+        self.present(optionMenu, animated: true, completion: nil)
     }
     
     func onViewClick(data: CPListData) {
@@ -348,14 +345,16 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cplistcell") as! CPCell
-        cell.setDataToView(data: data)
+        if self.arrayList.count > 0{
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         cell.cpMenuDelegate = self
         cell.cpOptionItemDelegate = self
         return cell;
     }
-   
+    
     
 }
 

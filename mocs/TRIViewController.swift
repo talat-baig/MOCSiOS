@@ -37,7 +37,7 @@ class TRIViewController: ButtonBarPagerTabStripViewController {
         vwTopHeader.delegate = self
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnLeft.isHidden = true
-        vwTopHeader.btnRight.isHidden = false
+        vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = "Invoice No"
         vwTopHeader.lblSubTitle.text = data?.refId
         

@@ -171,7 +171,7 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
             self.txtVwComments.textColor = UIColor.lightGray
             
             if isApprove {
-                self.txtVwComments.text = "Enter Comment (Optional)"
+                self.txtVwComments.text = "Enter Comment"
             } else {
                 self.txtVwComments.text = "Enter Comment"
             }
@@ -198,7 +198,7 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
         if textView.text.isEmpty {
         
             if isApprove {
-                self.txtVwComments.text = "Enter Comment (Optional)"
+                self.txtVwComments.text = "Enter Comment"
             } else {
                 self.txtVwComments.text = "Enter Comment"
             }
