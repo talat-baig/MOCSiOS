@@ -41,7 +41,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     @IBOutlet weak var vwButtons: UIView!
     static var filterDelegate: filterViewDelegate?
     static var clearFilterDelegate: clearFilterDelegate?
-
+    
     //Added By RV : 13 May 18
     var delegate: onFilterButtonTap?
     var headerVwFilter : FilterHeaderView?
@@ -162,7 +162,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                     
                     let company = companiesJson[j]["Company"].stringValue
                     let locs = companiesJson[j]["Locations"]
-                  
+                    
                     
                     var loc:[DataObject] = []
                     for k in 0..<locs.count {
@@ -179,30 +179,17 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                             let sliced  = company.slice(from: "(", to: ")")
                             comp.compCode = sliced ?? "0"
                             
-                            print(sliced ?? "")
-//                            let compny = company.suffix(5)
-//                            let newString = String(compny)
-//                            let slicedString = newString.slice(from: "(", to: ")")
-//                            comp.compCode = slicedString!
-                            
+                            //                            print(sliced ?? "")
                             
                             let loc = Location()
                             loc.locName = location
                             
-                            //  let newBCode = busUnit[l]["BU"].stringValue.slice(from: "(", to: ")")!
-                            
-                            
                             
                             let newBUString = busUnit[l]["BU"].stringValue
-//                            let newSubString = String(newBUString)
                             
                             let buSliced  = newBUString.slice(from: "(", to: ")")
-//                            comp.compCode = sliced ?? "0"
-
-//                            let slicedBUString = newSubString.slice(from: "(", to: ")")
-//                            //                            print(slicedBUString)
-//
-                            print(buSliced!)
+                            //
+//                            print(buSliced!)
                             let newBName = busUnit[l]["BU"].stringValue
                             
                             bu.append(DataObject(name: newBName,
@@ -470,7 +457,7 @@ extension FilterViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
         cell.lblTitle.text = newStr
         cell.lblTitle.font =  UIFont.systemFont(ofSize: 17.0)
-//        cell.lblTitle.preferredMaxLayoutWidth = 100
+        //        cell.lblTitle.preferredMaxLayoutWidth = 100
         return cell
     }
     

@@ -170,7 +170,7 @@ class HomeViewController: UIViewController , filterViewDelegate {
 
 extension HomeViewController: MaterialShowcaseDelegate {
     func showCaseWillDismiss(showcase: MaterialShowcase) {
-        print("Showcase \(showcase.primaryText) will dismiss.")
+//        print("Showcase \(showcase.primaryText) will dismiss.")
     }
     func showCaseDidDismiss(showcase: MaterialShowcase) {
        

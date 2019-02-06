@@ -331,7 +331,6 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
                     self.arrayList.remove(at: buttonRow)
                     self.tblVwVouchers.reloadData()
                     if self.arrayList.count == 0 {
-                        print("Zeroooooooo")
                         self.showEmptyState()
                     }
                 } else {

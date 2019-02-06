@@ -82,19 +82,16 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
     
     @objc func refreshList() {
         self.arrayList.removeAll()
+        self.currentPage = 1
         self.populateList()
     }
     
     func loadMoreItemsForList() {
         self.currentPage += 1
-        populateList(currentPage: self.currentPage)
+        populateList()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        self.populateList()
-//    }
-    
+
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
@@ -108,7 +105,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         Helper.showNoItemState(vc:self ,  tb:tableView)
     }
     
-    @objc func populateList(currentPage : Int = 1){
+    @objc func populateList(){
         
         var arrData : [ROData] = []
         if internetStatus != .notReachable {
@@ -171,24 +168,29 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                             self.currentPage -= 1
                             Helper.showMessage(message: "No more data found")
                         }
-//                        self.refreshControl.endRefreshing()
-//                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                     }
                     self.tableView.reloadData()
                 } else {
-                    
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
                     print("Invalid Reponse")
-//                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: #selector(self.showFilterMenu))
                 }
             }))
         }else{
           
-            Helper.showNoInternetMessg()
             self.refreshControl.endRefreshing()
-            if self.currentPage == 1 {
-                self.refreshList()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
                 btnMore.isHidden = true
-                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
             }
         }
     }

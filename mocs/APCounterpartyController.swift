@@ -183,7 +183,6 @@ extension APCounterpartyController: UITableViewDataSource {
                 height = 170
             }
         }
-        print("CP Cell", height)
         return height
     }
     

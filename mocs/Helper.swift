@@ -1372,7 +1372,7 @@ extension UIView {
         
         progressTime -= 1.0
         progressView?.setProgress(Float(progressTime/180.0), animated: true)
-        print(Float(progressTime/180.0))
+//        print(Float(progressTime/180.0))
         
         let dict = progressTimer?.userInfo as! [String : AnyObject]
         
@@ -1415,7 +1415,7 @@ extension UIView {
         let minutes = Int(time) / 60
         let seconds = time - Double(minutes) * 60
         //        let secondsFraction = seconds - Double(Int(seconds))
-        print("%02i:%02i",minutes,Int(seconds))
+//        print("%02i:%02i",minutes,Int(seconds))
         return String(format:"%02i:%02i",minutes,Int(seconds))
     }
 }

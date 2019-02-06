@@ -108,7 +108,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             self.txtFldContact.isUserInteractionEnabled = false
             self.txtFldTo.isUserInteractionEnabled = false
             self.btnLeaveType.isUserInteractionEnabled = false
-            btnSubmit.isHidden = true
+            self.btnSubmit.isHidden = true
             
         } else {
             self.txtFldDelegation.isUserInteractionEnabled = true
@@ -117,9 +117,7 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             self.txtFldTo.isUserInteractionEnabled = true
             self.txtFldContact.isUserInteractionEnabled = true
             self.btnLeaveType.isUserInteractionEnabled = true
-            btnSubmit.isHidden = false
-            
-            
+            self.btnSubmit.isHidden = false
             
             self.getLeaveTypes { (res) in
                 
@@ -139,20 +137,13 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             self.getWorkPolicy{ (arr, res)  in
                 
                 if res {
-                    
                     if arr.count > 0 {
-                        self.arrayWorkOff = arr
-                        //                        self.checkWorkOffDays()
+                        self.arrayWorkOff = arr  // temp
                     }
-                    
                 } else {
                 }
             }
-            
         }
-        
-        
-        
         
         if lmsReqData != nil {
             
@@ -162,7 +153,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             txtFldNoOfDays.text = lmsReqData?.noOfDays
             txtFldApprovingMngr.text = Session.reportMngr
             self.btnLeaveType.setTitle( self.lmsReqData?.leaveType , for: .normal)
-            //            self.checkForLeaveType() // check leave type for UI elements enable/disable
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -187,7 +177,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
             txtFldApprovingMngr.text = Session.reportMngr
         }
         
-        //         self.makePrefix()
     }
     
     func getLeaveTypes( comp : @escaping(Bool)-> ()) {
@@ -214,7 +203,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
                 comp(false)
             }
         } else {
-            
             self.arrLeaveTypes = parseAndAssignLeaveTypes(leavTypeString: Session.leaveTypes)
             comp(true)
         }
@@ -223,7 +211,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     
     func parseAndAssignLeaveTypes(leavTypeString : String)  -> [String] {
         
-        //            var leavTyp = [String]()
         var lmsLeavTyp = [LeaveType]()
         
         let jsonObj = JSON.init(parseJSON:leavTypeString)
@@ -332,7 +319,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 680.0)
-        print(scrlVw.contentSize)
     }
     
     @objc func handleTap() {
@@ -576,17 +562,25 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
     func checkWorkOffDays(startDate : Date , endDate : Date) -> Int {
         
         var workingDays : Int = 0
+        var arrWO : [String] = []
+        var arrPO : [String] = []
+        var arrPolicy : [String] = []
+
         
-        let workOff = self.arrayWorkOff[0].woDays // {sat,sun}
-        let arrWO = workOff.components(separatedBy: ",")
-        
-        let publicOff = self.arrayWorkOff[0].woDates // {2019-01-04,2019-03-02}
-        let arrPO = publicOff.components(separatedBy: ",")
-        
-        let workPolicy = self.arrayWorkOff[0].woPolicy // {WO,PH}
-        let arrPolicy = workPolicy.components(separatedBy: ",")
+        if arrayWorkOff.count > 0 {
+            
+            let workOff = self.arrayWorkOff[0].woDays // {sat,sun}
+            arrWO = workOff.components(separatedBy: ",")
+            
+            let publicOff = self.arrayWorkOff[0].woDates // {2019-01-04,2019-03-02}
+            arrPO = publicOff.components(separatedBy: ",")
+            
+            let workPolicy = self.arrayWorkOff[0].woPolicy // {WO,PH}
+            arrPolicy = workPolicy.components(separatedBy: ",")
+        }
         
         workingDays =  Helper.getWorkingDays(startDate: startDate, endDate: endDate, publicHolidays: arrPO , workOff:arrWO , workOffPolicy:arrPolicy)
+        
         return workingDays
     }
     
@@ -646,7 +640,6 @@ class LMSAddEditController: UIViewController,IndicatorInfoProvider, UIGestureRec
         }
         self.view.endEditing(true)
     }
-    
 }
 
 

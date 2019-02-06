@@ -16,6 +16,7 @@ class PendingApprovalsController: UIViewController {
 //    let arrayMod : [String] = ["Purchase Contract","Sales Contract","Delivery Order", "Release Order"]
 //    let arrayModCount : [String] = ["10","90","34", "0"]
 
+    @IBOutlet weak var lblSummary: UILabel!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
     @IBOutlet weak var tableView: UITableView!
@@ -66,7 +67,8 @@ class PendingApprovalsController: UIViewController {
                     self.arrayList.removeAll()
                     
                     if array.count > 0 {
-                        
+                        self.lblSummary.isHidden = false
+                    
                         for(_,json):(String,JSON) in jsonResponse {
                             
                             let paDta = PAData()
@@ -92,10 +94,14 @@ class PendingApprovalsController: UIViewController {
                         }
                         self.arrayList = arrData
                     } else {
+                        Helper.showEmptyState(vc: self, messg: "No Summary data found", action: nil)
+                        self.lblSummary.isHidden = true
                     }
                     self.tableView.tableFooterView = nil
                     self.tableView.reloadData()
                 } else {
+                    Helper.showEmptyState(vc: self, messg: "No Summary data found", action: nil)
+                    self.lblSummary.isHidden = true
                 }
             }))
         } else {
@@ -103,6 +109,7 @@ class PendingApprovalsController: UIViewController {
             Helper.showNoInternetMessg()
             self.refreshControl.endRefreshing()
             self.tableView.reloadData()
+            lblSummary.isHidden = true
             Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(getAllPAData))
         }
     }

@@ -84,12 +84,13 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     
     @objc func refreshList() {
         self.arrayList.removeAll()
+        self.currentPage = 1
         self.populateList()
     }
     
     func loadMoreItemsForList() {
         self.currentPage += 1
-        populateList(currentPage: self.currentPage)
+        populateList()
     }
     
 //    @objc func handleRefresh(_ refreshControl: UIRefreshControl){
@@ -97,7 +98,7 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
 //    }
     
     
-    @objc func populateList(currentPage: Int = 1){
+    @objc func populateList(){
         
         var newData: [PurchaseContractData] = []
         
@@ -117,7 +118,7 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                     let data = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
 //                    self.arrayList.removeAll()
-                    print("responseValid : %d", data.count)
+//                    print("responseValid : %d", data.count)
                     if data.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse{
@@ -148,16 +149,25 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                     }
                     self.tableView.reloadData()
                 } else {
-                     print("Invalid Reponse")
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
                 }
             }))
         }else{
-            Helper.showNoInternetMessg()
             self.refreshControl.endRefreshing()
-            if self.currentPage == 1 {
-                self.refreshList()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
                 btnMore.isHidden = true
                 Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
             }
         }
     }
@@ -326,20 +336,11 @@ extension PurchaseContractController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-//        if arrayList.count > 0 {
-//            tableView.backgroundView?.isHidden = true
-//            tableView.separatorStyle = .singleLine
-//        }else{
-//            tableView.backgroundView?.isHidden = false
-//            tableView.separatorStyle = .none
-//        }
-        print("numbrOfrows - %d",self.arrayList.count)
         return arrayList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("cellforRows - %d",self.arrayList.count)
-//        let data = arrayList[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ContractCell
         if arrayList.count > 0 {
             cell.setDataToView(data: arrayList[indexPath.row])

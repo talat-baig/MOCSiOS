@@ -65,7 +65,7 @@ class DOViewViewController: ButtonBarPagerTabStripViewController {
         attachment.moduleName = "DO"
         
         viewArray.append(primary)
-        var jsonResponse = JSON(self.response)
+        var jsonResponse = JSON(self.response!)
         var array = jsonResponse.arrayObject as! [[String:AnyObject]]
 
         var rawPro = JSON.init(parseJSON: (array[0]["Release Order Details"] as! String))

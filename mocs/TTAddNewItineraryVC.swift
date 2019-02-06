@@ -170,7 +170,6 @@ class TTAddNewItineraryVC: UIViewController , UIGestureRecognizerDelegate {
         
         var expCities = [String]()
         let jsonObj = JSON.init(parseJSON:citiesString)
-        print(Session.cities)
         
         for(_,j):(String,JSON) in jsonObj{
             let cityNme = j["CityName"].stringValue

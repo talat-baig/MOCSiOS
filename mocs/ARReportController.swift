@@ -96,7 +96,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
         var messg = ""
         let arrFilterString = ["35+Ivory Coast+06", "25+Dubai+06"]
         
-        print(FilterViewController.getFilterString())
+//        print(FilterViewController.getFilterString())
         
         
         if FilterViewController.getFilterString().contains(",") {
@@ -372,7 +372,7 @@ extension ARReportController: UITableViewDataSource {
                     height = 225
                 }
             }
-            print("Overall height" , height)
+//            print("Overall height" , height)
             break
         case 1:  height = 300
             break

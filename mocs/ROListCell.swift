@@ -114,7 +114,6 @@ class ROListCell: UITableViewCell {
     
     @IBAction func onViewTap(_ sender: Any) {
         if(self.delegate?.responds(to: #selector(ROListCell.onViewTap(_:))) != nil){
-            print("onViewTap")
             delegate?.onViewClick(data: data!)
         }
     }

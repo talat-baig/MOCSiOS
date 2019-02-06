@@ -422,7 +422,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                     }
                     self.tableView.reloadData()
                     if self.arrayList.count == 0 {
-                        print("Zeroooooooo")
                         self.showEmptyState()
                     }
                 }
@@ -449,7 +448,6 @@ class TTVoucherListVC: UIViewController, IndicatorInfoProvider, UIDocumentPicker
                 self.arrayList.remove(at: buttonRow)
                 self.tableView.reloadData()
                 if self.arrayList.count == 0 {
-                    print("Zeroooooooo")
                     self.showEmptyState()
                 }
             }

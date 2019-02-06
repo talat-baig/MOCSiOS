@@ -227,7 +227,7 @@ class DetailsListViewController: UIViewController {
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.AvlRel.WAREHOUSE_WISE_PRODUCT_LIST, Session.authKey, Helper.encodeURL(url: wareName), Helper.encodeURL(url: vesslStr))
-            print("warehouse wise prod", url)
+//            print("warehouse wise prod", url)
             self.view.showLoading()
             
             Alamofire.request(url).responseData(completionHandler: ({ prodResp in

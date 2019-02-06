@@ -207,7 +207,6 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
         let height = lastView.frame.size.height
         let pos = lastView.frame.origin.y
         let sizeOfContent = height + pos + 100
-        print(sizeOfContent)
         scrlVw.contentSize.height = sizeOfContent
     }
     

@@ -365,7 +365,6 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: 840 )
-        print(scrlVw.contentSize)
     }
     
     

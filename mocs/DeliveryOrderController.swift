@@ -37,11 +37,13 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
+        
         srchBar.delegate = self
         FilterViewController.filterDelegate = self
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.isNavigationBarHidden = true
+        
         vwHeader.delegate = self
         vwHeader.btnBack.isHidden = false
         vwHeader.btnLeft.isHidden = true
@@ -65,12 +67,13 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
     
     @objc func refreshList() {
         self.arrayList.removeAll()
+        self.currentPage = 1
         self.populateList()
     }
     
     func loadMoreItemsForList() {
         self.currentPage += 1
-        populateList(currentPage: self.currentPage)
+        populateList()
     }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
@@ -88,7 +91,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         }
     }
     
-    @objc func populateList(currentPage: Int = 1){
+    @objc func populateList(){
         
         var arrData : [DeliveryOrderData] = []
 
@@ -98,6 +101,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                                   Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
             self.view.showLoading()
 
+            print("currPAge-%d",currentPage)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
@@ -105,8 +109,6 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                     
                     let jsonResponse = JSON(response.result.value!)
                     let arrayJson = jsonResponse.arrayObject as! [[String:AnyObject]]
-                    
-//                    self.arrayList.removeAll()
                     
                     if arrayJson.count > 0 {
 
@@ -138,20 +140,35 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                     }
                     self.tableView.reloadData()
                 } else {
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
                     print("Invalid Reponse")
                 }
-                
             }))
         } else {
-            Helper.showNoInternetMessg()
+            
             self.refreshControl.endRefreshing()
-            if self.currentPage == 1 {
-                self.refreshList()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
                 btnMore.isHidden = true
-                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
             }
         }
     }
+    
+    func handlePagination() {
+        
+    }
+    
+    
     
     func viewContract(refId: String){
         if internetStatus != .notReachable{

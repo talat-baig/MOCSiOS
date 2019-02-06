@@ -590,7 +590,6 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                         }
                         self.tableView.reloadData()
                         if self.arrayList.count == 0 {
-                            print("Zeroooooooo")
                             self.showEmptyState()
                         }
                     }
@@ -685,8 +684,6 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                 self.arrayList.remove(at: buttonRow)
                 self.tableView.reloadData()
                 if self.arrayList.count == 0 {
-                    print("Zeroooooooo")
-//                    self.showEmptyState()
                     self.showLMSEmptyState()
                 }
             }
@@ -720,7 +717,6 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
                     self.arrayList.remove(at: buttonRow)
                     self.tableView.reloadData()
                     if self.arrayList.count == 0 {
-                        print("Zeroooooooo")
                         self.showEmptyState()
                     }
                 } else {

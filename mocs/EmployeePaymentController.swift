@@ -61,12 +61,13 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     
     @objc func refreshList() {
         self.arrayList.removeAll()
+        self.currentPage = 1
         self.populateList()
     }
     
     func loadMoreItemsForList() {
         self.currentPage += 1
-        populateList(currentPage: self.currentPage)
+        populateList()
     }
     
     func cancelFilter(filterString: String) {
@@ -80,7 +81,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         self.populateList()
     }
     
-    @objc func populateList(currentPage : Int = 1) {
+    @objc func populateList() {
         
         var newData :[EPRData] = []
         
@@ -129,17 +130,26 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                     }
                      self.tableView.reloadData()
                 } else {
-                     print("Invalid Reponse")
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
                 }
             }))
         } else {
             
-            Helper.showNoInternetMessg()
             self.refreshControl.endRefreshing()
-            if self.currentPage == 1 {
-                self.refreshList()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
                 btnMore.isHidden = true
-                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
             }
         }
     }

@@ -274,7 +274,6 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
                     height = 148
                 }
             }
-            print("case 0:", height)
             break
         case 1:  height = 300.0
             break

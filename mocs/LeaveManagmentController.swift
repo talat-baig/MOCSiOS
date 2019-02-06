@@ -140,20 +140,14 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
             if res1 {
                 self.getPendingLeavesByFilter { (res2, tpl) in
                     if res2 {
-                        //                        self.vwOuter.isHidden = false
-                        //                        self.initialSetup()
                         self.lblCount.text = String(format: "%d", tpl)
                         self.txtFldEmpName.filterStrings(self.lmsData.map { $0.empName })
                     } else {
-                        //                        self.vwOuter.isHidden = true
-                        //                        self.initialSetup()
-                        //                        Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
+                       
                     }
                 }
             } else {
-                //                self.vwOuter.isHidden = true
-                //                Helper.showEmptyState(vc: self, messg : "No LMS Summary Data Found" ,action: #selector(self.getPendingLeaves))
-                print("")
+//                print("")
             }
         }
     }
