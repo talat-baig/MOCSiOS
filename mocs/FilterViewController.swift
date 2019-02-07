@@ -81,6 +81,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         }
         treeView.separatorStyle = RATreeViewCellSeparatorStyleNone
         treeView.reloadData()
+        self.collVwFilter.reloadData()
         headerVwFilter?.isHidden = true
     }
     
@@ -244,6 +245,11 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             self.sideMenuViewController?.hideMenuViewController()
         }
     }
+    
+    static func setFilterString() {
+        
+    }
+    
     
     
     static func getFilterString(noBU : Bool = false ) -> String {

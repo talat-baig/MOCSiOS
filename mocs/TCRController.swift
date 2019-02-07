@@ -79,7 +79,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         if !arrayList.isEmpty {
             arrayList.removeAll()
         }
-        self.populateList()
+        self.refreshList()
     }
     
     

@@ -77,7 +77,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         if !arrayList.isEmpty {
             arrayList.removeAll()
         }
-        self.populateList()
+        self.refreshList()
     }
     
     @objc func refreshList() {

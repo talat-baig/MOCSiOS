@@ -77,7 +77,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
         if !arrayList.isEmpty {
             arrayList.removeAll()
         }
-        self.populateList()
+        self.refreshList()
     }
     
     override func didReceiveMemoryWarning() {

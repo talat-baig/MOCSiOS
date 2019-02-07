@@ -68,7 +68,7 @@ class DOViewViewController: ButtonBarPagerTabStripViewController {
         var jsonResponse = JSON(self.response!)
         var array = jsonResponse.arrayObject as! [[String:AnyObject]]
 
-        var rawPro = JSON.init(parseJSON: (array[0]["Release Order Details"] as! String))
+        var rawPro = JSON.init(parseJSON: (array[0]["Release Order Details"]  as? String ?? ""))
         if (rawPro.null == nil) {
             if (rawPro.arrayObject as! [[String:AnyObject]]).count > 0{
                 product.response = rawPro
@@ -76,7 +76,7 @@ class DOViewViewController: ButtonBarPagerTabStripViewController {
             }
         }
 
-        var rawLog = JSON.init(parseJSON: (array[0]["Do Logistics"] as! String))
+        var rawLog = JSON.init(parseJSON: (array[0]["Do Logistics"]  as? String ?? ""))
         if rawLog.null == nil{
             if (rawLog.arrayObject as! [[String:AnyObject]]).count > 0 {
                 logistics.response = rawLog

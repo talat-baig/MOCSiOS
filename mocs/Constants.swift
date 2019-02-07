@@ -11,7 +11,7 @@ struct ApiKey {
 //    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-        static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {

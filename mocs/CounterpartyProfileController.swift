@@ -49,7 +49,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
-        vwTopHeader.btnRight.isHidden = false
+        vwTopHeader.btnRight.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = navTitle
         vwTopHeader.lblSubTitle.isHidden = true

@@ -41,7 +41,7 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
         if !arrayList.isEmpty  {
             arrayList.removeAll()
         }
-        self.populateList()
+        self.refreshList()
     }
     
     override func viewDidLoad() {

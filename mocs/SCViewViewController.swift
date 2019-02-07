@@ -78,7 +78,9 @@ class SCViewViewController: ButtonBarPagerTabStripViewController {
         controllers.append(shipment)
         var jsonResponse = JSON(self.response)
         var array = jsonResponse.arrayObject as! [[String:AnyObject]]
-        var rawJson = JSON.init(parseJSON: (array[0]["Products"] as! String))
+        
+       
+        var rawJson = JSON.init(parseJSON: (array[0]["Products"] as? String ?? ""))
         if (rawJson.null == nil) {
             if (rawJson.arrayObject as! [[String:AnyObject]]).count > 0{
                 controllers.append(product)

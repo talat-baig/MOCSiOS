@@ -85,7 +85,7 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         if !arrayList.isEmpty {
             arrayList.removeAll()
         }
-        self.populateList()
+        self.refreshList()
     }
     
     @objc func refreshList() {

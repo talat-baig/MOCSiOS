@@ -147,6 +147,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                         self.currentPage -= 1
                     }
                     print("Invalid Reponse")
+                    
                 }
             }))
         } else {
@@ -279,7 +280,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         if !arrayList.isEmpty {
             arrayList.removeAll()
         }
-        self.populateList()
+        self.refreshList()
     }
     
     func cancelFilter(filterString: String) {

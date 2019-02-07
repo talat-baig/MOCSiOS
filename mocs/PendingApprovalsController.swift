@@ -44,6 +44,11 @@ class PendingApprovalsController: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        if FilterViewController.selectedDataObj.count > 0 {
+            FilterViewController.selectedDataObj.removeAll()
+        }
+        
         getAllPAData()
     }
     
