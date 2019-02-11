@@ -63,7 +63,7 @@ class EPRViewController: ButtonBarPagerTabStripViewController {
         var jsonResponse = JSON(response!)
         var array = jsonResponse.arrayObject as! [[String:AnyObject]]
         
-        var rawLog = JSON.init(parseJSON: (array[0]["Payment Request Items"] as! String))
+        var rawLog = JSON.init(parseJSON: (array[0]["Payment Request Items"] as? String ?? ""))
         if rawLog.null == nil{
             if (rawLog.arrayObject as! [[String:AnyObject]]).count > 0 {
                 let payment = self.storyboard?.instantiateViewController(withIdentifier: "EPRPaymentController") as! EPRPaymentController

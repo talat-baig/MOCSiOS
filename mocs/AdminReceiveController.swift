@@ -18,7 +18,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     var arrayList:[ARIData] = []
     
     /// Array List of type ARIData elements
-    var newArray:[ARIData] = []
+    //    var newArray:[ARIData] = []
     var navTitle = ""
     var myView = CustomPopUpView()
     
@@ -36,6 +36,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     var refreshControl:UIRefreshControl = UIRefreshControl()
     
     var currentPage : Int = 1
+    var searchString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,9 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
         
         btnMore.isHidden = true
         btnMore.layer.cornerRadius = 5.0
+        btnMore.layer.shadowRadius = 4.0
+        btnMore.layer.shadowOpacity = 0.8
+        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
         self.view.addGestureRecognizer(gestureRecognizer)
         srchBar.delegate = self
@@ -102,8 +106,12 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.ARI.LIST, Session.authKey,
-                                  Helper.encodeURL(url:FilterViewController.getFilterString()), self.currentPage)
+                                  Helper.encodeURL(url:FilterViewController.getFilterString()), self.currentPage,self.searchString)
+            
             self.view.showLoading()
+            
+            
+            print("ARI_URL",url)
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 
@@ -114,7 +122,6 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                     var jsonResponse = JSON(response.result.value!);
                     let arrayJson = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-                    //     self.arrayList.removeAll()
                     if arrayJson.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse {
@@ -134,7 +141,6 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                         }
                         
                         self.arrayList.append(contentsOf: arrData)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
                         
@@ -146,7 +152,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-                    self.tableView.reloadData()
+                    
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -156,6 +162,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
                     }
                     print("Invalid Reponse")
                 }
+                self.tableView.reloadData()
             }))
         } else {
             self.refreshControl.endRefreshing()
@@ -272,7 +279,10 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+        let contentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if  (contentOffset >= maximumOffset)  && self.arrayList.count > 0 {
             btnMore.isHidden = false
         } else {
             btnMore.isHidden = true
@@ -283,19 +293,40 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
 
 
 extension AdminReceiveController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray =   newArray.filter {
-                $0.refId.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        
+        if searchTxt.isEmpty {
+            self.refreshList()
+        } else {
+            self.arrayList.removeAll()
+            self.populateList()
+        }
     }
 }
+
 
 extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onButtonClickListener{
     

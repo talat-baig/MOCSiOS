@@ -145,7 +145,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-                    self.tableView.reloadData()
+                    
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -155,6 +155,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                     }
                     print("Invalid Reponse")
                 }
+                 self.tableView.reloadData()
             }))
         } else {
           

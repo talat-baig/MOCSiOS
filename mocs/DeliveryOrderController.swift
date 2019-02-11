@@ -14,9 +14,10 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
   
     
     var arrayList:[DeliveryOrderData] = []
-    var newArray:[DeliveryOrderData] = []
+
     var navTitle = ""
-//    var filterString = ""
+    var searchString = ""
+
     var declVw = CustomPopUpView()
     var myView = CustomPopUpView()
     @IBOutlet weak var vwHeader: WC_HeaderView!
@@ -51,10 +52,17 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         vwHeader.lblTitle.text = navTitle
         vwHeader.lblSubTitle.isHidden = true
         
+       
+        tableView.separatorStyle = .none
+        
         btnMore.isHidden = true
         btnMore.layer.cornerRadius = 5.0
+        btnMore.layer.shadowRadius = 4.0
+        btnMore.layer.shadowOpacity = 0.8
+        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+
         
-        self.populateList()
+        self.refreshList()
     }
     
     override func didReceiveMemoryWarning() {
@@ -66,6 +74,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
     }
     
     @objc func refreshList() {
+        
         self.arrayList.removeAll()
         self.currentPage = 1
         self.populateList()
@@ -98,7 +107,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.DO.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage,self.searchString)
             self.view.showLoading()
 
             print("currPAge-%d",currentPage)
@@ -127,7 +136,6 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                             arrData.append(data)
                         }
                         self.arrayList.append(contentsOf: arrData)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
                         if self.arrayList.isEmpty {
@@ -138,7 +146,6 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-                    self.tableView.reloadData()
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -147,8 +154,8 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                         self.currentPage -= 1
                     }
                     print("Invalid Reponse")
-                    
                 }
+                 self.tableView.reloadData()
             }))
         } else {
             
@@ -269,11 +276,27 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
-            btnMore.isHidden = false
+        let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
+        let contentHeight = scrollView.contentSize.height
+
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = false
+            }
         } else {
-            btnMore.isHidden = true
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = true
+            }
         }
+        
+//        let contentOffset = scrollView.contentOffset.y
+//        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+//
+//        if  (contentOffset >= maximumOffset) {
+//            btnMore.isHidden = false
+//        } else {
+//            btnMore.isHidden = true
+//        }
     }
     
     func applyFilter(filterString: String) {
@@ -362,17 +385,37 @@ extension DeliveryOrderController: UITableViewDelegate, UITableViewDataSource, o
 }
 
 extension DeliveryOrderController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray = newArray.filter {
-                $0.refId.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        
+        if searchTxt.isEmpty {
+            self.refreshList()
+        } else {
+            self.arrayList.removeAll()
+            self.populateList()
+        }
     }
 }
 

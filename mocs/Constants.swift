@@ -8,7 +8,7 @@
 
 struct ApiKey {
     // LIVE
-//    static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+    // static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
     static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
@@ -17,7 +17,7 @@ struct ApiKey {
 struct ApiUrl {
     
     // LIVE
-//    static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+    // static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
     static let URL = "http://172.16.13.12:85/api"
@@ -344,15 +344,14 @@ struct Constant
     }
     
 
-    
-
     struct EMPLOYEE {
         /**
          *Get All Employee Directory*
          - 1: AuthID
          */
-        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_LAE?apiKey="+ApiKey.KEY+"&AuthId=%@"
+//        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_LAE?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
+        static let LIST = ApiUrl.URL + "/EmployeeDirectory/GetEmployeeDirectoryData?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
         /**
          *Get Details of Employee*
          - 1: AuthID
@@ -367,7 +366,7 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg. comp+loc+bu)*
          */
-        static let LIST =  ApiUrl.URL + "/PurchaseContract/GetAllPendingPurchaseContract?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+        static let LIST =  ApiUrl.URL + "/PurchaseContract/GetAllPendingPurchaseContract?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&Reference=%@"
         
         static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_PCLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&CompLocnBU=%@"
 
@@ -417,7 +416,7 @@ struct Constant
          */
         static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_SCFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
-        static let LIST =  ApiUrl.URL + "/SalesContract/GetAllPendingSalesContract?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+        static let LIST =  ApiUrl.URL + "/SalesContract/GetAllPendingSalesContract?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&Reference=%@"
 
         
         /**
@@ -457,7 +456,7 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg Com+loc+bu)*
          */
-        static let LIST =  ApiUrl.URL + "/DOApproval/GetAllDOPendingContracts?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&filter=%@&pageno=%d"
+        static let LIST =  ApiUrl.URL + "/DOApproval/GetAllDOPendingContracts?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&filter=%@&pageno=%d&Reference=%@"
         
         static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_DOLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
 
@@ -664,7 +663,7 @@ struct Constant
         static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_ARILFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
         
-        static let LIST =  ApiUrl.URL + "/ARI/GetAllPendingARI?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+        static let LIST =  ApiUrl.URL + "/ARI/GetAllPendingARI?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&reference=%@"
 
 //        static let TT_GET_TRAVEL_AGENT = ApiUrl.URL + "/TravelTickets/LoadTravelAgent?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%@"
 //        GetAllPendingARI(string apikey, string authid, string filter,int PageNo)

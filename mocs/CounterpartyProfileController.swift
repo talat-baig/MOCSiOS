@@ -55,6 +55,9 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         vwTopHeader.lblSubTitle.isHidden = true
         btnMore.isHidden = true
         btnMore.layer.cornerRadius = 5.0
+        btnMore.layer.shadowRadius = 4.0
+        btnMore.layer.shadowOpacity = 0.8
+        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
         populateList()
         
@@ -151,7 +154,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-                    self.tableView.reloadData()
+//                    self.tableView.reloadData()
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -161,6 +164,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                     }
                     print("Invalid Reponse")
                 }
+                 self.tableView.reloadData()
             }))
         }else{
            

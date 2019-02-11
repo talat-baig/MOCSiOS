@@ -147,7 +147,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                     }
                 }
             } else {
-//                print("")
+
             }
         }
     }

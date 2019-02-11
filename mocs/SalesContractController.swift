@@ -20,7 +20,8 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
     var navTitle = ""
     var declVw = CustomPopUpView()
     var myView = CustomPopUpView()
-    
+    var searchString = ""
+
     @IBOutlet weak var vwHeader: WC_HeaderView!
     @IBOutlet weak var btnMore: UIButton!
     
@@ -55,6 +56,9 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
         
         btnMore.isHidden = true
         btnMore.layer.cornerRadius = 5.0
+        btnMore.layer.shadowRadius = 4.0
+        btnMore.layer.shadowOpacity = 0.8
+        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
         populateList()
     }
@@ -97,7 +101,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
             
             print("currentPage %d", self.currentPage)
             let url = String.init(format: Constant.SC.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage,self.searchString)
             
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -108,7 +112,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                 if Helper.isResponseValid(vc: self, response: response.result){
                     var jsonResponse = JSON(response.result.value!)
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
-                    //                    self.arrayList.removeAll()
+
                     
                     if array.count > 0 {
                         
@@ -126,7 +130,6 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                         }
                         
                         self.arrayList.append(contentsOf: arrData)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
                         if self.arrayList.isEmpty {
@@ -137,9 +140,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
+                    
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -148,6 +149,9 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
                         self.currentPage -= 1
                     }
                     print("Invalid Reponse")
+                }
+                DispatchQueue.main.async {
+                  self.tableView.reloadData()
                 }
             }))
         } else {
@@ -288,17 +292,37 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
 }
 
 extension SalesContractController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray =   newArray.filter {
-                $0.RefNo.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        
+        if searchTxt.isEmpty {
+            self.refreshList()
+        } else {
+            self.arrayList.removeAll()
+            self.populateList()
+        }
     }
 }
 
