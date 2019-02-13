@@ -18,8 +18,9 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
     
     /// Array of TRIData elements
     var arrayList:[ROData] = []
-    var newArray : [ROData] = []
+//    var newArray : [ROData] = []
     var currentPage : Int = 1
+    var searchString = ""
 
     var navTitle = ""
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
@@ -113,7 +114,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         var arrData : [ROData] = []
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url:  FilterViewController.getFilterString()), Session.authKey,self.currentPage)
+            let url = String.init(format: Constant.RO.LIST, Helper.encodeURL(url:  FilterViewController.getFilterString()), Session.authKey,self.currentPage, self.searchString)
             print("RO URL", url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -125,7 +126,6 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                     let jsonResponse = JSON(response.result.value!);
                     let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
-//                    self.arrayList.removeAll()
                     if jsonArray.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResponse {
@@ -159,10 +159,9 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                             arrData.append(data)
                         }
                         self.arrayList.append(contentsOf: arrData)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                         
-                    }else{
+                    } else {
                         
                         if self.arrayList.isEmpty {
                             self.btnMore.isHidden = true
@@ -172,7 +171,6 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-//                    self.tableView.reloadData()
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -276,9 +274,6 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                     roVC.roData = data
                     
                     self.navigationController!.pushViewController(roVC, animated: true)
-                    //                    } else {
-                    //                        self.view.makeToast("No Data To Show")
-                    //                    }
                 }
             }))
         }else{
@@ -300,17 +295,29 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
 
 
 extension ReleaseOrderController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray =   newArray.filter {
-                $0.refId.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        self.searchString = searchTxt
+        self.refreshList()
     }
 }
 

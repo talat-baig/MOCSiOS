@@ -14,10 +14,12 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
     @IBOutlet weak var tableView: UITableView!
     
     var arrayList:[TravelClaimData] = []
-    var newArray : [TravelClaimData] = []
+
     var navTitle = ""
     var currentPage : Int = 1
+    var searchString = ""
 
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var btnMore: UIButton!
@@ -108,7 +110,7 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
         
         if internetStatus != .notReachable{
             let url = String.init(format: Constant.TCR.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, self.searchString)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -117,7 +119,6 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                     var responseJson = JSON(response.result.value!)
                     let arrayJson = responseJson.arrayObject as! [[String:AnyObject]]
                     
-//                    self.arrayList.removeAll()
                     if arrayJson.count > 0 {
                         
                         for(_,j):(String,JSON) in responseJson{
@@ -135,7 +136,6 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                             newData.append(data)
                         }
                         self.arrayList.append(contentsOf: newData)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     }else{
                         if self.arrayList.isEmpty {
@@ -146,7 +146,6 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-//                    self.tableView.reloadData()
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -280,17 +279,32 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
 }
 
 extension TCRController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray =   newArray.filter {
-                $0.headRef.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        
+        self.refreshList()
     }
 }
 

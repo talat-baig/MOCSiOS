@@ -191,11 +191,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
         let data = listArray[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! HomeAdapter
         cell.btnMore.tag = indexPath.row
-        cell.btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
-        cell.btnMore.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-        cell.btnMore.layer.shadowOpacity = 1.0
-        cell.btnMore.layer.shadowRadius = 1.0
-        cell.btnMore.clipsToBounds = true
+        
         cell.btnMore.addTarget(self, action: #selector(self.openMoreVC(sender:)), for: UIControlEvents.touchUpInside)
         cell.setDataToView(data: data)
         return cell

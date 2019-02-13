@@ -13,8 +13,6 @@ import SwiftyJSON
 class PendingApprovalsController: UIViewController {
 
     var arrayList : [PAData] = []
-//    let arrayMod : [String] = ["Purchase Contract","Sales Contract","Delivery Order", "Release Order"]
-//    let arrayModCount : [String] = ["10","90","34", "0"]
 
     @IBOutlet weak var lblSummary: UILabel!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -197,7 +195,6 @@ class PendingApprovalsController: UIViewController {
         default:
             break
         }
-
     }
 }
 
@@ -206,7 +203,7 @@ class PendingApprovalsController: UIViewController {
 extension PendingApprovalsController : UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 65
+        return 50
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

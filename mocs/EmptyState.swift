@@ -121,12 +121,10 @@ class EmptyState:UIControl{
         
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             textLabel.font = UIFont.systemFont(ofSize: 20.0)
-            
         } else {
-//            textLabel.font = UIFont.systemFont(ofSize: 14.0)
-            textLabel.font = UIFont(name: "HelveticaNeue", size: 14.0)
-
+            textLabel.font = UIFont.systemFont(ofSize: 14.0)
         }
+        
         return textLabel
     }
     

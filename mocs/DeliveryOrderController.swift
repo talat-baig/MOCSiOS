@@ -288,15 +288,6 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
                 self.btnMore.isHidden = true
             }
         }
-        
-//        let contentOffset = scrollView.contentOffset.y
-//        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-//
-//        if  (contentOffset >= maximumOffset) {
-//            btnMore.isHidden = false
-//        } else {
-//            btnMore.isHidden = true
-//        }
     }
     
     func applyFilter(filterString: String) {
@@ -378,8 +369,6 @@ extension DeliveryOrderController: UITableViewDelegate, UITableViewDataSource, o
         declVw.data = data
         declVw.cpvDelegate = self
         self.view.addMySubview(declVw)
-        
-        
     }
     
 }
@@ -409,13 +398,7 @@ extension DeliveryOrderController: UISearchBarDelegate {
         }
         
         self.searchString = searchTxt
-        
-        if searchTxt.isEmpty {
-            self.refreshList()
-        } else {
-            self.arrayList.removeAll()
-            self.populateList()
-        }
+        self.refreshList()
     }
 }
 

@@ -23,13 +23,13 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
     var navTitle = ""
     /// Custom Pop-up View
     var declVw = CustomPopUpView()
-    
+    var searchString = ""
+
     /// Array of TRIData elements
     var arrayList:[TRIData] = []
     
     var currentPage : Int = 1
     /// Array of TRIData elements
-    var newArray:[TRIData] = []
     
     @IBOutlet weak var btnMore: UIButton!
 
@@ -109,7 +109,7 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.TRI.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage)
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage,self.searchString)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
@@ -140,7 +140,6 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
                             arrData.append(data)
                         }
                         self.arrayList.append(contentsOf: arrData)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
 
                     }else{
@@ -152,7 +151,6 @@ class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, fi
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-//                    self.tableView.reloadData()
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -349,14 +347,27 @@ extension TradeInvoiceController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray = newArray.filter {
-                $0.refId.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        self.refreshList()
     }
 }
 

@@ -17,7 +17,7 @@ class PendingApprovalCell: UITableViewCell {
     @IBOutlet weak var lblModName: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        outrVw.layer.shadowOpacity = 0.25
+        outrVw.layer.shadowOpacity = 0.35
         outrVw.layer.shadowOffset = CGSize(width: 0, height: 2)
         outrVw.layer.shadowRadius = 1.5
         outrVw.layer.shadowColor = UIColor.gray.cgColor

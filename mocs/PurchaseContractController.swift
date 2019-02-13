@@ -97,10 +97,7 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
         populateList()
     }
     
-//    @objc func handleRefresh(_ refreshControl: UIRefreshControl){
-//        populateList()
-//    }
-    
+
     
     @objc func populateList(){
         
@@ -148,7 +145,6 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-//                    self.tableView.reloadData()
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -338,13 +334,7 @@ extension PurchaseContractController: UISearchBarDelegate {
         }
         
         self.searchString = searchTxt
-        
-        if searchTxt.isEmpty {
-            self.refreshList()
-        } else {
-            self.arrayList.removeAll()
-            self.populateList()
-        }
+        self.refreshList()
     }
 }
 

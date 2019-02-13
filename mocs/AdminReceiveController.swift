@@ -317,13 +317,7 @@ extension AdminReceiveController: UISearchBarDelegate {
         }
         
         self.searchString = searchTxt
-        
-        if searchTxt.isEmpty {
-            self.refreshList()
-        } else {
-            self.arrayList.removeAll()
-            self.populateList()
-        }
+        self.refreshList()
     }
 }
 

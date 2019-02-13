@@ -12,9 +12,10 @@ import SwiftyJSON
 class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, filterViewDelegate, customPopUpDelegate {
 
     var arrayList:[EPRData] = []
-    var newArray:[EPRData] = []
+//    var newArray:[EPRData] = []
     var navTitle = ""
 
+    var searchString = ""
     var currentPage : Int = 1
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
@@ -91,7 +92,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
         if internetStatus != .notReachable {
             
             let url = String.init(format: Constant.EPR.LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString(noBU: true)), self.currentPage)
+                                  Helper.encodeURL(url: FilterViewController.getFilterString(noBU: true)), self.currentPage,self.searchString)
             print(url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -119,7 +120,7 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                             newData.append(data)
                         }
                         self.arrayList.append(contentsOf: newData)
-                        self.newArray = self.arrayList
+//                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
                         
@@ -271,20 +272,52 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     @IBAction func btnMoreTapped(_ sender: Any) {
         self.loadMoreItemsForList()
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
+        let contentHeight = scrollView.contentSize.height
+        
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = false
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = true
+            }
+        }
+        
+    }
 }
 
 extension EmployeePaymentController: UISearchBarDelegate {
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray =  newArray.filter {
-                $0.refId.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        
+        self.refreshList()
     }
 }
 

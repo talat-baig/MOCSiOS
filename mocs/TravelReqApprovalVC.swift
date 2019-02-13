@@ -17,19 +17,17 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-    
+    @IBOutlet weak var btnMore: UIButton!
+
     var navTitle = ""
     var arrayList:[TravelRequestData] = []
-    
-    var newArray : [TravelRequestData] = []
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
-    @IBOutlet weak var btnMore: UIButton!
     var currentPage : Int = 1
-
+    var searchString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +80,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.TRF.TRF_APPROVAL_LIST, Session.authKey,self.currentPage)
+            let url = String.init(format: Constant.TRF.TRF_APPROVAL_LIST, Session.authKey,self.currentPage,self.searchString)
             print("TRF URL", url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -93,8 +91,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                     
                     let jsonResponse = JSON(response.result.value!)
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
-//                    self.arrayList.removeAll()
-                    
+
                     if array.count > 0 {
                         
                         for(_,json):(String,JSON) in jsonResponse {
@@ -134,7 +131,6 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                             data.append(trfData)
                         }
                         self.arrayList.append(contentsOf: data)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
                         if self.arrayList.isEmpty {
@@ -355,17 +351,31 @@ extension TravelReqApprovalVC : onMoreClickListener , onTRFApprovItemClickListen
 }
 
 extension TravelReqApprovalVC: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        //        if  searchText.isEmpty {
-        //            self.arrayList = newArray
-        //        } else {
-        ////            let filteredArray =   newArray.filter {
-        ////                $0.refId.localizedCaseInsensitiveContains(searchText)
-        ////            }
-        //            self.arrayList = filteredArray
-        //        }
-        //        tableView.reloadData()
+        if  searchText.isEmpty {
+            self.searchString = ""
+            self.refreshList()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        self.refreshList()
     }
 }
 

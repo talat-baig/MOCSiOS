@@ -17,6 +17,12 @@ class HomeAdapter: UITableViewCell {
     @IBOutlet weak var btnMore: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        btnMore.layer.shadowOpacity = 1.0
+        btnMore.layer.shadowOffset = CGSize(width: 0, height: 2)
+        btnMore.layer.shadowRadius = 1
+        btnMore.layer.shadowColor = UIColor.gray.cgColor
+        btnMore.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

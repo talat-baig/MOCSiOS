@@ -131,7 +131,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             /// Add
             
             arrPaymentType = ["CASH", "ET", "Cheque", "DD" , "Company Card", "Bank Settlement" ]
-            arrClaimType = ["Advance", "Claim Reimbursement"]
+            arrClaimType = ["Advance", "Claim Reimbursement", "Benefits Reimbursement"]
             arrCompName = [Session.company]
             arrDept = [Session.department]
             arrLocation = [Session.location]
@@ -253,7 +253,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     
     func assignDataToViews() {
         
-        //        arrPaymentType = [ecrDta.paymntMethd]
         
         btnCompany.setTitle(ecrDta.companyName, for:.normal)
         btnLocation.setTitle( ecrDta.location, for:.normal)
@@ -261,27 +260,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnBenfName.setTitle(ecrDta.benefName, for:.normal)
         btnPaymentMethd.setTitle(ecrDta.paymntMethd, for:.normal)
         btnClaimType.setTitle(ecrDta.claimType, for:.normal)
-//        if ecrDta.claimType == "Reimbursement" {
-//            btnClaimType.setTitle("Claim Reimbursement", for:.normal)
-//        } else {
-//            btnClaimType.setTitle(ecrDta.claimType, for:.normal)
-//        }
-//
-        
-        
-        //        var claimType = String()
-        //
-        //        if ecrDta.claimType == "Reimbursement" {
-        //            claimType = "Claim Reimbursement"
-        //        } else {
-        //            claimType = ecrDta.claimType
-        //        }
-        
-        //        arrClaimType = [claimType]
-        //        btnClaimType.setTitle(claimType, for:.normal)
-        
-        
-        //        self.accessOpenAdvancesBtn(item: claimType)
+
         
         if ecrDta.eprValue == "" {
             
@@ -340,17 +319,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         }
     }
     
-    //    func showHideEPRBtn() {
-    //
-    //        if isAdvance {
-    //            btnOpenEPRVal.isEnabled = false
-    //            btnOpenEPRVal.layer.borderColor = AppColor.lightGray.cgColor
-    //
-    //        } else {
-    //            btnOpenEPRVal.isEnabled = true
-    //            btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor
-    //        }
-    //    }
+ 
     
     
     @IBAction func btnReqCurrencyTapped(_ sender: Any) {
@@ -370,13 +339,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.btnClaimType.setTitle(item, for: .normal)
             self?.accessOpenAdvancesBtn(item: item)
-            //            if item == "Advance" {
-            //                self?.btnOpenEPRVal.isEnabled = false
-            //                self?.btnOpenEPRVal.layer.borderColor = AppColor.lightGray.cgColor
-            //            } else {
-            //                self?.btnOpenEPRVal.isEnabled = true
-            //                self?.btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor
-            //            }
+          
         }
         dropDown.show()
     }
@@ -526,8 +489,10 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         
         if btnClaimType.titleLabel?.text == "Advance" {
             claimType = 1
-        } else {
+        } else if btnClaimType.titleLabel?.text == "Claim Reimbursement" {
             claimType = 2
+        } else {
+            claimType = 3
         }
         
         guard let reqDate = txtFldReqDate.text, !reqDate.isEmpty else {

@@ -14,7 +14,8 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     
     var navTitle = ""
     var currentPage : Int = 1
-    
+    var searchString = ""
+
     @IBOutlet weak var srchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
@@ -28,7 +29,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     //    var declView = CustomPopUpView()
     
     var arrayList:[CPListData] = []
-    var newArray : [CPListData] = []
+//    var newArray : [CPListData] = []
     
     
     override func viewDidLoad() {
@@ -91,7 +92,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         var arrData : [CPListData] = []
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.CP.LIST, Session.authKey, self.currentPage)
+            let url = String.init(format: Constant.CP.LIST, Session.authKey, self.currentPage, self.searchString)
             
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -141,45 +142,46 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                             arrData.append(data)
                         }
                         self.arrayList.append(contentsOf: arrData)
-                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                         
                     } else {
-                        
-                        if self.arrayList.isEmpty {
-                            self.btnMore.isHidden = true
-                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
-                        } else {
-                            self.currentPage -= 1
-                            Helper.showMessage(message: "No more data found")
-                        }
+                        self.resetData(state: EmptyStates.noItems, messg: "No more data found")
                     }
-//                    self.tableView.reloadData()
                 } else {
-                    if self.arrayList.isEmpty {
-                        self.btnMore.isHidden = true
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
-                    } else {
-                        self.currentPage -= 1
-                    }
+                    self.resetData(state: EmptyStates.noItems, messg: "")
                     print("Invalid Reponse")
                 }
                  self.tableView.reloadData()
             }))
-        }else{
-           
+        } else {
             self.refreshControl.endRefreshing()
             Helper.showNoInternetMessg()
+            self.resetData(state: EmptyStates.noInternet, messg: "")
+            self.tableView.reloadData()
+        }
+    }
+    
+    func resetData(state : EmptyStates = EmptyStates.other , messg : String = "") {
+        
+        if self.arrayList.isEmpty {
             
-            if self.arrayList.isEmpty {
-                btnMore.isHidden = true
+            btnMore.isHidden = true
+            
+            if state == EmptyStates.noItems {
+                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+            }
+            
+            if state == EmptyStates.noInternet {
                 Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
-                self.tableView.reloadData()
-            } else {
-                self.currentPage -= 1
+            }
+        } else {
+            self.currentPage -= 1
+            if messg != "" {
+                Helper.showMessage(message: "No more data found")
             }
         }
     }
+    
     
     func onOkClick() {
         self.refreshList()
@@ -346,7 +348,7 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
         if arrayList.count > 0{
             tableView.backgroundView?.isHidden = true
             tableView.separatorStyle = .singleLine
-        }else{
+        } else {
             tableView.backgroundView?.isHidden = false
             tableView.separatorStyle = .none
         }
@@ -376,14 +378,27 @@ extension CounterpartyProfileController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
-            self.arrayList = newArray
-        } else {
-            let filteredArray =   newArray.filter {
-                $0.custId.localizedCaseInsensitiveContains(searchText)
-            }
-            self.arrayList = filteredArray
+            self.searchString = ""
+            self.refreshList()
         }
-        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        
+        self.searchString = searchTxt
+        self.refreshList()
     }
 }
 

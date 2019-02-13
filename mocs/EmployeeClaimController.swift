@@ -106,12 +106,11 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
                             ecData.eprMainId = json["EmployeePaymentRequestMainID"].stringValue
 
                             if json["EPRMainPaymentRequestType"].stringValue == "Advance" {
-                                ecData.claimTypeInInt = 0
+                                ecData.claimTypeInInt = 1
                                 ecData.claimType = "Advance"
                             } else {
-                                ecData.claimTypeInInt = 1
+                                ecData.claimTypeInInt = 2
                                 ecData.claimType = "Claim Reimbursement"
-
                             }
                             
                             

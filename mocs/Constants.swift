@@ -8,7 +8,7 @@
 
 struct ApiKey {
     // LIVE
-    // static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+//     static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
     static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
@@ -17,7 +17,7 @@ struct ApiKey {
 struct ApiUrl {
     
     // LIVE
-    // static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+//     static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
     static let URL = "http://172.16.13.12:85/api"
@@ -27,6 +27,13 @@ struct ApiUrl {
 struct TaskAuthId {
     /// Authentication Id
     static let KEY = "9f1919491842d0bf2fb46897a81422175275"
+}
+
+enum EmptyStates {
+    
+    case noItems
+    case noInternet
+    case other
 }
 
 struct AppColor {
@@ -90,6 +97,7 @@ struct Constant
         static let CP = "Counterparty Profile"
         static let TT = "Travel Ticket"
     }
+
     
     struct API {
         
@@ -501,7 +509,7 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg Com+loc+bu)*
          */
-        static let LIST = ApiUrl.URL + "/TCR/GetAllPendingTCR?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authId=%@&filter=%@&PageNo=%d"
+        static let LIST = ApiUrl.URL + "/TCR/GetAllPendingTCR?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authId=%@&filter=%@&PageNo=%d&Reference=%@"
 
         static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRLFA2?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
 
@@ -566,7 +574,7 @@ struct Constant
         static let TRF_OLD_APPROVAL_LIST = ApiUrl.URL + "/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@"
         
         
-        static let TRF_APPROVAL_LIST = ApiUrl.URL + "/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@&pageno=%d"
+        static let TRF_APPROVAL_LIST = ApiUrl.URL + "/BusinessTravel/GetBusinessTravelListingForApproval?apiget=33ddb2ee-59a5-428f-a0a5-7167859b8589&authget=%@&pageno=%d&Reference=%@"
         
         static let TRF_APPROVE = ApiUrl.URL + "/BusinessTravel/ApproveRejectBusinesstravel?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&ID=%d&check=%d&Reason=%@"
         
@@ -621,7 +629,7 @@ struct Constant
          - 1: AuthID
          - 2: Filter *(eg Com+loc+bu)*
          */
-        static let LIST = ApiUrl.URL + "/EPR/GetAllPendingEPR?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+        static let LIST = ApiUrl.URL + "/EPR/GetAllPendingEPR?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&Reference=%@"
         
         static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_EPRFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
 //        GetAllPendingEPR(string apikey, string authid, string filter, int PageNo)
@@ -708,7 +716,7 @@ struct Constant
         
         static let roNotificationKey = "com.tech.releaseorder"
         
-        static let LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@&pageno=%d"
+        static let LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@&pageno=%d&Reference=%@"
         
         static let OLD_LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@"
 
@@ -728,7 +736,7 @@ struct Constant
     
     struct CP {
         
-        static let LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&pageno=%d"
+        static let LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&pageno=%d&Reference=%@"
         
         static let OLD_LIST = ApiUrl.URL + "/CounterParty/GetCounterPartyListing?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
 
@@ -759,7 +767,7 @@ struct Constant
          */
         static let OLD_LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TRILFA3?apiKey="+ApiKey.KEY+"&AuthId=%@&Filter=%@"
         
-        static let LIST = ApiUrl.URL + "/TRI/GetAllPendingTRI?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d"
+        static let LIST = ApiUrl.URL + "/TRI/GetAllPendingTRI?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&Reference=%@"
 
 //        GetAllPendingTRI(string apikey, string authid, string filter, int PageNo)
         /**
