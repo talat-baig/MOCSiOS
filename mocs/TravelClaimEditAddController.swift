@@ -18,7 +18,6 @@ protocol onTCRSubmit: NSObjectProtocol {
 
 class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIGestureRecognizerDelegate , notifyChilds_UC , addEPRAdvancesDelegate  {
    
-    
     weak var currentTxtFld: UITextField? = nil
     var response:Data?
     var typeOfTravel = String()
@@ -28,8 +27,7 @@ class TravelClaimEditAddController: UIViewController, IndicatorInfoProvider, UIG
     var counter = Int()
     
     var tcrEprArr : [TCREPRListData] = []
-    
-    
+
     @IBOutlet weak var btnAdvances: UIButton!
     @IBOutlet weak var btnSubmit: UIButton!
     @IBOutlet weak var scrlVw: UIScrollView!

@@ -129,7 +129,6 @@ class ECRBaseViewController: ButtonBarPagerTabStripViewController, onECRSubmit, 
         }
     }
     
-    
 }
 
 extension ECRBaseViewController: WC_HeaderViewDelegate {

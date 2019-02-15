@@ -95,23 +95,37 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
                             ecData.location = json["EPRMainLocation"].stringValue
                             ecData.reqAmount = json["Total Requested value"].stringValue
                             ecData.currency = json["EPRMainRequestedCurrency"].stringValue
-                            ecData.paidAmount = json["Total Paid Value"].stringValue
-                            ecData.balance = json["Balance To Pay"].stringValue
+//                            ecData.paidAmount = json["Total Paid Value"].stringValue
+//                            ecData.balance = json["Balance To Pay"].stringValue
+                          
+                            ecData.paidAmount = json["Total Paid Value"].stringValue != "" ? json["Total Paid Value"].stringValue : "-"
+
+                            ecData.balance = json["Balance To Pay"].stringValue != "" ? json["Balance To Pay"].stringValue : "-"
+
+                            
                             ecData.requestedDate = json["EPRMainRequestedValueDate"].stringValue
                             ecData.benefName = json["EPRMainBeneficiaryName"].stringValue
                             ecData.paymntMethd = json["EPRMainRequestedPaymentMode"].stringValue
-//                            ecData.claimType = json["EPRMainPaymentRequestType"].stringValue
+
                             ecData.counter = json["EprRefIDCounter"].intValue
                             
                             ecData.eprMainId = json["EmployeePaymentRequestMainID"].stringValue
 
+                            
+                            ecData.claimType = json["EPRMainPaymentRequestType"].stringValue
+
+                            
                             if json["EPRMainPaymentRequestType"].stringValue == "Advance" {
+                                
                                 ecData.claimTypeInInt = 1
-                                ecData.claimType = "Advance"
-                            } else {
+                                
+                            } else if json["EPRMainPaymentRequestType"].stringValue == "Claim Reimbursement" {
+                                
                                 ecData.claimTypeInInt = 2
-                                ecData.claimType = "Claim Reimbursement"
+                            } else {
+                                ecData.claimTypeInInt = 3
                             }
+                            
                             
                             
                             if json["EPRMainOpenAdvanceValue"].stringValue == "" {

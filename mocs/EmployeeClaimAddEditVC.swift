@@ -141,11 +141,10 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             btnLocation.setTitle(Session.location, for:.normal)
             btnBVertical.setTitle(Session.department, for:.normal)
             btnBenfName.setTitle(Session.user, for:.normal)
-            
+            self.accessOpenAdvancesBtn(item: "")
+
             btnSubmit.setTitle("SAVE",for: .normal)
-            
         }
-        
         
     }
     
@@ -181,7 +180,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnPaymentMethd.contentHorizontalAlignment = .left
         btnClaimType.contentHorizontalAlignment = .left
         
-        
         Helper.addBordersToView(view: vwCompany)
         Helper.addBordersToView(view: vwLocation)
         Helper.addBordersToView(view: vwBusiness)
@@ -190,11 +188,11 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         Helper.addBordersToView(view: vwPaymentMthd)
         Helper.addBordersToView(view: vwClaimType)
         Helper.addBordersToView(view: vwReqCurrency)
-
+        
         
         Helper.addBordersToView(view: btnReqCurrency)
         Helper.addBordersToView(view: txtFldReqDate)
-
+        
         
         btnOpenEPRVal.layer.borderWidth = 1
         btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor
@@ -260,14 +258,12 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         btnBenfName.setTitle(ecrDta.benefName, for:.normal)
         btnPaymentMethd.setTitle(ecrDta.paymntMethd, for:.normal)
         btnClaimType.setTitle(ecrDta.claimType, for:.normal)
-
         
         if ecrDta.eprValue == "" {
-            
+            btnOpenEPRVal.setTitle("Open Advances", for: .normal)
         } else {
-            checkAllotedEPR(res:  ecrDta.eprValue )
+            checkAllotedEPR(res: ecrDta.eprValue )
         }
-        
         
         let newReqDate = Helper.convertToDate(dateString: ecrDta.requestedDate)
         let dateFormatter = DateFormatter()
@@ -309,7 +305,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             }
         }
         let refIdStrings =  self.tcrEprArr.map {$0.eprRefId}
-        
         let advancesString = refIdStrings.joined(separator: ",")
         
         if refIdStrings.isEmpty {
@@ -318,8 +313,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             btnOpenEPRVal.setTitle(advancesString, for: .normal)
         }
     }
-    
- 
     
     
     @IBAction func btnReqCurrencyTapped(_ sender: Any) {
@@ -339,19 +332,19 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.btnClaimType.setTitle(item, for: .normal)
             self?.accessOpenAdvancesBtn(item: item)
-          
+            
         }
         dropDown.show()
     }
     
     func accessOpenAdvancesBtn(item : String) {
         
-        if item == "Advance" {
-            self.btnOpenEPRVal.isEnabled = false
-            self.btnOpenEPRVal.layer.borderColor = AppColor.lightGray.cgColor
-        } else {
+        if item == "Claim Reimbursement" || item == "Benefits Reimbursement"  {
             self.btnOpenEPRVal.isEnabled = true
             self.btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor
+        } else  {
+            self.btnOpenEPRVal.isEnabled = false
+            self.btnOpenEPRVal.layer.borderColor = AppColor.lightGray.cgColor
         }
     }
     
@@ -373,11 +366,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        if currentTxtFld == txtFldReqDate {
-            
-        }
-        
         self.view.endEditing(true)
     }
     
@@ -386,11 +374,8 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        //        if currentTxtFld == txtFldReqDate {
         txtFldReqDate.text = dateFormatter.string(from: datePicker.date) as String
         self.view.endEditing(true)
-        //        }
-        
     }
     
     
@@ -425,10 +410,8 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
                             newObj.isSelect = false
                             tempArr1.append(newObj)
                         }
-                        
                         var tempArr2 : [TCREPRListData] = []
-                        
-                        
+
                         for newEpr in tempArr1 {
                             for newTmp in self.tcrEprArr {
                                 if newEpr.eprRefId == newTmp.eprRefId {
@@ -442,7 +425,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
                                 tempArr1.remove(at: index)
                             }
                         }
-                        
                         self.tcrEprArr.append(contentsOf: tempArr1)
                         
                         let eprView = Bundle.main.loadNibNamed("EPRListView", owner: nil, options: nil)![0] as! EPRListView
@@ -468,7 +450,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         }else{
             Helper.showMessage(message: "No Internet, Please Try Again")
         }
-        
         
     }
     
@@ -515,7 +496,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             return
         }
         
-        
         guard let eprStr = btnOpenEPRVal.titleLabel?.text else {
             Helper.showMessage(message: "Something went wrong! Please try again")
             return
@@ -529,9 +509,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             eprString = eprStr
         }
         
-        
         self.addOrEditClaim(ecrRefNo: ecrNo, claimType: claimType, paymntMethd: pymnt, ReqDate: reqDate, eprAdvanceVal: eprString , currency: currency, counter : (ecrDta.counter))
-       
     }
     
     
@@ -547,12 +525,12 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             if ecrNo == "" {
                 
                 url = String.init(format: Constant.API.ECR_ADD, Session.authKey, claimType)
-                newRecord = ["EPRMainRequestedPaymentMode": paymntMethd , "EPRMainOpenAdvanceValue": "", "EPRMainRequestedValueDate": ReqDate, "EPRMainRequestedCurrency": currency] as [String : Any]
+                newRecord = ["EPRMainRequestedPaymentMode": paymntMethd , "EPRMainOpenAdvanceValue": eprAdvanceVal, "EPRMainRequestedValueDate": ReqDate, "EPRMainRequestedCurrency": currency] as [String : Any]
                 
             } else {
                 
                 url = String.init(format: Constant.API.ECR_UPDATE, Session.authKey, counter , ecrRefNo)
-                newRecord = ["EPRMainRequestedValueDate": txtFldReqDate.text ?? "" , "EPRMainRequestedCurrency": currency] as [String : Any]
+                newRecord = ["EPRMainRequestedValueDate": txtFldReqDate.text ?? "" ,"EPRMainOpenAdvanceValue": eprAdvanceVal, "EPRMainRequestedCurrency": currency] as [String : Any]
             }
             
             
@@ -652,7 +630,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
                 }
             }
         }
-
+        
     }
 }
 

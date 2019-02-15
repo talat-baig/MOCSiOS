@@ -79,8 +79,20 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
             assignDataToViews()
         } else {
             // Add
-            btnAccChrgHd.setTitle("Select", for:.normal)
-            btnReason.setTitle("Select", for:.normal)
+            if arrAccChrg.count > 0 {
+                
+                btnAccChrgHd.setTitle(arrAccChrg[0], for:.normal)
+                
+                self.getPaymentReason(accntChrg: arrAccChrg[0]) { (res) in
+                    self.btnReason.setTitle(self.arrReason.first, for: .normal)
+                }
+                
+            } else {
+                btnAccChrgHd.setTitle("", for:.normal)
+                btnReason.setTitle("", for:.normal)
+            }
+            
+            
         }
         
         checkDatePickerDates()
@@ -148,13 +160,7 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         btnReason.contentHorizontalAlignment = .left
         btnAccChrgHd.contentHorizontalAlignment = .left
         
-        
         self.automaticallyAdjustsScrollViewInsets = false
-        
-//        let currentDate = Date()
-//        datePicker.date = currentDate
-//        datePicker.minimumDate = currentDate
-//        datePicker.maximumDate = currentDate
         
     }
     
@@ -214,9 +220,16 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         
         if internetStatus != .notReachable {
             var newData:[String] = []
-//            print("accntCharge : %@", accntChrg)
-            let url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, Helper.encodeURL(url: ecrData.claimType) , Helper.encodeURL(url: accntChrg), self.ecrData.headRef)
-//            print("pymtn reason:",url)
+            var url = ""
+            
+            if ecrData.claimType.caseInsensitiveCompare("Benefits Reimbursement") == ComparisonResult.orderedSame {
+                url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey , Helper.encodeURL(url: accntChrg), "", self.ecrData.headRef)
+            } else {
+                url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, Helper.encodeURL(url: ecrData.claimType) , Helper.encodeURL(url: accntChrg), self.ecrData.headRef)
+            }
+            
+            
+            print("Payment reason:",url)
             self.view.showLoading()
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -243,6 +256,16 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         }
     }
     
+    func showNoBenefitsPopUp() {
+        
+        self.handleTap()
+        var custPopUpVw = CustomPopUpView()
+
+        custPopUpVw = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
+        custPopUpVw.setDataToCustomView(title: "", description: "No benefits have been allocated to you, please contact HR" , leftButton: "", rightButton: "OK", isTxtVwHidden: true, isApprove: false, isFromEmpDirectory: false, isWarning : true, isOkButton: true)
+       
+        self.view.addMySubview(custPopUpVw)
+    }
     
     @IBAction func btnSubmitTapped(_ sender: Any) {
         
@@ -251,16 +274,21 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
             return
         }
         
-        guard let reason = btnReason.titleLabel?.text, !accntChrg.isEmpty else {
-            Helper.showMessage(message: "Please enter Payment Reason")
+      
+        
+        guard let reason = btnReason.titleLabel?.text, !reason.isEmpty else {
+            
+            if self.ecrData.claimTypeInInt == 3 {
+
+                self.showNoBenefitsPopUp()
+           } else {
+                Helper.showMessage(message: "Please enter Payment Reason")
+            }
             return
         }
         
-        //        guard let reason = btnReason.titleLabel?.text, !accntChrg.isEmpty else {
-        //            Helper.showMessage(message: "Please enter Payment Reason")
-        //            return
-        //        }
         
+       
         guard let pymntDate = txtExpDate.text, !pymntDate.isEmpty else {
             Helper.showMessage(message: "Please enter Payment Date")
             return
@@ -344,8 +372,8 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
                             self.navigationController?.popViewController(animated: true)
                         }))
                         self.present(success, animated: true, completion: nil)
-                    }  else {
                         
+                    }  else {
                         NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
                     }
                 })
@@ -381,7 +409,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
             self?.getPaymentReason(accntChrg: item, comp: {(result) in
                 
                 if result {
-                    
                     self?.btnReason.setTitle(self?.arrReason.first, for: .normal)
                     
                 } else {

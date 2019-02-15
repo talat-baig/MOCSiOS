@@ -43,8 +43,9 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     var cpvDelegate: customPopUpDelegate?
     var wunderDelegate: wunderlistPopupDelegate?
     
-    var isFromSideMenu = false
-    
+    var isFromEmpDirectory = false
+    var isWarning = false
+
     
      /// Object of type AnyObject
     var data : AnyObject?
@@ -118,12 +119,14 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     /// Action method for right button tapped
     @IBAction func btnRightTapped(_ sender: Any) {
         
-        if isFromSideMenu {
+        if isFromEmpDirectory {
             
             if let d = wunderDelegate {
                
                 d.onRightBtnTap()
             }
+        } else if isWarning {
+            self.removeFromSuperviewWithAnimate()
         } else {
             
             if let d = cpvDelegate {
@@ -145,18 +148,27 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     ///   - rightButton: Right button text
     ///   - isTxtVwHidden: Bool Flag to know if text view is hidden or not
     ///   - isApprove: Bool flag to know if pop-up is for Approve or Decline
-    func setDataToCustomView(title: String, description: String, leftButton: String = "", rightButton: String = "" ,isTxtVwHidden : Bool  = false , isApprove : Bool = true ,  isFromSideMenu : Bool = false ) {
+    func setDataToCustomView(title: String, description: String, leftButton: String = "", rightButton: String = "" ,isTxtVwHidden : Bool  = false , isApprove : Bool = true ,  isFromEmpDirectory : Bool = false , isWarning : Bool = false, isOkButton : Bool = false) {
         
         self.lblTitle.text = title
         self.lblSubtitle.text = description
         
-        self.btnLeft.setTitle(leftButton,for: .normal)
-        self.btnRight.setTitle(rightButton,for: .normal)
-        self.isApprove = isApprove
-        self.isFromSideMenu = isFromSideMenu
+        if isOkButton {
+            self.btnRight.setTitle(rightButton,for: .normal)
+            self.btnLeft.isHidden = true
+        } else {
+            self.btnLeft.setTitle(leftButton,for: .normal)
+            self.btnRight.setTitle(rightButton,for: .normal)
+        }
         
-        if isFromSideMenu {
+        self.isApprove = isApprove
+        self.isFromEmpDirectory = isFromEmpDirectory
+        self.isWarning = isWarning
+
+        if isFromEmpDirectory {
             imgVw.image = UIImage(named: "wunderlist")
+        } else if isWarning {
+            imgVw.image = UIImage(named: "warning")
         } else {
             imgVw.image = UIImage(named: "approve_questn")
         }
