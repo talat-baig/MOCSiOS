@@ -300,6 +300,7 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "overallcell") as! APOverallCell
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 5
@@ -307,13 +308,13 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
             cell.setDataToViews(data: self.apData!)
             return cell
         } else if indexPath.section == 1 {
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "chartcell") as! ARChartCell
-//            cell.setDataToViews(dataEntry: self.dataEntry)
             cell.setDataToViews(dataEntry: self.dataEntry, strTxt: String( format : "TOP %d COUNTER PARTIES",self.dataEntry.count))
-
             cell.selectionStyle = .none
             return cell
         } else {
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "listcell") as! APListCell
             cell.setDataToViews(data: self.apData!)
             cell.selectionStyle = .none
@@ -324,13 +325,13 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.section == 2 {
+            
             let apCPVC = self.storyboard?.instantiateViewController(withIdentifier: "APCounterpartyController") as! APCounterpartyController
             apCPVC.company =  self.apData!.company
             apCPVC.location =  self.apData!.location
             apCPVC.bUnit =  self.apData!.bVertical
             
             self.navigationController?.pushViewController(apCPVC, animated: true)
-            
         } else {
         }
     }

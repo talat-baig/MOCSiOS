@@ -1137,7 +1137,7 @@
                                                         <rect key="frame" x="0.0" y="60" width="275" height="587"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="zjQ-OL-xel">
-                                                                <rect key="frame" x="8" y="8" width="259" height="352"/>
+                                                                <rect key="frame" x="8" y="8" width="259" height="397"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="k6Y-f9-85G">
                                                                         <rect key="frame" x="0.0" y="0.0" width="259" height="37"/>
@@ -1331,6 +1331,30 @@
                                                                             </view>
                                                                         </subviews>
                                                                     </stackView>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="IvV-TM-s94">
+                                                                        <rect key="frame" x="0.0" y="360" width="259" height="37"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price (Including Tax)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qkc-xN-9lQ">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="259" height="16"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7V4-bJ-fSR">
+                                                                                <rect key="frame" x="0.0" y="17" width="259" height="18"/>
+                                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b6V-vm-QaQ">
+                                                                                <rect key="frame" x="0.0" y="36" width="259" height="1"/>
+                                                                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="1" id="UeU-dV-RMY"/>
+                                                                                </constraints>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </stackView>
                                                                 </subviews>
                                                             </stackView>
                                                         </subviews>
@@ -1377,6 +1401,7 @@
                         <outlet property="lblBagSize" destination="ucy-XD-DkG" id="cgd-rw-o2I"/>
                         <outlet property="lblBrand" destination="SIw-iN-woo" id="p2X-6J-85p"/>
                         <outlet property="lblPrice" destination="J8V-Zz-zCA" id="HsL-UJ-ki5"/>
+                        <outlet property="lblPriceTax" destination="7V4-bJ-fSR" id="QCx-c1-HbX"/>
                         <outlet property="lblProduct" destination="yZT-Mp-p8f" id="qLE-SI-QYy"/>
                         <outlet property="lblQty" destination="zfX-dX-s4H" id="YYg-Y1-obJ"/>
                         <outlet property="lblQtyMT" destination="tAh-9P-bIZ" id="lT1-2t-EZY"/>

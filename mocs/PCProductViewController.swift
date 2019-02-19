@@ -23,6 +23,7 @@ class PCProductViewController: UIViewController, IndicatorInfoProvider {
     @IBOutlet weak var lblSKU: UILabel!
     @IBOutlet weak var lblQtyMT: UILabel!
     @IBOutlet weak var lblPrice: UILabel!
+    @IBOutlet weak var lblPriceTax: UILabel!
     
     var arrayList:[ProductData] = []
     var response:Data!
@@ -54,6 +55,7 @@ class PCProductViewController: UIViewController, IndicatorInfoProvider {
             data.sku = j["SKU"].stringValue
             data.quantityMT = j["Quanity (MT)"].stringValue
             data.price = j["Price"].stringValue
+            data.priceWithTax = j["Product Price with Tax"].stringValue
             arrayList.append(data)
         }
         self.tableView.reloadData()
@@ -71,6 +73,7 @@ class PCProductViewController: UIViewController, IndicatorInfoProvider {
         lblSKU.text! = data.sku
         lblQtyMT.text! = data.quantityMT
         lblPrice.text! = data.price
+        lblPriceTax.text = data.priceWithTax
     }
     
 }

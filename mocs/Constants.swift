@@ -30,10 +30,15 @@ struct TaskAuthId {
 }
 
 enum EmptyStates {
-    
     case noItems
     case noInternet
     case other
+}
+
+enum RequestType: String {
+    case advance = "Advance"
+    case claim = "Claim Reimbursement"
+    case benefits = "Benefits Reimbursement"
 }
 
 struct AppColor {
@@ -74,7 +79,6 @@ struct Constant
         static let TR = "Travel Request - Approval"
         static let LMS = "LMS - Approval"
         static let ALL = "Pending Approvals"
-
     }
     
     /// Help Document Url link
@@ -109,7 +113,6 @@ struct Constant
         
         /// Filter List
         static let FILTER_LIST =  ApiUrl.URL +  "/CompanyFilter/GetCompanyFilter?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
-        
         
         /**
          *TCR Claim List*
@@ -827,8 +830,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-//                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+                static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

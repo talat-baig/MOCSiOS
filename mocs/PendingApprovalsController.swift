@@ -79,7 +79,7 @@ class PendingApprovalsController: UIViewController {
                             if json["Module Name"].stringValue == "" {
                                 paDta.modName = "-"
                             } else {
-                                paDta.modName  = json["Module Name"].stringValue
+                                paDta.modName = json["Module Name"].stringValue
                             }
                            
                             if json["Total Pending"].stringValue == "" {
@@ -119,74 +119,71 @@ class PendingApprovalsController: UIViewController {
     
     func navigateToModulePA(data: PAData) {
         
-//        var vc : UIViewController?
-        
-        switch data.modName {
-        case "TCR":
+        switch data.modName.lowercased() {
+            
+        case "tcr":
             let vc = UIStoryboard(name: "TCR", bundle: nil).instantiateViewController(withIdentifier: "TCRController") as! TCRController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
 
             break
             
-        case "EPR":
+        case "epr":
             let vc = UIStoryboard(name: "EmployeePayment", bundle: nil).instantiateViewController(withIdentifier: "EmployeePaymentController") as! EmployeePaymentController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
             break
             
-        case "DO":
+        case "do":
             let vc = UIStoryboard(name: "DeliveryOrder", bundle: nil).instantiateViewController(withIdentifier: "DeliveryOrderController") as! DeliveryOrderController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
             break
             
-        case "CounterParty":
+        case "counterparty":
             let vc = UIStoryboard(name: "CounterpartyApproval", bundle: nil).instantiateViewController(withIdentifier: "CounterpartyProfileController") as! CounterpartyProfileController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
-
             break
             
-        case "Leave Management System":
+        case "leave management system":
             let vc = UIStoryboard(name: "LMS", bundle: nil).instantiateViewController(withIdentifier: "LeaveManagmentController") as! LeaveManagmentController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
-
             break
             
-        case "Purchase Contract":
+        case "purchase contract":
             let vc = UIStoryboard(name: "PurchaseContract", bundle: nil).instantiateViewController(withIdentifier: "PurchaseContractController") as! PurchaseContractController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
             break
             
-        case "RO":
+        case "ro":
             let vc = UIStoryboard(name: "ReleaseOrder", bundle: nil).instantiateViewController(withIdentifier: "ReleaseOrderController") as! ReleaseOrderController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
             break
             
-        case "Sales Contract":
+        case "sales contract":
             let vc = UIStoryboard(name: "SalesContract", bundle: nil).instantiateViewController(withIdentifier: "SalesContractController") as! SalesContractController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
             break
             
-        case "Travel Request":
+        case "travel request":
             let vc = UIStoryboard(name: "TravelReqApproval", bundle: nil).instantiateViewController(withIdentifier: "TravelReqApprovalVC") as! TravelReqApprovalVC
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
             break
             
-        case "TRI":
+        case "tri":
             let vc = UIStoryboard(name: "TradeInvoice", bundle: nil).instantiateViewController(withIdentifier: "TradeInvoiceController") as! TradeInvoiceController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
 
             break
             
-        case "ARI":
+        case "ari":
             let vc = UIStoryboard(name: "AdminReceive", bundle: nil).instantiateViewController(withIdentifier: "AdminReceiveController") as! AdminReceiveController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
@@ -220,12 +217,9 @@ extension PendingApprovalsController : UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let data = self.arrayList[indexPath.row]
         self.navigateToModulePA(data: data)
     }
-
-    
     
 }
 

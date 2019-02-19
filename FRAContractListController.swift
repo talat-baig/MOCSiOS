@@ -47,7 +47,6 @@ class FRAContractListController: UIViewController {
             
             var newData:[FRAContractData] = []
 
-            
             self.view.showLoading()
             let url:String = String.init(format: Constant.FRA.FRA_CONTRACT_LIST, Session.authKey,Helper.encodeURL(url:refId))
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -61,49 +60,23 @@ class FRAContractListController: UIViewController {
                     for i in 0..<jsonArr.count {
                         
                         let fraContrct = FRAContractData()
+                        
                         fraContrct.refNo = jsonResponse[i]["Allocated Contract Number"].stringValue
                         
-                        if jsonResponse[i]["Allocated Invoice Number"].stringValue == "" {
-                            fraContrct.invNo  = "-"
-                        } else {
-                            fraContrct.invNo  = jsonResponse[i]["Allocated Invoice Number"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Invoice Amount"].stringValue == "" {
-                            fraContrct.invAmt  = "-"
-                        } else {
-                            fraContrct.invAmt  = jsonResponse[i]["Invoice Amount"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["USD Equivalent"].stringValue == "" {
-                            fraContrct.invVal  = "-"
-                        } else {
-                            fraContrct.invVal  = jsonResponse[i]["USD Equivalent"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Invoice CCY"].stringValue == "" {
-                            fraContrct.invCurr  = "-"
-                        } else {
-                            fraContrct.invCurr  = jsonResponse[i]["Invoice CCY"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Allocated and Unallocated Amount"].stringValue == "" {
-                            fraContrct.unallocAmt  = "-"
-                        } else {
-                            fraContrct.unallocAmt  = jsonResponse[i]["Allocated and Unallocated Amount"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["FX Gain and Loss Amount"].stringValue == "" {
-                            fraContrct.gainLossAmt  = "-"
-                        } else {
-                            fraContrct.gainLossAmt  = jsonResponse[i]["FX Gain and Loss Amount"].stringValue
-                        }
-                        
-                        if jsonResponse[i]["Cancel reason"].stringValue == "" {
-                            fraContrct.remarks  = "-"
-                        } else {
-                            fraContrct.remarks  = jsonResponse[i]["Cancel reason"].stringValue
-                        }
+                        fraContrct.invNo = jsonResponse[i]["Allocated Invoice Number"].stringValue != "" ? jsonResponse[i]["Allocated Invoice Number"].stringValue : "-"
+
+                        fraContrct.invAmt = jsonResponse[i]["Invoice Amount"].stringValue != "" ? jsonResponse[i]["Invoice Amount"].stringValue : "-"
+
+                        fraContrct.invVal = jsonResponse[i]["USD Equivalent"].stringValue != "" ? jsonResponse[i]["USD Equivalent"].stringValue : "-"
+
+                        fraContrct.invCurr = jsonResponse[i]["Invoice CCY"].stringValue != "" ? jsonResponse[i]["Invoice CCY"].stringValue : "-"
+                    
+                        fraContrct.unallocAmt = jsonResponse[i]["Allocated and Unallocated Amount"].stringValue != "" ? jsonResponse[i]["Allocated and Unallocated Amount"].stringValue : "-"
+
+                        fraContrct.gainLossAmt = jsonResponse[i]["FX Gain and Loss Amount"].stringValue != "" ? jsonResponse[i]["FX Gain and Loss Amount"].stringValue : "-"
+
+                        fraContrct.remarks = jsonResponse[i]["Cancel reason"].stringValue != "" ? jsonResponse[i]["Cancel reason"].stringValue : "-"
+
                         newData.append(fraContrct)
                     }
                     self.arrayList = newData

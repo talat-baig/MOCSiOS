@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 class ProductData{
     var lotNo:String = ""
     var productName:String = ""
@@ -17,4 +18,5 @@ class ProductData{
     var sku:String = ""
     var quantityMT:String = ""
     var price:String = ""
+    var priceWithTax:String = ""
 }

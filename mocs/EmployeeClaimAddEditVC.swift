@@ -338,8 +338,10 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     }
     
     func accessOpenAdvancesBtn(item : String) {
-        
-        if item == "Claim Reimbursement" || item == "Benefits Reimbursement"  {
+      
+        if item == "Claim Reimbursement" {
+
+//        if item == "Claim Reimbursement" || item == "Benefits Reimbursement"  { // Temp Commented For EBR Final Confirmation of Web Module
             self.btnOpenEPRVal.isEnabled = true
             self.btnOpenEPRVal.layer.borderColor = UIColor.lightGray.cgColor
         } else  {
@@ -473,7 +475,8 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         } else if btnClaimType.titleLabel?.text == "Claim Reimbursement" {
             claimType = 2
         } else {
-            claimType = 3
+             claimType = 0
+//            claimType = 3 // Temp Commented For EBR Final Confirmation of Web Module
         }
         
         guard let reqDate = txtFldReqDate.text, !reqDate.isEmpty else {

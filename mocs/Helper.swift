@@ -592,6 +592,15 @@ class Helper: UIView {
         }
     }
     
+    public static func setupCollVwFitler(collVw : UICollectionView) {
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        flowLayout.minimumInteritemSpacing = 5.0
+        collVw.collectionViewLayout = flowLayout
+    }
+    
     public static func showVUMessage(message:String, success: Bool) {
         if success {
             NotificationBanner(title: message,style:.success).show()

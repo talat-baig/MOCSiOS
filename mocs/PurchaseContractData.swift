@@ -17,4 +17,5 @@ class PurchaseContractData {
     var commodity:String = ""
     var supplier:String = ""
     var contractValue:String = ""
+    
 }

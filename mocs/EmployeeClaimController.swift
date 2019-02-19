@@ -95,8 +95,6 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
                             ecData.location = json["EPRMainLocation"].stringValue
                             ecData.reqAmount = json["Total Requested value"].stringValue
                             ecData.currency = json["EPRMainRequestedCurrency"].stringValue
-//                            ecData.paidAmount = json["Total Paid Value"].stringValue
-//                            ecData.balance = json["Balance To Pay"].stringValue
                           
                             ecData.paidAmount = json["Total Paid Value"].stringValue != "" ? json["Total Paid Value"].stringValue : "-"
 

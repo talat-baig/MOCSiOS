@@ -222,11 +222,11 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
             var newData:[String] = []
             var url = ""
             
-            if ecrData.claimType.caseInsensitiveCompare("Benefits Reimbursement") == ComparisonResult.orderedSame {
-                url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey , Helper.encodeURL(url: accntChrg), "", self.ecrData.headRef)
-            } else {
+//            if ecrData.claimType.caseInsensitiveCompare("Benefits Reimbursement") == ComparisonResult.orderedSame {
+//                url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey , Helper.encodeURL(url: accntChrg), "", self.ecrData.headRef)
+//            } else { // Temp Commented For EBR Final Confirmation of Web Module
                 url = String.init(format: Constant.API.GET_PAYMENT_REASON, Session.authKey, Helper.encodeURL(url: ecrData.claimType) , Helper.encodeURL(url: accntChrg), self.ecrData.headRef)
-            }
+//            } // Temp Commented For EBR Final Confirmation of Web Module
             
             
             print("Payment reason:",url)
@@ -278,12 +278,12 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         
         guard let reason = btnReason.titleLabel?.text, !reason.isEmpty else {
             
-            if self.ecrData.claimTypeInInt == 3 {
-
-                self.showNoBenefitsPopUp()
-           } else {
+//            if self.ecrData.claimTypeInInt == 3 {
+//
+//                self.showNoBenefitsPopUp()
+//           } else { // Temp Commented For EBR Final Confirmation of Web Module
                 Helper.showMessage(message: "Please enter Payment Reason")
-            }
+//            } // Temp Commented For EBR Final Confirmation of Web Module
             return
         }
         

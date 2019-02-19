@@ -14,17 +14,11 @@ import SwiftyJSON
 class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDelegate  {
 
     var fpData : SSListData?
-//    var barDataEntry1: [BarChartDataEntry] = []
-//    var barDataEntry2: [BarChartDataEntry] = []
-
     var fpBarData : FPSBarData?
-
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-    
     @IBOutlet weak var lblNote: UILabel!
     @IBOutlet weak var collVw: UICollectionView!
-    
     @IBOutlet weak var tableView: UITableView!
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
@@ -96,7 +90,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
             let url2 = String.init(format: Constant.FPS.FPS_CHART, Session.authKey,
                                    Helper.encodeURL(url :  FilterViewController.getFilterString()))
             
-            
             var request = URLRequest(url: URL(string: url1)!)
             request.httpMethod = "GET"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -110,7 +103,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                 if Helper.isResponseValid(vc: self, response: response.result) {
                     
                     let ovrAllResp = JSON(response.result.value!)
-                    
                     self.view.hideLoadingProgressLoader()
                     self.refreshControl.endRefreshing()
                     
@@ -120,7 +112,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                         Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
                         return
                     } else {
-                        
                         Alamofire.request(url2).responseData(completionHandler: ({ response in
                             if Helper.isResponseValid(vc: self, response: response.result) {
                                 let chartResponse = JSON(response.result.value!)
@@ -184,7 +175,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
             summ.totalValUSD = i["Total Balance Amount In USD"].stringValue
             self.fpData = summ
         }
-        
     }
     
     func populateChartData(respJson : JSON) {
@@ -194,10 +184,10 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         if self.fpBarData != nil {
             self.fpBarData = nil
         }
-
+        
         if jsonArr.count > 0 {
             
-             let fpsBarDta = FPSBarData()
+            let fpsBarDta = FPSBarData()
             
             for i in 0..<jsonArr.count {
                 
@@ -210,7 +200,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                 let balAmt = respJson[i]["Balance Amount"].stringValue
                 let editedText2 = balAmt.replacingOccurrences(of: ",", with: "")
                 let bAmt = Double(editedText2)
-
+                
                 fpsBarDta.name.append(name)
                 fpsBarDta.value1.append(pAmt ?? 0)
                 fpsBarDta.value2.append(bAmt ?? 0)
@@ -223,7 +213,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
     }
-
+    
 }
 
 
@@ -256,13 +246,13 @@ extension FundsPaymentController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 1
+        //        return 1
         if self.fpData != nil {
             tableView.backgroundView?.isHidden = true
         } else {
             tableView.backgroundView?.isHidden = false
         }
-
+        
         switch section {
         case 0,2:
             if self.fpData != nil {

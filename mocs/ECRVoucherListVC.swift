@@ -695,8 +695,6 @@ class ECRVoucherListVC: UIViewController,IndicatorInfoProvider , UIDocumentPicke
         
         present(deleteAlert, animated: true, completion: nil)
         
-        
-        
     }
     
     @objc func deleteFileTapped(sender:UIButton) {

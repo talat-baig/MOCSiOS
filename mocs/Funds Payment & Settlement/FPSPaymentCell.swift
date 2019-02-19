@@ -10,7 +10,6 @@ import UIKit
 
 class FPSPaymentCell: UITableViewCell {
 
-    
     @IBOutlet weak var lblPymntId: UILabel!
     @IBOutlet weak var lblPaymntAmt: UILabel!
     @IBOutlet weak var lblPaymntMode: UILabel!
@@ -32,7 +31,9 @@ class FPSPaymentCell: UITableViewCell {
         headerVw.layer.shadowOpacity = 0.25
         headerVw.layer.shadowOffset = CGSize(width: 1, height: 2)
         headerVw.layer.shadowRadius = 1
-        headerVw.layer.shadowColor = UIColor.black.cgColor    }
+        headerVw.layer.shadowColor = UIColor.black.cgColor
+        
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -42,7 +43,6 @@ class FPSPaymentCell: UITableViewCell {
         
         lblPymntId.text = data.payId
         lblPaidDate.text = data.paidDate
-//        lblPaymntAmt.text = data.paidAmt
         
         let val = data.paidAmt
         let valCurr = data.currency
