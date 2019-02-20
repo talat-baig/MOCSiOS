@@ -78,7 +78,6 @@ class FPSRefListViewController: UIViewController, UIGestureRecognizerDelegate {
                     for i in 0..<jsonArr.count {
 
                         let fpsRef = FPSRefData()
-        
                  
                         fpsRef.cpName = jsonResponse[i]["CounterParty Name"].stringValue
                         fpsRef.refId = jsonResponse[i]["ReferenceID"].stringValue
@@ -91,9 +90,7 @@ class FPSRefListViewController: UIViewController, UIGestureRecognizerDelegate {
                         }
                         fpsRef.paidAmt = jsonResponse[i]["Paid Amount"].stringValue
                         fpsRef.reqAmt = jsonResponse[i]["Requested Amount"].stringValue
- 
                         fpsRef.currency = jsonResponse[i]["Currency"].stringValue
-
                         
                         newData.append(fpsRef)
                     }
@@ -106,8 +103,6 @@ class FPSRefListViewController: UIViewController, UIGestureRecognizerDelegate {
             Helper.showNoInternetMessg()
         }
     }
-    
-    
     
 }
 

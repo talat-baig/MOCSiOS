@@ -11,7 +11,7 @@ import Alamofire
 import Charts
 import SwiftyJSON
 
-class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilterDelegate {
+class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -30,7 +30,10 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllECRData))
         tableView.addSubview(refreshControl)
-        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        gestureRecognizer.delegate = self
+        self.view.addGestureRecognizer(gestureRecognizer)
+
         Helper.setupCollVwFitler(collVw: self.collVw)
         
         FilterViewController.filterDelegate = self
@@ -91,6 +94,14 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
+    {
+        if (touch.view?.isDescendant(of: tableView))! {
+            return false
+        }
+        return true
     }
 }
 

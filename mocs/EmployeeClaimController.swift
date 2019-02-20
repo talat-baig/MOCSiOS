@@ -42,7 +42,7 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
         srchBar.delegate = self
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(self.populateList))
         tableView.addSubview(refreshControl)
-
+        tableView.separatorStyle = .none
         populateList()
         
     }

@@ -44,12 +44,14 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllFRAData))
         tableView.addSubview(refreshControl)
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        flowLayout.minimumInteritemSpacing = 5.0
-        collVw.collectionViewLayout = flowLayout
-        
+//        let flowLayout = UICollectionViewFlowLayout()
+//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+//        flowLayout.minimumInteritemSpacing = 5.0
+//        collVw.collectionViewLayout = flowLayout
+
+        Helper.setupCollVwFitler(collVw: self.collVw)
+
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
         

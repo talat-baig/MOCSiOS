@@ -35,11 +35,14 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllFPSData))
         tableView.addSubview(refreshControl)
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        flowLayout.minimumInteritemSpacing = 5.0
-        collVw.collectionViewLayout = flowLayout
+//        let flowLayout = UICollectionViewFlowLayout()
+//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+//        flowLayout.minimumInteritemSpacing = 5.0
+//        collVw.collectionViewLayout = flowLayout
+        
+        Helper.setupCollVwFitler(collVw: self.collVw)
+
         
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
@@ -205,7 +208,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                 fpsBarDta.value1.append(pAmt ?? 0)
                 fpsBarDta.value2.append(bAmt ?? 0)
             }
-            
             self.fpBarData = fpsBarDta
         }
     }
@@ -246,7 +248,7 @@ extension FundsPaymentController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        return 1
+
         if self.fpData != nil {
             tableView.backgroundView?.isHidden = true
         } else {

@@ -131,7 +131,9 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
             /// Add
             
             arrPaymentType = ["CASH", "ET", "Cheque", "DD" , "Company Card", "Bank Settlement" ]
-            arrClaimType = ["Advance", "Claim Reimbursement", "Benefits Reimbursement"]
+//            arrClaimType = ["Advance", "Claim Reimbursement", "Benefits Reimbursement"] // Temp Commented For EBR Final Confirmation of Web Module
+            arrClaimType = ["Advance", "Claim Reimbursement"]
+
             arrCompName = [Session.company]
             arrDept = [Session.department]
             arrLocation = [Session.location]
@@ -332,7 +334,6 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.btnClaimType.setTitle(item, for: .normal)
             self?.accessOpenAdvancesBtn(item: item)
-            
         }
         dropDown.show()
     }

@@ -308,6 +308,14 @@
 		57F03490207F815E00DE5056 /* TreeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57F03488207F815D00DE5056 /* TreeTableViewCell.xib */; };
 		57F03491207F815E00DE5056 /* LocationFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F03489207F815D00DE5056 /* LocationFilterCell.swift */; };
 		57F2F6ED216B309B00A3D1EA /* TravelModeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F2F6EC216B309B00A3D1EA /* TravelModeType.swift */; };
+		57F5A45F221D3C7F008521EA /* CustomerLedger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F5A45E221D3C7F008521EA /* CustomerLedger.storyboard */; };
+		57F5A462221D3CA5008521EA /* CLListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5A460221D3CA5008521EA /* CLListCell.swift */; };
+		57F5A463221D3CA5008521EA /* CLListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57F5A461221D3CA5008521EA /* CLListCell.xib */; };
+		57F5A465221D4D6D008521EA /* CLListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5A464221D4D6D008521EA /* CLListController.swift */; };
+		57F5A468221D690C008521EA /* PaymentLedgerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5A467221D690C008521EA /* PaymentLedgerController.swift */; };
+		57F5A46A221D6926008521EA /* PaymentLedger.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57F5A469221D6926008521EA /* PaymentLedger.storyboard */; };
+		57F5A46D221D697B008521EA /* PaymentLedgerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F5A46B221D697B008521EA /* PaymentLedgerCell.swift */; };
+		57F5A46E221D697B008521EA /* PaymentLedgerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57F5A46C221D697B008521EA /* PaymentLedgerCell.xib */; };
 		57F7B86421F5A31000E5D707 /* LMSReqData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F7B86321F5A31000E5D707 /* LMSReqData.swift */; };
 		57F7B86821F5E85C00E5D707 /* LMSCustomHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57F7B86721F5E85C00E5D707 /* LMSCustomHeader.xib */; };
 		57F7B86A21F5EC1700E5D707 /* LMSCustomHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F7B86921F5EC1700E5D707 /* LMSCustomHeader.swift */; };
@@ -718,6 +726,14 @@
 		57F03488207F815D00DE5056 /* TreeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TreeTableViewCell.xib; sourceTree = "<group>"; };
 		57F03489207F815D00DE5056 /* LocationFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationFilterCell.swift; sourceTree = "<group>"; };
 		57F2F6EC216B309B00A3D1EA /* TravelModeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelModeType.swift; sourceTree = "<group>"; };
+		57F5A45E221D3C7F008521EA /* CustomerLedger.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CustomerLedger.storyboard; sourceTree = "<group>"; };
+		57F5A460221D3CA5008521EA /* CLListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLListCell.swift; sourceTree = "<group>"; };
+		57F5A461221D3CA5008521EA /* CLListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CLListCell.xib; sourceTree = "<group>"; };
+		57F5A464221D4D6D008521EA /* CLListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLListController.swift; sourceTree = "<group>"; };
+		57F5A467221D690C008521EA /* PaymentLedgerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentLedgerController.swift; sourceTree = "<group>"; };
+		57F5A469221D6926008521EA /* PaymentLedger.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PaymentLedger.storyboard; sourceTree = "<group>"; };
+		57F5A46B221D697B008521EA /* PaymentLedgerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentLedgerCell.swift; sourceTree = "<group>"; };
+		57F5A46C221D697B008521EA /* PaymentLedgerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaymentLedgerCell.xib; sourceTree = "<group>"; };
 		57F7B86321F5A31000E5D707 /* LMSReqData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMSReqData.swift; sourceTree = "<group>"; };
 		57F7B86721F5E85C00E5D707 /* LMSCustomHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LMSCustomHeader.xib; sourceTree = "<group>"; };
 		57F7B86921F5EC1700E5D707 /* LMSCustomHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMSCustomHeader.swift; sourceTree = "<group>"; };
@@ -1264,6 +1280,28 @@
 			name = Filter;
 			sourceTree = "<group>";
 		};
+		57F5A45D221D3C46008521EA /* Customer Ledger */ = {
+			isa = PBXGroup;
+			children = (
+				57F5A464221D4D6D008521EA /* CLListController.swift */,
+				57F5A45E221D3C7F008521EA /* CustomerLedger.storyboard */,
+				57F5A460221D3CA5008521EA /* CLListCell.swift */,
+				57F5A461221D3CA5008521EA /* CLListCell.xib */,
+			);
+			name = "Customer Ledger";
+			sourceTree = "<group>";
+		};
+		57F5A466221D68EA008521EA /* Payment Ledger */ = {
+			isa = PBXGroup;
+			children = (
+				57F5A467221D690C008521EA /* PaymentLedgerController.swift */,
+				57F5A469221D6926008521EA /* PaymentLedger.storyboard */,
+				57F5A46B221D697B008521EA /* PaymentLedgerCell.swift */,
+				57F5A46C221D697B008521EA /* PaymentLedgerCell.xib */,
+			);
+			name = "Payment Ledger";
+			sourceTree = "<group>";
+		};
 		6371686A3B05000B9C507673 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1419,6 +1457,8 @@
 		84D0C4E12052AB7F000BED53 /* Reports */ = {
 			isa = PBXGroup;
 			children = (
+				57F5A466221D68EA008521EA /* Payment Ledger */,
+				57F5A45D221D3C46008521EA /* Customer Ledger */,
 				57455DBD21DCA13200FB7A62 /* Funds Payment & Settlement */,
 				573EE490221BDBEE0087DDB1 /* ECR_EPR_Report */,
 				5736D67521CCC75E006CDA58 /* FundsRcptAllocation */,
@@ -1685,6 +1725,7 @@
 				B3DB258F202866A300FA176D /* ocs_loading.json in Resources */,
 				57CD32C421DE0E5B00B041C5 /* FPSOverallCell.xib in Resources */,
 				5773437021E35A7800C3D302 /* LMS.storyboard in Resources */,
+				57F5A46A221D6926008521EA /* PaymentLedger.storyboard in Resources */,
 				57DCB4962201B678004DE9A5 /* PendingApprovalCell.xib in Resources */,
 				84279FAB205FA09A006F7BEC /* AROverall.xib in Resources */,
 				57D8A701217EF30600F0855C /* APOverallCell.xib in Resources */,
@@ -1722,8 +1763,10 @@
 				57866FED21C3AE6100B76FD7 /* PurchaseSummCell.xib in Resources */,
 				5735F28B2076040700A0A640 /* ARInstrumentsCell.xib in Resources */,
 				5736D68321CD15D5006CDA58 /* FRAContractCell.xib in Resources */,
+				57F5A463221D3CA5008521EA /* CLListCell.xib in Resources */,
 				572D105320DB88A500966426 /* LevelZeroCell.xib in Resources */,
 				57F0348A207F815E00DE5056 /* BusinessUnitFilterCell.xib in Resources */,
+				57F5A46E221D697B008521EA /* PaymentLedgerCell.xib in Resources */,
 				57A0DED2208D9D6E0057FA08 /* EPRListView.xib in Resources */,
 				57CD32C821DE113D00B041C5 /* FPSListCell.xib in Resources */,
 				57303778216C85880058ED9A /* TTItineraryListCell.xib in Resources */,
@@ -1746,6 +1789,7 @@
 				57866FE321C38AB900B76FD7 /* PurchaseSummry.storyboard in Resources */,
 				572D105220DB88A500966426 /* LevelTwoCell.xib in Resources */,
 				577BDBBE21CA78C30009A0C7 /* SearchByProductsView.xib in Resources */,
+				57F5A45F221D3C7F008521EA /* CustomerLedger.storyboard in Resources */,
 				841C966A2046A9350090E751 /* DeliveryOrder.storyboard in Resources */,
 				57A0DED8208DA22E0057FA08 /* EPRListCell.xib in Resources */,
 				57C81B48219D3E12003657C7 /* AvlRelListCell.xib in Resources */,
@@ -1892,6 +1936,7 @@
 				574627BA215B967F001117E0 /* TravelTicketAddEditVC.swift in Sources */,
 				573ED59521D0DEC300D3C4C9 /* FRARefData.swift in Sources */,
 				571DE866213514D400AE6B72 /* KYCViewController.swift in Sources */,
+				57F5A468221D690C008521EA /* PaymentLedgerController.swift in Sources */,
 				57CC7F2021ABCD6D0021538D /* ROWHRData.swift in Sources */,
 				575005E3214B815D0004A1CE /* ItineraryListCell.swift in Sources */,
 				5756DE8821D6334D00C355EE /* BarGraphEntryCell.swift in Sources */,
@@ -2057,6 +2102,7 @@
 				5758A60220D1079C0064B69D /* ECRBaseViewController.swift in Sources */,
 				B322700D2015A5C8005FA3B8 /* FilterTransactionManager.swift in Sources */,
 				84D0C4D520501C1D000BED53 /* EPRData.swift in Sources */,
+				57F5A46D221D697B008521EA /* PaymentLedgerCell.swift in Sources */,
 				846F26492058DC2300B3F873 /* TradeInvoiceAdapter.swift in Sources */,
 				B31BE4672013D04C00F55648 /* ViewController.swift in Sources */,
 				57C8424221EC713400AFACE6 /* LMSLeaveDetailsVC.swift in Sources */,
@@ -2073,6 +2119,7 @@
 				57523DDD2164D9430053DE66 /* GroupCompany.swift in Sources */,
 				57D0A519219C4A5500DBD45C /* VesselListViewController.swift in Sources */,
 				573DB4992089EFDD007056A1 /* CustomTRIApproveView.swift in Sources */,
+				57F5A462221D3CA5008521EA /* CLListCell.swift in Sources */,
 				B31BE4652013D04C00F55648 /* AppDelegate.swift in Sources */,
 				57CEE40821AEA25600BF5FEE /* EmptyStateView.swift in Sources */,
 				577727152109E12900AA31DA /* ROCargoDetailsEditVC.swift in Sources */,
@@ -2169,6 +2216,7 @@
 				57D731852186EE02000589F8 /* APCounterPartyData.swift in Sources */,
 				846F264B2058E41200B3F873 /* TRIViewController.swift in Sources */,
 				57E3674C20692B5D000C7A5D /* TravelClaimNonEditController.swift in Sources */,
+				57F5A465221D4D6D008521EA /* CLListController.swift in Sources */,
 				571DE86C21351D2900AE6B72 /* ContactPersonController.swift in Sources */,
 				5758A60420D114E00064B69D /* ECRExpenseListVC.swift in Sources */,
 				57BB7F4F21BFC63100FF70FF /* SalesReportData.swift in Sources */,

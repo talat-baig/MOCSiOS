@@ -33,12 +33,14 @@ class AvlRelBaseViewController: UIViewController,filterViewDelegate , clearFilte
         vwTopHeader.lblTitle.text = "Available Releases"
         vwTopHeader.lblSubTitle.isHidden = true
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        flowLayout.minimumInteritemSpacing = 5.0
-        collVw.collectionViewLayout = flowLayout
-        
+//        let flowLayout = UICollectionViewFlowLayout()
+//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+//        flowLayout.minimumInteritemSpacing = 5.0
+//        collVw.collectionViewLayout = flowLayout
+
+        Helper.setupCollVwFitler(collVw: self.collVw)
+
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
 

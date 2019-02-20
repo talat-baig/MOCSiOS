@@ -51,18 +51,21 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     @IBOutlet weak var btnClear: UIButton!
     
     @IBOutlet weak var vwCollection: UIView!
-    
+    @IBOutlet weak var collVw: UICollectionView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTreeView()
         populateFilterList()
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-        flowLayout.minimumInteritemSpacing = 5.0
-        collVwFilter.collectionViewLayout = flowLayout
+//        let flowLayout = UICollectionViewFlowLayout()
+//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
+//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+//        flowLayout.minimumInteritemSpacing = 5.0
+//        collVwFilter.collectionViewLayout = flowLayout
         
+        Helper.setupCollVwFitler(collVw: self.collVwFilter)
+
         //Added By RV : 13 May 18
         headerVwFilter = Bundle.main.loadNibNamed("FilterHeaderView", owner: nil, options: nil)![0] as? FilterHeaderView
         headerVwFilter?.frame = CGRect.init(x: 0, y: 0, width:  self.view.frame.size.width, height: 70 )

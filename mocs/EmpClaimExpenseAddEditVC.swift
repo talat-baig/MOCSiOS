@@ -82,17 +82,14 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
             if arrAccChrg.count > 0 {
                 
                 btnAccChrgHd.setTitle(arrAccChrg[0], for:.normal)
-                
                 self.getPaymentReason(accntChrg: arrAccChrg[0]) { (res) in
+                    
                     self.btnReason.setTitle(self.arrReason.first, for: .normal)
                 }
-                
             } else {
                 btnAccChrgHd.setTitle("", for:.normal)
                 btnReason.setTitle("", for:.normal)
             }
-            
-            
         }
         
         checkDatePickerDates()
@@ -187,8 +184,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         txtAmtPaid.text = ecrExpListData.expAmount
         txtInvoiceNum.text = ecrExpListData.invoiceNo
         txtComments.text = ecrExpListData.comments
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -415,7 +410,6 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
                     
                 }
             })
-            
         }
         dropDown.show()
     }

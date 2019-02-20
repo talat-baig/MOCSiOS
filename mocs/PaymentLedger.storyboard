@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--PaymentLedgerController-->
+        <scene sceneID="JQb-kK-VW9">
+            <objects>
+                <viewController storyboardIdentifier="PaymentLedgerController" title="PaymentLedgerController" id="ACj-3a-BhP" customClass="PaymentLedgerController" customModule="mocs" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="mPJ-8U-PSP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="18B-cr-IwG" customClass="WC_HeaderView" customModule="mocs" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="QJt-8M-zNK"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Jg-6g-xNc">
+                                <rect key="frame" x="0.0" y="70" width="375" height="597"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Z1b-z0-iJv">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="589"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YxP-w1-7wY">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="38"/>
+                                                <subviews>
+                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8rF-sI-vCY">
+                                                        <rect key="frame" x="6" y="4" width="363" height="30"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="NrJ-Q4-JHX">
+                                                            <size key="itemSize" width="50" height="50"/>
+                                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                        </collectionViewFlowLayout>
+                                                        <cells>
+                                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="filterCollectionCell" id="ylw-Yo-5A4" customClass="FilterCollectionViewCell" customModule="mocs" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="-10" width="50" height="50"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <subviews>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t1I-O6-al6">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                            <color key="backgroundColor" red="0.0039215686269999999" green="0.22352941179999999" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                                    <integer key="value" value="15"/>
+                                                                                </userDefinedRuntimeAttribute>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                        </label>
+                                                                    </subviews>
+                                                                </view>
+                                                                <constraints>
+                                                                    <constraint firstItem="t1I-O6-al6" firstAttribute="top" secondItem="ylw-Yo-5A4" secondAttribute="top" id="FU2-Ba-4Mi"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="t1I-O6-al6" secondAttribute="bottom" id="iKp-nu-Akv"/>
+                                                                    <constraint firstItem="t1I-O6-al6" firstAttribute="leading" secondItem="ylw-Yo-5A4" secondAttribute="leading" id="jWn-66-yhR"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="t1I-O6-al6" secondAttribute="trailing" id="tEE-pe-z2i"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                                        <integer key="value" value="10"/>
+                                                                    </userDefinedRuntimeAttribute>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <outlet property="lblTitle" destination="t1I-O6-al6" id="oiQ-kq-waM"/>
+                                                                </connections>
+                                                            </collectionViewCell>
+                                                        </cells>
+                                                        <connections>
+                                                            <outlet property="dataSource" destination="ACj-3a-BhP" id="ucd-os-hSY"/>
+                                                            <outlet property="delegate" destination="ACj-3a-BhP" id="B6H-Ob-476"/>
+                                                        </connections>
+                                                    </collectionView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="38" id="CPf-cM-uea"/>
+                                                    <constraint firstAttribute="trailing" secondItem="8rF-sI-vCY" secondAttribute="trailing" constant="6" id="DnW-SN-Xtb"/>
+                                                    <constraint firstItem="8rF-sI-vCY" firstAttribute="leading" secondItem="YxP-w1-7wY" secondAttribute="leading" constant="6" id="QKR-4m-yL5"/>
+                                                    <constraint firstItem="8rF-sI-vCY" firstAttribute="top" secondItem="YxP-w1-7wY" secondAttribute="top" constant="4" id="YnV-Mt-cWQ"/>
+                                                    <constraint firstAttribute="bottom" secondItem="8rF-sI-vCY" secondAttribute="bottom" constant="4" id="cZU-9e-Kp4"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QER-Xf-wiZ">
+                                                <rect key="frame" x="0.0" y="38" width="375" height="551"/>
+                                                <subviews>
+                                                    <searchBar contentMode="redraw" placeholder="Search by Reference Id" translatesAutoresizingMaskIntoConstraints="NO" id="HYj-7e-Z6F">
+                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="56" id="tZz-Zg-Hlx"/>
+                                                        </constraints>
+                                                        <color key="barTintColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </searchBar>
+                                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Kac-6q-qNd">
+                                                        <rect key="frame" x="0.0" y="56" width="375" height="495"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <prototypes>
+                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="221" id="pGq-KH-FiK">
+                                                                <rect key="frame" x="0.0" y="28" width="375" height="221"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pGq-KH-FiK" id="HYB-Ij-zg6">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="221"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </tableViewCellContentView>
+                                                            </tableViewCell>
+                                                        </prototypes>
+                                                        <connections>
+                                                            <outlet property="dataSource" destination="ACj-3a-BhP" id="Kzn-90-bZf"/>
+                                                            <outlet property="delegate" destination="ACj-3a-BhP" id="RbL-M5-Bkk"/>
+                                                        </connections>
+                                                    </tableView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="Kac-6q-qNd" firstAttribute="top" secondItem="HYj-7e-Z6F" secondAttribute="bottom" id="6K0-Yl-Iw7"/>
+                                                    <constraint firstItem="HYj-7e-Z6F" firstAttribute="top" secondItem="QER-Xf-wiZ" secondAttribute="top" id="8aZ-ci-7Tq"/>
+                                                    <constraint firstItem="Kac-6q-qNd" firstAttribute="leading" secondItem="QER-Xf-wiZ" secondAttribute="leading" id="BNF-hi-FLg"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Kac-6q-qNd" secondAttribute="bottom" id="HDH-yJ-zSg"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Kac-6q-qNd" secondAttribute="trailing" id="Kdl-Md-7aO"/>
+                                                    <constraint firstItem="HYj-7e-Z6F" firstAttribute="leading" secondItem="QER-Xf-wiZ" secondAttribute="leading" id="lf3-RG-E9E"/>
+                                                    <constraint firstAttribute="trailing" secondItem="HYj-7e-Z6F" secondAttribute="trailing" id="lq2-se-7gb"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Z1b-z0-iJv" secondAttribute="bottom" constant="8" id="2AH-H7-AuH"/>
+                                    <constraint firstItem="Z1b-z0-iJv" firstAttribute="top" secondItem="9Jg-6g-xNc" secondAttribute="top" id="QVS-Ew-2Id"/>
+                                    <constraint firstItem="Z1b-z0-iJv" firstAttribute="leading" secondItem="9Jg-6g-xNc" secondAttribute="leading" id="l9O-If-wgb"/>
+                                    <constraint firstAttribute="trailing" secondItem="Z1b-z0-iJv" secondAttribute="trailing" id="sQB-Od-gFR"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="18B-cr-IwG" firstAttribute="leading" secondItem="B4E-cc-2Jk" secondAttribute="leading" id="DGh-oA-uY2"/>
+                            <constraint firstItem="18B-cr-IwG" firstAttribute="bottom" secondItem="9Jg-6g-xNc" secondAttribute="top" id="ODa-V2-Cds"/>
+                            <constraint firstItem="18B-cr-IwG" firstAttribute="trailing" secondItem="B4E-cc-2Jk" secondAttribute="trailing" id="epk-cd-tqJ"/>
+                            <constraint firstItem="18B-cr-IwG" firstAttribute="top" secondItem="mPJ-8U-PSP" secondAttribute="top" id="gHQ-QK-Z5g"/>
+                            <constraint firstAttribute="trailing" secondItem="9Jg-6g-xNc" secondAttribute="trailing" id="iyb-D0-E3G"/>
+                            <constraint firstItem="9Jg-6g-xNc" firstAttribute="leading" secondItem="mPJ-8U-PSP" secondAttribute="leading" id="k6T-Ih-ydC"/>
+                            <constraint firstAttribute="bottom" secondItem="9Jg-6g-xNc" secondAttribute="bottom" id="vRO-2k-eUE"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="B4E-cc-2Jk"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Accounts Payable" id="pMu-YG-VfW">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="menu" id="TI1-Ue-MAX">
+                            <color key="tintColor" red="0.1083565962" green="0.20052874309999999" blue="0.62983819799999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="presentLeftMenuViewController:" destination="ACj-3a-BhP" id="ODb-nJ-IPe"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="filter" id="IAd-Lh-KtN">
+                            <color key="tintColor" red="0.1083565962" green="0.20052874309999999" blue="0.62983819799999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="presentRightMenuViewController:" destination="ACj-3a-BhP" id="XAW-yi-MsZ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collVw" destination="8rF-sI-vCY" id="fqR-5R-jaE"/>
+                        <outlet property="srchBar" destination="HYj-7e-Z6F" id="IaL-zi-kD5"/>
+                        <outlet property="tableView" destination="Kac-6q-qNd" id="2f2-TC-RWd"/>
+                        <outlet property="vwContent" destination="QER-Xf-wiZ" id="iFW-wa-7sQ"/>
+                        <outlet property="vwFilter" destination="YxP-w1-7wY" id="tj3-NU-bas"/>
+                        <outlet property="vwTopHeader" destination="18B-cr-IwG" id="nt5-te-Lwj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8bq-V7-BHa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="157.59999999999999" y="-81.409295352323838"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="filter" width="21.75" height="21.75"/>
+        <image name="menu" width="43.5" height="43.5"/>
+    </resources>
+</document>

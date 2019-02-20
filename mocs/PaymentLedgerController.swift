@@ -1,40 +1,97 @@
 //
-//  ECRRefIDListVC.swift
+//  PaymentLedgerController.swift
 //  mocs
 //
-//  Created by Talat Baig on 2/19/19.
+//  Created by Talat Baig on 2/20/19.
 //  Copyright © 2019 Rv. All rights reserved.
 //
 
 import UIKit
 
-class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
+class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
+
     
+    @IBOutlet weak var vwFilter: UIView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-    @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var srchBar: UISearchBar!
+    @IBOutlet weak var vwContent: UIView!
+    lazy var refreshControl:UIRefreshControl = UIRefreshControl()
+    @IBOutlet weak var collVw: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(UINib(nibName: "ECRRefIDDetailsCell", bundle: nil), forCellReuseIdentifier: "cell")
+
+        self.tableView.register(UINib(nibName: "PaymentLedgerCell", bundle: nil), forCellReuseIdentifier: "cell")
+        
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllPLData))
+        tableView.addSubview(refreshControl)
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
-
-        vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = true
-        vwTopHeader.btnBack.isHidden = false
-        vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblSubTitle.isHidden = false
-        vwTopHeader.lblTitle.text = "Emp Name"
-        vwTopHeader.lblSubTitle.text = "EMP ID"
         
-        self.tableView.separatorStyle = .none
+        Helper.setupCollVwFitler(collVw: self.collVw)
+        
+        FilterViewController.filterDelegate = self
+        FilterViewController.clearFilterDelegate = self
+        
+        fetchAllPLData()
+        resetViews()
+        
+        self.navigationController?.isNavigationBarHidden = true
+        
+        vwTopHeader.delegate = self
+        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnRight.isHidden = false
+        vwTopHeader.lblTitle.text = "Payment Ledger"
+        vwTopHeader.lblSubTitle.isHidden = true
     }
     
+    
     @objc func handleTap() {
-        self.searchBar.endEditing(true)
+        self.srchBar.endEditing(true)
+    }
+    
+    func resetViews() {
+        
+        if FilterViewController.selectedDataObj.isEmpty {
+            vwFilter.isHidden = true
+        } else {
+            vwFilter.isHidden = false
+        }
+    }
+    
+    func applyFilter(filterString: String) {
+        
+        if filterString.contains(",") {
+            Helper.showMessage(message: "Please select only one filter")
+            return
+        }
+        self.fetchAllPLData()
+        self.resetViews()
+        self.collVw.reloadData()
+    }
+    
+    func cancelFilter(filterString: String) {
+        self.fetchAllPLData()
+        self.resetViews()
+    }
+    
+    @objc func fetchAllPLData() {
+    }
+    
+    func clearAll() {
+        self.collVw.reloadData()
+        self.fetchAllPLData()
+        self.resetViews()
+    }
+    
+    func resetData() {
+    }
+    
+    @objc func showFilterMenu(){
+        self.sideMenuViewController?.presentRightMenuViewController()
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
@@ -44,12 +101,12 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         }
         return true
     }
-    
 }
 
 
+
 // MARK: - UITableViewDataSource methods
-extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
+extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -61,17 +118,14 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 280
-        
+        return 330
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ECRRefIDDetailsCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! PaymentLedgerCell
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 5
-        cell.isUserInteractionEnabled = false
         cell.selectionStyle = .none
-
         return cell
     }
     
@@ -83,10 +137,9 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
 
 
 // MARK: - WC_HeaderViewDelegate methods
-extension ECRRefIDListVC: WC_HeaderViewDelegate {
+extension PaymentLedgerController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {
@@ -100,7 +153,7 @@ extension ECRRefIDListVC: WC_HeaderViewDelegate {
 }
 
 
-extension ECRRefIDListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension PaymentLedgerController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return FilterViewController.selectedDataObj.count

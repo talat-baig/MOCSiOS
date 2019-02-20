@@ -51,9 +51,7 @@ struct AppColor {
     static let lightGray = UIColor(red: 204.0/255.0, green: 204.0/255.0, blue: 204.0/255.0, alpha: 1.0)
     static let lightestBlue = UIColor(red: 218.0/255.0, green: 231.0/255.0, blue: 254.0/255.0, alpha: 1.0)
     static let scrollVwColor = UIColor(red: 92.0/255.0, green: 94.0/255.0, blue: 102.0/255.0, alpha: 1.0)
-    
     static let grayColor = UIColor(red: 154.0/255.0, green: 154.0/255.0, blue: 154.0/255.0, alpha: 1.0)
-    
     static let greenFlag = UIColor(red: 16.0/255.0, green: 155.0/255.0, blue: 53.0/255.0, alpha: 1.0)
     static let amberFlag = UIColor(red: 255.0/255.0, green: 194.0/255.0, blue: 0.0/255.0, alpha: 1.0)
     static let redFalg = UIColor(red: 239.0/255.0, green: 35.0/255.0, blue: 35.0/255.0, alpha: 1.0)

@@ -14,6 +14,7 @@ import RATreeView
 
 
 class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, RATreeViewDelegate {
+    
     func didSelectItemAtIndex(_ index: Int) {
         
     }
@@ -23,13 +24,14 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
     @IBOutlet weak var vwTreeTable: UIView!
     @IBOutlet weak var lblUserName: UILabel!
     @IBOutlet weak var menuTable: UITableView!
+    
     var cell = [TLACell]()
     var delegateController: TLAViewController!
     var selectedItem : MenuDataObject?
     var helpDocViewer: UIDocumentInteractionController!
     var wunderPopup = CustomPopUpView()
     
-    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "1.1.5 Leave Request Form", "3.2.1 Purchase Contract (PC)","3.2.2 Sales Contract (SC)" , "3.2.3 Delivery Orders (DO)", "3.1.1 Travel Claims Reimbursement (TCR)", "3.1.2 Employee Claims & Payments (ECR EPR)" , "3.1.3 Admin Receive Invoice (ARI)", "3.2.4 Trade Received Invoice (TRI)", "3.2.5 Release Order (RO)", "3.2.6 Counterparty Profile" ,"3.1.5 Travel Request", "3.1.4 Leave Management System (LMS)" ,"Pending Approvals" ,"Employee Directory","Task Manager" , "2.1.1 Accounts Receivables (AR) Report", "2.1.2 Accounts Payable Report", "2.1.3 Available Release Report", "2.1.4 Sales Summary Report","2.1.5 Purchase Summary Report", "2.1.6 Funds Receipt and Allocation", "2.1.7 Funds Payment & Settlement","2.1.8 Employee Advances,Settlements & Reimbursements Summary"]
+    let approvalsArr = ["1.1.1 Travel Claims Reimburstment (TCR) Form","1.1.2 Employee Claims Reimburstment (ECR) Form", "1.1.3 Travel Request Form", "1.1.4 Travel Ticket" , "1.1.5 Leave Request Form", "3.2.1 Purchase Contract (PC)","3.2.2 Sales Contract (SC)" , "3.2.3 Delivery Orders (DO)", "3.1.1 Travel Claims Reimbursement (TCR)", "3.1.2 Employee Claims & Payments (ECR EPR)" , "3.1.3 Admin Receive Invoice (ARI)", "3.2.4 Trade Received Invoice (TRI)", "3.2.5 Release Order (RO)", "3.2.6 Counterparty Profile" ,"3.1.5 Travel Request", "3.1.4 Leave Management System (LMS)" ,"Pending Approvals" ,"Employee Directory","Task Manager" , "2.1.1 Accounts Receivables (AR) Report", "2.1.2 Accounts Payable Report", "2.1.3 Available Release Report", "2.1.4 Sales Summary Report","2.1.5 Purchase Summary Report", "2.1.6 Funds Receipt and Allocation", "2.1.7 Funds Payment & Settlement","2.1.8 Employee Advances,Settlements & Reimbursements Summary", "2.1.9 Customer Ledger","2.1.10 Payment Ledger" ]
     
     
     var mdataObj : [MenuDataObject] = []
@@ -87,8 +89,12 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let fundsPymnt = MenuDataObject(name: "2.1.7 Funds Payment & Settlement", storybdNAme: "FundsPayment", vcName: "FundsPaymentController", imageName: #imageLiteral(resourceName: "empty"))
         
         let ecrRept = MenuDataObject(name: "2.1.8 Employee Advances,Settlements & Reimbursements Summary", storybdNAme: "ECRReport", vcName: "ECREmployeeListController", imageName: #imageLiteral(resourceName: "empty"))
+       
+        let custLedger = MenuDataObject(name: "2.1.9 Customer Ledger", storybdNAme: "CustomerLedger", vcName: "CLListController", imageName: #imageLiteral(resourceName: "empty"))
+        let pmyntLedger = MenuDataObject(name: "2.1.10 Payment Ledger", storybdNAme: "PaymentLedger", vcName: "PaymentLedgerController", imageName: #imageLiteral(resourceName: "empty"))
 
-        let reports = MenuDataObject(name: "2.1 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt,ecrRept ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        
+        let reports = MenuDataObject(name: "2.1 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt,ecrRept,custLedger,pmyntLedger ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         
