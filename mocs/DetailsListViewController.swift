@@ -74,44 +74,7 @@ class DetailsListViewController: UIViewController {
         self.lblTotalQty.text = " "
         self.vwNameAndQty.isHidden = true
     }
-    //    @objc func initialSetup() {
-    //
-    //        self.lblQtyVal.text = "QTY Avail (MT)"
-    //
-    //        if isFromVessel || isFromVesselAndProduct {
-    //
-    //            vwTopHeader.lblTitle.text = "Report [Vessel-wise]"
-    //
-    //            if isFromVesselAndProduct {
-    //                self.lblTitleVal.text = "Release No"
-    //                btnSelect.setTitle(vesselStr, for: .normal)
-    //                fetchProductWiseROList(vesslName: vesselStr, prodName: titleStr )
-    //            } else {
-    //                btnSelect.setTitle(titleStr, for: .normal)
-    //                self.lblTitleVal.text = "Product Name"
-    //                fetchVesselWiseProducts(vesslName: titleStr )
-    //            }
-    //        } else if isFromProduct {
-    //
-    //            vwTopHeader.lblTitle.text = "Report [Product-wise]"
-    //            btnSelect.setTitle(arrVesselList[0], for: .normal)
-    //            self.lblTitleVal.text = "Release No"
-    //            fetchProductWiseROList(vesslName: arrVesselList[0], prodName: titleStr )
-    //        } else {
-    //
-    //            vwTopHeader.lblTitle.text = "Report [Warehouse-wise]"
-    //            btnSelect.setTitle(arrVesselList[0], for: .normal)
-    //
-    //            if isFromWarehouseAndProduct {
-    //                self.lblTitleVal.text = "Release No"
-    //                self.fetchProductWiseROList(vesslName: self.arrVesselList[0], prodName: self.titleStr, warehouseName: self.wareHousStr )
-    //            } else {
-    //                self.lblTitleVal.text = "Product Name"
-    //                fetchWarehouseWiseProduct(wareName: self.titleStr, vesslName: arrVesselList[0])
-    //            }
-    //        }
-    //
-    //    }
+
     
     @objc func initialSetup() {
         

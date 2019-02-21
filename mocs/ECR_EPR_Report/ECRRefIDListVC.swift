@@ -15,6 +15,8 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
+    var arrSample : [String] = ["test test test test","test test testtest test testtest test testtest test testtest test test test test testtest test test","test test testtest test test","test test test"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "ECRRefIDDetailsCell", bundle: nil), forCellReuseIdentifier: "cell")
@@ -31,6 +33,9 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         vwTopHeader.lblSubTitle.text = "EMP ID"
         
         self.tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = 368.0
+        tableView.rowHeight = UITableViewAutomaticDimension
+
     }
     
     @objc func handleTap() {
@@ -57,12 +62,11 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return arrSample.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 280
-        
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -72,6 +76,7 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
         cell.isUserInteractionEnabled = false
         cell.selectionStyle = .none
 
+        cell.lblNOE.text = self.arrSample[indexPath.row]
         return cell
     }
     

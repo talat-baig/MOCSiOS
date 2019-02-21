@@ -94,7 +94,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let pmyntLedger = MenuDataObject(name: "2.1.10 Payment Ledger", storybdNAme: "PaymentLedger", vcName: "PaymentLedgerController", imageName: #imageLiteral(resourceName: "empty"))
 
         
-        let reports = MenuDataObject(name: "2.1 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt,ecrRept,custLedger,pmyntLedger ], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let reports = MenuDataObject(name: "2.1 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt,ecrRept], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         

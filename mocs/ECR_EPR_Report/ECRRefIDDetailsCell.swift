@@ -14,6 +14,7 @@ class ECRRefIDDetailsCell: UITableViewCell {
     
     @IBOutlet weak var headrVw: UIView!
     
+    @IBOutlet weak var lblNOE: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         
