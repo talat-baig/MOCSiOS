@@ -101,7 +101,6 @@ class CargoInfoCell: UITableViewCell {
                 self.optionMenuDelegate?.onReceiveClick(sender: sender)
             }
         })
-
         optionMenu.addAction(recvAction)
         
         
@@ -110,11 +109,8 @@ class CargoInfoCell: UITableViewCell {
                 self.optionMenuDelegate?.onCancelClick()
             }
         })
+        optionMenu.addAction(cancelAction)
         
-//        if sender.tag == 1 {
-            optionMenu.addAction(cancelAction)
-//        }
-
         
         if ((menuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
             menuDelegate?.onClick(optionMenu: optionMenu , sender: sender)

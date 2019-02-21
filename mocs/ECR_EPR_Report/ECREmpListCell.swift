@@ -14,6 +14,12 @@ class ECREmpListCell: UITableViewCell {
     @IBOutlet weak var outerVw: UIView!
     @IBOutlet weak var headerVw: UIView!
 
+    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var lblEmpId: UILabel!
+    @IBOutlet weak var lblReq: UILabel!
+    @IBOutlet weak var lblPaid: UILabel!
+    @IBOutlet weak var lblCurr: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         outerVw.layer.shadowOpacity = 0.25
@@ -26,9 +32,18 @@ class ECREmpListCell: UITableViewCell {
         headerVw.layer.shadowRadius = 1
         headerVw.layer.shadowColor = UIColor.black.cgColor
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    func setDataToView(data:ECREmpData){
+        
+        lblName.text! = data.empName
+        lblEmpId.text! = data.empId
+        lblReq.text! = data.totalReq
+        lblPaid.text! = data.totalPaid
+//        lblCurr.text! = data.curr
     }
     
 }

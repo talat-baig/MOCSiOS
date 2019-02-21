@@ -49,7 +49,6 @@ class SalesSummaryCell: UITableViewCell {
         lblRefNum.text = data?.refNo
         cpName.text = data?.cpName
         
-        
         let val = data?.value ?? "-"
         let valCurr = data?.valCurr ?? ""
         

@@ -352,7 +352,17 @@ struct Constant
         static let FPS_PAYMENTS_LIST = ApiUrl.URL + "/FundsPayableSettlement/ShowDetailsbyRefID?apikeyref=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&filter=%@&referenceid=%@"
     }
     
+    struct ECRReport {
+    
+        static let EMP_LIST = ApiUrl.URL + "/ECR/GetECRReport?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&EmployeeName=%@"
+        
+        
+        static let REF_LIST = ApiUrl.URL + "/ECR/GetECRReportByName?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&EmployeeName=%@"
 
+    }
+    
+    
+    
     struct EMPLOYEE {
         /**
          *Get All Employee Directory*

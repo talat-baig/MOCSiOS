@@ -12,7 +12,6 @@ import SwiftyJSON
 class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, filterViewDelegate, customPopUpDelegate {
 
     var arrayList:[EPRData] = []
-//    var newArray:[EPRData] = []
     var navTitle = ""
 
     var searchString = ""
@@ -30,15 +29,16 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
 
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
+        
         srchBar.delegate = self
         FilterViewController.filterDelegate = self
 

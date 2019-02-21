@@ -13,10 +13,16 @@ import SwiftyJSON
 
 class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
     
+    var searchString = ""
+    var currentPage : Int = 1
+    var arrayList:[ECREmpData] = []
+
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collVw: UICollectionView!
+    @IBOutlet weak var btnMore: UIButton!
+//    @IBOutlet weak var btnMore: UIView!
     
     @IBOutlet weak var filterVw: UIView!
     @IBOutlet weak var vwContent: UIView!
@@ -28,18 +34,17 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
         
         self.tableView.register(UINib(nibName: "ECREmpListCell", bundle: nil), forCellReuseIdentifier: "cell")
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllECRData))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
 
         Helper.setupCollVwFitler(collVw: self.collVw)
-        
+        srchBar.delegate = self
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
         
-        fetchAllECRData()
         resetViews()
         self.navigationController?.isNavigationBarHidden = true
         
@@ -48,45 +53,129 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Employees Advances & Settlements"
         vwTopHeader.lblSubTitle.isHidden = true
+        
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        btnMore.layer.shadowRadius = 4.0
+        btnMore.layer.shadowOpacity = 0.8
+        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+        
+        self.refreshList()
+
     }
     
     @objc func handleTap() {
-        self.srchBar.endEditing(true)
+        self.view.endEditing(true)
+    }
+    
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.currentPage = 1
+        self.populateList()
+        self.resetViews()
     }
     
     func resetViews() {
-        
         if FilterViewController.selectedDataObj.isEmpty {
             filterVw.isHidden = true
         } else {
-             filterVw.isHidden = false
+            filterVw.isHidden = false
         }
     }
     
     func applyFilter(filterString: String) {
         
-        if filterString.contains(",") {
-            Helper.showMessage(message: "Please select only one filter")
-            return
+        if !arrayList.isEmpty {
+            arrayList.removeAll()
         }
-        self.fetchAllECRData()
+        self.refreshList()
         self.resetViews()
         self.collVw.reloadData()
     }
     
-    func cancelFilter(filterString: String) {
-        self.fetchAllECRData()
-        self.resetViews()
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList()
     }
     
-    @objc func fetchAllECRData() {
+    func cancelFilter(filterString: String) {
+        self.populateList()
+        self.resetViews()
+    }
+   
+    @objc func populateList() {
+        
+        var newData :[ECREmpData] = []
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.ECRReport.EMP_LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
+            print(url)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+                    
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+                    
+                    if arrayJson.count > 0 {
+                        
+                        for(_,j):(String,JSON) in jsonResp{
+                            let data = ECREmpData()
+                            data.empId = j["Employee Code"].stringValue
+                            data.empName = j["Employee Name"].stringValue
+
+                            data.totalPaid = j["Paid Total"].stringValue != "" ? j["Paid Total"].stringValue : "-"
+                            data.totalReq = j["Requested Total"].stringValue != "" ? j["Requested Total"].stringValue : "-"
+                            newData.append(data)
+                        }
+                        self.arrayList.append(contentsOf: newData)
+                        self.tableView.tableFooterView = nil
+                    } else {
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
+                    }
+                } else {
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
+                }
+                self.tableView.reloadData()
+            }))
+        } else {
+            self.refreshControl.endRefreshing()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
+            }
+        }
+    }
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
     }
     
     func clearAll() {
         self.collVw.reloadData()
-        self.fetchAllECRData()
         self.resetViews()
-
     }
     
     func resetData() {
@@ -103,6 +192,24 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
         }
         return true
     }
+    
+  
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
+        let contentHeight = scrollView.contentSize.height
+        
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = false
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = true
+            }
+        }
+    }
+    
 }
 
 
@@ -116,7 +223,7 @@ extension ECREmployeeListController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -128,16 +235,50 @@ extension ECREmployeeListController: UITableViewDataSource, UITableViewDelegate 
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
+        if arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let ecrDetails = self.storyboard?.instantiateViewController(withIdentifier: "ECRRefIDListVC") as! ECRRefIDListVC
+        ecrDetails.empName = self.arrayList[indexPath.row].empName
+        ecrDetails.empID = self.arrayList[indexPath.row].empId
+
         self.navigationController?.pushViewController(ecrDetails, animated: true)
     }
     
 }
 
+
+extension ECREmployeeListController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if  searchText.isEmpty {
+            self.searchString = ""
+            self.refreshList()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        self.searchString = searchTxt
+        self.refreshList()
+    }
+}
 
 // MARK: - WC_HeaderViewDelegate methods
 extension ECREmployeeListController: WC_HeaderViewDelegate {

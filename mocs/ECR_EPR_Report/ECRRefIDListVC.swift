@@ -8,14 +8,21 @@
 
 import UIKit
 
+import Alamofire
+import SwiftyJSON
+
 class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
     
+    
+    var arrayList = [ECRRefData]()
+    var newArray = [ECRRefData]()
+    var empName = ""
+    var empID = ""
+
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var arrSample : [String] = ["test test test test","test test testtest test testtest test testtest test testtest test test test test testtest test test","test test testtest test test","test test test"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,23 +30,25 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
-
+        
+        self.searchBar.delegate = self
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblSubTitle.isHidden = false
-        vwTopHeader.lblTitle.text = "Emp Name"
-        vwTopHeader.lblSubTitle.text = "EMP ID"
+        vwTopHeader.lblTitle.text = self.empName
+        vwTopHeader.lblSubTitle.text =  self.empID
         
         self.tableView.separatorStyle = .none
-        tableView.estimatedRowHeight = 368.0
+        tableView.estimatedRowHeight = 375.0
         tableView.rowHeight = UITableViewAutomaticDimension
-
+        
+        self.populateList()
     }
     
     @objc func handleTap() {
-        self.searchBar.endEditing(true)
+        self.view.endEditing(true)
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
@@ -48,6 +57,54 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
             return false
         }
         return true
+    }
+    
+    @objc func populateList(){
+        
+        var newArr : [ECRRefData] = []
+        if internetStatus != .notReachable {
+            
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.ECRReport.REF_LIST, Session.authKey, Helper.encodeURL(url : FilterViewController.getFilterString()), Helper.encodeURL(url: self.empName))
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+                    
+                    if arrayJson.count > 0 {
+                        
+                        for(_,j):(String,JSON) in jsonResp {
+                        
+                            let newObj = ECRRefData()
+                            
+                            newObj.refNo = j["Reference ID"].stringValue
+                            newObj.amtReq = j["Requested Amount"].stringValue != "" ? j["Requested Amount"].stringValue : "-"
+                            newObj.reqType = j["Request Type"].stringValue != "" ? j["Request Type"].stringValue : "-"
+                            newObj.charge = j["Account Charge Head"].stringValue != "" ? j["Account Charge Head"].stringValue : "-"
+                            newObj.amtPaid = j["Paid Total"].stringValue != "" ? j["Paid Total"].stringValue : "-"
+                            newObj.natureExpense = j["Expense Type"].stringValue != "" ? j["Expense Type"].stringValue : "-"
+                            newObj.curr = j["Local Currency"].stringValue != "" ? j["Local Currency"].stringValue : "-"
+                            newObj.deptApproval = j["Claim Dept. Approval Status"].stringValue != "" ? j["Claim Dept. Approval Status"].stringValue : "-"
+                            newObj.financeApproval = j["Claim Finance Approval Status"].stringValue != "" ? j["Claim Finance Approval Status"].stringValue : "-"
+                            newObj.account = j["Account Number"].stringValue != "" ? j["Account Number"].stringValue : "-"
+                            newObj.bankName = j["Bank"].stringValue != "" ? j["Bank"].stringValue : "-"
+
+                            newObj.remarks = j["Remarks"].stringValue != "" ? j["Remarks"].stringValue : "-"
+
+                            newArr.append(newObj)
+                        }
+                        self.arrayList = newArr
+                    }
+                    self.newArray = self.arrayList
+                    self.tableView.reloadData()
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
     
 }
@@ -62,7 +119,7 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrSample.count
+        return arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -75,8 +132,11 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.isUserInteractionEnabled = false
         cell.selectionStyle = .none
-
-        cell.lblNOE.text = self.arrSample[indexPath.row]
+        if self.arrayList.count > 0 {
+            DispatchQueue.main.async {
+                cell.setDataToView(data: self.arrayList[indexPath.row])
+            }
+        }
         return cell
     }
     
@@ -84,6 +144,32 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
         
     }
     
+}
+
+
+extension ECRRefIDListVC: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if  searchText.isEmpty {
+            self.arrayList = newArray
+        } else {
+            let filteredArray = newArray.filter {
+                $0.refNo.localizedCaseInsensitiveContains(searchText)
+            }
+            self.arrayList = filteredArray
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        self.searchBar.endEditing(true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchBar.endEditing(true)
+    }
 }
 
 
