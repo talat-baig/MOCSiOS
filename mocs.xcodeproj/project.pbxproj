@@ -209,6 +209,11 @@
 		57A0DED7208DA22E0057FA08 /* EPRListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A0DED5208DA22E0057FA08 /* EPRListCell.swift */; };
 		57A0DED8208DA22E0057FA08 /* EPRListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57A0DED6208DA22E0057FA08 /* EPRListCell.xib */; };
 		57B7D2EE2121B65B004D1202 /* EmployeeClaimData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B7D2ED2121B65B004D1202 /* EmployeeClaimData.swift */; };
+		57B8836E221FE397004EE9D9 /* CashAndBalance.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57B8836D221FE397004EE9D9 /* CashAndBalance.storyboard */; };
+		57B88370221FE3CE004EE9D9 /* CashBankBalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8836F221FE3CE004EE9D9 /* CashBankBalController.swift */; };
+		57B88373221FE3F1004EE9D9 /* CashBankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B88371221FE3F1004EE9D9 /* CashBankCell.swift */; };
+		57B88374221FE3F1004EE9D9 /* CashBankCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57B88372221FE3F1004EE9D9 /* CashBankCell.xib */; };
+		57B8837622201BFD004EE9D9 /* PaymentLedgerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B8837522201BFD004EE9D9 /* PaymentLedgerData.swift */; };
 		57BB7F4F21BFC63100FF70FF /* SalesReportData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BB7F4E21BFC63100FF70FF /* SalesReportData.swift */; };
 		57BB7F5221BFD99700FF70FF /* SalesProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BB7F5021BFD99700FF70FF /* SalesProductCell.swift */; };
 		57BB7F5321BFD99700FF70FF /* SalesProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 57BB7F5121BFD99700FF70FF /* SalesProductCell.xib */; };
@@ -629,6 +634,11 @@
 		57A0DED5208DA22E0057FA08 /* EPRListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPRListCell.swift; sourceTree = "<group>"; };
 		57A0DED6208DA22E0057FA08 /* EPRListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EPRListCell.xib; sourceTree = "<group>"; };
 		57B7D2ED2121B65B004D1202 /* EmployeeClaimData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeClaimData.swift; sourceTree = "<group>"; };
+		57B8836D221FE397004EE9D9 /* CashAndBalance.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CashAndBalance.storyboard; sourceTree = "<group>"; };
+		57B8836F221FE3CE004EE9D9 /* CashBankBalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashBankBalController.swift; sourceTree = "<group>"; };
+		57B88371221FE3F1004EE9D9 /* CashBankCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashBankCell.swift; sourceTree = "<group>"; };
+		57B88372221FE3F1004EE9D9 /* CashBankCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CashBankCell.xib; sourceTree = "<group>"; };
+		57B8837522201BFD004EE9D9 /* PaymentLedgerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentLedgerData.swift; sourceTree = "<group>"; };
 		57BB7F4E21BFC63100FF70FF /* SalesReportData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesReportData.swift; sourceTree = "<group>"; };
 		57BB7F5021BFD99700FF70FF /* SalesProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesProductCell.swift; sourceTree = "<group>"; };
 		57BB7F5121BFD99700FF70FF /* SalesProductCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SalesProductCell.xib; sourceTree = "<group>"; };
@@ -1242,6 +1252,17 @@
 			name = Purchase_Summary_Report;
 			sourceTree = "<group>";
 		};
+		57B8836C221FE36B004EE9D9 /* Cash&Bank Balance */ = {
+			isa = PBXGroup;
+			children = (
+				57B8836D221FE397004EE9D9 /* CashAndBalance.storyboard */,
+				57B8836F221FE3CE004EE9D9 /* CashBankBalController.swift */,
+				57B88371221FE3F1004EE9D9 /* CashBankCell.swift */,
+				57B88372221FE3F1004EE9D9 /* CashBankCell.xib */,
+			);
+			path = "Cash&Bank Balance";
+			sourceTree = "<group>";
+		};
 		57CFBA9021F1B82400935D84 /* LMS */ = {
 			isa = PBXGroup;
 			children = (
@@ -1464,6 +1485,7 @@
 				57F5A466221D68EA008521EA /* Payment Ledger */,
 				57F5A45D221D3C46008521EA /* Customer Ledger */,
 				57455DBD21DCA13200FB7A62 /* Funds Payment & Settlement */,
+				57B8836C221FE36B004EE9D9 /* Cash&Bank Balance */,
 				573EE490221BDBEE0087DDB1 /* ECR_EPR_Report */,
 				5736D67521CCC75E006CDA58 /* FundsRcptAllocation */,
 				57EEFF1721CA5DEE009FE1C9 /* SearchByProductsView.swift */,
@@ -1583,6 +1605,7 @@
 		B3C93AC0201E045100505273 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				57B8837522201BFD004EE9D9 /* PaymentLedgerData.swift */,
 				57E11D95221ECA3D0072BC90 /* ECRRefData.swift */,
 				57E11D93221EA8D70072BC90 /* ECREmpData.swift */,
 				57DCB4992201C577004DE9A5 /* PAData.swift */,
@@ -1711,6 +1734,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57B8836E221FE397004EE9D9 /* CashAndBalance.storyboard in Resources */,
 				57EAD4DF21366E4D003C9910 /* EnterKYCDetailsView.xib in Resources */,
 				B31BE46F2013D04D00F55648 /* LaunchScreen.storyboard in Resources */,
 				57F7B86821F5E85C00E5D707 /* LMSCustomHeader.xib in Resources */,
@@ -1763,6 +1787,7 @@
 				57F0348D207F815E00DE5056 /* LocationFilterCell.xib in Resources */,
 				57866FF521C3D4A400B76FD7 /* PurchaseProdCell.xib in Resources */,
 				5735F2932076261200A0A640 /* SendEmailView.xib in Resources */,
+				57B88374221FE3F1004EE9D9 /* CashBankCell.xib in Resources */,
 				571B23E321BE417E00D4A1A7 /* SSListCell.xib in Resources */,
 				572FABBE215B5A2D00E6115B /* TravelTicket.storyboard in Resources */,
 				5746529920AC1AF80052AE2D /* CustomPopUpView.xib in Resources */,
@@ -1955,6 +1980,7 @@
 				8425156E2056494300130073 /* ARIData.swift in Sources */,
 				57480435211471DB00A87CDA /* RecordRcptData.swift in Sources */,
 				571065F620FE1693006E7864 /* CargoInfoCell.swift in Sources */,
+				57B88370221FE3CE004EE9D9 /* CashBankBalController.swift in Sources */,
 				5735F2842075F61500A0A640 /* ARInstrumentController.swift in Sources */,
 				571B23E221BE417E00D4A1A7 /* SSListCell.swift in Sources */,
 				8443BFD3203AB93A00F09DE0 /* PurchaseContractController.swift in Sources */,
@@ -2006,6 +2032,7 @@
 				84D0C4D120501AD0000BED53 /* EmployeePaymentController.swift in Sources */,
 				571B23ED21BE717400D4A1A7 /* SalesSummaryCell.swift in Sources */,
 				84D0C4BD204D0C24000BED53 /* TCRController.swift in Sources */,
+				57B88373221FE3F1004EE9D9 /* CashBankCell.swift in Sources */,
 				84251570205684EA00130073 /* ARIViewController.swift in Sources */,
 				5756DE8421D6239900C355EE /* PieChartEntryCell.swift in Sources */,
 				575CA3AF21BE8C8D00D4B56F /* SalesSummData.swift in Sources */,
@@ -2128,6 +2155,7 @@
 				573DB4992089EFDD007056A1 /* CustomTRIApproveView.swift in Sources */,
 				57F5A462221D3CA5008521EA /* CLListCell.swift in Sources */,
 				B31BE4652013D04C00F55648 /* AppDelegate.swift in Sources */,
+				57B8837622201BFD004EE9D9 /* PaymentLedgerData.swift in Sources */,
 				57CEE40821AEA25600BF5FEE /* EmptyStateView.swift in Sources */,
 				577727152109E12900AA31DA /* ROCargoDetailsEditVC.swift in Sources */,
 				842515762056965800130073 /* AllocationAdapter.swift in Sources */,

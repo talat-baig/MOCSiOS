@@ -11,7 +11,6 @@ import UIKit
 class ECRRefIDDetailsCell: UITableViewCell {
 
     @IBOutlet weak var outerVw: UIView!
-    
     @IBOutlet weak var headrVw: UIView!
     
     @IBOutlet weak var lblNOE: UILabel!
@@ -42,14 +41,15 @@ class ECRRefIDDetailsCell: UITableViewCell {
         headrVw.layer.shadowRadius = 1
         headrVw.layer.shadowColor = UIColor.black.cgColor
         
-        
+        self.layoutIfNeeded()
+        self.layoutSubviews()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
-    
+
+
     func setDataToView(data:ECRRefData){
         
         lblNOE.text! = data.natureExpense

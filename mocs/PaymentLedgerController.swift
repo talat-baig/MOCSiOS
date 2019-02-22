@@ -7,9 +7,14 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
 
+    var searchString = ""
+    var currentPage : Int = 1
+    var arrayList:[PaymentLedgerData] = []
     
     @IBOutlet weak var vwFilter: UIView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -19,26 +24,25 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
     @IBOutlet weak var vwContent: UIView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     @IBOutlet weak var collVw: UICollectionView!
-    
+    @IBOutlet weak var btnMore: UIButton!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.tableView.register(UINib(nibName: "PaymentLedgerCell", bundle: nil), forCellReuseIdentifier: "cell")
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllPLData))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
-        
+        srchBar.delegate = self
         Helper.setupCollVwFitler(collVw: self.collVw)
         
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
         
-        fetchAllPLData()
         resetViews()
-        
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -46,13 +50,31 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Payment Ledger"
         vwTopHeader.lblSubTitle.isHidden = true
+        
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        btnMore.layer.shadowRadius = 4.0
+        btnMore.layer.shadowOpacity = 0.8
+        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+        
+        self.refreshList()
+
+        
     }
     
     
     @objc func handleTap() {
-        self.srchBar.endEditing(true)
+        self.view.endEditing(true)
     }
     
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.currentPage = 1
+        self.populateList()
+        self.resetViews()
+    }
+    
+   
     func resetViews() {
         
         if FilterViewController.selectedDataObj.isEmpty {
@@ -64,26 +86,106 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
     
     func applyFilter(filterString: String) {
         
-        if filterString.contains(",") {
-            Helper.showMessage(message: "Please select only one filter")
-            return
+        if !arrayList.isEmpty {
+            arrayList.removeAll()
         }
-        self.fetchAllPLData()
+        self.refreshList()
         self.resetViews()
         self.collVw.reloadData()
     }
     
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList()
+    }
+    
     func cancelFilter(filterString: String) {
-        self.fetchAllPLData()
+        self.populateList()
         self.resetViews()
     }
     
-    @objc func fetchAllPLData() {
+  
+    @objc func populateList() {
+        
+        
+        var newData :[PaymentLedgerData] = []
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.PaymentLedger.PL_LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
+            print(url)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+                    
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+                    
+                    if arrayJson.count > 0 {
+                        
+                        for(_,j):(String,JSON) in jsonResp {
+                            
+                            let data = PaymentLedgerData()
+                          
+                            data.cpID = j["Employee Code"].stringValue
+                            data.journal = j["Journal"].stringValue != "" ? j["Journal"].stringValue : "-"
+                            data.curr = j["Currency"].stringValue != "" ? j["Currency"].stringValue : "-"
+                            data.instNo = j["Instrument No."].stringValue != "" ? j["Instrument No."].stringValue : "-"
+                            data.refNo = j["Reference ID"].stringValue != "" ? j["Reference ID"].stringValue : "-"
+                            data.date = j["Date"].stringValue != "" ? j["Date"].stringValue : "-"
+                            data.debit = j["Debit"].stringValue != "" ? j["Debit"].stringValue : "-"
+                            data.credit = j["Credit"].stringValue != "" ? j["Credit"].stringValue : "-"
+                            data.balance = j["Balance"].stringValue != "" ? j["Balance"].stringValue : "-"
+                            data.particular = j["Particulars"].stringValue != "" ? j["Particulars"].stringValue : "-"
+                            data.remarks = j["Remarks"].stringValue != "" ? j["Remarks"].stringValue : "-"
+                            newData.append(data)
+                        }
+                        self.arrayList.append(contentsOf: newData)
+                        self.tableView.tableFooterView = nil
+                    } else {
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
+                    }
+                } else {
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
+                }
+                self.tableView.reloadData()
+            }))
+        } else {
+            self.refreshControl.endRefreshing()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
+            }
+        }
+    }
+    
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
     }
     
     func clearAll() {
         self.collVw.reloadData()
-        self.fetchAllPLData()
         self.resetViews()
     }
     
@@ -101,6 +203,22 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         }
         return true
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
+        let contentHeight = scrollView.contentSize.height
+        
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = false
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = true
+            }
+        }
+    }
 }
 
 
@@ -114,7 +232,7 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -126,6 +244,11 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
+        if self.arrayList.count > 0 {
+            DispatchQueue.main.async {
+                cell.setDataToView(data: self.arrayList[indexPath.row])
+            }
+        }
         return cell
     }
     
@@ -135,6 +258,32 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
+extension PaymentLedgerController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if  searchText.isEmpty {
+            self.searchString = ""
+            self.refreshList()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        srchBar.resignFirstResponder()
+        guard let searchTxt = srchBar.text else {
+            return
+        }
+        self.searchString = searchTxt
+        self.refreshList()
+    }
+}
 
 // MARK: - WC_HeaderViewDelegate methods
 extension PaymentLedgerController: WC_HeaderViewDelegate {

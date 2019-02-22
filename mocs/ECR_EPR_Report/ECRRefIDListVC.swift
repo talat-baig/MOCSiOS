@@ -23,7 +23,6 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "ECRRefIDDetailsCell", bundle: nil), forCellReuseIdentifier: "cell")
@@ -41,7 +40,7 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         vwTopHeader.lblSubTitle.text =  self.empID
         
         self.tableView.separatorStyle = .none
-        tableView.estimatedRowHeight = 375.0
+        tableView.estimatedRowHeight = 55
         tableView.rowHeight = UITableViewAutomaticDimension
         
         self.populateList()
@@ -58,6 +57,7 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         }
         return true
     }
+    
     
     @objc func populateList(){
         
@@ -99,7 +99,11 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
                         self.arrayList = newArr
                     }
                     self.newArray = self.arrayList
+//                    self.tableView.setNeedsLayout()
+//                    self.tableView.layoutIfNeeded()
                     self.tableView.reloadData()
+                    self.tableView.beginUpdates()
+                    self.tableView.endUpdates()
                 }
             }))
         } else {
@@ -107,12 +111,15 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         }
     }
     
+//    override func didMoveToSuperview() {
+//        super.didMoveToSuperview()
+//        layoutIfNeeded()
+//    }
 }
 
 
 // MARK: - UITableViewDataSource methods
 extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -123,6 +130,7 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
         return UITableViewAutomaticDimension
     }
     
@@ -138,6 +146,10 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
             }
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -159,6 +171,8 @@ extension ECRRefIDListVC: UISearchBarDelegate {
             }
             self.arrayList = filteredArray
         }
+//        self.tableView.setNeedsLayout()
+//        self.tableView.layoutIfNeeded()
         tableView.reloadData()
     }
     

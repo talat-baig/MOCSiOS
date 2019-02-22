@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import Charts
 import SwiftyJSON
 
 class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
@@ -22,7 +21,6 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collVw: UICollectionView!
     @IBOutlet weak var btnMore: UIButton!
-//    @IBOutlet weak var btnMore: UIView!
     
     @IBOutlet weak var filterVw: UIView!
     @IBOutlet weak var vwContent: UIView!

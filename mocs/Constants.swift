@@ -362,7 +362,13 @@ struct Constant
     }
     
     
+    struct PaymentLedger {
+        
+        static let PL_LIST = ApiUrl.URL + "/Report/GetPaymentLedger?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidPL=%@&filterPL=%@&PageNo=%d&reference=%@"
+      
+    }
     
+
     struct EMPLOYEE {
         /**
          *Get All Employee Directory*

@@ -13,6 +13,22 @@ class PaymentLedgerCell: UITableViewCell {
     @IBOutlet weak var outerVw: UIView!
     @IBOutlet weak var headerVw: UIView!
 
+    @IBOutlet weak var date: UILabel!
+    
+    @IBOutlet weak var lblCPID: UILabel!
+    @IBOutlet weak var refNo: UILabel!
+    @IBOutlet weak var vendorName: UILabel!
+    @IBOutlet weak var instrumentNo: UILabel!
+    
+    @IBOutlet weak var remarks: UILabel!
+    @IBOutlet weak var credit: UILabel!
+    @IBOutlet weak var currency: UILabel!
+    
+    @IBOutlet weak var particular: UILabel!
+    @IBOutlet weak var journal: UILabel!
+    @IBOutlet weak var debit: UILabel!
+    @IBOutlet weak var balance: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -29,6 +45,25 @@ class PaymentLedgerCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    func setDataToView(data:PaymentLedgerData){
+        
+//        lblCPID.text! = data.cpID
+        
+        lblCPID.text! = data.cpID != "" ? data.cpID : "-"
+        journal.text! = data.journal
+        currency.text! = data.curr
+        credit.text! = data.credit
+        debit.text! = data.debit
+        balance.text! = data.balance
+        journal.text! = data.journal
+        date.text! = data.date
+        remarks.text! = data.remarks
+        instrumentNo.text! = data.instNo
+        particular.text! = data.particular
+        refNo.text! = data.refNo
+
     }
     
 }
