@@ -18,7 +18,7 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
     var newArray = [ECRRefData]()
     var empName = ""
     var empID = ""
-
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -40,7 +40,7 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         vwTopHeader.lblSubTitle.text =  self.empID
         
         self.tableView.separatorStyle = .none
-        tableView.estimatedRowHeight = 55
+        tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         
         self.populateList()
@@ -58,6 +58,12 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         return true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+    }
     
     @objc func populateList(){
         
@@ -77,7 +83,7 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
                     if arrayJson.count > 0 {
                         
                         for(_,j):(String,JSON) in jsonResp {
-                        
+                            
                             let newObj = ECRRefData()
                             
                             newObj.refNo = j["Reference ID"].stringValue
@@ -91,19 +97,17 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
                             newObj.financeApproval = j["Claim Finance Approval Status"].stringValue != "" ? j["Claim Finance Approval Status"].stringValue : "-"
                             newObj.account = j["Account Number"].stringValue != "" ? j["Account Number"].stringValue : "-"
                             newObj.bankName = j["Bank"].stringValue != "" ? j["Bank"].stringValue : "-"
-
+                            
                             newObj.remarks = j["Remarks"].stringValue != "" ? j["Remarks"].stringValue : "-"
-
+                            
                             newArr.append(newObj)
                         }
                         self.arrayList = newArr
                     }
                     self.newArray = self.arrayList
-//                    self.tableView.setNeedsLayout()
-//                    self.tableView.layoutIfNeeded()
+                    self.tableView.setNeedsLayout()
+                    self.tableView.layoutIfNeeded()
                     self.tableView.reloadData()
-                    self.tableView.beginUpdates()
-                    self.tableView.endUpdates()
                 }
             }))
         } else {
@@ -111,10 +115,6 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         }
     }
     
-//    override func didMoveToSuperview() {
-//        super.didMoveToSuperview()
-//        layoutIfNeeded()
-//    }
 }
 
 
@@ -140,6 +140,7 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.isUserInteractionEnabled = false
         cell.selectionStyle = .none
+        cell.layoutSubviews()
         if self.arrayList.count > 0 {
             DispatchQueue.main.async {
                 cell.setDataToView(data: self.arrayList[indexPath.row])
@@ -171,10 +172,15 @@ extension ECRRefIDListVC: UISearchBarDelegate {
             }
             self.arrayList = filteredArray
         }
-//        self.tableView.setNeedsLayout()
-//        self.tableView.layoutIfNeeded()
+        //        self.tableView.setNeedsLayout()
+        //        self.tableView.layoutIfNeeded()
         tableView.reloadData()
+        
+        
     }
+    
+    
+    
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""

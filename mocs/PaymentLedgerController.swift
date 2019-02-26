@@ -65,7 +65,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
     
     @objc func handleTap() {
         self.view.endEditing(true)
-    }
+    } 
     
     @objc func refreshList() {
         self.arrayList.removeAll()

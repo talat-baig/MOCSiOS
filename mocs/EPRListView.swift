@@ -32,7 +32,6 @@ class EPRListView: UIView {
         
         self.tblVwEPR.register(UINib(nibName: "EPRListCell", bundle: nil), forCellReuseIdentifier: "eprCell")
         
-//        self.tblVwEPR.separatorStyle = .none
         
     }
     

@@ -13,17 +13,20 @@ class CashBankCell: UITableViewCell {
     @IBOutlet weak var outerVw: UIView!
     @IBOutlet weak var headrVw: UIView!
 
-    @IBOutlet weak var cpName: UILabel!
+    @IBOutlet weak var lblCPName: UILabel!
     
-    @IBOutlet weak var cpId: UILabel!
-    @IBOutlet weak var particulars: UILabel!
-    @IBOutlet weak var date: UILabel!
-    @IBOutlet weak var debit: UILabel!
-    @IBOutlet weak var credit: UILabel!
-    @IBOutlet weak var balance: UILabel!
-    @IBOutlet weak var remarks: UILabel!
+    @IBOutlet weak var lblCPId: UILabel!
+    @IBOutlet weak var lblParticulars: UILabel!
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var lblDebit: UILabel!
+    @IBOutlet weak var lblCredit: UILabel!
+    @IBOutlet weak var lblBal: UILabel!
+    @IBOutlet weak var lblRemarks: UILabel!
 
-    @IBOutlet weak var lblCode: UILabel!
+    @IBOutlet weak var lblJournal: UILabel!
+    @IBOutlet weak var lblAccount: UILabel!
+    @IBOutlet weak var lblBankName: UILabel!
+    @IBOutlet weak var lblRef: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,12 +44,22 @@ class CashBankCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setDataToView(data:ECRRefData){
+    func setDataToView(data:PaymentLedgerData){
         
-//        lblDeptApproval.text! = data.deptApproval
-//        lblFinanceApproval.text! = data.financeApproval
-//        lblRemarks.text! = data.remarks
-//        lblRef.text! = data.refNo
+        lblCPId.text = data.cpID != "" ? data.cpID : "-" //
+        lblCPName.text = data.vendorName != "" ? data.vendorName : "-" //
+        
+        lblDate.text = data.date
+        lblBal.text = data.balance
+        lblBankName.text = data.bankName
+        lblAccount.text = data.account
+        lblRemarks.text = data.remarks
+        lblJournal.text = data.journal
+        lblParticulars.text = data.particular
+        lblCredit.text = data.debit
+        lblDebit.text = data.debit
+        lblRef.text = data.refNo
+        
     }
 
     

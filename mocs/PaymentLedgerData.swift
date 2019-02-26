@@ -22,5 +22,7 @@ class PaymentLedgerData: NSObject {
     var particular = ""
     var instNo = ""
     var curr = ""
+    var bankName = ""
+    var account = ""
 
 }
