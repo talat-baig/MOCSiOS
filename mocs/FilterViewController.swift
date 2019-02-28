@@ -58,11 +58,6 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         setupTreeView()
         populateFilterList()
         
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-//        flowLayout.minimumInteritemSpacing = 5.0
-//        collVwFilter.collectionViewLayout = flowLayout
         
         Helper.setupCollVwFitler(collVw: self.collVwFilter)
 
