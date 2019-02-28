@@ -33,9 +33,11 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
+        
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
+        
         srchBar.delegate = self
         Helper.setupCollVwFitler(collVw: self.collVw)
         

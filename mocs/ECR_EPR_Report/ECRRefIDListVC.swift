@@ -58,12 +58,6 @@ class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
         return true
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//
-//        tableView.estimatedRowHeight = 100
-//        tableView.rowHeight = UITableViewAutomaticDimension
-//    }
     
     @objc func populateList(){
         
@@ -140,11 +134,9 @@ extension ECRRefIDListVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.isUserInteractionEnabled = false
         cell.selectionStyle = .none
-//        cell.layoutSubviews()
+        
         if self.arrayList.count > 0 {
-//            DispatchQueue.main.async {
                 cell.setDataToView(data: self.arrayList[indexPath.row])
-//            }
         }
         return cell
     }

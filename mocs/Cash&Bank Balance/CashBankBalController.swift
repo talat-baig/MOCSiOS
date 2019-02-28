@@ -123,8 +123,6 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
                 
-                
-                
                 if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
                     
                     let jsonResp = JSON(response.result.value!)
@@ -174,6 +172,8 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
                     }
                     print("Invalid Reponse")
                 }
+                self.tableView.setNeedsLayout()
+                self.tableView.layoutIfNeeded()
                 self.tableView.reloadData()
             }))
         } else {
@@ -249,9 +249,7 @@ extension CashBankBalController: UITableViewDataSource, UITableViewDelegate {
         return self.arrayList.count
     }
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 330
-//    }
+
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
@@ -263,11 +261,7 @@ extension CashBankBalController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         if self.arrayList.count > 0 {
-            DispatchQueue.main.async {
-               cell.layoutIfNeeded()
-                cell.setNeedsDisplay()
              cell.setDataToView(data: self.arrayList[indexPath.row])
-            }
         }
         return cell
     }
