@@ -7,10 +7,14 @@
 //
 
 import UIKit
-
+import Alamofire
+import SwiftyJSON
 
 class CLListController: UIViewController, filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
 
+    var searchString = ""
+    var currentPage : Int = 1
+    var arrayList:[PaymentLedgerData] = []
     
     @IBOutlet weak var vwFilter: UIView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -20,24 +24,26 @@ class CLListController: UIViewController, filterViewDelegate, clearFilterDelegat
     @IBOutlet weak var vwContent: UIView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     @IBOutlet weak var collVw: UICollectionView!
+    @IBOutlet weak var btnMore: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.register(UINib(nibName: "CLListCell", bundle: nil), forCellReuseIdentifier: "cell")
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllCLData))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
+        
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         
+        srchBar.delegate = self
         Helper.setupCollVwFitler(collVw: self.collVw)
         
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
         
-        fetchAllCLData()
         resetViews()
         
         self.navigationController?.isNavigationBarHidden = true
@@ -47,15 +53,33 @@ class CLListController: UIViewController, filterViewDelegate, clearFilterDelegat
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Customer Ledger"
         vwTopHeader.lblSubTitle.isHidden = true
+        
+        
+        btnMore.isHidden = true
+        btnMore.layer.cornerRadius = 5.0
+        btnMore.layer.shadowRadius = 4.0
+        btnMore.layer.shadowOpacity = 0.8
+        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+        
+//        tableView.estimatedRowHeight = 100
+//        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        self.refreshList()
+        
+    }
+   
+    @objc func handleTap() {
+        self.view.endEditing(true)
     }
     
-    
-    @objc func handleTap() {
-        self.srchBar.endEditing(true)
+    @objc func refreshList() {
+        self.arrayList.removeAll()
+        self.currentPage = 1
+        self.populateList()
+        self.resetViews()
     }
     
     func resetViews() {
-        
         if FilterViewController.selectedDataObj.isEmpty {
             vwFilter.isHidden = true
         } else {
@@ -65,31 +89,36 @@ class CLListController: UIViewController, filterViewDelegate, clearFilterDelegat
     
     func applyFilter(filterString: String) {
         
-        if filterString.contains(",") {
-            Helper.showMessage(message: "Please select only one filter")
-            return
+        if !arrayList.isEmpty {
+            arrayList.removeAll()
         }
-        self.fetchAllCLData()
+        self.refreshList()
         self.resetViews()
         self.collVw.reloadData()
+    }
+    
+    func loadMoreItemsForList() {
+        self.currentPage += 1
+        populateList()
     }
     
     func cancelFilter(filterString: String) {
-        self.fetchAllCLData()
+        self.populateList()
         self.resetViews()
     }
     
-    @objc func fetchAllCLData() {
+
+    @IBAction func btnMoreTapped(_ sender: Any) {
+        self.loadMoreItemsForList()
     }
     
     func clearAll() {
+        self.handleTap()
         self.collVw.reloadData()
-        self.fetchAllCLData()
         self.resetViews()
     }
     
-    func resetData() {
-    }
+   
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
@@ -101,6 +130,101 @@ class CLListController: UIViewController, filterViewDelegate, clearFilterDelegat
             return false
         }
         return true
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
+        let contentHeight = scrollView.contentSize.height
+        
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = false
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = true
+            }
+        }
+    }
+    
+    @objc func populateList() {
+        
+        handleTap()
+        var newData :[PaymentLedgerData] = []
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.CustomerLedger.CL_LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
+            print(url)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+                    
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+                    
+                    if arrayJson.count > 0 {
+                        
+                        for(_,j):(String,JSON) in jsonResp {
+                            
+                            let data = PaymentLedgerData()
+        
+                            data.cpID = j["CustomerCode"].stringValue //
+                            data.vendorName = j["CustomerName"].stringValue //
+                            
+                            data.journal = j["Journal"].stringValue != "" ? j["Journal"].stringValue : "-" //
+                            data.curr = j["Currency"].stringValue != "" ? j["Currency"].stringValue : "-" //
+                            data.instNo = j["Invoice No"].stringValue != "" ? j["Invoice No"].stringValue : "-"
+                            data.refNo = j["RefrenceID"].stringValue != "" ? j["RefrenceID"].stringValue : "-" //
+                            data.date = j["ValuePaidDate"].stringValue != "" ? j["ValuePaidDate"].stringValue : "-" //
+                           
+                            data.debit = j["DebitAmount"].stringValue != "" ? j["DebitAmount"].stringValue : "-" //
+                            data.credit = j["CreditAmount"].stringValue != "" ? j["CreditAmount"].stringValue : "-" //
+                            data.balance = j["Balance_Payable"].stringValue != "" ? j["Balance_Payable"].stringValue : "-" //
+                        
+                            data.remarks = j["Description"].stringValue != "" ? j["Description"].stringValue : "-" //
+                            newData.append(data)
+                        }
+                        self.arrayList.append(contentsOf: newData)
+                        self.tableView.tableFooterView = nil
+                    } else {
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
+                    }
+                } else {
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
+                }
+                self.tableView.reloadData()
+            }))
+        } else {
+            self.refreshControl.endRefreshing()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
+            }
+        }
     }
 }
 
@@ -115,7 +239,7 @@ extension CLListController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -127,6 +251,10 @@ extension CLListController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
+        if arrayList.count > 0 {
+            let data = arrayList[indexPath.row]
+            cell.setDataToView(data: data)
+        }
         return cell
     }
     
@@ -151,6 +279,35 @@ extension CLListController: WC_HeaderViewDelegate {
         self.presentRightMenuViewController(sender as AnyObject)
     }
     
+}
+
+
+
+extension CLListController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if  searchText.isEmpty {
+            self.searchString = ""
+            self.refreshList()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.searchString = ""
+        self.refreshList()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        searchBar.resignFirstResponder()
+        guard let searchTxt = searchBar.text else {
+            return
+        }
+        self.searchString = searchTxt
+        self.refreshList()
+    }
 }
 
 

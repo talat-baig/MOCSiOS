@@ -40,19 +40,12 @@ class ECRRefIDDetailsCell: UITableViewCell {
         headrVw.layer.shadowOffset = CGSize(width: 1, height: 2)
         headrVw.layer.shadowRadius = 1
         headrVw.layer.shadowColor = UIColor.black.cgColor
-     
-        
     }
     
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        layoutIfNeeded()
-    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
 
     func setDataToView(data:ECRRefData){
         

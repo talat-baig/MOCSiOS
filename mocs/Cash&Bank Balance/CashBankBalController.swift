@@ -60,6 +60,9 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
         btnMore.layer.shadowOpacity = 0.8
         btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+
         self.refreshList()
         
     }
@@ -76,9 +79,7 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
         self.resetViews()
     }
     
-    
     func resetViews() {
-        
         if FilterViewController.selectedDataObj.isEmpty {
             vwFilter.isHidden = true
         } else {
@@ -194,6 +195,7 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
     }
     
     func clearAll() {
+        self.handleTap()
         self.collVw.reloadData()
         self.resetViews()
     }
@@ -247,8 +249,12 @@ extension CashBankBalController: UITableViewDataSource, UITableViewDelegate {
         return self.arrayList.count
     }
     
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 330
+//    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 330
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -258,6 +264,8 @@ extension CashBankBalController: UITableViewDataSource, UITableViewDelegate {
         cell.selectionStyle = .none
         if self.arrayList.count > 0 {
             DispatchQueue.main.async {
+               cell.layoutIfNeeded()
+                cell.setNeedsDisplay()
              cell.setDataToView(data: self.arrayList[indexPath.row])
             }
         }

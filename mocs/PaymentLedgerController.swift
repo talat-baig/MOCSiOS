@@ -57,8 +57,11 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         btnMore.layer.shadowOpacity = 0.8
         btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
         self.refreshList()
-
+        
         
     }
     
@@ -236,7 +239,8 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 330
+        
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -244,10 +248,11 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
+        cell.layoutIfNeeded()
         if self.arrayList.count > 0 {
-            DispatchQueue.main.async {
+//            DispatchQueue.main.async {
                 cell.setDataToView(data: self.arrayList[indexPath.row])
-            }
+//            }
         }
         return cell
     }

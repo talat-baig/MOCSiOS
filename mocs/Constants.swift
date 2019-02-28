@@ -374,6 +374,13 @@ struct Constant
         
     }
     
+    struct CustomerLedger {
+        
+        static let CL_LIST = ApiUrl.URL + "/Report/GetCustomerLedger?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&reference=%@"
+        
+    }
+    
+    
     
     
     

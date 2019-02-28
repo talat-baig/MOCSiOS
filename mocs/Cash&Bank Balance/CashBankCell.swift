@@ -38,10 +38,17 @@ class CashBankCell: UITableViewCell {
         headrVw.layer.shadowOpacity = 0.25
         headrVw.layer.shadowOffset = CGSize(width: 1, height: 2)
         headrVw.layer.shadowRadius = 1
-        headrVw.layer.shadowColor = UIColor.black.cgColor    }
+        headrVw.layer.shadowColor = UIColor.black.cgColor
+        
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        layoutIfNeeded()
     }
     
     func setDataToView(data:PaymentLedgerData){

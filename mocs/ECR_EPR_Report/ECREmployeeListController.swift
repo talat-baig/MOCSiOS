@@ -172,6 +172,7 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
     }
     
     func clearAll() {
+        self.handleTap()
         self.collVw.reloadData()
         self.resetViews()
     }

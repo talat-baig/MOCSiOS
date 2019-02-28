@@ -29,7 +29,7 @@
                                 <rect key="frame" x="0.0" y="70" width="375" height="597"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1rW-Vc-pSF">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="589"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="541"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xi3-yU-0Bv">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="38"/>
@@ -97,7 +97,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uOf-Mr-7Ct">
-                                                <rect key="frame" x="0.0" y="38" width="375" height="551"/>
+                                                <rect key="frame" x="0.0" y="38" width="375" height="503"/>
                                                 <subviews>
                                                     <searchBar contentMode="redraw" placeholder="Search by Reference Id" translatesAutoresizingMaskIntoConstraints="NO" id="uWN-G6-A6f">
                                                         <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
@@ -108,7 +108,7 @@
                                                         <textInputTraits key="textInputTraits"/>
                                                     </searchBar>
                                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0IK-d6-6yy">
-                                                        <rect key="frame" x="0.0" y="56" width="375" height="495"/>
+                                                        <rect key="frame" x="0.0" y="56" width="375" height="447"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <prototypes>
                                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="221" id="29b-NP-iIh">
@@ -139,12 +139,29 @@
                                             </view>
                                         </subviews>
                                     </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cYT-dZ-8Jc">
+                                        <rect key="frame" x="8" y="549" width="359" height="40"/>
+                                        <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="ZrW-aJ-K99"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                        <state key="normal" title="LOAD MORE">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btnMoreTapped:" destination="xWL-go-jsZ" eventType="touchUpInside" id="eFO-Lh-cP5"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="1rW-Vc-pSF" secondAttribute="trailing" id="M35-rZ-VsE"/>
+                                    <constraint firstItem="cYT-dZ-8Jc" firstAttribute="top" secondItem="1rW-Vc-pSF" secondAttribute="bottom" constant="8" id="OO6-Yl-MK4"/>
+                                    <constraint firstItem="cYT-dZ-8Jc" firstAttribute="leading" secondItem="mTT-fv-fgr" secondAttribute="leading" constant="8" id="QfT-V2-Vvl"/>
+                                    <constraint firstAttribute="trailing" secondItem="cYT-dZ-8Jc" secondAttribute="trailing" constant="8" id="ZEJ-8M-QmG"/>
                                     <constraint firstItem="1rW-Vc-pSF" firstAttribute="top" secondItem="mTT-fv-fgr" secondAttribute="top" id="cbf-1o-FNV"/>
-                                    <constraint firstAttribute="bottom" secondItem="1rW-Vc-pSF" secondAttribute="bottom" constant="8" id="eKp-QY-gWg"/>
+                                    <constraint firstAttribute="bottom" secondItem="cYT-dZ-8Jc" secondAttribute="bottom" constant="8" id="iop-Ax-CMV"/>
                                     <constraint firstItem="1rW-Vc-pSF" firstAttribute="leading" secondItem="mTT-fv-fgr" secondAttribute="leading" id="uu4-Bh-yip"/>
                                 </constraints>
                             </view>
@@ -176,6 +193,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="btnMore" destination="cYT-dZ-8Jc" id="dY5-A2-tGc"/>
                         <outlet property="collVw" destination="q02-Mp-a6m" id="O7U-mO-wnc"/>
                         <outlet property="srchBar" destination="uWN-G6-A6f" id="IaD-6d-l1V"/>
                         <outlet property="tableView" destination="0IK-d6-6yy" id="nxP-zx-jZG"/>

@@ -43,7 +43,6 @@ class ECREmpListCell: UITableViewCell {
         lblEmpId.text! = data.empId
         lblReq.text! = data.totalReq
         lblPaid.text! = data.totalPaid
-//        lblCurr.text! = data.curr
     }
     
 }
