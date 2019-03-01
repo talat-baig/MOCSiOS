@@ -23,6 +23,7 @@ class CashBankCell: UITableViewCell {
     @IBOutlet weak var lblBal: UILabel!
     @IBOutlet weak var lblRemarks: UILabel!
 
+    @IBOutlet weak var lblCurr: UILabel!
     @IBOutlet weak var lblJournal: UILabel!
     @IBOutlet weak var lblAccount: UILabel!
     @IBOutlet weak var lblBankName: UILabel!
@@ -66,7 +67,8 @@ class CashBankCell: UITableViewCell {
         lblCredit.text = data.debit
         lblDebit.text = data.debit
         lblRef.text = data.refNo
-        
+     
+        lblCurr.text = data.curr
     }
 
     
