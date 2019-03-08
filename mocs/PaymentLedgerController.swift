@@ -214,7 +214,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
         let contentHeight = scrollView.contentSize.height
         
-        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 9 {
             DispatchQueue.main.async {
                 self.btnMore.isHidden = false
             }
@@ -241,7 +241,6 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         return UITableViewAutomaticDimension
     }
     
@@ -252,10 +251,14 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
         if self.arrayList.count > 0 {
-//            DispatchQueue.main.async {
                 cell.setDataToView(data: self.arrayList[indexPath.row])
-//            }
         }
+        
+//        if self.arrayList.count == 1 {
+//            self.tableView.isScrollEnabled = false
+//        } else {
+//            self.tableView.isScrollEnabled = true
+//        }
         return cell
     }
     

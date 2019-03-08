@@ -61,6 +61,7 @@ class ItineraryListCell: UITableViewCell {
         lblDepDate.text = data.depDate
         lblRetDate.text = data.retDate
         lblEstDays.text = data.estDays
+        lblItinryDate.text = data.createdDate
 //        lblDate.text = data.createdDate
         self.data = data
     }
@@ -93,14 +94,10 @@ class ItineraryListCell: UITableViewCell {
             }
         })
         optionMenu.addAction(cancelAction)
-
         
         if ((itnryMenuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
             itnryMenuDelegate?.onClick(optionMenu: optionMenu , sender: sender)
         }
-        
-        
-        
     }
     
 }

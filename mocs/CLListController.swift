@@ -61,8 +61,8 @@ class CLListController: UIViewController, filterViewDelegate, clearFilterDelegat
         btnMore.layer.shadowOpacity = 0.8
         btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
-//        tableView.estimatedRowHeight = 100
-//        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
         
         self.refreshList()
         
@@ -138,7 +138,7 @@ class CLListController: UIViewController, filterViewDelegate, clearFilterDelegat
         let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
         let contentHeight = scrollView.contentSize.height
         
-        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 9 {
             DispatchQueue.main.async {
                 self.btnMore.isHidden = false
             }
@@ -243,7 +243,7 @@ extension CLListController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

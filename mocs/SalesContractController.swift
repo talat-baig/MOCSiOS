@@ -277,7 +277,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 9 {
             btnMore.isHidden = false
         } else {
             btnMore.isHidden = true

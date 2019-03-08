@@ -113,19 +113,20 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                             
                             data.refId = j["Refid"].stringValue
                             data.custId = j["CustomerID"].stringValue
-                            data.cpName = j["CPName"].stringValue
                             
-                            data.contactType = j["ContactType"].stringValue
-                            data.industryType = j["IndustryType"].stringValue
+                            data.cpName = j["CPName"].stringValue != "" ? j["CPName"].stringValue : "-"
+                            
+                            data.contactType = j["ContactType"].stringValue != "" ? j["ContactType"].stringValue : "-"
+                            data.industryType = j["IndustryType"].stringValue != "" ? j["IndustryType"].stringValue : "-"
                             data.addedBy = j["Addedby"].stringValue
                             
                             data.addedDate = j["Addedbysysdt"].stringValue
-                            data.address = j["Address"].stringValue
-                            data.country = j["Country"].stringValue
+                            data.address = j["Address"].stringValue != "" ? j["Address"].stringValue : "-"
+                            data.country = j["Country"].stringValue != "" ? j["Country"].stringValue : "-"
                             
-                            data.zipPostalCode = j["ZipPostalCode"].stringValue
-                            data.branchCity = j["BranchCity"].stringValue
-                            data.shortName = j["ShortName"].stringValue
+                            data.zipPostalCode = j["ZipPostalCode"].stringValue != "" ? j["ZipPostalCode"].stringValue : "-"
+                            data.branchCity = j["BranchCity"].stringValue != "" ? j["BranchCity"].stringValue : "-"
+                            data.shortName = j["ShortName"].stringValue != "" ? j["ShortName"].stringValue : "-"
                             
                             data.website = j["Website"].stringValue
                             data.faxNo = j["Faxno"].stringValue
@@ -152,6 +153,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                     print("Invalid Reponse")
                 }
                  self.tableView.reloadData()
+//                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }))
         } else {
             self.refreshControl.endRefreshing()
@@ -302,7 +304,7 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 9 {
             btnMore.isHidden = false
         } else {
             btnMore.isHidden = true
@@ -345,13 +347,6 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if arrayList.count > 0{
-            tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
-        } else {
-            tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
-        }
         return arrayList.count
     }
     
@@ -366,9 +361,10 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
             let data = arrayList[indexPath.row]
             cell.setDataToView(data: data)
         }
+        
         cell.cpMenuDelegate = self
         cell.cpOptionItemDelegate = self
-        return cell;
+        return cell
     }
     
     

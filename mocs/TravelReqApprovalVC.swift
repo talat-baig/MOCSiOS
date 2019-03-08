@@ -17,17 +17,21 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-    @IBOutlet weak var btnMore: UIButton!
-
+    
+    
     var navTitle = ""
     var arrayList:[TravelRequestData] = []
+    
+    //    var newArray : [TravelRequestData] = []
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     var myView = CustomPopUpView()
     var declView = CustomPopUpView()
+    @IBOutlet weak var btnMore: UIButton!
     var currentPage : Int = 1
     var searchString = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +48,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         
+        tableView.separatorStyle = .none
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
@@ -91,7 +96,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                     
                     let jsonResponse = JSON(response.result.value!)
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
-
+                    
                     if array.count > 0 {
                         
                         for(_,json):(String,JSON) in jsonResponse {
@@ -151,10 +156,10 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                     }
                     print("Invalid Reponse")
                 }
-                 self.tableView.reloadData()
+                self.tableView.reloadData()
             }))
         } else {
-          
+            
             self.refreshControl.endRefreshing()
             Helper.showNoInternetMessg()
             
@@ -169,7 +174,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         
     }
     
-  
+    
     
     func getItirenaryData(trfData :TravelRequestData, isFromView : Bool ) {
         
@@ -195,24 +200,25 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        //        var commnt = ""
-        //        if text == "" || text == "Enter Comment"  {
-        //            commnt = ""
-        //        } else {
-        //            commnt = text
-        //        }
-        
-        if text == "" || text == "Enter Comment" {
-            Helper.showMessage(message: "Please Enter Comment")
-            return
+        var commnt = ""
+        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
+            commnt = ""
+        } else {
+            commnt = text
         }
         
         if isApprove {
-            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: text)
+            
+            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: commnt)
             myView.removeFromSuperviewWithAnimate()
         } else {
             
-            self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: text)
+            if text == "" || text == "Enter Comment" {
+                Helper.showMessage(message: "Please Enter Comment")
+                return
+            }
+            
+            self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: commnt)
             declView.removeFromSuperviewWithAnimate()
         }
     }
@@ -221,7 +227,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
         
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.TRF.TRF_APPROVE, Session.authKey, trData.trfId, event, comment)
+            let url = String.init(format: Constant.TRF.TRF_APPROVE, Session.authKey, trData.trfId, event, Helper.encodeURL(url: comment))
             self.view.showLoading()
             Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()
@@ -268,12 +274,20 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
-            btnMore.isHidden = false
+        let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
+        let contentHeight = scrollView.contentSize.height
+        
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 9 {
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = false
+            }
         } else {
-            btnMore.isHidden = true
+            DispatchQueue.main.async {
+                self.btnMore.isHidden = true
+            }
         }
     }
+    
     
 }
 
@@ -282,13 +296,7 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if arrayList.count > 0 {
-            tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
-        } else {
-            tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
-        }
+     
         return arrayList.count
     }
     
@@ -306,6 +314,12 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
             let data = arrayList[indexPath.row]
             view.setDataToView(data: data, isFromApprove : true)
         }
+        
+//        if arrayList.count > 0 && arrayList.count <= 2 {
+//            self.tableView.isScrollEnabled = false
+//        } else {
+//            self.tableView.isScrollEnabled = true
+//        }
         view.isFromApprov = true
         view.delegate = self
         view.trfApprvListener = self

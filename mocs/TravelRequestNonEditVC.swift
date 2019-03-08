@@ -113,8 +113,6 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider {
         } else {
             lblReportMngr.text! = trfDta.reportMngr
         }
-        
-        
     }
     
     

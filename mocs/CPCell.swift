@@ -56,7 +56,8 @@ class CPCell: UITableViewCell {
     
     func setDataToView(data:CPListData){
         
-        lblCustomerId.text! = data.custId
+        lblCustomerId.text! = data.custId != "" ? data.custId : "-"
+        
         
         lblCPName.text! = data.cpName
         

@@ -279,7 +279,7 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
         let contentHeight = scrollView.contentSize.height
 
-        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 9 {
             DispatchQueue.main.async {
                 self.btnMore.isHidden = false
             }

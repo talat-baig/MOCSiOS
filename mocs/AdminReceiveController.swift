@@ -282,7 +282,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
         let contentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
-        if  (contentOffset >= maximumOffset)  && self.arrayList.count > 0 {
+        if  (contentOffset >= maximumOffset)  && self.arrayList.count > 9 {
             btnMore.isHidden = false
         } else {
             btnMore.isHidden = true

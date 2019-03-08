@@ -220,7 +220,7 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
         let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
         let contentHeight = scrollView.contentSize.height
         
-        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 9 {
             DispatchQueue.main.async {
                 self.btnMore.isHidden = false
             }
@@ -263,6 +263,13 @@ extension CashBankBalController: UITableViewDataSource, UITableViewDelegate {
         if self.arrayList.count > 0 {
              cell.setDataToView(data: self.arrayList[indexPath.row])
         }
+//        if self.arrayList.count == 1 {
+//            self.tableView.isScrollEnabled = false
+//        } else {
+//            self.tableView.isScrollEnabled = true
+//
+//        }
+        
         return cell
     }
     

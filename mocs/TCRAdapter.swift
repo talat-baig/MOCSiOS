@@ -28,7 +28,6 @@ class TCRAdapter: UITableViewCell {
         super.awakeFromNib()
         self.vwInner.layer.borderWidth = 1
         self.vwInner.layer.borderColor = AppColor.universalHeaderColor.cgColor
-
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

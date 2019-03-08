@@ -177,8 +177,6 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
         self.resetViews()
     }
     
-    func resetData() {
-    }
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
@@ -198,7 +196,7 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
         let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
         let contentHeight = scrollView.contentSize.height
         
-        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 0 {
+        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 9 {
             DispatchQueue.main.async {
                 self.btnMore.isHidden = false
             }
@@ -208,7 +206,6 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
             }
         }
     }
-    
 }
 
 
@@ -238,6 +235,7 @@ extension ECREmployeeListController: UITableViewDataSource, UITableViewDelegate 
             let data = arrayList[indexPath.row]
             cell.setDataToView(data: data)
         }
+
         return cell
     }
     

@@ -289,7 +289,7 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
         
         
         
-        let alert = UIAlertController(title: "Submit Claim?", message: "Are you sure you want to submit this Request? After submitting you'll not be able to edit the Request", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Submit Request?", message: "Are you sure you want to submit this Request? After submitting you'll not be able to edit the Request", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
         

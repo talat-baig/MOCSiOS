@@ -438,10 +438,7 @@ class Helper: UIView {
             } else {
                 NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again by reloading", style:.info).show()
             }
-            
             break
-            
-       
         
         case .failure(let error):
             if error._code == NSURLErrorTimedOut{
@@ -644,7 +641,7 @@ class Helper: UIView {
             
             
         case ModName.isApprovals :
-            emptyView.message = " No data for the current Filter "
+            emptyView.message = " No data for the current "
             
         case ModName.isLMSApproval :
             emptyView.message = "No Pending Approval Data for the current\nTry going back and changing filter"

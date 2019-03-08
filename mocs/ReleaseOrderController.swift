@@ -285,7 +285,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 0 {
+        if ((scrollView.contentOffset.y + scrollView.frame.size.height) >= scrollView.contentSize.height) && self.arrayList.count > 9 {
             btnMore.isHidden = false
         } else {
             btnMore.isHidden = true
@@ -354,13 +354,7 @@ extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, on
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if arrayList.count > 0{
-            tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
-        }else{
-            tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
-        }
+      
         return arrayList.count
     }
     

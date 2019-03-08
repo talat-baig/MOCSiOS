@@ -183,9 +183,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                             let loc = Location()
                             loc.locName = location
                             
-                            
                             let newBUString = busUnit[l]["BU"].stringValue
-                            
                             let buSliced  = newBUString.slice(from: "(", to: ")")
                             //
 //                            print(buSliced!)
