@@ -201,32 +201,32 @@ extension ECRRefIDListVC: WC_HeaderViewDelegate {
     }
     
 }
-
-
-extension ECRRefIDListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return FilterViewController.selectedDataObj.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterCollectionCell", for: indexPath as IndexPath) as! FilterCollectionViewCell
-        let newObj = FilterViewController.selectedDataObj[indexPath.row]
-        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
-        cell.lblTitle.text = newStr
-        cell.lblTitle.preferredMaxLayoutWidth = 100
-        return cell
-    }
-    
-    func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
-    {
-        let newObj = FilterViewController.selectedDataObj[indexPath.row]
-        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
-        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
-        return size
-    }
-    
-    
-}
-
+//
+//
+//extension ECRRefIDListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return FilterViewController.selectedDataObj.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "filterCollectionCell", for: indexPath as IndexPath) as! FilterCollectionViewCell
+//        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+//        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+//        cell.lblTitle.text = newStr
+//        cell.lblTitle.preferredMaxLayoutWidth = 100
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
+//    {
+//        let newObj = FilterViewController.selectedDataObj[indexPath.row]
+//        let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
+//        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+//        return size
+//    }
+//
+//
+//}
+//

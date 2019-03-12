@@ -16,7 +16,6 @@ class CLListCell: UITableViewCell {
     
     @IBOutlet weak var lblCName: UILabel!
     @IBOutlet weak var lblCID: UILabel!
-    @IBOutlet weak var lblRefNo: UILabel!
     @IBOutlet weak var lblDate: UILabel!
     @IBOutlet weak var lblJournal: UILabel!
     @IBOutlet weak var lblRemarks: UILabel!

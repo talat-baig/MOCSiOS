@@ -7,7 +7,8 @@
 //
 
 import Foundation
-class EPRData{
+
+class EPRData {
     var refId:String = String()
     var company:String = String()
     var location:String = String()

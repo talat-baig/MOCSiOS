@@ -58,14 +58,19 @@ class TaskManagerController: UIViewController {
     
     /// Method that calls API to list tasks and populate table view according to API response data
     @objc func populateList(){
+        
         if internetStatus != .notReachable {
+            
             var data:[TaskData] = []
             self.view.showLoading()
+            
             let url:String = String.init(format: Constant.TASK_MANAGER.LIST,Session.email)
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
                 self.refreshControl.endRefreshing()
+                
                 if Helper.isResponseValid(vc: self, response: response.result, tv:self.tableView){
+                    
                     let responseJson = JSON(response.result.value!)
                     
                     for(_,j):(String,JSON) in responseJson{

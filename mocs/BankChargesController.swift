@@ -1,20 +1,22 @@
 //
-//  PaymentLedgerController.swift
+//  BankChargesController.swift
 //  mocs
 //
-//  Created by Talat Baig on 2/20/19.
+//  Created by Talat Baig on 3/11/19.
 //  Copyright © 2019 Rv. All rights reserved.
 //
 
 import UIKit
+
 import Alamofire
 import SwiftyJSON
 
-class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
+class BankChargesController: UIViewController , filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
 
+    
     var searchString = ""
     var currentPage : Int = 1
-    var arrayList:[PaymentLedgerData] = []
+    var arrayList:[BCRefData] = []
     
     @IBOutlet weak var vwFilter: UIView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -25,11 +27,10 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     @IBOutlet weak var collVw: UICollectionView!
     @IBOutlet weak var btnMore: UIButton!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.tableView.register(UINib(nibName: "PaymentLedgerCell", bundle: nil), forCellReuseIdentifier: "cell")
+        self.tableView.register(UINib(nibName: "BankChargesListCell", bundle: nil), forCellReuseIdentifier: "cell")
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
@@ -50,7 +51,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = "Payment Ledger"
+        vwTopHeader.lblTitle.text = "Bank Charges Summary"
         vwTopHeader.lblSubTitle.isHidden = true
         
         btnMore.isHidden = true
@@ -63,13 +64,12 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         tableView.rowHeight = UITableViewAutomaticDimension
         
         self.refreshList()
-        
     }
     
     
     @objc func handleTap() {
         self.view.endEditing(true)
-    } 
+    }
     
     @objc func refreshList() {
         self.arrayList.removeAll()
@@ -78,7 +78,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         self.resetViews()
     }
     
-   
+    
     func resetViews() {
         
         if FilterViewController.selectedDataObj.isEmpty {
@@ -108,15 +108,14 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         self.resetViews()
     }
     
-  
+    
     @objc func populateList() {
         
-        
-        var newData :[PaymentLedgerData] = []
+        var newData :[BCRefData] = []
         
         if internetStatus != .notReachable {
             
-            let url = String.init(format: Constant.PaymentLedger.PL_LIST, Session.authKey,
+            let url = String.init(format: Constant.BankCharges.BCS_LIST, Session.authKey,
                                   Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
             print(url)
             self.view.showLoading()
@@ -131,23 +130,17 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
                     
                     if arrayJson.count > 0 {
                         
-                        for(_,j):(String,JSON) in jsonResp {
-                            
-                            let data = PaymentLedgerData()
-                          
-                            data.cpID = j["Employee Code"].stringValue
-                            data.journal = j["Journal"].stringValue != "" ? j["Journal"].stringValue : "-"
-                            data.curr = j["Currency"].stringValue != "" ? j["Currency"].stringValue : "-"
-                            data.instNo = j["Instrument No."].stringValue != "" ? j["Instrument No."].stringValue : "-"
-                            data.refNo = j["Reference ID"].stringValue != "" ? j["Reference ID"].stringValue : "-"
-                            data.date = j["Date"].stringValue != "" ? j["Date"].stringValue : "-"
-                            data.debit = j["Debit"].stringValue != "" ? j["Debit"].stringValue : "-"
-                            data.credit = j["Credit"].stringValue != "" ? j["Credit"].stringValue : "-"
-                            data.balance = j["Balance"].stringValue != "" ? j["Balance"].stringValue : "-"
-                            data.particular = j["Particulars"].stringValue != "" ? j["Particulars"].stringValue : "-"
-                            data.remarks = j["Remarks"].stringValue != "" ? j["Remarks"].stringValue : "-"
-                            newData.append(data)
+                        do {
+                            // 1
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            // 2
+                            newData = try decoder.decode([BCRefData].self, from: response.result.value!)
+                        } catch let error { // 3
+                            print("Error creating current newDataObj from JSON because: \(error)")
                         }
+                        
+                        
                         self.arrayList.append(contentsOf: newData)
                         self.tableView.tableFooterView = nil
                     } else {
@@ -193,8 +186,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
         self.resetViews()
     }
     
-    func resetData() {
-    }
+ 
     
     @objc func showFilterMenu(){
         self.sideMenuViewController?.presentRightMenuViewController()
@@ -228,7 +220,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
 
 
 // MARK: - UITableViewDataSource methods
-extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
+extension BankChargesController: UITableViewDataSource, UITableViewDelegate {
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -237,43 +229,41 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.arrayList.count
+//        return 2
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return 100
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! PaymentLedgerCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! BankChargesListCell
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
         if self.arrayList.count > 0 {
-                cell.setDataToView(data: self.arrayList[indexPath.row])
+            cell.setDataToView(data: self.arrayList[indexPath.row])
         }
-        
-//        if self.arrayList.count == 1 {
-//            self.tableView.isScrollEnabled = false
-//        } else {
-//            self.tableView.isScrollEnabled = true
-//        }
+    
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let bcDetail = self.storyboard?.instantiateViewController(withIdentifier: "BankChargeDetailsVC") as! BankChargeDetailsVC
+        self.navigationController?.pushViewController(bcDetail, animated: true)
     }
     
 }
 
-extension PaymentLedgerController: UISearchBarDelegate {
+extension BankChargesController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -281,11 +271,13 @@ extension PaymentLedgerController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         srchBar.resignFirstResponder()
+        self.handleTap()
         guard let searchTxt = srchBar.text else {
             return
         }
@@ -295,7 +287,7 @@ extension PaymentLedgerController: UISearchBarDelegate {
 }
 
 // MARK: - WC_HeaderViewDelegate methods
-extension PaymentLedgerController: WC_HeaderViewDelegate {
+extension BankChargesController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
     }
@@ -311,7 +303,7 @@ extension PaymentLedgerController: WC_HeaderViewDelegate {
 }
 
 
-extension PaymentLedgerController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension BankChargesController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return FilterViewController.selectedDataObj.count

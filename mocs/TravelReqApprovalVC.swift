@@ -13,15 +13,12 @@ import NotificationBannerSwift
 
 class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, customPopUpDelegate {
     
-    
     @IBOutlet weak var srchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
-    
     var navTitle = ""
     var arrayList:[TravelRequestData] = []
-    
     //    var newArray : [TravelRequestData] = []
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
