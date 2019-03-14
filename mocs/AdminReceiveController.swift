@@ -299,6 +299,7 @@ extension AdminReceiveController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -306,6 +307,7 @@ extension AdminReceiveController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -318,6 +320,7 @@ extension AdminReceiveController: UISearchBarDelegate {
         
         self.searchString = searchTxt
         self.refreshList()
+        self.handleTap()
     }
 }
 
@@ -329,14 +332,6 @@ extension AdminReceiveController:UITableViewDelegate, UITableViewDataSource, onB
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if arrayList.count > 0 {
-            tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
-        } else {
-            tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
-        }
         return arrayList.count
     }
     

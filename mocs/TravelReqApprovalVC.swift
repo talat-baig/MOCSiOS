@@ -19,7 +19,6 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     
     var navTitle = ""
     var arrayList:[TravelRequestData] = []
-    //    var newArray : [TravelRequestData] = []
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
@@ -292,8 +291,6 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-     
         return arrayList.count
     }
     
@@ -311,12 +308,7 @@ extension TravelReqApprovalVC : UITableViewDelegate, UITableViewDataSource {
             let data = arrayList[indexPath.row]
             view.setDataToView(data: data, isFromApprove : true)
         }
-        
-//        if arrayList.count > 0 && arrayList.count <= 2 {
-//            self.tableView.isScrollEnabled = false
-//        } else {
-//            self.tableView.isScrollEnabled = true
-//        }
+   
         view.isFromApprov = true
         view.delegate = self
         view.trfApprvListener = self
@@ -368,6 +360,7 @@ extension TravelReqApprovalVC: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -375,18 +368,19 @@ extension TravelReqApprovalVC: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         searchBar.resignFirstResponder()
-        
         guard let searchTxt = searchBar.text else {
             return
         }
         
         self.searchString = searchTxt
         self.refreshList()
+        self.handleTap()
     }
 }
 

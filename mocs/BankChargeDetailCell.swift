@@ -13,7 +13,6 @@ class BankChargeDetailCell: UITableViewCell {
     @IBOutlet weak var outerVw: UIView!
     
     @IBOutlet weak var lblCType: UILabel!
-    
     @IBOutlet weak var lblCAmt: UILabel!
     @IBOutlet weak var lblDesc: UILabel!
     @IBOutlet weak var lblBnkAccNo: UILabel!
@@ -23,20 +22,22 @@ class BankChargeDetailCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-
         outerVw.layer.borderColor = AppColor.universalHeaderColor.cgColor
         outerVw.layer.borderWidth = 1.0
-        
-//        outerVw.layer.shadowOpacity = 0.25
-//        outerVw.layer.shadowOffset = CGSize(width: 0, height: 2)
-//        outerVw.layer.shadowRadius = 1
-//        outerVw.layer.shadowColor = UIColor.black.cgColor
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
     
+    func setDataToView(data : BCDetailData?) {
+        
+        lblCType.text = data?.chrgType != "" ? data?.chrgType : "-"
+        lblCAmt.text = data?.chrgAmt != "" ? data?.chrgAmt : "-"
+        lblDesc.text = data?.desc != "" ? data?.desc : "-"
+        lblBnkAccNo.text = data?.bankAccNo != "" ? data?.bankAccNo : "-"
+        lblCurr.text = data?.currency != "" ? data?.currency : "-"
+        lblTaxVal.text = data?.taxVal != "" ? data?.taxVal : "-"
+        lblBnkName.text = data?.bankName != "" ? data?.bankName : "-"
+    }
 }

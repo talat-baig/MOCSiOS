@@ -35,12 +35,9 @@ class BankChargesListCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    
-    
     func setDataToView(data : BCRefData?) {
-        
-        lblRefId.text = data?.refID
-        lblDate.text = data?.chrgDate
-        lblTotalAmt.text = data?.chrgAmt
+        lblRefId.text = data?.refID != "" ? data?.refID : "-"
+        lblDate.text = data?.chrgDate != "" ? data?.chrgDate : "-"
+        lblTotalAmt.text = data?.chrgAmt != "" ? data?.chrgAmt : "-"
     }
 }

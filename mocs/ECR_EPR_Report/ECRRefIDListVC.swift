@@ -13,7 +13,6 @@ import SwiftyJSON
 
 class ECRRefIDListVC: UIViewController,UIGestureRecognizerDelegate {
     
-    
     var arrayList = [ECRRefData]()
     var newArray = [ECRRefData]()
     var empName = ""
@@ -164,15 +163,8 @@ extension ECRRefIDListVC: UISearchBarDelegate {
             }
             self.arrayList = filteredArray
         }
-        //        self.tableView.setNeedsLayout()
-        //        self.tableView.layoutIfNeeded()
         tableView.reloadData()
-        
-        
     }
-    
-    
-    
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
@@ -201,8 +193,8 @@ extension ECRRefIDListVC: WC_HeaderViewDelegate {
     }
     
 }
-//
-//
+
+
 //extension ECRRefIDListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 //
 //    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

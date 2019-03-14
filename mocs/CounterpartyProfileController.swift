@@ -274,7 +274,6 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                     vc.cpBaseDel = self
                     
                     self.navigationController?.pushViewController(vc, animated: true)
-                    
                 }
             }))
         }else{
@@ -315,7 +314,6 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
 
 extension CounterpartyProfileController: UITableViewDataSource, UITableViewDelegate, onCPListMoreListener, onCPListMoreItemListener {
     
-    
     func onClick(optionMenu: UIViewController, sender: UIButton) {
         self.handleTap()
         self.present(optionMenu, animated: true, completion: nil)
@@ -346,13 +344,11 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return arrayList.count
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -361,7 +357,6 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
             let data = arrayList[indexPath.row]
             cell.setDataToView(data: data)
         }
-        
         cell.cpMenuDelegate = self
         cell.cpOptionItemDelegate = self
         return cell
@@ -376,6 +371,7 @@ extension CounterpartyProfileController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -383,6 +379,7 @@ extension CounterpartyProfileController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -395,6 +392,7 @@ extension CounterpartyProfileController: UISearchBarDelegate {
         
         self.searchString = searchTxt
         self.refreshList()
+        self.handleTap()
     }
 }
 

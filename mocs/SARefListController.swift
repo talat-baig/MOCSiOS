@@ -110,74 +110,70 @@ class SARefListController: UIViewController , filterViewDelegate, clearFilterDel
     
     
     @objc func populateList() {
-        
-//        var newData :[SARefData] = []
-//
-//        if internetStatus != .notReachable {
-//
-//            let url = String.init(format: Constant.BankCharges.BCS_LIST, Session.authKey,
-//                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
-//            print(url)
-//            self.view.showLoading()
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                self.refreshControl.endRefreshing()
-//
-//                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
-//
-//                    let jsonResp = JSON(response.result.value!)
-//                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
-//
-//                    if arrayJson.count > 0 {
-//
-//                        do {
-//                            // 1
-//                            let decoder = JSONDecoder()
-//                            decoder.keyDecodingStrategy = .convertFromSnakeCase
-//                            // 2
-//                            let dataObj = try decoder.decode(SARefData.self, from: json)
-//                            return completion(dataObj, nil)
-//                        } catch let error { // 3
-//                            print("Error creating current weather from JSON because: \(error.localizedDescription)")
-//                            return completion(nil, error)
-//                        }
-//
-//                        let newData = SARefData.createSARefDataObjectWith
-//
-//                        self.arrayList.append(contentsOf: newData)
-//                        self.tableView.tableFooterView = nil
-//                    } else {
-//                        if self.arrayList.isEmpty {
-//                            self.btnMore.isHidden = true
-//                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
-//                        } else {
-//                            self.currentPage -= 1
-//                            Helper.showMessage(message: "No more data found")
-//                        }
-//                    }
-//                } else {
-//                    if self.arrayList.isEmpty {
-//                        self.btnMore.isHidden = true
-//                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
-//                    } else {
-//                        self.currentPage -= 1
-//                    }
-//                    print("Invalid Reponse")
-//                }
-//                self.tableView.reloadData()
-//            }))
-//        } else {
-//            self.refreshControl.endRefreshing()
-//            Helper.showNoInternetMessg()
-//            
-//            if self.arrayList.isEmpty {
-//                btnMore.isHidden = true
-//                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
-//                self.tableView.reloadData()
-//            } else {
-//                self.currentPage -= 1
-//            }
-//        }
+
+        var newData :[SARefData] = []
+
+        if internetStatus != .notReachable {
+
+            let url = String.init(format: Constant.ShipmentAdvise.SA_LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
+            print(url)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+
+                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+
+                    if arrayJson.count > 0 {
+
+                        do {
+                            // 1
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            // 2
+                            newData = try decoder.decode([SARefData].self, from: response.result.value!)
+                        } catch let error { // 3
+                            print("Error creating current newDataObj from JSON because: \(error)")
+                        }
+
+                        self.arrayList.append(contentsOf: newData)
+                        self.tableView.tableFooterView = nil
+                    } else {
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
+                    }
+                } else {
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
+                }
+                self.tableView.reloadData()
+            }))
+        } else {
+            self.refreshControl.endRefreshing()
+            Helper.showNoInternetMessg()
+
+            if self.arrayList.isEmpty {
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
+            }
+        }
     }
     
     @IBAction func btnMoreTapped(_ sender: Any) {
@@ -187,9 +183,6 @@ class SARefListController: UIViewController , filterViewDelegate, clearFilterDel
     func clearAll() {
         self.collVw.reloadData()
         self.resetViews()
-    }
-    
-    func resetData() {
     }
     
     @objc func showFilterMenu(){
@@ -219,20 +212,17 @@ class SARefListController: UIViewController , filterViewDelegate, clearFilterDel
             }
         }
     }
- 
-
 }
 
 // MARK: - UITableViewDataSource methods
 extension SARefListController: UITableViewDataSource, UITableViewDelegate {
-    
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -245,17 +235,16 @@ extension SARefListController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
-//        if self.arrayList.count > 0 {
-//            cell.setDataToView(data: self.arrayList[indexPath.row])
-//        }
-//
+        if self.arrayList.count > 0 {
+            cell.setDataToView(data: self.arrayList[indexPath.row])
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let prodListVC = self.storyboard?.instantiateViewController(withIdentifier: "SAProductListController") as! SAProductListController
+        prodListVC.refId = self.arrayList[indexPath.row].refID ?? ""
         self.navigationController?.pushViewController(prodListVC, animated: true)
-
     }
     
 }
@@ -267,6 +256,7 @@ extension SARefListController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -274,6 +264,7 @@ extension SARefListController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -284,6 +275,7 @@ extension SARefListController: UISearchBarDelegate {
         }
         self.searchString = searchTxt
         self.refreshList()
+        self.handleTap()
     }
 }
 

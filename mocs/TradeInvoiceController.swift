@@ -349,6 +349,7 @@ extension TradeInvoiceController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -356,6 +357,7 @@ extension TradeInvoiceController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -368,6 +370,7 @@ extension TradeInvoiceController: UISearchBarDelegate {
         
         self.searchString = searchTxt
         self.refreshList()
+        self.handleTap()
     }
 }
 

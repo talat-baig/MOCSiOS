@@ -140,7 +140,6 @@ class BankChargesController: UIViewController , filterViewDelegate, clearFilterD
                             print("Error creating current newDataObj from JSON because: \(error)")
                         }
                         
-                        
                         self.arrayList.append(contentsOf: newData)
                         self.tableView.tableFooterView = nil
                     } else {
@@ -185,7 +184,6 @@ class BankChargesController: UIViewController , filterViewDelegate, clearFilterD
         self.collVw.reloadData()
         self.resetViews()
     }
-    
  
     
     @objc func showFilterMenu(){
@@ -251,6 +249,7 @@ extension BankChargesController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let bcDetail = self.storyboard?.instantiateViewController(withIdentifier: "BankChargeDetailsVC") as! BankChargeDetailsVC
+        bcDetail.refId = self.arrayList[indexPath.row].refID ?? ""
         self.navigationController?.pushViewController(bcDetail, animated: true)
     }
     

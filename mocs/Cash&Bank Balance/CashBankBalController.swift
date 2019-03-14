@@ -64,7 +64,6 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
         tableView.rowHeight = UITableViewAutomaticDimension
 
         self.refreshList()
-        
     }
     
     

@@ -285,6 +285,7 @@ extension TCRController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -292,6 +293,7 @@ extension TCRController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -305,6 +307,7 @@ extension TCRController: UISearchBarDelegate {
         self.searchString = searchTxt
         
         self.refreshList()
+        self.handleTap()
     }
 }
 

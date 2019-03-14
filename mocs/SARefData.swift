@@ -10,5 +10,17 @@ import UIKit
 
 struct SARefData : Decodable {
     
-    
+    let refID: String?
+    let suppName: String?
+    let addDate: String?
+    let purContract: String?
+
+    enum CodingKeys : String, CodingKey {
+        case refID = "RSA Reference Id"
+        case suppName = "Supplier Name"
+        case addDate = "Advise Date"
+        case purContract = "Purchase Contract"
+
+    }
+ 
 }

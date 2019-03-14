@@ -8,6 +8,23 @@
 
 import UIKit
 
-struct BCDetailData {
+struct BCDetailData : Decodable {
+    
+    var chrgType: String = ""
+    var chrgAmt: String = ""
+    var currency: String = ""
+    var bankName: String = ""
+    var bankAccNo: String = ""
+    var desc: String = "-"
+    var taxVal: String = ""
 
+    enum CodingKeys : String, CodingKey {
+        case chrgType = "Charge Type"
+        case chrgAmt = "Charge Amount (USD)"
+        case currency = "Currency"
+        case bankName = "Bank"
+        case bankAccNo = "Bank Account Number"
+        case desc = "Description"
+        case taxVal = "Tax Values (USD)"
+    }
 }

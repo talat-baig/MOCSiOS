@@ -16,6 +16,5 @@ class CashBankRegData: NSObject {
     var cpName = ""
     var cpId = ""
     var particulars = ""
-//    var particulars = ""
 
 }

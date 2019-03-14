@@ -15,6 +15,7 @@ import SwiftyJSON
 class BankChargeDetailsVC: UIViewController, UIGestureRecognizerDelegate {
 
     var arrayList = [BCDetailData]()
+    var refId = ""
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
 
@@ -32,8 +33,8 @@ class BankChargeDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblSubTitle.isHidden = false
-//        vwTopHeader.lblTitle.text = self.empName
-//        vwTopHeader.lblSubTitle.text =  self.empID
+        vwTopHeader.lblTitle.text = "Bank Charges Detail"
+        vwTopHeader.lblSubTitle.text =  self.refId
         
         self.tableView.separatorStyle = .none
         
@@ -42,7 +43,6 @@ class BankChargeDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         
         self.populateList()
     }
-    
     
     
     @objc func handleTap() {
@@ -58,56 +58,43 @@ class BankChargeDetailsVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     
-    @objc func populateList(){
+    @objc func populateList() {
         
-//        var newArr : [ECRRefData] = []
-//        if internetStatus != .notReachable {
-//
-//            self.view.showLoading()
-//            let url:String = String.init(format: Constant.ECRReport.REF_LIST, Session.authKey, Helper.encodeURL(url : FilterViewController.getFilterString()), Helper.encodeURL(url: self.empName))
-//
-//            Alamofire.request(url).responseData(completionHandler: ({ response in
-//                self.view.hideLoading()
-//                if Helper.isResponseValid(vc: self, response: response.result){
-//
-//                    let jsonResp = JSON(response.result.value!)
-//                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
-//
-//                    if arrayJson.count > 0 {
-//
-//                        for(_,j):(String,JSON) in jsonResp {
-//
-//                            let newObj = ECRRefData()
-//
-//                            newObj.refNo = j["Reference ID"].stringValue
-//                            newObj.amtReq = j["Requested Amount"].stringValue != "" ? j["Requested Amount"].stringValue : "-"
-//                            newObj.reqType = j["Request Type"].stringValue != "" ? j["Request Type"].stringValue : "-"
-//                            newObj.charge = j["Account Charge Head"].stringValue != "" ? j["Account Charge Head"].stringValue : "-"
-//                            newObj.amtPaid = j["Paid Total"].stringValue != "" ? j["Paid Total"].stringValue : "-"
-//                            newObj.natureExpense = j["Expense Type"].stringValue != "" ? j["Expense Type"].stringValue : "-"
-//                            newObj.curr = j["Local Currency"].stringValue != "" ? j["Local Currency"].stringValue : "-"
-//                            newObj.deptApproval = j["Claim Dept. Approval Status"].stringValue != "" ? j["Claim Dept. Approval Status"].stringValue : "-"
-//                            newObj.financeApproval = j["Claim Finance Approval Status"].stringValue != "" ? j["Claim Finance Approval Status"].stringValue : "-"
-//                            newObj.account = j["Account Number"].stringValue != "" ? j["Account Number"].stringValue : "-"
-//                            newObj.bankName = j["Bank"].stringValue != "" ? j["Bank"].stringValue : "-"
-//
-//                            newObj.remarks = j["Remarks"].stringValue != "" ? j["Remarks"].stringValue : "-"
-//
-//                            newArr.append(newObj)
-//                        }
-//                        self.arrayList = newArr
-//                    }
-//                    self.newArray = self.arrayList
-//                    self.tableView.setNeedsLayout()
-//                    self.tableView.layoutIfNeeded()
-//                    self.tableView.reloadData()
-//                }
-//            }))
-//        } else {
-//            Helper.showNoInternetMessg()
-//        }
+        var newArr : [BCDetailData] = []
+        if internetStatus != .notReachable {
+
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.BankCharges.BCS_DETAILS, Session.authKey, Helper.encodeURL(url : FilterViewController.getFilterString()), Helper.encodeURL(url: self.refId))
+
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+
+                    if arrayJson.count > 0 {
+
+                        do {
+                            // 1
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            // 2
+                            newArr = try decoder.decode([BCDetailData].self, from: response.result.value!)
+                        } catch let error { // 3
+                            print("Error creating current newDataObj from JSON because: \(error)")
+                        }
+                        self.arrayList = newArr
+                    }
+                    self.tableView.setNeedsLayout()
+                    self.tableView.layoutIfNeeded()
+                    self.tableView.reloadData()
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
-    
 }
 
 
@@ -119,7 +106,7 @@ extension BankChargeDetailsVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -132,9 +119,9 @@ extension BankChargeDetailsVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.isUserInteractionEnabled = false
         cell.selectionStyle = .none
-//        if self.arrayList.count > 0 {
-//            cell.setDataToView(data: self.arrayList[indexPath.row])
-//        }
+        if self.arrayList.count > 0 {
+            cell.setDataToView(data: self.arrayList[indexPath.row])
+        }
         return cell
     }
     

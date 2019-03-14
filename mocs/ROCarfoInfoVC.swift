@@ -73,20 +73,15 @@ class ROCarfoInfoVC: UIViewController, IndicatorInfoProvider {
                          whrList.rcptQty = k["ROReceiptQtyinmt"].stringValue
                     }
 //                    whrList.rcptQty = k["ROReceiptQtyinmt"].stringValue
-
 //                    whrList.roGuid = k["ROGUID"].stringValue
-                    
                     data.append(whrList)
                 }
-                
                 self.arrayList = data
                 self.tableView.reloadData()
             } else {
                 
-                
             }
         }
-        
     }
     
     

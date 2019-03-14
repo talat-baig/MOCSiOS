@@ -266,7 +266,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
                 if Helper.isResponseValid(vc: self, response: cargoResponse.result){
                     let responseJson = JSON(cargoResponse.result.value!)
                     let arrData = responseJson.arrayObject as! [[String:AnyObject]]
-                    //                    if (arrData.count > 0) {
+                    //     if (arrData.count > 0) {
                     
                     let roVC = self.storyboard?.instantiateViewController(withIdentifier: "ROBaseViewController") as! ROBaseViewController
                     roVC.cargoResponse = cargoResponse.result.value
@@ -279,7 +279,6 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         }else{
             Helper.showNoInternetMessg()
         }
-        
     }
     
     
@@ -301,12 +300,14 @@ extension ReleaseOrderController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -318,12 +319,12 @@ extension ReleaseOrderController: UISearchBarDelegate {
         }
         self.searchString = searchTxt
         self.refreshList()
+        self.handleTap()
     }
 }
 
 
 extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, onROListMoreListener, onROListMoreItemListener  {
-    
     
     func onCancelClick() {
         
@@ -353,8 +354,6 @@ extension ReleaseOrderController: UITableViewDataSource, UITableViewDelegate, on
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-      
         return arrayList.count
     }
     

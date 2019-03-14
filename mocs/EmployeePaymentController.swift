@@ -298,6 +298,7 @@ extension EmployeePaymentController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -305,6 +306,7 @@ extension EmployeePaymentController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -318,6 +320,7 @@ extension EmployeePaymentController: UISearchBarDelegate {
         self.searchString = searchTxt
         
         self.refreshList()
+        self.handleTap()
     }
 }
 

@@ -39,11 +39,10 @@ class SARefListCell: UITableViewCell {
     
     func setDataToView(data:SARefData){
         
-//        lblRefId.text = data.vendorName != "" ? data.vendorName : "-" //
-//        lblDate.text = data.cpID != "" ? data.cpID : "-" //
-//        lblPCNo.text = data.date
-//        lblSuppName.text = data.balance
-        
+        lblRefId.text = data.refID != "" ? data.refID : "-" //
+        lblDate.text = data.addDate != "" ? data.addDate : "-" //
+        lblPCNo.text = data.purContract != "" ? data.purContract : "-"
+        lblSuppName.text = data.suppName  != "" ? data.suppName : "-"
     }
     
 }

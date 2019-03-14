@@ -316,6 +316,7 @@ extension PurchaseContractController: UISearchBarDelegate {
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
+            self.handleTap()
         }
     }
     
@@ -323,6 +324,7 @@ extension PurchaseContractController: UISearchBarDelegate {
         
         self.searchString = ""
         self.refreshList()
+        self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -335,6 +337,7 @@ extension PurchaseContractController: UISearchBarDelegate {
         
         self.searchString = searchTxt
         self.refreshList()
+        self.handleTap()
     }
 }
 

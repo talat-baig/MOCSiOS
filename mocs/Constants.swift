@@ -356,7 +356,6 @@ struct Constant
     
         static let EMP_LIST = ApiUrl.URL + "/ECR/GetECRReport?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&EmployeeName=%@"
         
-        
         static let REF_LIST = ApiUrl.URL + "/ECR/GetECRReportByName?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&EmployeeName=%@"
 
     }
@@ -377,30 +376,31 @@ struct Constant
     struct CustomerLedger {
         
         static let CL_LIST = ApiUrl.URL + "/Report/GetCustomerLedger?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&PageNo=%d&reference=%@"
-        
     }
     
     
     struct BankCharges {
         
         static let BCS_LIST = ApiUrl.URL + "/Report/CombinedBankChargeSummary?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidcc=%@&filtercc=%@&PageNo=%d&reference=%@"
-
-//        CombinedBankChargeSummary(string apikey, string authidcc, string filtercc, int PageNo, string reference)
+        
+        static let BCS_DETAILS = ApiUrl.URL + "/Report/CombinedBankChargeSummaryByReference?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidccs=%@&filterccs=%@&ReferenceID=%@"
     }
     
-    
-    
-    
-    
-    
-    
+    struct ShipmentAdvise {
+        
+        static let SA_LIST = ApiUrl.URL + "/Report/ShipmentAdviseSummary?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidsa=%@&filtersa=%@&PageNo=%d&ReferenceID=%@"
+        
+        static let SA_Summary = ApiUrl.URL + "/Report/ShipmentAdviseSummaryByReference?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidsar=%@&filtersar=%@&ReferenceID=%@"
+        
+        static let SA_VESSEL = ApiUrl.URL + "/Report/ShipmentAdviseList?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidsar=%@&filtersar=%@&ReferenceID=%@&ProductName=%@"
+
+    }
     
     struct EMPLOYEE {
         /**
          *Get All Employee Directory*
          - 1: AuthID
          */
-//        static let LIST = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_LAE?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
         static let LIST = ApiUrl.URL + "/EmployeeDirectory/GetEmployeeDirectoryData?apiKey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
         /**
