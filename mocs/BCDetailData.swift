@@ -10,13 +10,13 @@ import UIKit
 
 struct BCDetailData : Decodable {
     
-    var chrgType: String = ""
-    var chrgAmt: String = ""
-    var currency: String = ""
-    var bankName: String = ""
-    var bankAccNo: String = ""
-    var desc: String = "-"
-    var taxVal: String = ""
+    let chrgType: String?
+    let chrgAmt: String?
+    let currency: String?
+    let bankName: String?
+    let bankAccNo: String?
+    let desc: String?
+    let taxVal: String?
 
     enum CodingKeys : String, CodingKey {
         case chrgType = "Charge Type"

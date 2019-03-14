@@ -31,8 +31,8 @@ class SAVesselListController: UIViewController {
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblSubTitle.isHidden = false
-        vwTopHeader.lblTitle.text = "Vessel"
-        vwTopHeader.lblSubTitle.text =  "Prod Name"
+        vwTopHeader.lblTitle.text = "Vessel Summary"
+        vwTopHeader.lblSubTitle.text =  self.prodName
         
         self.tableView.separatorStyle = .none
         

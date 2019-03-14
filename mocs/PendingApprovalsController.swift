@@ -30,7 +30,6 @@ class PendingApprovalsController: UIViewController {
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.ALL
         vwTopHeader.lblSubTitle.isHidden = true
-
         
         self.tableView.separatorStyle = .none
         self.tableView.register(UINib(nibName: "PendingApprovalCell", bundle: nil), forCellReuseIdentifier: "cell")
