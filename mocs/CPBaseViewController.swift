@@ -26,13 +26,9 @@ protocol onProcessItemClickListener: NSObjectProtocol {
 class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
    
    
-   
-
-    
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-    
     
     var cpResponse : Data?
     var bnkCredResponse : Data?
@@ -41,7 +37,6 @@ class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
     
     var processItemDelegte : onProcessItemClickListener?
     var cpBaseDel: onCPUpdate?
-
     
     override func viewDidLoad() {
         
@@ -69,9 +64,6 @@ class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
         
-//        vwTopHeader.btnRight.setTitleColor(UIColor.white, for: .normal)
-//        vwTopHeader.btnRight.setTitle("Process", for: .normal)
-        
         vwTopHeader.btnRight.setImage(nil, for: .normal)
         vwTopHeader.lblTitle.text = "Counterparty Profile"
         vwTopHeader.lblSubTitle.text = cpListData.custId
@@ -82,7 +74,6 @@ class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
@@ -113,18 +104,14 @@ class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
         views.append(relationshp)
         views.append(kycVC)
         views.append(attachment)
-        
         return views
     }
-    
-    
     
     func onOkCPClick() {
         if let d = self.cpBaseDel {
             d.onCPUpdateClick()
         }
     }
-    
     
     func onOkClick() {
         if let d = self.cpBaseDel {
@@ -133,28 +120,6 @@ class CPBaseViewController: ButtonBarPagerTabStripViewController, onCPApprove {
     }
     
     
-    
-    //    func approveOrDeclineCP( event : Int, data:CPListData, comment:String){
-    //
-    //        if internetStatus != .notReachable {
-    //            let url = String.init(format: Constant.CP.CP_APPROVE, Session.authKey,
-    //                                  Helper.encodeURL(url: data.custId), event, data.kycContactType, data.kycRequired, data.refId )
-    //            self.view.showLoading()
-    //            Alamofire.request(url).responseData(completionHandler: ({ response in
-    //                self.view.hideLoading()
-    //                if Helper.isResponseValid(vc: self, response: response.result){
-    //                    let alert = UIAlertController(title: "Success", message: "Counterparty Successfully Approved", preferredStyle: .alert)
-    //                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
-    //                        (UIAlertAction) -> Void in
-    //                        self.populateList()
-    //                    }))
-    //                    self.present(alert, animated: true, completion: nil)
-    //                }
-    //            }))
-    //        } else {
-    //            Helper.showNoInternetMessg()
-    //        }
-    //    }
     
 }
 
@@ -172,37 +137,6 @@ extension CPBaseViewController: WC_HeaderViewDelegate {
     
     func topMenuRightButtonTapped(sender: Any) {
         
-//        let optionMenu = UIAlertController(title: nil, message: "", preferredStyle: .actionSheet)
-//
-//        let approveAction = UIAlertAction(title: "Approve", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.processItemDelegte?.responds(to: Selector(("onApproveClick"))) != nil){
-//                self.processItemDelegte?.onApprove(data: self.cpListData)
-//            }
-//        })
-//
-//        optionMenu.addAction(approveAction)
-//
-//        let declineAction = UIAlertAction(title: "Decline", style: .default, handler: { (UIAlertAction) -> Void in
-//            if (self.processItemDelegte?.responds(to: Selector(("onDeclineClick"))) != nil){
-//                self.processItemDelegte?.onDecline(data: self.cpListData)
-//            }
-//        })
-//
-//
-//        optionMenu.addAction(declineAction)
-//
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (UIAlertAction) -> Void in
-//            //            if (self.processItemDelegte?.responds(to: Selector(("onCancelClick"))) != nil){
-//            //                self.processItemDelegte?.onCancelClick()
-//            //            }
-//        })
-//
-//        optionMenu.addAction(cancelAction)
-//
-//        self.present(optionMenu, animated: true, completion: nil)
-//
-//
-//
     }
-//
+
 }

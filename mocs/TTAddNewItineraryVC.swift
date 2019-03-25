@@ -373,8 +373,6 @@ extension TTAddNewItineraryVC: UITextFieldDelegate {
         case txtTrvlStatus :
             addDropDwnToTrvlStatusTxtFld()
               
-//            let scrollPoint:CGPoint = CGPoint(x:0, y:  stckVwDateTime.frame.origin.y  )
-//            scrlVw!.setContentOffset(scrollPoint, animated: true)
             val = false
             
         default :

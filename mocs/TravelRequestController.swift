@@ -29,6 +29,11 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(populateList),
+                                               name: NSNotification.Name(rawValue: Constant.RO.roNotificationKey),
+                                               object: nil)
+        
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)

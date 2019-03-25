@@ -100,11 +100,12 @@ class PendingApprovalsController: UIViewController {
                         self.lblSummary.isHidden = true
                     }
                     self.tableView.tableFooterView = nil
-                    self.tableView.reloadData()
+//                    self.tableView.reloadData()
                 } else {
                     Helper.showEmptyState(vc: self, messg: "No Summary data found", action: nil)
                     self.lblSummary.isHidden = true
                 }
+                self.tableView.reloadData()
             }))
         } else {
             self.arrayList.removeAll()

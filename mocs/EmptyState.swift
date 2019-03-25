@@ -18,6 +18,9 @@ class EmptyState:UIControl{
     /// The button
     fileprivate(set) open var button: UIButton!
     
+    fileprivate(set) open var stackVw: UIStackView!
+
+    
     /// The empty state image
     @IBInspectable
     open var image: UIImage{
@@ -118,6 +121,8 @@ class EmptyState:UIControl{
         textLabel.textAlignment = .center
         textLabel.numberOfLines = 0
         textLabel.lineBreakMode = .byWordWrapping
+        textLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        textLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
         
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             textLabel.font = UIFont.systemFont(ofSize: 20.0)
@@ -142,18 +147,17 @@ class EmptyState:UIControl{
     /// - Returns: The button.
     open func setupButton()->UIButton{
         let button = UIButton(type: .system)
-//        button.setAttributedTitle(, for: <#T##UIControlState#>)
-//        button.layer.cornerRadius = 5
-//        button.layer.borderColor = button.tintColor.cgColor
-//        button.layer.borderWidth = 1
-        //        button.frame.size = CGSize(width: 60, height: 30)
-       
+
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         } else {
              button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         }
         return button
+    }
+    
+    open func setupView()->UIView{
+        return UIView()
     }
     
     
@@ -164,12 +168,21 @@ class EmptyState:UIControl{
     ///   - textLabel: The label of the empty state.
     ///   - button: The button of the empty state.
     /// - Returns: The stack view.
-    open func setupStack(_ imageView: UIImageView,_ textLabel: UILabel,_ button: UIButton)->UIStackView{
-        let stackView = UIStackView(arrangedSubviews: [imageView,textLabel,button])
+    open func setupStack( _ tempVw: UIView,_ imageView: UIStackView,_ textLabel: UILabel,_ button: UIButton, _ textLabel1: UILabel)->UIStackView{
+        let stackView = UIStackView(arrangedSubviews: [tempVw, imageView,textLabel,button,textLabel1])
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.distribution = .fillProportionally
         stackView.spacing = 10
+        return stackView
+    }
+    
+    open func setupHorStack(_ imageView: UIImageView,_ imageView1: UIImageView,_ imageView2: UIImageView)->UIStackView{
+        let stackView = UIStackView(arrangedSubviews: [imageView,imageView1,imageView2])
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 0
         return stackView
     }
     
@@ -179,25 +192,42 @@ class EmptyState:UIControl{
         backgroundColor = .clear
         
         // Setup views
+        let imageView1 = setupImage()
         imageView = setupImage()
+        let imageView2 = setupImage()
+
         textLabel = setupLabel()
         button = setupButton()
-        let stackView = setupStack(imageView,textLabel,button)
+        let tempVw = setupView()
+
+        stackVw = setupHorStack(imageView1, imageView, imageView2)
+//        let tempLabel1 = setupLabel()
+        let tempLabel2 = setupLabel()
+
+        let stackView = setupStack(tempVw,stackVw,textLabel,button,tempLabel2)
         
         // make imageView square
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        //        imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.0).isActive = true
+        tempVw.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
         if (UIDevice.current.userInterfaceIdiom == .pad) {
             imageView.widthAnchor.constraint(equalToConstant: 250).isActive = true
             imageView.heightAnchor.constraint(equalToConstant: 350).isActive = true
         }  else {
-            imageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+            imageView1.widthAnchor.constraint(equalToConstant: 53).isActive = true
+            imageView2.widthAnchor.constraint(equalToConstant: 53).isActive = true
+
+//            tempVw.backgroundColor = UIColor.cyan
+            imageView.heightAnchor.constraint(equalToConstant: 110).isActive = true
+            textLabel.frame.size.height = textLabel.intrinsicContentSize.height
+            button.heightAnchor.constraint(equalToConstant: 20).isActive = true
         }
         // add constraints to stackview
         addSubview(stackView)
+        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
         stackView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         stackView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         

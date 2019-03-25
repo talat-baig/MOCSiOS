@@ -38,7 +38,6 @@ struct SAVesselData: Decodable {
         case pendingShipmnt = "Pending Shipment"
         case salesContrct = "Sales Contract"
         case buyrName = "Buyer Name"
-
     }
 
 }

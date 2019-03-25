@@ -337,7 +337,7 @@ extension TravelReqApprovalVC : onMoreClickListener , onTRFApprovItemClickListen
         self.myView.data = data
         self.myView.cpvDelegate = self
         self.myView.isApprove = true
-        self.view.addMySubview(self.myView)
+        self.view.window?.addSubview(self.myView)
     }
     
     func onDeclineTRF(data: TravelRequestData) {

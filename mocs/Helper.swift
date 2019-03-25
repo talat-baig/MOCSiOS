@@ -191,85 +191,9 @@ class Helper: UIView {
     class func daysBetweenDays2(startDate : Date, endDate : Date) -> Int {
         
         let calendar = Calendar.current
-        
-        // Replace the hour (time) of both dates with 00:00
-//        let date1 = calendar.startOfDay(for: startDate)
-//        let date2 = calendar.startOfDay(for: endDate)
-        
         let components = calendar.dateComponents([.day], from: startDate, to: endDate).day! + 1
         return components
     }
-    
-    //    class func getWorkOffDays(startDate : Date, endDate : Date) -> (Int) {
-    //
-    //        guard startDate < endDate else {
-    //            return (0)
-    //        }
-    //
-    //        var weekendDays = 0
-    //        var workingDays = 0
-    //        var date = startDate.noon
-    //        repeat {
-    //            if date.isDateInWeekend {
-    //                weekendDays +=  1
-    //            } else {
-    //                workingDays += 1
-    //            }
-    //            date = date.tomorrow
-    //        } while date <= endDate
-    //        return (workingDays + 1)
-    //    }
-    
-    
-//    class func getWorkingDays(startDate : Date, endDate : Date, publicHolidays : [String], workOff : [String], workOffPolicy: [String]) -> Int {
-//
-//        let calendar = Calendar.current
-//
-//        let date1 = startDate
-//        let date2 = endDate
-//
-//
-//        let totalDays = calendar.dateComponents([.day], from: date1, to: date2).day! + 1
-//
-//        let allDatesBetween = self.getAllDatesBetweenDates(startDate: startDate, endDate: endDate)
-//
-//        var testDate = date1
-//        var workOffRemovedDates : [String] = []
-//        var counter = 0
-//        let fmt = DateFormatter()
-//        fmt.dateFormat = "yyyy-MM-dd"
-//
-//        if workOffPolicy.contains("WO") {
-//
-//            repeat {
-//                let todayNumber = testDate.dayNumberOfWeek()
-//                if workOff.contains(self.getDayOfWeekString(today: todayNumber ?? 0 ) ?? "") {
-//                    counter += 1
-//                    let dateString = fmt.string(from: testDate)
-//                    workOffRemovedDates.append(dateString)
-//                }
-//                testDate = testDate.tomorrow
-//            } while testDate < date2.tomorrow
-//        }
-//
-//
-//        if workOffPolicy.contains("PH") {
-//
-//            for newDate in allDatesBetween {
-//
-//                if publicHolidays.contains(newDate) {
-//
-//                    if !workOffRemovedDates.contains(newDate) {
-//                        counter += 1
-//                    }
-//                }
-//            }
-//        }
-//        let finalDays = totalDays - counter
-//        print(finalDays)
-//        return finalDays
-//
-//    }
     
     
     class func getWorkingDays(startDate : Date, endDate : Date, publicHolidays : [String], workOff : [String], workOffPolicy: [String]) -> Int {
@@ -852,6 +776,7 @@ class Helper: UIView {
         emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
         emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
         emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+       
     }
     
     public static func showNoItemState(vc:UIViewController, messg: String = "" , tb:UITableView, action:Selector? = nil) -> Void {
@@ -934,7 +859,6 @@ class Helper: UIView {
         } catch let error as NSError {
             
             print("invalid regex: \(error.localizedDescription)")
-            
             return []
         }}
     

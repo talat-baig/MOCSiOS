@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 class PurchaseContractData {
     
     var RefNo:String = ""

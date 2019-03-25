@@ -54,7 +54,6 @@ class SAProductListController: UIViewController {
     
     @objc func populateList(){
         
-        
         var newArr : [SAProdData] = []
         if internetStatus != .notReachable {
             
@@ -127,7 +126,6 @@ extension SAProductListController: UITableViewDataSource, UITableViewDelegate {
         let vesslListVC = self.storyboard?.instantiateViewController(withIdentifier: "SAVesselListController") as! SAVesselListController
         vesslListVC.prodName = self.arrayList[indexPath.row].prod ?? ""
         vesslListVC.refId = self.refId
-
         self.navigationController?.pushViewController(vesslListVC, animated: true)
     }
     

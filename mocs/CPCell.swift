@@ -57,8 +57,6 @@ class CPCell: UITableViewCell {
     func setDataToView(data:CPListData){
         
         lblCustomerId.text! = data.custId != "" ? data.custId : "-"
-        
-        
         lblCPName.text! = data.cpName
         
         if data.email == "" {
@@ -78,7 +76,6 @@ class CPCell: UITableViewCell {
         } else {
             lblPostalCode.text! = data.zipPostalCode
         }
-        
         
         lblBranchCity.text! = data.branchCity
         lblCountry.text! = data.country
@@ -140,7 +137,6 @@ class CPCell: UITableViewCell {
             }
         })
         
-        
         optionMenu.addAction(cancelAction)
         
         if ((cpMenuDelegate?.responds(to: Selector(("onClick:")))) != nil ){
@@ -150,7 +146,6 @@ class CPCell: UITableViewCell {
     }
     
     
-//
 //
 //    @IBAction func onViewTap(_ sender: Any) {
 //        if(self.cpMenuDelegate?.responds(to: #selector(ROListCell.onViewTap(_:))) != nil){

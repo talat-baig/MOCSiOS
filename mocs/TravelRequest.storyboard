@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1562,10 +1561,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Zg-Du-fKF">
-                                <rect key="frame" x="0.0" y="5" width="375" height="662"/>
+                                <rect key="frame" x="0.0" y="5" width="375" height="652"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XAa-Ut-bdD">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="662"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="652"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="gG1-46-6TA">
                                                 <rect key="frame" x="8" y="5" width="359" height="393"/>
@@ -1885,15 +1884,52 @@
                                                     </stackView>
                                                 </subviews>
                                             </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="UUV-NU-e54">
+                                                <rect key="frame" x="12" y="592" width="351" height="40"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfx-Wd-3BI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="165.5" height="40"/>
+                                                        <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="HRf-M6-C6a"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                        <state key="normal" title="Approve">
+                                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="approveTapped:" destination="y1d-hi-6TJ" eventType="touchUpInside" id="A1W-1i-6qX"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bnI-sy-aiz">
+                                                        <rect key="frame" x="185.5" y="0.0" width="165.5" height="40"/>
+                                                        <color key="backgroundColor" red="0.27058823529999998" green="0.54117647059999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="Eyz-9e-RcJ"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                        <state key="normal" title="Decline">
+                                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="declineTapped:" destination="y1d-hi-6TJ" eventType="touchUpInside" id="FD5-gP-VSb"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="UUV-NU-e54" secondAttribute="bottom" constant="20" id="0UP-cz-GgF"/>
+                                            <constraint firstAttribute="trailing" secondItem="UUV-NU-e54" secondAttribute="trailing" constant="12" id="5wd-KX-vI5"/>
                                             <constraint firstItem="gG1-46-6TA" firstAttribute="trailing" secondItem="XAa-Ut-bdD" secondAttribute="trailingMargin" id="BHN-Yf-Diw"/>
                                             <constraint firstItem="gG1-46-6TA" firstAttribute="top" secondItem="XAa-Ut-bdD" secondAttribute="top" constant="5" id="G4m-MU-gKl"/>
+                                            <constraint firstItem="UUV-NU-e54" firstAttribute="leading" secondItem="XAa-Ut-bdD" secondAttribute="leading" constant="12" id="mUi-Ra-nBJ"/>
                                             <constraint firstItem="gG1-46-6TA" firstAttribute="leading" secondItem="XAa-Ut-bdD" secondAttribute="leadingMargin" id="q3n-4f-53m"/>
                                         </constraints>
                                     </view>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="XAa-Ut-bdD" firstAttribute="leading" secondItem="0Zg-Du-fKF" secondAttribute="leading" id="3yH-WI-lz8"/>
                                     <constraint firstAttribute="trailing" secondItem="XAa-Ut-bdD" secondAttribute="trailing" id="66N-2v-RBR"/>
@@ -1906,7 +1942,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="0Zg-Du-fKF" secondAttribute="bottom" id="Bkn-mz-9ug"/>
+                            <constraint firstAttribute="bottom" secondItem="0Zg-Du-fKF" secondAttribute="bottom" constant="10" id="Bkn-mz-9ug"/>
                             <constraint firstAttribute="trailing" secondItem="0Zg-Du-fKF" secondAttribute="trailing" id="CNc-vq-wXF"/>
                             <constraint firstItem="0Zg-Du-fKF" firstAttribute="top" secondItem="w3s-DE-fnP" secondAttribute="top" constant="5" id="Ssm-Rx-AWx"/>
                             <constraint firstItem="0Zg-Du-fKF" firstAttribute="leading" secondItem="w3s-DE-fnP" secondAttribute="leading" id="jyS-aJ-vCL"/>
@@ -1914,6 +1950,8 @@
                         <viewLayoutGuide key="safeArea" id="WtI-PK-wIB"/>
                     </view>
                     <connections>
+                        <outlet property="btnApprove" destination="rfx-Wd-3BI" id="vJo-Gj-vau"/>
+                        <outlet property="btnDecline" destination="bnI-sy-aiz" id="mfb-rO-AoF"/>
                         <outlet property="lblAccmpnd" destination="zzz-Yy-xfm" id="T6Q-Io-ntX"/>
                         <outlet property="lblApprvdBy" destination="NHu-cu-fHN" id="lM6-nj-MSd"/>
                         <outlet property="lblApprvdByDate" destination="TrY-t0-Eqv" id="3Uy-Xa-Qei"/>
@@ -1934,10 +1972,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="add" width="50" height="50"/>
-        <image name="filter" width="14" height="14"/>
-        <image name="ic_more" width="50" height="50"/>
-        <image name="menu" width="29" height="29"/>
-        <image name="unchecked_black" width="20" height="20"/>
+        <image name="add" width="100" height="100"/>
+        <image name="filter" width="21.75" height="21.75"/>
+        <image name="ic_more" width="40" height="40"/>
+        <image name="menu" width="43.5" height="43.5"/>
+        <image name="unchecked_black" width="32" height="32"/>
     </resources>
 </document>

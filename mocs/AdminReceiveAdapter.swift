@@ -22,17 +22,15 @@ class AdminReceiveAdapter: UITableViewCell {
     @IBOutlet weak var vwInner: UIView!
     weak var delegate:onButtonClickListener?
     var data:ARIData?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.vwInner.layer.borderWidth = 1
         self.vwInner.layer.borderColor = AppColor.universalHeaderColor.cgColor
-
     }
-
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
 
     func setDataToView(data:ARIData){

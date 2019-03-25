@@ -78,7 +78,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     @IBOutlet weak var txtAccmpndBy: UITextView!
     @IBOutlet weak var txtReqDate: UITextField!
     
-    
     @IBOutlet weak var btnFlight: UIButton!
     @IBOutlet weak var btnHotel: UIButton!
     @IBOutlet weak var btnRentCar: UIButton!
@@ -91,7 +90,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
     var isFlight = false
     var isHotel = false
     var isRentCar = false
-    
     
     
     override func viewDidLoad() {
@@ -214,7 +212,6 @@ class TravelRequestAddEditController: UIViewController, IndicatorInfoProvider, U
                 case "Travel Advance" : isTravlAdv = true
                 txtFldAmount.text = trvReqData.trvelAdvnce
                 btnCurrency.setTitle(trvReqData.currency, for: .normal)
-                
                     break
                     
                 default:

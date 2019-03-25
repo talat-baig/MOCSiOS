@@ -31,7 +31,6 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
     var arrayList:[CPListData] = []
 //    var newArray : [CPListData] = []
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -59,14 +58,11 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
         btnMore.layer.shadowRadius = 4.0
         btnMore.layer.shadowOpacity = 0.8
         btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
-        
         populateList()
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @objc func handleTap() {
@@ -153,7 +149,6 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                     print("Invalid Reponse")
                 }
                  self.tableView.reloadData()
-//                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             }))
         } else {
             self.refreshControl.endRefreshing()
@@ -272,7 +267,6 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
                     vc.relResponse = relResponse.result.value
                     vc.cpListData = data
                     vc.cpBaseDel = self
-                    
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }))
@@ -313,6 +307,10 @@ class CounterpartyProfileController: UIViewController, UIGestureRecognizerDelega
 }
 
 extension CounterpartyProfileController: UITableViewDataSource, UITableViewDelegate, onCPListMoreListener, onCPListMoreItemListener {
+    func onCancelClick() {
+        
+    }
+    
     
     func onClick(optionMenu: UIViewController, sender: UIButton) {
         self.handleTap()
@@ -333,10 +331,6 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
             self.sendEmail(refId: data.custId)
         }))
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    func onCancelClick() {
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -361,7 +355,6 @@ extension CounterpartyProfileController: UITableViewDataSource, UITableViewDeleg
         cell.cpOptionItemDelegate = self
         return cell
     }
-    
     
 }
 
@@ -389,7 +382,6 @@ extension CounterpartyProfileController: UISearchBarDelegate {
         guard let searchTxt = searchBar.text else {
             return
         }
-        
         self.searchString = searchTxt
         self.refreshList()
         self.handleTap()
@@ -410,7 +402,6 @@ extension CounterpartyProfileController: WC_HeaderViewDelegate {
     
     func topMenuRightButtonTapped(sender: Any) {
         self.presentRightMenuViewController(sender as AnyObject)
-        
     }
     
 }

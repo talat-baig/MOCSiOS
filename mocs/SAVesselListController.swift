@@ -22,9 +22,7 @@ class SAVesselListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         self.tableView.register(UINib(nibName: "SAVesselCell", bundle: nil), forCellReuseIdentifier: "cell")
-      
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true

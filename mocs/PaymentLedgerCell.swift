@@ -43,11 +43,7 @@ class PaymentLedgerCell: UITableViewCell {
         headerVw.layer.shadowColor = UIColor.black.cgColor
     }
     
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        self.contentView.layoutIfNeeded()
-//        self.particular.preferredMaxLayoutWidth  = self.particular.frame.size.width
-//    }
+
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

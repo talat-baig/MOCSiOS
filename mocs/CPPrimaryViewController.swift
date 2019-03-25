@@ -68,6 +68,7 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
         let jsonResponse = JSON(primResponse!)
         for(_,j):(String,JSON) in jsonResponse{
             
+            print("CP Name:",j["CPName"].stringValue)
             lblCPName.text! = j["CPName"].stringValue
             lblContctType.text! = j["ContactType"].stringValue
             lblIndustryType.text! = j["IndustryType"].stringValue
@@ -174,7 +175,6 @@ class CPPrimaryViewController: UIViewController, IndicatorInfoProvider {
                 lblJobTitle.text! = j["JobTitle"].stringValue
             }
             
-           
             
             if j["Email1"].stringValue == "" {
                 lblContactEmail.text! = "-"

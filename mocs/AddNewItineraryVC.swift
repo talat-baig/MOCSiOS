@@ -134,11 +134,11 @@ class AddNewItineraryVC: UIViewController {
         
         if currentTxtFld == txtFldRetDate {
             txtFldRetDate.text = dateFormatter.string(from: datePicker.date) as String
-            let startDate = dateFormatter.date(from: txtFldDeptDate.text!)!
             
+            let startDate = dateFormatter.date(from: txtFldDeptDate.text!)!
             let endDate = dateFormatter.date(from: txtFldRetDate.text!)!
             
-            let estDays =  Helper.daysBetweenDates(startDate:startDate , endDate: endDate)
+            let estDays =  Helper.daysBetweenDays2(startDate:startDate , endDate: endDate)
             txtEstdDays.text = String(format: "%d", estDays)
         }
         
@@ -221,13 +221,11 @@ class AddNewItineraryVC: UIViewController {
                                 d.onOkClick()
                             }
                             self.navigationController?.popViewController(animated: true)
-                            
                         }))
                         
                         self.present(successAlrt, animated: true, completion: nil)
                         
                     }  else {
-                        
                         NotificationBanner(title: "Something Went Wrong!", subtitle: "Please Try again later", style:.info).show()
                     }
                 })
