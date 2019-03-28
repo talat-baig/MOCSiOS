@@ -8,19 +8,19 @@
 
 struct ApiKey {
     // LIVE
-     static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+//     static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-//    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+    static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-     static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+//     static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
     
     // UAT
-//    static let URL = "http://172.16.13.12:85/api"
+    static let URL = "http://172.16.13.12:85/api"
 }
 
 
@@ -394,6 +394,16 @@ struct Constant
         static let SA_VESSEL = ApiUrl.URL + "/Report/ShipmentAdviseList?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidsar=%@&filtersar=%@&ReferenceID=%@&ProductName=%@"
 
     }
+    
+    struct CreditUtil {
+        
+        static let CU_LIST = ApiUrl.URL + "/Report/CustomerCreditLimitUtilization?apikeycc=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidcc=%@&filtersa=%@&PageNo=%d&IsLanding=%d&ReferenceID=%@&CustomerID=%@"
+        
+    }
+    
+//    CustomerCreditLimitUtilization(string apikeycc, string authidcc, string filtersa, int PageNo, int? IsLanding, string ReferenceID, string CustomerID)
+    
+    
     
     struct EMPLOYEE {
         /**

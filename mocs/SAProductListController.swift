@@ -22,7 +22,7 @@ class SAProductListController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.register(UINib(nibName: "SAProdCell", bundle: nil), forCellReuseIdentifier: "cell")
+//        self.tableView.register(UINib(nibName: "SAProdCell", bundle: nil), forCellReuseIdentifier: "cell")
 
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
@@ -34,9 +34,10 @@ class SAProductListController: UIViewController {
         
         self.tableView.separatorStyle = .none
         
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
+//        tableView.estimatedRowHeight = 100
+//        tableView.rowHeight = UITableViewAutomaticDimension
+        Helper.setupTableView(tableVw : self.tableView, nibName: "SAProdCell")
+
         self.populateList()
     }
     

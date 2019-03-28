@@ -530,6 +530,14 @@ class Helper: UIView {
         }
     }
     
+    public static func setupTableView(tableVw : UITableView, nibName : String, identifier : String = "cell" ) {
+        
+        tableVw.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: identifier)
+        tableVw.separatorStyle = .none
+        tableVw.estimatedRowHeight = 100
+        tableVw.rowHeight = UITableViewAutomaticDimension
+    }
+    
     public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: ModName, action:Selector? = nil){
         
         let emptyView = EmptyState()

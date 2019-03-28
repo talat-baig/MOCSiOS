@@ -305,7 +305,6 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                
                 let dataEntry = BarChartDataEntry(x: Double(i), y: Double(qty!) )
                 
-                
                 self.cpBarDataEntry.append(dataEntry)
                 self.cpNameArr.append(name)
                 self.cpValuesArr.append(modifiedVal ?? "0")
