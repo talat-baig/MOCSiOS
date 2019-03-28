@@ -175,18 +175,20 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                             let comp = Company()
                             comp.compName = company
                             
-                            let sliced  = company.slice(from: "(", to: ")")
-                            comp.compCode = sliced ?? "0"
+                            let lastTenChar = company.suffix(5)
+                            let compStr = String(lastTenChar)
                             
-                            //                            print(sliced ?? "")
+                            let sliced  = compStr.slice(from: "(", to: ")")
+                            comp.compCode = sliced ?? "0"
+                            print(comp.compCode)
                             
                             let loc = Location()
                             loc.locName = location
                             
                             let newBUString = busUnit[l]["BU"].stringValue
                             let buSliced  = newBUString.slice(from: "(", to: ")")
-                            //
-//                            print(buSliced!)
+
+                            //  print(buSliced!)
                             let newBName = busUnit[l]["BU"].stringValue
                             
                             bu.append(DataObject(name: newBName,
@@ -210,7 +212,6 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             self.dataObj = dataObject
             self.treeView.treeFooterView = nil
             DispatchQueue.main.async {
-                
                 self.treeView.reloadData()
             }
         } else {

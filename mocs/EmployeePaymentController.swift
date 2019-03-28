@@ -312,13 +312,10 @@ extension EmployeePaymentController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         searchBar.resignFirstResponder()
-        
         guard let searchTxt = searchBar.text else {
             return
         }
-        
         self.searchString = searchTxt
-        
         self.refreshList()
         self.handleTap()
     }
@@ -326,20 +323,12 @@ extension EmployeePaymentController: UISearchBarDelegate {
 
 extension EmployeePaymentController: UITableViewDelegate, UITableViewDataSource, onButtonClickListener{
     
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 295
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
   
-        if arrayList.count > 0 {
-            tableView.backgroundView?.isHidden = true
-            tableView.separatorStyle = .singleLine
-        } else {
-            tableView.backgroundView?.isHidden = false
-            tableView.separatorStyle = .none
-        }
         return arrayList.count
     }
     

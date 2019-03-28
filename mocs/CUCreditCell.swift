@@ -11,9 +11,16 @@ import UIKit
 class CUCreditCell: UITableViewCell {
 
     @IBOutlet weak var outrVw: UIView!
-    
     @IBOutlet weak var headerVw: UIView!
 
+    @IBOutlet weak var lblRefId: UILabel!
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var lblBnkName: UILabel!
+    @IBOutlet weak var lblCurr: UILabel!
+    @IBOutlet weak var lblGrossCCY: UILabel!
+    @IBOutlet weak var lblGross: UILabel!
+    @IBOutlet weak var lblAccNo: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -31,8 +38,18 @@ class CUCreditCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
+    
+    func setDataToView(data : CUCreditData) {
+        
+        lblRefId.text = data.refID
+        lblAccNo.text = data.accNo
+        lblDate.text = data.date
+        lblBnkName.text = data.bankShortName
+        lblCurr.text = data.curr
+        lblGrossCCY.text = data.grossAmtCCY
+        lblGross.text = data.grossAmt
+    }
+    
     
 }

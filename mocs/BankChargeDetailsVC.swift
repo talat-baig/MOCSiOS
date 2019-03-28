@@ -18,7 +18,6 @@ class BankChargeDetailsVC: UIViewController, UIGestureRecognizerDelegate {
     var refId = ""
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +36,6 @@ class BankChargeDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         vwTopHeader.lblSubTitle.text =  self.refId
         
         self.tableView.separatorStyle = .none
-        
         tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -132,10 +130,7 @@ extension BankChargeDetailsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
-    
 }
-
-
 
 
 // MARK: - WC_HeaderViewDelegate methods
@@ -152,5 +147,4 @@ extension BankChargeDetailsVC: WC_HeaderViewDelegate {
     func topMenuRightButtonTapped(sender: Any) {
         self.presentRightMenuViewController(sender as AnyObject)
     }
-    
 }

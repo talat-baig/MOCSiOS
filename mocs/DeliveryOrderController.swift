@@ -172,11 +172,6 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
         }
     }
     
-    func handlePagination() {
-        
-    }
-    
-    
     
     func viewContract(refId: String){
         if internetStatus != .notReachable{

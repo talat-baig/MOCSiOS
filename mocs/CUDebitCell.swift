@@ -14,6 +14,14 @@ class CUDebitCell: UITableViewCell {
     
     @IBOutlet weak var headerVw: UIView!
     
+    @IBOutlet weak var lblRefId: UILabel!
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var lblUOM: UILabel!
+    @IBOutlet weak var lblCurr: UILabel!
+    @IBOutlet weak var lblInvValCCY: UILabel!
+    @IBOutlet weak var lblInvVal: UILabel!
+    @IBOutlet weak var lblInvQty: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -31,8 +39,17 @@ class CUDebitCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    }
+    
+    func setDataToView(data : CUDebitData) {
+        
+        lblRefId.text = data.refID != "" ? data.refID : "-"
+        lblUOM.text = data.uom != "" ? data.uom : "-"
+        lblDate.text = data.date != "" ? data.date : "-"
+        lblInvQty.text = data.invQty != "" ? data.invQty : "-"
+        lblCurr.text = data.curr != "" ? data.curr : "-"
+        lblInvVal.text = data.invVal != "" ? data.invVal : "-"
+        lblInvValCCY.text = data.invValCCY != "" ? data.invValCCY : "-"
     }
     
 }

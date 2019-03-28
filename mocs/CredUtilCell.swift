@@ -53,6 +53,7 @@ class CredUtilCell: UITableViewCell {
         lblPayments.text = data?.payments != "" ? data?.payments : "-"
         lblCredLimit.text = data?.credLimit != "" ? data?.credLimit : "-"
         lblAvailCredLimit.text = data?.AvlCreditLimit != "" ? data?.AvlCreditLimit : "-"
+        lblTotalOutstanding.text = data?.totalOutstanding != "" ? data?.totalOutstanding : "-"
     }
 
 }

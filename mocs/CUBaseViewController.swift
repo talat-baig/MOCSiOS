@@ -13,7 +13,15 @@ class CUBaseViewController: ButtonBarPagerTabStripViewController {
 
     let purpleInspireColor = UIColor(red:0.312, green:0.581, blue:0.901, alpha:1.0)
     
+    var cuListData : CUListData?
+    var response:Data?
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
+    
+    @IBOutlet weak var lblTotalOutStng: UILabel!
+    @IBOutlet weak var lblTotalDebit: UILabel!
+    @IBOutlet weak var lblTotalCredit: UILabel!
+
     
     override func viewDidLoad() {
         
@@ -43,9 +51,12 @@ class CUBaseViewController: ButtonBarPagerTabStripViewController {
         
         vwTopHeader.btnRight.setImage(nil, for: .normal)
         vwTopHeader.lblTitle.text = "Statement"
-        vwTopHeader.lblSubTitle.text = "123456"
+        vwTopHeader.lblSubTitle.text = cuListData?.cpID
+        
         self.navigationController?.isNavigationBarHidden = true
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+        
+        self.setDatatoView()
 
     }
     
@@ -53,9 +64,10 @@ class CUBaseViewController: ButtonBarPagerTabStripViewController {
         var views:[UIViewController] = []
         
         let cuCreditVC = self.storyboard?.instantiateViewController(withIdentifier: "CreditStatementController") as! CreditStatementController
+        cuCreditVC.response = self.response
         
         let cuDebitVC = self.storyboard?.instantiateViewController(withIdentifier: "DebitStatementController") as! DebitStatementController
-        
+        cuDebitVC.response = self.response
         views.append(cuDebitVC)
         views.append(cuCreditVC)
         
@@ -63,6 +75,12 @@ class CUBaseViewController: ButtonBarPagerTabStripViewController {
     }
     
 
+    func setDatatoView() {
+        
+        lblTotalDebit.text = String(format: "Total Debit : \n%@", self.cuListData?.billed ?? "-")
+        lblTotalOutStng.text =  String(format: "Total Outstanding : %@",  self.cuListData?.totalOutstanding ??  "-")
+        lblTotalCredit.text =  String(format: "Total Credit : \n%@", self.cuListData?.payments ?? "-")
+    }
 }
 
 

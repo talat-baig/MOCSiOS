@@ -765,10 +765,10 @@ class Helper: UIView {
         emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
     }
     
-    public static func showEmptyState(vc:UIViewController, messg: String = "" , action:Selector? = nil) -> Void {
+    public static func showEmptyState(vc:UIViewController, messg: String = "" , action:Selector? = nil, imageName : String = "no_result") -> Void {
         
         let emptyView = EmptyState()
-        emptyView.image = UIImage(named: "no_result")!
+        emptyView.image = UIImage(named: imageName)!
         emptyView.message = messg
         
         if action != nil{

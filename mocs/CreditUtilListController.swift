@@ -30,9 +30,6 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
-//        self.tableView.register(UINib(nibName: "CredUtilCell", bundle: nil), forCellReuseIdentifier: "cell")
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
@@ -183,7 +180,7 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
     
     
     func setCurrencyText() {
-        if arrayList.count > 0 {
+        if arrayList.count > 0 && self.arrayList[0].currency != nil {
             self.lblNote.text =  String(format: "*All values are reflected in %@" , self.arrayList[0].currency ?? "-")
         } else {
             self.lblNote.text = ""
@@ -217,6 +214,36 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
             }
         }
     }
+    
+    
+    func getStatementDetailsAndNavigate(data : CUListData) {
+        
+        if internetStatus != .notReachable{
+            
+            let url = String.init(format: Constant.CreditUtil.CU_LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()),1 , 1 , "" ,Helper.encodeURL(url: data.cpID ?? ""))
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    let baseCUVC = self.storyboard?.instantiateViewController(withIdentifier: "CUBaseViewController") as! CUBaseViewController
+                    baseCUVC.cuListData = data
+                    baseCUVC.response = response.result.value
+                    self.navigationController?.pushViewController(baseCUVC, animated: true)
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
+    }
+    
+    @objc func viewStatement(sender : UIButton) {
+        self.getStatementDetailsAndNavigate(data: self.arrayList[sender.tag] )
+    }
+    
+    
+    
 }
 
 extension CreditUtilListController: UISearchBarDelegate {
@@ -248,11 +275,7 @@ extension CreditUtilListController: UISearchBarDelegate {
         self.handleTap()
     }
     
-    @objc func viewLeaveReq(sender : UIButton) {
-        
-        let baseCUVC = self.storyboard?.instantiateViewController(withIdentifier: "CUBaseViewController") as! CUBaseViewController
-        self.navigationController?.pushViewController(baseCUVC, animated: true)
-    }
+
 }
 
 // MARK: - UITableViewDataSource methods
@@ -276,7 +299,7 @@ extension CreditUtilListController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.btnView.tag = indexPath.row
-        cell.btnView.addTarget(self, action: #selector(self.viewLeaveReq(sender:)), for: UIControlEvents.touchUpInside)
+        cell.btnView.addTarget(self, action: #selector(self.viewStatement(sender:)), for: UIControlEvents.touchUpInside)
         if arrayList.count > 0 {
             cell.setDataToViews(data: self.arrayList[indexPath.row])
         }
