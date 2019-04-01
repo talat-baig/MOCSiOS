@@ -51,6 +51,8 @@ class CreditStatementController: UIViewController ,IndicatorInfoProvider {
                     creditData.bankShortName = k["Bank Short Name"].stringValue
                     creditData.grossAmt = k["Gross Amount"].stringValue
                     creditData.curr = k["Currency"].stringValue
+                    creditData.accNo = k["Account No."].stringValue
+
                     creditData.grossAmtCCY = k["Gross Amount (CCY)"].stringValue
                     data.append(creditData)
                 }

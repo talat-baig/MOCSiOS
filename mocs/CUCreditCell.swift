@@ -42,13 +42,13 @@ class CUCreditCell: UITableViewCell {
     
     func setDataToView(data : CUCreditData) {
         
-        lblRefId.text = data.refID
-        lblAccNo.text = data.accNo
-        lblDate.text = data.date
-        lblBnkName.text = data.bankShortName
-        lblCurr.text = data.curr
-        lblGrossCCY.text = data.grossAmtCCY
-        lblGross.text = data.grossAmt
+        lblRefId.text = data.refID != "" ? data.refID : "-"
+        lblAccNo.text = data.accNo != "" ? data.accNo : "-"
+        lblDate.text = data.date != "" ? data.date : "-"
+        lblBnkName.text = data.bankShortName != "" ? data.bankShortName : "-"
+        lblCurr.text = data.curr != "" ? data.curr : "-"
+        lblGrossCCY.text = data.grossAmtCCY != "" ? data.grossAmtCCY : "-"
+        lblGross.text = data.grossAmt != "" ? data.grossAmt : "-"
     }
     
     

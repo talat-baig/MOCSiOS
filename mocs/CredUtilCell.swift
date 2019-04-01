@@ -44,16 +44,16 @@ class CredUtilCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setDataToViews(data : CUListData?) {
+    func setDataToViews(data : CUListData) {
         
-        lblCPName.text = data?.cpName != "" ? data?.cpName : "-"
-        lblBilled.text = data?.billed != "" ? data?.billed : "-"
-        lblUnbilled.text = data?.unbilled != "" ? data?.unbilled : "-"
-        lblHeader.text = data?.cpID != "" ? data?.cpID : "-"
-        lblPayments.text = data?.payments != "" ? data?.payments : "-"
-        lblCredLimit.text = data?.credLimit != "" ? data?.credLimit : "-"
-        lblAvailCredLimit.text = data?.AvlCreditLimit != "" ? data?.AvlCreditLimit : "-"
-        lblTotalOutstanding.text = data?.totalOutstanding != "" ? data?.totalOutstanding : "-"
+        lblCPName.text = data.cpName != "" ? data.cpName : "-"
+        lblBilled.text = data.billed != "" ? data.billed : "-"
+        lblUnbilled.text = data.unbilled != "" ? data.unbilled : "-"
+        lblHeader.text = data.cpID != "" ? data.cpID : "-"
+        lblPayments.text = data.payments != "" ? data.payments : "-"
+        lblCredLimit.text = data.credLimit != "" ? data.credLimit : "-"
+        lblAvailCredLimit.text = data.AvlCreditLimit != "" ? data.AvlCreditLimit : "-"
+        lblTotalOutstanding.text = data.totalOutstanding != "" ? data.totalOutstanding : "-"
     }
 
 }
