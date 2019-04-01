@@ -91,15 +91,22 @@ class TCRController: UIViewController, UIGestureRecognizerDelegate , filterViewD
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        if text == "" || text == "Enter Comment"  {
-            Helper.showMessage(message: "Please Enter Comment")
-            return
-        }
         
         if isApprove {
-            self.approveClaim(data: (data as! TravelClaimData), comment: text)
+            
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            self.approveClaim(data: (data as! TravelClaimData), comment: newText)
             myView.removeFromSuperviewWithAnimate()
         } else {
+            if text == "" || text == "Enter Comment"  {
+                Helper.showMessage(message: "Please Enter Comment")
+                return
+            }
             self.declineClaim(data: data as! TravelClaimData, comment: text)
             declVw.removeFromSuperviewWithAnimate()
         }

@@ -61,10 +61,11 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
         
         Helper.setupTableView(tableVw: self.tableView, nibName: "CredUtilCell", identifier: "cell")
         self.refreshList()
-    
     }
     
     func resetViews() {
+        
+        self.collVw.reloadData()
         
         if FilterViewController.selectedDataObj.isEmpty {
             vwFilter.isHidden = true
@@ -75,14 +76,17 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
 
     func applyFilter(filterString: String) {
         
-        if filterString.contains(",") {
-            Helper.showMessage(message: "Please select only one filter")
-            return
-        }
-        
         if !arrayList.isEmpty {
             arrayList.removeAll()
         }
+        
+//
+//        if FilterViewController.getFilterString().contains(",") {
+//            Helper.showMessage(message: "Please select only one filter")
+//            self.collVw.reloadData()
+//            return
+//        }
+
         self.refreshList()
         self.resetViews()
         self.collVw.reloadData()
@@ -110,6 +114,18 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
     
     
     @objc func populateList() {
+        
+        if FilterViewController.getFilterString().contains(",") {
+            
+            Helper.showMessage(message: "Please select only one filter")
+            self.collVw.reloadData()
+            self.arrayList.removeAll()
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
+
+            return
+        }
         
         var newData :[CUListData] = []
         
@@ -145,7 +161,7 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
                     } else {
                         if self.arrayList.isEmpty {
                             self.btnMore.isHidden = true
-                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
                         } else {
                             self.currentPage -= 1
                             Helper.showMessage(message: "No more data found")
@@ -154,7 +170,7 @@ class CreditUtilListController: UIViewController , filterViewDelegate, clearFilt
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
                     } else {
                         self.currentPage -= 1
                     }

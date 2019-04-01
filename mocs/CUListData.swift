@@ -19,6 +19,7 @@ struct CUListData : Decodable {
     let payments: String?
     let totalOutstanding: String?
     let currency: String?
+    let overallOutstanding: String?
 
 
     enum CodingKeys : String, CodingKey {
@@ -29,6 +30,7 @@ struct CUListData : Decodable {
         case AvlCreditLimit = "Available Credit Limit"
         case payments = "Payments"
         case totalOutstanding = "Total Outstanding"
+        case overallOutstanding = "Total Outstanding Statement"
         case currency = "Currency"
         case cpID = "CP ID"
     }

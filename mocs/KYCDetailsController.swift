@@ -315,15 +315,22 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        var commnt = ""
-        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
-            commnt = ""
-        } else {
-            commnt = text
-        }
+//        var commnt = ""
+//        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
+//            commnt = ""
+//        } else {
+//            commnt = text
+//        }
         
         if isApprove {
-            self.approveOrDeclineCP(event: 1, cpData: data as! CPListData, comment: commnt)
+            
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            self.approveOrDeclineCP(event: 1, cpData: data as! CPListData, comment: newText)
             myView.removeFromSuperviewWithAnimate()
         } else {
             

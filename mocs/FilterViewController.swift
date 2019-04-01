@@ -180,7 +180,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                             
                             let sliced  = compStr.slice(from: "(", to: ")")
                             comp.compCode = sliced ?? "0"
-                            print(comp.compCode)
+//                            print(comp.compCode)
                             
                             let loc = Location()
                             loc.locName = location

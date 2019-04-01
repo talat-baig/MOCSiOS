@@ -86,8 +86,17 @@ class DeliveryOrderController: UIViewController, UIGestureRecognizerDelegate, cu
     }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
+        
+       
         if isApprove {
-            self.approveContract(data: (data as! DeliveryOrderData), comment: text)
+            
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            self.approveContract(data: (data as! DeliveryOrderData), comment: newText)
             myView.removeFromSuperviewWithAnimate()
         } else {
             if text == "" || text == "Enter Comment"  {

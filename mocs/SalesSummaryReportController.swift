@@ -136,7 +136,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                         self.resetData()
                         self.tableView.reloadData()
                         
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllSSData))
                         return
                     } else {
                         
@@ -161,7 +161,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                                 self.refreshControl.endRefreshing()
                                                 self.resetData()
                                                 self.tableView.reloadData()
-                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
+                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllSSData))
                                                 return
                                             } else {
                                                 
@@ -178,7 +178,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                             self.refreshControl.endRefreshing()
                                             self.resetData()
                                             self.tableView.reloadData()
-                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
+                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllSSData))
                                         }
                                     }))
                                    
@@ -188,7 +188,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllSSData))
                             }
                         }))
                     }
@@ -197,14 +197,14 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isSC , action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllSSData))
                 }
             }))
         } else {
             Helper.showNoInternetMessg()
             self.resetData()
             self.tableView.reloadData()
-            Helper.showNoInternetState(vc: self, tb: self.tableView, action: #selector(self.fetchAllSSData))
+            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllSSData))
             self.refreshControl.endRefreshing()
         }
     }

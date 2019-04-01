@@ -17,6 +17,7 @@ import SearchTextField
 
 enum ModName {
     
+    case isReport
     case isARReport
     case isAPReport
     case isTrvReq
@@ -542,7 +543,7 @@ class Helper: UIView {
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
-        emptyView.buttonText = "CHANGE FILTER"
+        emptyView.buttonText = "TRY AGAIN"
         
         switch reports {
             
@@ -571,7 +572,9 @@ class Helper: UIView {
         case ModName.isFPS :
             emptyView.message = "No Funds Payment & Settlement Data for the current\nTry by changing filter"
             
-            
+        case ModName.isReport :
+            emptyView.message = "No Data for the current\nTry by changing filter"
+
         case ModName.isApprovals :
             emptyView.message = " No data for the current "
             
@@ -579,22 +582,19 @@ class Helper: UIView {
             emptyView.message = "No Pending Approval Data for the current\nTry going back and changing filter"
         case ModName.isLMSApprovalDetails :
             emptyView.message = "No Leave Data Found for the current employee"
-            emptyView.buttonText = "RELOAD"
+//            emptyView.buttonText = "TRY AGAIN"
             
         default :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
         }
         
-        if action != nil{
-//            emptyView.message = "You have no task to do! Add task by tapping on add button"
+        if action != nil {
             emptyView.button.isHidden = false
-            emptyView.buttonText = "LOAD ITEM"
             emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
         } else {
-//            emptyView.message = "You have no task to do! Add task by tapping on add button"
             emptyView.button.isHidden = true
         }
-//        emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
+
         tb.tableFooterView = emptyView
         
         emptyView.translatesAutoresizingMaskIntoConstraints = false
@@ -605,71 +605,6 @@ class Helper: UIView {
     }
     
     
-    
-    
-    //    public static func showNoFilterState(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, isSC : Bool = false, action:Selector){
-    //
-    //        let emptyView = EmptyState()
-    //        emptyView.image = UIImage(named: "no_result")!
-    //        emptyView.buttonText = "CHANGE FILTER"
-    //
-    //        if isARReport {
-    //            emptyView.message = "No AR Data for the current\nTry by changing filter"
-    //        } else if isAPReport {
-    //            emptyView.message = "No AP Data for the current\nTry by changing filter"
-    //        } else if isTrvReq {
-    //            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
-    //            emptyView.buttonText = "RELOAD"
-    //        } else if isCP {
-    //            emptyView.message = "No Counterparty Data found \n Try again by reloading"
-    //        } else if isSC {
-    //            emptyView.message = "No Sales Summary Data for the current\nTry by changing filter"
-    //        } else {
-    //            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
-    //        }
-    //
-    //
-    //        emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
-    //        tb.tableFooterView = emptyView
-    //
-    //        emptyView.translatesAutoresizingMaskIntoConstraints = false
-    //        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
-    //        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
-    //        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
-    //        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
-    //    }
-    
-    
-    //    public static func showNoFilterStateForReports(vc:UIViewController, tb:UITableView, isTrvReq : Bool = false , isARReport : Bool = false, isAPReport : Bool = false , isCP : Bool = false, action:Selector){
-    //
-    //        let emptyView = EmptyState()
-    //        emptyView.image = UIImage(named: "no_result")!
-    //        emptyView.buttonText = "CHANGE FILTER"
-    //
-    //        if isARReport {
-    //            emptyView.message = "No AR Data for the current\nTry by changing filter"
-    //        } else if isAPReport {
-    //            emptyView.message = "No AP Data for the current\nTry by changing filter"
-    //        } else if isTrvReq {
-    //            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
-    //            emptyView.buttonText = "RELOAD"
-    //        } else if isCP {
-    //            emptyView.message = "No Counterparty Data found \n Try again by reloading"
-    //        } else {
-    //            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
-    //        }
-    //
-    //
-    //        emptyView.button.addTarget(vc, action: action, for: .touchUpInside)
-    //        tb.tableFooterView = emptyView
-    //
-    //        emptyView.translatesAutoresizingMaskIntoConstraints = false
-    //        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
-    //        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
-    //        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
-    //        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
-    //    }
-    //
     
     
     public static func getNavTitleString(modName : ModName) -> String {
@@ -1079,97 +1014,6 @@ extension NSObject:Utility{
     }
 }
 
-//class TextField: SearchTextField {
-//
-//    let padding = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-//
-//    override open func textRect(forBounds bounds: CGRect) -> CGRect {
-//        return UIEdgeInsetsInsetRect(bounds, padding)
-//    }
-//
-//    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-//        return UIEdgeInsetsInsetRect(bounds, padding)
-//    }
-//
-//    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-//        return UIEdgeInsetsInsetRect(bounds, padding)
-//    }
-//}
-
-//extension UITextView: UITextViewDelegate {
-//
-//    /// Resize the placeholder when the UITextView bounds change
-//    override open var bounds: CGRect {
-//        didSet {
-//            self.resizePlaceholder()
-//        }
-//    }
-//
-//    /// The UITextView placeholder text
-//    public var placeholder: String? {
-//        get {
-//            var placeholderText: String?
-//
-//            if let placeholderLabel = self.viewWithTag(100) as? UILabel {
-//                placeholderText = placeholderLabel.text
-//            }
-//
-//            return placeholderText
-//        }
-//        set {
-//            if let placeholderLabel = self.viewWithTag(100) as! UILabel? {
-//                placeholderLabel.text = newValue
-//                placeholderLabel.sizeToFit()
-//            } else {
-//                self.addPlaceholder(newValue!)
-//            }
-//        }
-//    }
-//
-//    /// When the UITextView did change, show or hide the label based on if the UITextView is empty or not
-//    ///
-//    /// - Parameter textView: The UITextView that got updated
-//    public func textViewDidChange(_ textView: UITextView) {
-//        if let placeholderLabel = self.viewWithTag(100) as? UILabel {
-//            placeholderLabel.isHidden = self.text.count > 0
-//        }
-//    }
-//
-//    /// Resize the placeholder UILabel to make sure it's in the same position as the UITextView text
-//    private func resizePlaceholder() {
-//        if let placeholderLabel = self.viewWithTag(100) as! UILabel? {
-//            let labelX = self.textContainer.lineFragmentPadding
-//            let labelY = self.textContainerInset.top - 2
-//            let labelWidth = self.frame.width - (labelX * 2)
-//            let labelHeight = placeholderLabel.frame.height
-//
-//            placeholderLabel.frame = CGRect(x: labelX, y: labelY, width: labelWidth, height: labelHeight)
-//        }
-//    }
-//
-//    /// Adds a placeholder UILabel to this UITextView
-//    private func addPlaceholder(_ placeholderText: String) {
-//        let placeholderLabel = UILabel()
-//
-//        placeholderLabel.text = placeholderText
-//        placeholderLabel.sizeToFit()
-//
-//        placeholderLabel.font = self.font
-//        placeholderLabel.textColor = UIColor.lightGray
-//        placeholderLabel.tag = 100
-//
-//        placeholderLabel.isHidden = self.text.count > 0
-//
-//        self.addSubview(placeholderLabel)
-//        self.resizePlaceholder()
-//        self.delegate = self
-//    }
-//
-//}
-//extension UIViewController {
-//    
-//    var navTitle = ""
-//}
 
 
 var progressTimer: Timer?
@@ -1393,7 +1237,6 @@ extension String {
         let okayChars = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890")
         return self.filter {
             okayChars.contains($0)
-            
         }
     }
     

@@ -130,7 +130,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllPSData))
                         return
                     } else {
 
@@ -143,7 +143,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllPSData))
                                     return
                                 } else {
 
@@ -156,7 +156,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                                 self.refreshControl.endRefreshing()
                                                 self.resetData()
                                                 self.tableView.reloadData()
-                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
+                                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllPSData))
                                                 return
                                             } else {
                                                 
@@ -173,7 +173,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                             self.refreshControl.endRefreshing()
                                             self.resetData()
                                             self.tableView.reloadData()
-                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
+                                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllPSData))
                                         }
                                     }))
                                 }
@@ -182,7 +182,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllPSData))
                             }
                         }))
                     }
@@ -191,7 +191,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isPC, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllPSData))
                 }
             }))
         } else {

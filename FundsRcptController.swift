@@ -26,6 +26,7 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
     
     @IBOutlet weak var collVw: UICollectionView!
     
+    @IBOutlet weak var vwColl: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var lblNote: UILabel!
 
@@ -44,18 +45,13 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllFRAData))
         tableView.addSubview(refreshControl)
         
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-//        flowLayout.minimumInteritemSpacing = 5.0
-//        collVw.collectionViewLayout = flowLayout
 
         Helper.setupCollVwFitler(collVw: self.collVw)
 
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
+        resetViews()
         
-        fetchAllFRAData()
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -63,10 +59,12 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Funds Receipt and Allocation"
         vwTopHeader.lblSubTitle.isHidden = true
+        fetchAllFRAData()
     }
     
     func clearAll() {
         self.collVw.reloadData()
+        self.resetViews()
         self.fetchAllFRAData()
     }
     
@@ -82,12 +80,14 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
             return
         }
         self.fetchAllFRAData()
+        self.resetViews()
         self.collVw.reloadData()
     }
     
     func cancelFilter(filterString: String) {
         self.fpData = nil
         self.barDataEntry.removeAll()
+        self.resetViews()
     }
     
     @objc func fetchAllFRAData() {
@@ -122,7 +122,7 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFRAData))
                         return
                     } else {
                         
@@ -135,7 +135,10 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
+//                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
+                                    
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFRAData))
+
                                     return
                                 } else {
                                     self.populateOverallData(respJson: ovrAllResp)
@@ -149,7 +152,9 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
+//                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFRAData))
+
                             }
                         }))
                     }
@@ -158,7 +163,9 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
+//                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFRA, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFRAData))
+
                 }
             }))
         } else {
@@ -168,7 +175,15 @@ class FundsRcptController: UIViewController ,filterViewDelegate, clearFilterDele
             Helper.showNoInternetState(vc: self, tb: self.tableView, action: #selector(self.fetchAllFRAData))
             self.refreshControl.endRefreshing()
         }
+    }
+    
+    func resetViews() {
         
+        if FilterViewController.selectedDataObj.isEmpty {
+            vwColl.isHidden = true
+        } else {
+            vwColl.isHidden = false
+        }
     }
     
     func resetData() {

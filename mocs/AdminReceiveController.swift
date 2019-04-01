@@ -211,15 +211,22 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        if text == "" || text == "Enter Comment" {
-            Helper.showMessage(message: "Please Enter Comment")
-            return
-        }
-        
         if isApprove {
-            self.approveContract(data: data as! ARIData, comment: text)
+            
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            self.approveContract(data: data as! ARIData, comment: newText)
             myView.removeFromSuperview()
         } else {
+            
+            if text == "" || text == "Enter Comment"  {
+                Helper.showMessage(message: "Please Enter Comment")
+                return
+            }
             self.declineContract(data: data as! ARIData, comment: text)
             declView.removeFromSuperviewWithAnimate()
         }
@@ -230,7 +237,7 @@ class AdminReceiveController: UIViewController , UIGestureRecognizerDelegate, fi
         if internetStatus != .notReachable{
             let url = String.init(format: Constant.ARI.APPROVE, Session.authKey,
                                   data.refId,
-                                  comment)
+                                   Helper.encodeURL(url: comment))
             self.view.showLoading()
             Alamofire.request(url, method: .post, encoding: JSONEncoding.default).responseString(completionHandler: {  response in
                 self.view.hideLoading()

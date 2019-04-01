@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+
 class TradeInvoiceController: UIViewController , UIGestureRecognizerDelegate, filterViewDelegate, customPopUpDelegate{
     
     /// Table view

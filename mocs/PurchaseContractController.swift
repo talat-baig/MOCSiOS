@@ -230,15 +230,24 @@ class PurchaseContractController: UIViewController, UIGestureRecognizerDelegate,
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        if text == "" || text == "Enter Comment" {
-            Helper.showMessage(message: "Please Enter Comment")
-            return
-        }
+       
         
         if isApprove {
-            self.approveContract(data: data as! PurchaseContractData, remark: text)
+            
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            self.approveContract(data: data as! PurchaseContractData, remark: newText)
             myView.removeFromSuperviewWithAnimate()
         } else {
+            
+            if text == "" || text == "Enter Comment"  {
+                Helper.showMessage(message: "Please Enter Comment")
+                return
+            }
             self.declineContract(data: data as! PurchaseContractData, comment: text)
             declView.removeFromSuperviewWithAnimate()
         }

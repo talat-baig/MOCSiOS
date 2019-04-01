@@ -196,16 +196,15 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        var commnt = ""
-        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
-            commnt = ""
-        } else {
-            commnt = text
-        }
-        
         if isApprove {
             
-            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: commnt)
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            self.approveOrDeclineTRF(event: 1, trData: data as! TravelRequestData, comment: newText)
             myView.removeFromSuperviewWithAnimate()
         } else {
             
@@ -214,7 +213,7 @@ class TravelReqApprovalVC: UIViewController, UIGestureRecognizerDelegate, custom
                 return
             }
             
-            self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: commnt)
+            self.approveOrDeclineTRF(event: 2, trData: data as! TravelRequestData , comment: text)
             declView.removeFromSuperviewWithAnimate()
         }
     }

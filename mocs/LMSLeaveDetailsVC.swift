@@ -189,22 +189,22 @@ class LMSLeaveDetailsVC: UIViewController , onButtonClickListener , customPopUpD
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-        var commnt = ""
-        if text == "" || text == "Enter Comment"  {
-            commnt = ""
-        } else {
-            commnt = text
-        }
-        
         if isApprove {
-            self.approveOrDeclineLeave(status: "Approved", data: (data as! LMSLeaveData), comment: commnt)
+            
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            self.approveOrDeclineLeave(status: "Approved", data: (data as! LMSLeaveData), comment: newText)
             myView.removeFromSuperviewWithAnimate()
         } else {
             if text == "" || text == "Enter Comment"  {
                 Helper.showMessage(message: "Please Enter Comment")
                 return
             } else {
-                self.approveOrDeclineLeave(status: "Rejected", data: (data as! LMSLeaveData), comment: commnt)
+                self.approveOrDeclineLeave(status: "Rejected", data: (data as! LMSLeaveData), comment: text)
                 declVw.removeFromSuperviewWithAnimate()
             }
         }

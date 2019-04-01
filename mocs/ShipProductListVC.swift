@@ -9,20 +9,15 @@
 import UIKit
 
 class ShipProductListVC: UIViewController {
-
-    let flt = 0.5
+    
     var refId = ""
     var prodName = ""
     var arrayList = [SABuyerData]()
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     
-//    @IBOutlet weak var lblCurrText: UILabel!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        self.tableView.register(UINib(nibName: "ShipProductCell", bundle: nil), forCellReuseIdentifier: "cell")
         
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = true
@@ -32,9 +27,6 @@ class ShipProductListVC: UIViewController {
         vwTopHeader.lblTitle.text = "Product Name"
         vwTopHeader.lblSubTitle.text =  "Buyer Name"
         
-//        self.tableView.separatorStyle = .none
-//        tableView.estimatedRowHeight = 100
-//        tableView.rowHeight = UITableViewAutomaticDimension
         Helper.setupTableView(tableVw : self.tableView, nibName: "ShipProductCell")
 
         self.populateList()

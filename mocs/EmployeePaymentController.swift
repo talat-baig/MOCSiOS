@@ -102,7 +102,6 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                 if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
                     let jsornResponse = JSON(response.result.value!)
                     let arrayJson = jsornResponse.arrayObject as! [[String:AnyObject]]
-//                    self.arrayList.removeAll()
                     
                     if arrayJson.count > 0 {
                         
@@ -120,7 +119,6 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                             newData.append(data)
                         }
                         self.arrayList.append(contentsOf: newData)
-//                        self.newArray = self.arrayList
                         self.tableView.tableFooterView = nil
                     } else {
                         
@@ -132,7 +130,6 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
                             Helper.showMessage(message: "No more data found")
                         }
                     }
-//                     self.tableView.reloadData()
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
@@ -160,8 +157,17 @@ class EmployeePaymentController: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
+        
         if isApprove {
-            self.approveClaim(data:data as! EPRData, comment : text)
+            
+            var newText : String = ""
+            newText = text
+            
+            if text == "Enter Comment (Optional)" {
+                newText = " "
+            }
+            
+            self.approveClaim(data:data as! EPRData, comment : newText)
             myView.removeFromSuperviewWithAnimate()
         } else {
             

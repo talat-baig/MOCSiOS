@@ -112,7 +112,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                     if  (ovrAllResp.arrayObject?.isEmpty)! {
                         self.resetData()
                         self.tableView.reloadData()
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFPSData))
                         return
                     } else {
                         Alamofire.request(url2).responseData(completionHandler: ({ response in
@@ -124,7 +124,8 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFPSData))
+
                                     return
                                 } else {
                                     self.populateOverallData(respJson: ovrAllResp)
@@ -138,7 +139,8 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFPSData))
+
                             }
                         }))
                     }
@@ -147,7 +149,7 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isFPS, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllFPSData))
                 }
             }))
         } else {

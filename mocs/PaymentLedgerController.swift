@@ -112,7 +112,6 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
   
     @objc func populateList() {
         
-        
         var newData :[PaymentLedgerData] = []
         
         if internetStatus != .notReachable {
@@ -154,7 +153,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
                     } else {
                         if self.arrayList.isEmpty {
                             self.btnMore.isHidden = true
-                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
                         } else {
                             self.currentPage -= 1
                             Helper.showMessage(message: "No more data found")
@@ -163,7 +162,7 @@ class PaymentLedgerController: UIViewController , filterViewDelegate, clearFilte
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
                     } else {
                         self.currentPage -= 1
                     }
@@ -254,11 +253,7 @@ extension PaymentLedgerController: UITableViewDataSource, UITableViewDelegate {
                 cell.setDataToView(data: self.arrayList[indexPath.row])
         }
         
-//        if self.arrayList.count == 1 {
-//            self.tableView.isScrollEnabled = false
-//        } else {
-//            self.tableView.isScrollEnabled = true
-//        }
+
         return cell
     }
     

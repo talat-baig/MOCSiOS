@@ -78,7 +78,7 @@ class CUBaseViewController: ButtonBarPagerTabStripViewController {
     func setDatatoView() {
         
         lblTotalDebit.text = String(format: "Total Debit : \n%@", self.cuListData?.billed ?? "-")
-        lblTotalOutStng.text =  String(format: "Total Outstanding : %@",  self.cuListData?.totalOutstanding ??  "-")
+        lblTotalOutStng.text =  String(format: "Total Outstanding : %@",  self.cuListData?.overallOutstanding ??  "-")
         lblTotalCredit.text =  String(format: "Total Credit : \n%@", self.cuListData?.payments ?? "-")
     }
 }

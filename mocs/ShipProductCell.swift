@@ -24,13 +24,10 @@ class ShipProductCell: UITableViewCell {
         headerVw.layer.shadowOffset = CGSize(width: 1, height: 2)
         headerVw.layer.shadowRadius = 1
         headerVw.layer.shadowColor = UIColor.black.cgColor
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
 }

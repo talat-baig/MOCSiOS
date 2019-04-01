@@ -156,7 +156,7 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
                     } else {
                         if self.arrayList.isEmpty {
                             self.btnMore.isHidden = true
-                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
                         } else {
                             self.currentPage -= 1
                             Helper.showMessage(message: "No more data found")
@@ -165,7 +165,8 @@ class CashBankBalController: UIViewController , filterViewDelegate, clearFilterD
                 } else {
                     if self.arrayList.isEmpty {
                         self.btnMore.isHidden = true
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isApprovals, action: nil)
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
+                        
                     } else {
                         self.currentPage -= 1
                     }

@@ -90,7 +90,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                         self.resetData()
                         self.tableView.reloadData()
                         
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllAPData))
                         return
                     } else {
                         
@@ -103,7 +103,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                                     self.refreshControl.endRefreshing()
                                     self.resetData()
                                     self.tableView.reloadData()
-                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
+                                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllAPData))
                                     return
                                 } else {
                                     
@@ -117,7 +117,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                                 self.refreshControl.endRefreshing()
                                 self.resetData()
                                 self.tableView.reloadData()
-                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
+                                Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllAPData))
                             }
                         }))
                     }
@@ -126,7 +126,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
                     self.refreshControl.endRefreshing()
                     self.resetData()
                     self.tableView.reloadData()
-                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isAPReport, action: #selector(self.showFilterMenu))
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.fetchAllAPData))
                 }
             }))
         } else {
@@ -183,11 +183,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
             }
         }
     }
-    
-    @objc func showFilterMenu(){
-        self.sideMenuViewController?.presentRightMenuViewController()
-    }
-    
+
     
     func cancelFilter(filterString: String) {
         self.fetchAllAPData()
@@ -267,7 +263,6 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             if let invCount = self.apData?.totalInvoice.count {
           
-                
                 if invCount > 2 && invCount <= 4 {
                     height = 180
                 } else if invCount > 2 && invCount <= 6 {

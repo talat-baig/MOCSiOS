@@ -255,6 +255,7 @@ class SalesContractController: UIViewController , UIGestureRecognizerDelegate , 
     }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
+        
         if isApprove {
             self.approveContract(data: data as! PurchaseContractData)
             myView.removeFromSuperviewWithAnimate()

@@ -45,18 +45,18 @@ class SAVesselCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setDataToView(data : SAVesselData?) {
+    func setDataToView(data : SAVesselData) {
         
-        lblVesslName.text = data?.vessel != "" ? data?.vessel : "-"
-        lblShipQty.text = data?.shipdQty != "" ? data?.shipdQty : "-"
-        lblPOL.text = data?.pol != "" ? data?.pol : "-"
-        lblPOD.text = data?.pod != "" ? data?.pod : "-"
-        lblPrice.text = data?.price != "" ? data?.price : "-"
-        lblPendingShpmnt.text = data?.pendingShipmnt != "" ? data?.pendingShipmnt : "-"
-        lblBuyrName.text = data?.buyrName != "" ? data?.buyrName : "-"
-        lblUOM.text = data?.uom != "" ? data?.uom : "-"
-        lblSC.text = data?.salesContrct != "" ? data?.salesContrct : "-"
-        lblhead.text = data?.refID != "" ? data?.refID : "-"
+        lblVesslName.text = data.vessel != "" ? data.vessel : "-"
+        lblShipQty.text = data.shipdQty != "" ? data.shipdQty : "-"
+        lblPOL.text = data.pol != "" ? data.pol : "-"
+        lblPOD.text = data.pod != "" ? data.pod : "-"
+        lblPrice.text = data.price != "" ? data.price : "-"
+        lblPendingShpmnt.text = data.pendingShipmnt != "" ? data.pendingShipmnt : "-"
+        lblBuyrName.text = data.buyrName != "" ? data.buyrName : "-"
+        lblUOM.text = data.uom != "" ? data.uom : "-"
+        lblSC.text = data.salesContrct != "" ? data.salesContrct : "-"
+        lblhead.text = data.refID != "" ? data.refID : "-"
     }
     
 }
