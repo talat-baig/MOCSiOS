@@ -56,8 +56,8 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         gestureRecognizer.delegate = self
@@ -80,8 +80,8 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     
     deinit {
         debugPrint("Remove NotificationCenter Deinit")
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     /// Handle user tap when keyboard is open
@@ -92,7 +92,7 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     /// Invoked before keyboard will show
     @objc func keyboardWillShow(notification: NSNotification) {
         
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             var keyboardHeight : CGFloat
             keyboardHeight = keyboardRectangle.height

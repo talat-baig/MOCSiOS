@@ -46,7 +46,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         lblUserName.text = Session.user
         
         treeView.estimatedRowHeight = 55.0
-        treeView.rowHeight = UITableViewAutomaticDimension
+        treeView.rowHeight = UITableView.automaticDimension
         
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
         lblVersionName.text =  String(format: "Version %@",  appVersion!)
@@ -105,7 +105,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let shipmntApp = MenuDataObject(name: "2.1.15 Shipment Appropriation Summary", storybdNAme: "ShipmentAppropriation", vcName: "ShipmentAppListVC", imageName: #imageLiteral(resourceName: "empty"))
 
         
-        let reports = MenuDataObject(name: "2.1 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt,ecrRept,cashBnk,custLedger,pmyntLedger,bnkCharges, shipmntAdvise,credUtilRpt], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
+        let reports = MenuDataObject(name: "2.1 Reports" , children: [arReport, apReport,avlRelReport, salesSummRpt, purchaseSummRpt, fundsRecpt, fundsPymnt,ecrRept,cashBnk,custLedger,pmyntLedger,bnkCharges, shipmntAdvise,credUtilRpt,shipmntApp], storybdNAme: "ARReport", vcName: "", imageName: #imageLiteral(resourceName: "pie_chart"))
         
         let business = MenuDataObject(name: "Business", children: [reports], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "briefcase"))
         
@@ -292,7 +292,7 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let level = treeView.levelForCell(forItem: item)
         
         if level == 2 {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         } else {
             return 60
         }
@@ -362,7 +362,7 @@ extension SideMenuController: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
         UINavigationBar.appearance().tintColor = AppColor.universalHeaderColor
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : AppColor.universalHeaderColor]
         return self
     }
     

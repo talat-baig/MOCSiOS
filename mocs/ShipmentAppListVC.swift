@@ -12,7 +12,6 @@ import SwiftyJSON
 
 class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
 
-
     var searchString = ""
     var currentPage : Int = 1
     var arrayList:[ShipAppData] = []
@@ -30,7 +29,6 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
@@ -60,13 +58,8 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
         btnMore.layer.shadowOpacity = 0.8
         btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
-//        self.tableView.register(UINib(nibName: "ShipmentAppListCell", bundle: nil), forCellReuseIdentifier: "cell")
-
-//        tableView.estimatedRowHeight = 100
-//        tableView.rowHeight = UITableViewAutomaticDimension
         Helper.setupTableView(tableVw: self.tableView, nibName: "ShipmentAppListCell" )
         self.refreshList()
-        
     }
     
 
@@ -84,7 +77,6 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
     
     
     func resetViews() {
-        
         if FilterViewController.selectedDataObj.isEmpty {
             vwFilter.isHidden = true
         } else {
@@ -113,6 +105,82 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
     }
 
     @objc func populateList() {
+        
+        if FilterViewController.getFilterString().contains(",") {
+            
+            Helper.showMessage(message: "Please select only one filter")
+            self.collVw.reloadData()
+            self.arrayList.removeAll()
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
+            
+            return
+        }
+        
+        var newData :[ShipAppData] = []
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.ShipmentAppropriation.SA_LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
+            print(url)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+                    
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+                    
+                    if arrayJson.count > 0 {
+                        
+                        do {
+                            // 1
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            // 2
+                            newData = try decoder.decode([ShipAppData].self, from: response.result.value!)
+                        } catch let error { // 3
+                            print("Error creating current newDataObj from JSON because: \(error)")
+                        }
+                        
+                        self.arrayList.append(contentsOf: newData)
+                        self.tableView.tableFooterView = nil
+                    } else {
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
+                    }
+                } else {
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
+                }
+                self.tableView.reloadData()
+            }))
+        } else {
+            self.refreshControl.endRefreshing()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
+            }
+        }
     }
     
     @IBAction func btnMoreTapped(_ sender: Any) {
@@ -162,11 +230,11 @@ extension ShipmentAppListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -175,14 +243,15 @@ extension ShipmentAppListVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
-//        if self.arrayList.count > 0 {
-//            cell.setDataToView(data: self.arrayList[indexPath.row])
-//        }
+        if self.arrayList.count > 0 {
+            cell.setDataToView(data: self.arrayList[indexPath.row])
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let saBuyerVC = self.storyboard?.instantiateViewController(withIdentifier: "ShipAppBuyerListVC") as! ShipAppBuyerListVC
+        saBuyerVC.saListData = self.arrayList[indexPath.row]
         self.navigationController?.pushViewController(saBuyerVC, animated: true)
     }
     
@@ -191,7 +260,6 @@ extension ShipmentAppListVC: UITableViewDataSource, UITableViewDelegate {
 extension ShipmentAppListVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
         if  searchText.isEmpty {
             self.searchString = ""
             self.refreshList()
@@ -254,7 +322,7 @@ extension ShipmentAppListVC: UICollectionViewDelegate, UICollectionViewDataSourc
     {
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
         let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
-        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0)])
         return size
     }
 }

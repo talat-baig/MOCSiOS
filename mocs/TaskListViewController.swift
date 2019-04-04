@@ -120,7 +120,7 @@ class TaskListViewController: UIViewController {
         }
         
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextFieldTextDidChange, object: self.addNoteAlert.textFields![0], queue: OperationQueue.main) { (notification) in
+        NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: self.addNoteAlert.textFields![0], queue: OperationQueue.main) { (notification) in
             
             let dateFormatterGet = DateFormatter()
             dateFormatterGet.dateFormat = "yyyy-MM-dd"
@@ -134,7 +134,7 @@ class TaskListViewController: UIViewController {
         }
         
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextFieldTextDidChange, object: self.addNoteAlert.textFields![1], queue: OperationQueue.main) { (notification) in
+        NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: self.addNoteAlert.textFields![1], queue: OperationQueue.main) { (notification) in
             
             let dateFormatterGet = DateFormatter()
             dateFormatterGet.dateFormat = "yyyy-MM-dd"
@@ -291,7 +291,7 @@ class TaskListViewController: UIViewController {
             textField.keyboardType = .default
             textField.clearButtonMode = .whileEditing
             
-            NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextFieldTextDidChange, object: textField, queue: OperationQueue.main) { (notification) in
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main) { (notification) in
                 submitAction.isEnabled = textField.text!.count > 0
             }
         }
@@ -360,7 +360,7 @@ class TaskListViewController: UIViewController {
             textField.keyboardType = .default
             textField.clearButtonMode = .whileEditing
             textField.placeholder = "Enter Comment here"
-            NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextFieldTextDidChange, object: textField, queue: OperationQueue.main) { (notification) in
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main) { (notification) in
                 submitAction.isEnabled = textField.text!.count > 0
             }
         }
@@ -479,9 +479,9 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
             cell.btnComplete.tag = indexPath.row
             cell.btnStarNote.tag = indexPath.row
             
-            cell.btnAddNote.addTarget(self, action: #selector(self.addNewNoteTapped(sender:)), for: UIControlEvents.touchUpInside)
-            cell.btnComplete.addTarget(self, action: #selector(self.completeTaskTapped(sender:)), for: UIControlEvents.touchUpInside)
-            cell.btnStarNote.addTarget(self, action: #selector(self.starTaskTapped(sender:)), for: UIControlEvents.touchUpInside)
+            cell.btnAddNote.addTarget(self, action: #selector(self.addNewNoteTapped(sender:)), for: UIControl.Event.touchUpInside)
+            cell.btnComplete.addTarget(self, action: #selector(self.completeTaskTapped(sender:)), for: UIControl.Event.touchUpInside)
+            cell.btnStarNote.addTarget(self, action: #selector(self.starTaskTapped(sender:)), for: UIControl.Event.touchUpInside)
             
             cell.selectionStyle = .none
             return cell

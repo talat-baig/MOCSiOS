@@ -306,7 +306,7 @@ extension CreditUtilListController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -315,7 +315,7 @@ extension CreditUtilListController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.btnView.tag = indexPath.row
-        cell.btnView.addTarget(self, action: #selector(self.viewStatement(sender:)), for: UIControlEvents.touchUpInside)
+        cell.btnView.addTarget(self, action: #selector(self.viewStatement(sender:)), for: UIControl.Event.touchUpInside)
         if arrayList.count > 0 {
             cell.setDataToViews(data: self.arrayList[indexPath.row])
         }
@@ -364,7 +364,7 @@ extension CreditUtilListController: UICollectionViewDelegate, UICollectionViewDa
     {
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
         let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
-        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0)])
         return size
     }
 }

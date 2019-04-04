@@ -81,12 +81,13 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillShow,
-                                               object: nil)
-        
+                                               name: UIResponder.keyboardWillShowNotification,object: nil)
+          
+
+            
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
         
         
@@ -176,7 +177,7 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
    
     @objc func keyboardWillShow(notification: NSNotification) {
         
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             var keyboardHeight : CGFloat
             keyboardHeight = keyboardRectangle.height
@@ -412,18 +413,18 @@ class KYCDetailsController: UIViewController, IndicatorInfoProvider, UIGestureRe
     @IBAction func btnAttachmntTapped(_ sender: Any) {
         
         
-        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.default)
+        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertAction.Style.default)
         {
             UIAlertAction in
             self.openCamera()
         }
-        let gallaryAction = UIAlertAction(title: "Gallery", style: UIAlertActionStyle.default)
+        let gallaryAction = UIAlertAction(title: "Gallery", style: UIAlertAction.Style.default)
         {
             UIAlertAction in
             self.openGallery()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel)
         {
             UIAlertAction in
         }
@@ -613,7 +614,7 @@ extension KYCDetailsController: UITextFieldDelegate, UIImagePickerControllerDele
         self.imagePicker.allowsEditing = true
         self.imagePicker.modalTransitionStyle = .crossDissolve
         
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
             let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
             switch authStatus {
             case .authorized:
@@ -642,7 +643,7 @@ extension KYCDetailsController: UITextFieldDelegate, UIImagePickerControllerDele
         documentPicker.delegate = self
         
         /// Set Document picker navigation bar text color
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor : AppColor.universalHeaderColor], for: .normal)
         documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
         self.present(documentPicker, animated: true, completion: nil)
         
@@ -668,12 +669,13 @@ extension KYCDetailsController: UITextFieldDelegate, UIImagePickerControllerDele
         return true
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
+        
         self.imagePicker.dismiss(animated: true, completion: { () -> Void in
             self.view.showLoading()
-            if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            if let image = info[.originalImage] as? UIImage {
                 
-                let compressData = UIImageJPEGRepresentation(image, 0.5)
+                let compressData = image.jpegData(compressionQuality: 0.5) //max value is 1.0 and minimum is 0.0
                 
                 let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
                 myView.frame = (self.navigationController?.view.frame)!
@@ -693,7 +695,7 @@ extension KYCDetailsController: UITextFieldDelegate, UIImagePickerControllerDele
         
         let alert = UIAlertController(title: appName + " Would Like To Access the Camera", message: "Please grant permission to use the Camera", preferredStyle: .alert )
         alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { alert in
-            if let appSettingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+            if let appSettingsURL = NSURL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(appSettingsURL as URL, options: [:], completionHandler: nil)
             }
         })
@@ -724,7 +726,7 @@ extension KYCDetailsController: UITextFieldDelegate, UIImagePickerControllerDele
         self.imagePicker.modalPresentationStyle = UIModalPresentationStyle.currentContext
         self.imagePicker.delegate = self
         self.imagePicker.allowsEditing = true
-        self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+        self.imagePicker.sourceType = UIImagePickerController.SourceType.camera
         present(self.imagePicker, animated: true, completion: nil)
     }
     
@@ -735,7 +737,7 @@ extension KYCDetailsController: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
         UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : AppColor.universalHeaderColor]
         return self.navigationController!
     }
     

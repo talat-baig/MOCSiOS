@@ -181,7 +181,7 @@ extension RODetailsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "rocell") as! RODetailsCell
         cell.layer.masksToBounds = true
         cell.btnSendMail.tag = indexPath.row
-        cell.btnSendMail.addTarget(self, action: #selector(self.sendEmailTapped(sender:)) , for: UIControlEvents.touchUpInside)
+        cell.btnSendMail.addTarget(self, action: #selector(self.sendEmailTapped(sender:)) , for: UIControl.Event.touchUpInside)
         cell.setDataTOView(data: self.arrayList[indexPath.row])
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 5

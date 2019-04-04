@@ -154,12 +154,12 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -226,7 +226,7 @@ class EmployeeClaimAddEditVC: UIViewController, UIGestureRecognizerDelegate ,Ind
     
     @objc func keyboardWillShow(notification: NSNotification) {
         
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             var keyboardHeight : CGFloat
             keyboardHeight = keyboardRectangle.height

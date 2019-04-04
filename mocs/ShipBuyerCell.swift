@@ -13,6 +13,13 @@ class ShipBuyerCell: UITableViewCell {
     @IBOutlet weak var outrVw: UIView!
     @IBOutlet weak var headerVw: UIView!
 
+    @IBOutlet weak var lblRefId: UILabel!
+    @IBOutlet weak var lblProdName: UILabel!
+    @IBOutlet weak var lblQlty: UILabel!
+    @IBOutlet weak var lblSize: UILabel!
+    @IBOutlet weak var lblBrand: UILabel!
+
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -25,12 +32,18 @@ class ShipBuyerCell: UITableViewCell {
         headerVw.layer.shadowOffset = CGSize(width: 1, height: 2)
         headerVw.layer.shadowRadius = 1
         headerVw.layer.shadowColor = UIColor.black.cgColor
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
     
+    func setDataToViews(data: SABuyerData){
+        
+        lblRefId.text = data.scNo
+        lblQlty.text = data.quality
+        lblSize.text = data.size
+        lblBrand.text = data.brand
+        lblProdName.text = data.product
+    }
 }

@@ -61,7 +61,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             self.imagePicker.allowsEditing = true
             self.imagePicker.modalTransitionStyle = .crossDissolve
             
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
                 let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                 switch authStatus {
                 case .authorized:
@@ -90,7 +90,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
             documentPicker.delegate = self
             
             /// Set Document picker navigation bar text color
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor], for: .normal)
+            UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor : AppColor.universalHeaderColor], for: .normal)
             documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
             self.present(documentPicker, animated: true, completion: nil)
             
@@ -141,7 +141,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         
         let alert = UIAlertController(title: appName + " Would Like To Access the Camera", message: "Please grant permission to use the Camera", preferredStyle: .alert )
         alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { alert in
-            if let appSettingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+            if let appSettingsURL = NSURL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(appSettingsURL as URL, options: [:], completionHandler: nil)
             }
         })
@@ -173,7 +173,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         self.imagePicker.modalPresentationStyle = UIModalPresentationStyle.currentContext
         self.imagePicker.delegate = self
         self.imagePicker.allowsEditing = true
-        self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+        self.imagePicker.sourceType = UIImagePickerController.SourceType.camera
         present(self.imagePicker, animated: true, completion: nil)
     }
     
@@ -182,7 +182,7 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
         self.imagePicker.modalPresentationStyle = UIModalPresentationStyle.currentContext
         self.imagePicker.delegate = self
         self.imagePicker.allowsEditing = true
-        self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        self.imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
         present(self.imagePicker, animated: true, completion: nil)
     }
     
@@ -588,12 +588,13 @@ class VouchersListViewController: UIViewController, IndicatorInfoProvider , UIDo
 
 extension VouchersListViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
+        
         self.imagePicker.dismiss(animated: true, completion: { () -> Void in
             self.view.showLoading()
-            if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-
-                let compressData = UIImageJPEGRepresentation(image, 0.5) //max value is 1.0 and minimum is 0.0
+            if let image = info[.originalImage] as? UIImage {
+                
+                let compressData = image.jpegData(compressionQuality: 0.5) //max value is 1.0 and minimum is 0.0
                 
                 let myView = Bundle.main.loadNibNamed("UploadFileCustomView", owner: nil, options: nil)![0] as! UploadFileCustomView
                 myView.frame = (self.navigationController?.view.frame)!
@@ -692,7 +693,7 @@ extension VouchersListViewController: UITableViewDataSource, UITableViewDelegate
         cellView.btnStatus.tag = indexPath.row
         cellView.btnDelete.tag = indexPath.row
         
-        cellView.btnDelete.addTarget(self, action: #selector(self.deleteFileTapped(sender:)), for: UIControlEvents.touchUpInside)
+        cellView.btnDelete.addTarget(self, action: #selector(self.deleteFileTapped(sender:)), for: UIControl.Event.touchUpInside)
         
         return cellView
     }
@@ -740,7 +741,7 @@ extension VouchersListViewController: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
         UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : AppColor.universalHeaderColor]
         return self.navigationController!
     }
     

@@ -90,10 +90,10 @@ class ExpenseAddEditViewController: UIViewController , UIGestureRecognizerDelega
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.keyboardWillShow(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.keyboardWillHide(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
         
         
         vwTopHeader.delegate = self
@@ -147,7 +147,7 @@ class ExpenseAddEditViewController: UIViewController , UIGestureRecognizerDelega
     
     @objc func keyboardWillShow(notification: NSNotification) {
         
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             var keyboardHeight : CGFloat
             keyboardHeight = keyboardRectangle.height

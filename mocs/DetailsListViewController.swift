@@ -67,7 +67,7 @@ class DetailsListViewController: UIViewController {
         self.vwSummary.layer.cornerRadius = 5
         
         tableView.estimatedRowHeight = 55.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
     }
     
     func resetViews() {
@@ -353,7 +353,7 @@ extension DetailsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

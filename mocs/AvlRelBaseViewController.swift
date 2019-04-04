@@ -104,7 +104,7 @@ extension AvlRelBaseViewController: UITableViewDelegate, UITableViewDataSource {
         cell.lblTitle.text = arrTitle[indexPath.row]
         
         cell.btnAvlRel.tag = indexPath.row
-        cell.btnAvlRel.addTarget(self, action: #selector(self.navigateToList(sender:)), for: UIControlEvents.touchUpInside)
+        cell.btnAvlRel.addTarget(self, action: #selector(self.navigateToList(sender:)), for: UIControl.Event.touchUpInside)
         
         cell.layer.masksToBounds = true
         cell.selectionStyle = .none
@@ -156,7 +156,7 @@ extension AvlRelBaseViewController: UICollectionViewDelegate, UICollectionViewDa
     {
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
         let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
-        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0)])
         return size
     }
     

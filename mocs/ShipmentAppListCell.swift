@@ -34,4 +34,11 @@ class ShipmentAppListCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    func setDataToView(data : ShipAppData) {
+    
+        lblRefId.text = data.refID
+        lblBuyerName.text  = data.buyrName
+        lblCommodities.text = data.commodity
+        
+    }
 }

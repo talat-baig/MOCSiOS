@@ -103,8 +103,10 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         gestureRecognizer.delegate = self
         self.view.addGestureRecognizer(gestureRecognizer)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CustomPopUpView.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(doThisWhenNotify),
                                                name: NSNotification.Name(rawValue: Constant.RO.roNotificationKey),
@@ -218,7 +220,7 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             var keyboardHeight : CGFloat
             keyboardHeight = keyboardRectangle.height

@@ -52,7 +52,7 @@ class EmployeeController: UIViewController , CNContactViewControllerDelegate , U
         
         UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
         UINavigationBar.appearance().tintColor = AppColor.universalHeaderColor
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : AppColor.universalHeaderColor]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : AppColor.universalHeaderColor]
         
         self.navigationController?.isNavigationBarHidden = true
         vwTopHeader.delegate = self

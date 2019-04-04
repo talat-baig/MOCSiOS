@@ -60,7 +60,7 @@ class PCProductViewController: UIViewController, IndicatorInfoProvider {
         }
         self.tableView.reloadData()
         let indexPath = IndexPath(row: 0, section: 0);
-        self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: UITableViewScrollPosition.none)
+        self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
         self.tableView(self.tableView, didSelectRowAt: indexPath)
     }
     

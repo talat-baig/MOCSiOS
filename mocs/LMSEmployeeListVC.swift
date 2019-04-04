@@ -73,7 +73,7 @@ extension LMSEmployeeListVC : UITableViewDelegate, UITableViewDataSource {
         let data = arrayList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! LMSEmpDataCell
         cell.btnView.tag = indexPath.row
-        cell.btnView.addTarget(self, action: #selector(self.viewLeaveReq(sender:)), for: UIControlEvents.touchUpInside)
+        cell.btnView.addTarget(self, action: #selector(self.viewLeaveReq(sender:)), for: UIControl.Event.touchUpInside)
         cell.setDataToViews(data: data)
         cell.selectionStyle = .none
         return cell

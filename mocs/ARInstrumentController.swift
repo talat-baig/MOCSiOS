@@ -234,7 +234,7 @@ extension ARInstrumentController: UITableViewDataSource {
         cell.selectionStyle = .none
         cell.layer.cornerRadius = 5
         cell.btnSendEmail.tag = indexPath.row
-        cell.btnSendEmail.addTarget(self, action: #selector(self.sendEmailTapped(sender:)), for: UIControlEvents.touchUpInside)
+        cell.btnSendEmail.addTarget(self, action: #selector(self.sendEmailTapped(sender:)), for: UIControl.Event.touchUpInside)
 //        cell.selectionStyle = .none
         
         if arInstrumentsData.count > 0 {

@@ -46,7 +46,7 @@ class ProductListViewController: UIViewController {
         vwTopHeader.lblSubTitle.isHidden = true
         
         tableView.estimatedRowHeight = 55.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         
         self.vwSummary.layer.borderWidth = 1
         self.vwSummary.layer.borderColor = AppColor.universalHeaderColor.cgColor
@@ -178,7 +178,7 @@ extension ProductListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

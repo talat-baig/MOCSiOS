@@ -451,7 +451,7 @@ extension SalesSummaryReportController: UICollectionViewDelegate, UICollectionVi
     {
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
         let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
-        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0)])
         return size
     }
     

@@ -29,7 +29,7 @@ class SARefListController: UIViewController , filterViewDelegate, clearFilterDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.register(UINib(nibName: "SARefListCell", bundle: nil), forCellReuseIdentifier: "cell")
+//        self.tableView.register(UINib(nibName: "SARefListCell", bundle: nil), forCellReuseIdentifier: "cell")
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
@@ -59,9 +59,9 @@ class SARefListController: UIViewController , filterViewDelegate, clearFilterDel
         btnMore.layer.shadowOpacity = 0.8
         btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
-        tableView.estimatedRowHeight = 100
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
+//        tableView.estimatedRowHeight = 100
+//        tableView.rowHeight = UITableViewAutomaticDimension
+        Helper.setupTableView(tableVw: self.tableView, nibName: "SARefListCell", identifier: "cell")
         self.refreshList()
         
     }
@@ -226,7 +226,7 @@ extension SARefListController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -315,7 +315,7 @@ extension SARefListController: UICollectionViewDelegate, UICollectionViewDataSou
     {
         let newObj = FilterViewController.selectedDataObj[indexPath.row]
         let  newStr = (newObj.company?.compName)! + "|" + (newObj.location?.locName)! + "|" +  newObj.name!
-        let size: CGSize = newStr.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 17.0)])
+        let size: CGSize = newStr.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0)])
         return size
     }
 }

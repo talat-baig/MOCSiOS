@@ -8,6 +8,21 @@
 
 import UIKit
 
-class ShipAppData: NSObject {
+struct ShipAppData: Decodable {
+    
+    let refID: String?
+    let compName: String?
+    let bussVert: String?
+    let location: String?
+    let commodity: String?
+    let buyrName: String?
 
+    enum CodingKeys : String, CodingKey {
+        case refID = "Reference ID"
+        case compName = "Company Name"
+        case location = "Location"
+        case bussVert = "Business Vertical"
+        case commodity = "Commodity"
+        case buyrName = "Buyer Name"
+    }
 }

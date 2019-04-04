@@ -43,7 +43,7 @@ class LMSReqController: UIViewController , onLMSUpdate {
         self.tableView.register(UINib(nibName: "LMSCustomHeader", bundle: nil), forCellReuseIdentifier: "summarycell")
         self.tableView.separatorStyle = .none
         self.tableView.estimatedRowHeight = 88.0
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateLMSData))
         tableView.addSubview(refreshControl)
@@ -377,7 +377,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         if indexPath.section == 0 {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         } else {
             return 205
         }
@@ -393,7 +393,7 @@ extension LMSReqController : UITableViewDelegate, UITableViewDataSource {
             let data = self.arrayGridList
             let cell = tableView.dequeueReusableCell(withIdentifier: "summarycell") as! LMSCustomHeader
             cell.setDataToViews(data: data )
-            cell.btnApply.addTarget(self, action: #selector(self.btnApplyTapped(sender:)), for: UIControlEvents.touchUpInside)
+            cell.btnApply.addTarget(self, action: #selector(self.btnApplyTapped(sender:)), for: UIControl.Event.touchUpInside)
             cell.selectionStyle =  .none
             tableCell = cell
         } else {

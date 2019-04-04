@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ShipProductListVC: UIViewController {
     
-    var refId = ""
-    var prodName = ""
-    var arrayList = [SABuyerData]()
+    var saBuyrData = SABuyerData(refID: "", scNo: "", product: "", quality: "", size: "", brand: "")
+    
+    var arrayList = [ShipAppProdData]()
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     
@@ -23,17 +25,49 @@ class ShipProductListVC: UIViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblSubTitle.isHidden = false
-        vwTopHeader.lblTitle.text = "Product Name"
-        vwTopHeader.lblSubTitle.text =  "Buyer Name"
-        
-        Helper.setupTableView(tableVw : self.tableView, nibName: "ShipProductCell")
+        vwTopHeader.lblSubTitle.isHidden = true
+        vwTopHeader.lblTitle.text = self.saBuyrData.scNo
+//        vwTopHeader.lblSubTitle.text = self.saBuyrData.refID
 
+        Helper.setupTableView(tableVw : self.tableView, nibName: "ShipProductCell")
         self.populateList()
     }
     
-    
     @objc func populateList(){
+        
+        var newArr : [ShipAppProdData] = []
+        if internetStatus != .notReachable {
+
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.ShipmentAppropriation.SA_SC_DETAILS, Session.authKey, Helper.encodeURL(url: self.saBuyrData.refID ?? ""), Helper.encodeURL(url: self.saBuyrData.scNo ?? ""))
+
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+
+                    if arrayJson.count > 0 {
+                        do {
+                            //    1
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            // 2
+                            newArr = try decoder.decode([ShipAppProdData].self, from: response.result.value!)
+                        } catch let error { // 3
+                            print("Error creating current newDataObj from JSON because: \(error)")
+                        }
+                        self.arrayList = newArr
+                    }
+                    self.tableView.setNeedsLayout()
+                    self.tableView.layoutIfNeeded()
+                    self.tableView.reloadData()
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
 }
 
@@ -46,11 +80,11 @@ extension ShipProductListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,9 +93,9 @@ extension ShipProductListVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
-        //        if self.arrayList.count > 0 {
-        //            cell.setDataToView(data: self.arrayList[indexPath.row])
-        //        }
+        if self.arrayList.count > 0 {
+            cell.setDataToView(data: self.arrayList[indexPath.row])
+        }
         return cell
     }
     

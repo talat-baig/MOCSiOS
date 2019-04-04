@@ -282,7 +282,7 @@ extension SummaryForApprovalController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "barcell") as! BarGraphEntryCell
             cell.btnOpenPA.tag = indexPath.row - 1
             
-            cell.btnOpenPA.addTarget(self, action: #selector(self.openPendingApprovals(sender:)), for: UIControlEvents.touchUpInside)
+            cell.btnOpenPA.addTarget(self, action: #selector(self.openPendingApprovals(sender:)), for: UIControl.Event.touchUpInside)
 
             let titleStr = String(format:"Pending Approvals for %@ [Product-wise]",self.paSummObj[indexPath.row - 1].compName)
 

@@ -192,7 +192,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! HomeAdapter
         cell.btnMore.tag = indexPath.row
         
-        cell.btnMore.addTarget(self, action: #selector(self.openMoreVC(sender:)), for: UIControlEvents.touchUpInside)
+        cell.btnMore.addTarget(self, action: #selector(self.openMoreVC(sender:)), for: UIControl.Event.touchUpInside)
         cell.setDataToView(data: data)
         return cell
     }

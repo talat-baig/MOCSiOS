@@ -410,8 +410,8 @@ class Helper: UIView {
                             break
                         case "Authenication Failed":
                             isValid = false
-                            let alert = UIAlertController(title: "Session Expired", message: "You'll be redirect to login page, Please Login again to continue", preferredStyle: UIAlertControllerStyle.alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
+                            let alert = UIAlertController(title: "Session Expired", message: "You'll be redirect to login page, Please Login again to continue", preferredStyle: UIAlertController.Style.alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { action in
                                 Helper.clearSession()
                                 if FilterViewController.selectedDataObj.count != 0 {
                                     FilterViewController.selectedDataObj.removeAll()
@@ -424,8 +424,8 @@ class Helper: UIView {
                             vc.present(alert, animated: true, completion: nil)
                             break
                         case "A Secured Link has been sent to your official email. Kindly click on the link to approve the device. The link valid for next 30 mins":
-                            let alert = UIAlertController(title:"Not Authenticated!",message:"A Secured Link has been sent to your official email. Kindly click on the link to approve the device. The link valid for next 30 Mins",preferredStyle: UIAlertControllerStyle.alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {action in
+                            let alert = UIAlertController(title:"Not Authenticated!",message:"A Secured Link has been sent to your official email. Kindly click on the link to approve the device. The link valid for next 30 Mins",preferredStyle: UIAlertController.Style.alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {action in
                                 
                             }))
                             vc.present(alert, animated: true, completion: nil)
@@ -517,8 +517,8 @@ class Helper: UIView {
     public static func setupCollVwFitler(collVw : UICollectionView) {
         
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        flowLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
         flowLayout.minimumInteritemSpacing = 5.0
         collVw.collectionViewLayout = flowLayout
     }
@@ -536,7 +536,7 @@ class Helper: UIView {
         tableVw.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: identifier)
         tableVw.separatorStyle = .none
         tableVw.estimatedRowHeight = 100
-        tableVw.rowHeight = UITableViewAutomaticDimension
+        tableVw.rowHeight = UITableView.automaticDimension
     }
     
     public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: ModName, action:Selector? = nil){
@@ -1137,7 +1137,7 @@ extension UIView {
         
         self.addSubview(lblTimerTxt)
         
-        progressView = UIProgressView(progressViewStyle: UIProgressViewStyle.default)
+        progressView = UIProgressView(progressViewStyle: UIProgressView.Style.default)
         progressView?.frame = CGRect(x: self.frame.origin.x + 30 , y: lblTimerTxt.frame.origin.y + lblTimerTxt.frame.size.height + 2, width: self.frame.size.width - 60, height: 50)
         progressView?.trackTintColor = AppColor.universalHeaderColor
         progressView?.progress = 1.0

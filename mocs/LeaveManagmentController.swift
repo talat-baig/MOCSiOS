@@ -112,9 +112,9 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         if let size = imgVwCal1.image?.size {
             imgVwCal1.frame = CGRect(x: 0.0, y: 0.0, width: size.width + 10.0, height: size.height)
         }
-        imgVwCal1.contentMode = UIViewContentMode.scaleAspectFit
+        imgVwCal1.contentMode = UIView.ContentMode.scaleAspectFit
         txtFldFrom.rightView = imgVwCal1
-        txtFldFrom.rightViewMode = UITextFieldViewMode.always
+        txtFldFrom.rightViewMode = UITextField.ViewMode.always
         
         txtFldFrom.delegate = self
         txtFldTo.delegate = self
@@ -126,9 +126,9 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         if let size = imgVwCal2.image?.size {
             imgVwCal2.frame = CGRect(x: 0.0, y: 0.0, width: size.width + 10.0, height: size.height)
         }
-        imgVwCal2.contentMode = UIViewContentMode.scaleAspectFit
+        imgVwCal2.contentMode = UIView.ContentMode.scaleAspectFit
         txtFldTo.rightView = imgVwCal2
-        txtFldTo.rightViewMode = UITextFieldViewMode.always
+        txtFldTo.rightViewMode = UITextField.ViewMode.always
         
         btnDept.setTitle("Select Department", for: .normal)
     }

@@ -225,12 +225,12 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillShow(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillHide(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
         
         
@@ -258,9 +258,9 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
         btnTrvlClass.contentHorizontalAlignment = .left
         btnTrvlMode.contentHorizontalAlignment = .left
         
-        swtchGuest.addTarget(self, action: #selector(guestType(mySwitch:)), for: UIControlEvents.valueChanged)
-        swtchPurpose.addTarget(self, action: #selector(purposeType(mySwitch:)), for: UIControlEvents.valueChanged)
-        swtchTrvlType.addTarget(self, action: #selector(trvType(mySwitch:)), for: UIControlEvents.valueChanged)
+        swtchGuest.addTarget(self, action: #selector(guestType(mySwitch:)), for: UIControl.Event.valueChanged)
+        swtchPurpose.addTarget(self, action: #selector(purposeType(mySwitch:)), for: UIControl.Event.valueChanged)
+        swtchTrvlType.addTarget(self, action: #selector(trvType(mySwitch:)), for: UIControl.Event.valueChanged)
         
         
     }
@@ -342,7 +342,7 @@ class TravelTicketAddEditVC: UIViewController , IndicatorInfoProvider, UIGesture
     
     @objc func keyboardWillShow(notification: NSNotification) {
         
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if  let keyboardFrame =  UIResponder.keyboardFrameEndUserInfoKey as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             var keyboardHeight : CGFloat
             keyboardHeight = keyboardRectangle.height

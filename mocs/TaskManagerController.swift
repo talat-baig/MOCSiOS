@@ -173,7 +173,7 @@ class TaskManagerController: UIViewController {
             textField.placeholder = "Enter Task Name here"
             textField.clearButtonMode = .whileEditing
             
-            NotificationCenter.default.addObserver(forName: NSNotification.Name.UITextFieldTextDidChange, object: textField, queue: OperationQueue.main) { (notification) in
+            NotificationCenter.default.addObserver(forName:                UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main) { (notification) in
                 submitAction.isEnabled = textField.text!.count > 0
             }
         }

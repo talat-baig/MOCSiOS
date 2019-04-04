@@ -210,7 +210,7 @@ extension PCAttachmentViewController: UITableViewDelegate, UITableViewDataSource
         
         
         cellView.btnStatus.tag = indexPath.row
-        cellView.btnStatus.addTarget(self, action: #selector(self.fileDownloadTapped(sender:)), for: UIControlEvents.touchUpInside)
+        cellView.btnStatus.addTarget(self, action: #selector(self.fileDownloadTapped(sender:)), for: UIControl.Event.touchUpInside)
         return cellView
     }
     
@@ -249,7 +249,7 @@ extension PCAttachmentViewController: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
         UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         return self.navigationController!
         
     }

@@ -39,7 +39,7 @@ class WarehouseListViewController: UIViewController {
         vwTopHeader.lblSubTitle.isHidden = true
         
         tableView.estimatedRowHeight = 55.0
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(getVesselAndWarehouseData))
         tableView.addSubview(refreshControl)
@@ -176,7 +176,7 @@ extension WarehouseListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
