@@ -32,7 +32,7 @@ class ReleaseOrderController: UIViewController, UIGestureRecognizerDelegate, fil
         srchBar.delegate = self
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(refreshList),
-                                               name: NSNotification.Name(rawValue: Constant.RO.roNotificationKey),
+                                               name: .relOrderNotify,
                                                object: nil) 
     
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))

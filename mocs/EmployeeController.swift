@@ -117,6 +117,8 @@ class EmployeeController: UIViewController , CNContactViewControllerDelegate , U
                         data.append(emp)
                     }
                     
+                    
+                    
                     data.sort { $0.name < $1.name }
                     
                     let emps = Array(Set(data.compactMap({ $0.name.first })))

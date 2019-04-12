@@ -227,7 +227,6 @@ struct Constant
     }
     
     
-    
     struct AR {
         /**
          *ARI Overall Data*
@@ -235,7 +234,6 @@ struct Constant
          - 2: Filter
          */
         static let OVERALL = ApiUrl.URL +  "/AR/GetARReport?apikeylist=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@"
-        
         
         /**
          *ARI Chart*
@@ -408,10 +406,25 @@ struct Constant
         
         static let SA_BUYER_LIST = ApiUrl.URL + "/Report/GetShipApproSumRefWise?apiref=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&reference=%@"
         
-        static let SA_SC_DETAILS = ApiUrl.URL + "/Report/GetShipApproSumRefSCWise?apisc=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&sc=%@"
+        static let SA_SC_DETAILS = ApiUrl.URL + "/Report/GetShipApproSumRefSCWise?apisc=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&sc=%@&bagSize=%@"
         
     }
     
+    struct FundsRemittance {
+        
+        static let FR_LIST = ApiUrl.URL + "/Report/GetFundRemittanceSummary?apifund=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&Page=%d&reference=%@"
+        
+        static let FR_INSTRUMENT_DETAILS = ApiUrl.URL + "/Report/GetFundRemittanceSummaryRefWise?apifund=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&referenceID=%@"
+
+        
+//        GetFundRemittanceSummaryRefWise(string apifund, string authref, string referenceID)
+//        GetFundRemittanceSummary(string apifund, string authid, string filter, int Page, string reference)
+        
+//        static let SA_BUYER_LIST = ApiUrl.URL + "/Report/GetShipApproSumRefWise?apiref=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&reference=%@"
+//
+//        static let SA_SC_DETAILS = ApiUrl.URL + "/Report/GetShipApproSumRefSCWise?apisc=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&sc=%@&bagSize=%@"
+        
+    }
     
     
     struct EMPLOYEE {
@@ -612,7 +625,7 @@ struct Constant
     
     struct TRF {
         
-        static let trfPopulate = "com.tech.trf"
+//        static let trfPopulate = "com.tech.trf"
 
         
         static let TRF_ADD = ApiUrl.URL + "/BusinessTravel/AddBusinessTrip?key=33ddb2ee-59a5-428f-a0a5-7167859b8589&authe=%@&business"
@@ -778,7 +791,7 @@ struct Constant
     
     struct RO {
         
-        static let roNotificationKey = "com.tech.releaseorder"
+//        static let roNotificationKey = "com.tech.releaseorder"
         
         static let LIST = ApiUrl.URL + "/RequestOrder/GetAllRO?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&filter=%@&authid=%@&pageno=%d&Reference=%@"
         
@@ -892,8 +905,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-       static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-//        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+//       static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

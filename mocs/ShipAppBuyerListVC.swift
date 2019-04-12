@@ -12,7 +12,6 @@ import SwiftyJSON
 
 class ShipAppBuyerListVC: UIViewController {
     
-//    var refId = ""
     var saListData = ShipAppData(refID: "", compName: "", bussVert: "", location: "", commodity: "", buyrName: "")
     
     var arrayList = [SABuyerData]()
@@ -26,9 +25,9 @@ class ShipAppBuyerListVC: UIViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblSubTitle.isHidden = true
-        vwTopHeader.lblTitle.text = self.saListData.refID
-//        vwTopHeader.lblSubTitle.text = self.saListData.commodity
+        vwTopHeader.lblSubTitle.isHidden = false
+        vwTopHeader.lblTitle.text = self.saListData.buyrName
+        vwTopHeader.lblSubTitle.text = self.saListData.refID
         
         Helper.setupTableView(tableVw : self.tableView, nibName: "ShipBuyerCell")
         self.populateList()

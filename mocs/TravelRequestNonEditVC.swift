@@ -28,7 +28,7 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
     @IBOutlet weak var lblApprvdBy: UILabel!
     @IBOutlet weak var lblApprvdByDate: UILabel!
     @IBOutlet weak var lblReqByDate: UILabel!
-
+    
     @IBOutlet weak var btnApprove: UIButton!
     @IBOutlet weak var btnDecline: UIButton!
     var myView = CustomPopUpView()
@@ -52,7 +52,7 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
     
     @IBAction func declineTapped(_ sender: Any) {
         
-//        self.handleTap()
+        //        self.handleTap()
         let window = UIApplication.shared.keyWindow!
         self.declView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
         declView.setDataToCustomView(title: "Decline?", description: "Are you sure you want to decline this Travel Request? You can't revert once declined", leftButton: "GO BACK", rightButton: "DECLINE", isTxtVwHidden: false, isApprove: false)
@@ -65,7 +65,7 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
     
     
     @IBAction func approveTapped(_ sender: Any) {
-//        self.handleTap()
+        //        self.handleTap()
         let window = UIApplication.shared.keyWindow!
         self.myView = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
         self.myView.setDataToCustomView(title: "Approve?", description: "Are you sure you want to approve this Travel Request? You can't revert once approved", leftButton: "GO BACK", rightButton: "APPROVE",isTxtVwHidden: false, isApprove: true)
@@ -82,8 +82,8 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
         guard let trfDta = trfData else {
             return
         }
-       
-//        lblEmpName.text! = trfDta.empName
+        
+        //        lblEmpName.text! = trfDta.empName
         
         if trfDta.empName == "" {
             lblEmpName.text! = "-"
@@ -92,7 +92,7 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
         }
         
         if trfDta.trvArrangmnt == "" {
-           lblTrvlArngmnt.text! = "-"
+            lblTrvlArngmnt.text! = "-"
         } else {
             lblTrvlArngmnt.text! = trfDta.trvArrangmnt
         }
@@ -104,19 +104,19 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
         }
         
         if trfDta.accmpnd == "" {
-             lblAccmpnd.text! = "-"
+            lblAccmpnd.text! = "-"
         } else {
             lblAccmpnd.text! = trfDta.accmpnd
         }
         
-//        lblEmpCode.text! = Session.empCode
-//        lblDept.text! = Session.department
-//        lblDesgntn.text! = Session.designation
+        //        lblEmpCode.text! = Session.empCode
+        //        lblDept.text! = Session.department
+        //        lblDesgntn.text! = Session.designation
         
         lblEmpCode.text! = trfDta.empCode
         lblDept.text! = trfDta.empDept
         lblDesgntn.text! = trfDta.empDesgntn
-       
+        
         if trfDta.approver == "" {
             lblApprvdBy.text! = "-"
         } else {
@@ -148,15 +148,12 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
         }
     }
     
-    
-    
     func showSuccessAlert() {
-        
         let alert = UIAlertController(title: "Success", message: "Travel Request Successfully Approved", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
-            NotificationCenter.default.post(name: Notification.Name(rawValue: Constant.TRF.trfPopulate), object: self)
             
+            NotificationCenter.default.post(name:.trfPopulateList, object: self)
             self.navigationController?.popToRootViewController(animated: true)
         }))
         self.present(alert, animated: true, completion: nil)
@@ -167,22 +164,20 @@ class TravelRequestNonEditVC: UIViewController, IndicatorInfoProvider, customPop
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
             (UIAlertAction) -> Void in
             
-            NotificationCenter.default.post(name: Notification.Name(rawValue: Constant.TRF.trfPopulate), object: self)
-            
-            
-           self.navigationController?.popToRootViewController(animated: true)
+            NotificationCenter.default.post(name: .trfPopulateList, object: self)
+            self.navigationController?.popToRootViewController(animated: true)
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
     func onRightBtnTap(data: AnyObject, text: String, isApprove: Bool) {
         
-//        var commnt = ""
-//        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
-//            commnt = ""
-//        } else {
-//            commnt = text
-//        }
+        //        var commnt = ""
+        //        if text == "" || text == "Enter Comment" || text == "Enter Comment (Optional)" {
+        //            commnt = ""
+        //        } else {
+        //            commnt = text
+        //        }
         
         if isApprove {
             

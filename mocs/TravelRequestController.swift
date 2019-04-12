@@ -12,13 +12,11 @@ import SwiftyJSON
 
 class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , onTRFUpdate , onTRFSubmit{
 
-    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
 
     @IBOutlet weak var srchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
-    
     
     var arrayList:[TravelRequestData] = []
     
@@ -31,7 +29,7 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(populateList),
-                                               name: NSNotification.Name(rawValue: Constant.RO.roNotificationKey),
+                                               name: .trfPopulateList,
                                                object: nil)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -123,7 +121,6 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
                             trfData.reportMngr = json["ReportingManager"].stringValue
                             trfData.trvArrangmnt = json["TravelArrangement"].stringValue
 
-                            
                             if json["Approver"].stringValue == "" {
                                 trfData.approver = ""
                             } else {
@@ -160,11 +157,9 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "TravelRequestAddEditController") as! TravelRequestAddEditController
         vc.okTRFSubmit = self
         self.navigationController!.pushViewController(vc, animated: true)
-        
     }
 
     func viewRequest(data: TravelRequestData,  isFromView: Bool) {
-    
         getItirenaryData(trfData : data, isFromView: isFromView)
     }
     
@@ -190,10 +185,7 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
         } else {
             Helper.showNoInternetMessg()
         }
-        
     }
-    
-    
     
     
     func deleteRequest(data : TravelRequestData ) {
@@ -214,7 +206,6 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
                     self.present(alert, animated: true, completion: nil)
                 }
             })
-            
         } else {
             Helper.showNoInternetMessg()
         }
@@ -238,7 +229,6 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
                     vc.itinryRespone = response.result.value
                 
                     self.navigationController!.pushViewController(vc, animated: true)
-            
             }))
         } else {
             Helper.showNoInternetMessg()
@@ -248,8 +238,6 @@ class TravelRequestController: UIViewController, UIGestureRecognizerDelegate , o
     func onOkClick() {
         populateList()
     }
-    
-    
 }
 
 extension TravelRequestController: UISearchBarDelegate {
@@ -287,12 +275,9 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
             self.deleteRequest(data : data )
         }))
         self.present(alert, animated: true, completion: nil)
-        
     }
     
     func onSubmitClick(data: TravelRequestData) {
-        
-        
         
         let alert = UIAlertController(title: "Submit Request?", message: "Are you sure you want to submit this Request? After submitting you'll not be able to edit the Request", preferredStyle: .alert)
         
@@ -303,14 +288,11 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
             self.submitRequest(data:data)
         }))
         self.present(alert, animated: true, completion: nil)
-        
-      }
-    
-
+    }
     
     func onEmailClick(data: TravelRequestData) {
-        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
         
+        let alert = UIAlertController(title: "Are you sure you want to Email?", message: "This Email will be send to your official Email ID", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "GO BACK", style: .destructive, handler: nil))
         alert.addAction(UIAlertAction(title: "SEND", style: .default, handler: { (UIAlertAction) -> Void in
             self.sendEmail(data: data)
@@ -332,7 +314,6 @@ extension TravelRequestController: UITableViewDataSource, UITableViewDelegate, o
                     let alert = UIAlertController(title: "Success", message: "Request has been Mailed Successfully", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
-                    
                 }
             })
         }else{

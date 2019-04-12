@@ -1,20 +1,18 @@
 //
-//  ShipmentAppListVC.swift
+//  ExportPresentationListVC.swift
 //  mocs
 //
-//  Created by Talat Baig on 3/27/19.
+//  Created by Talat Baig on 4/5/19.
 //  Copyright © 2019 Rv. All rights reserved.
 //
 
 import UIKit
-import Alamofire
-import SwiftyJSON
 
-class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
+class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
 
     var searchString = ""
     var currentPage : Int = 1
-    var arrayList:[ShipAppData] = []
+    var arrayList:[ExportPresData] = []
     
     @IBOutlet weak var vwFilter: UIView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -25,9 +23,8 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     @IBOutlet weak var collVw: UICollectionView!
     @IBOutlet weak var btnMore: UIButton!
-    
+
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
@@ -49,7 +46,7 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
         vwTopHeader.delegate = self
         vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.lblTitle.text = "Shipment Appropriation Summary"
+        vwTopHeader.lblTitle.text = "Export Presentation Summary"
         vwTopHeader.lblSubTitle.isHidden = true
         
         btnMore.isHidden = true
@@ -58,11 +55,10 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
         btnMore.layer.shadowOpacity = 0.8
         btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
         
-        Helper.setupTableView(tableVw: self.tableView, nibName: "ShipmentAppListCell" )
+        Helper.setupTableView(tableVw: self.tableView, nibName: "EPRefListCell" )
         self.refreshList()
-    }
-    
 
+    }
     
     @objc func handleTap() {
         self.view.endEditing(true)
@@ -103,84 +99,11 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
         self.populateList()
         self.resetViews()
     }
-
+    
     @objc func populateList() {
         
-        if FilterViewController.getFilterString().contains(",") {
-            
-            Helper.showMessage(message: "Please select only one filter")
-            self.collVw.reloadData()
-            self.arrayList.removeAll()
-            self.tableView.reloadData()
-            self.refreshControl.endRefreshing()
-            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
-            return
-        }
-        
-        var newData :[ShipAppData] = []
-        
-        if internetStatus != .notReachable {
-            
-            let url = String.init(format: Constant.ShipmentAppropriation.SA_LIST, Session.authKey,
-                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
-            print(url)
-            self.view.showLoading()
-            Alamofire.request(url).responseData(completionHandler: ({ response in
-                self.view.hideLoading()
-                self.refreshControl.endRefreshing()
-                
-                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
-                    
-                    let jsonResp = JSON(response.result.value!)
-                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
-                    
-                    if arrayJson.count > 0 {
-                        
-                        do {
-                            // 1
-                            let decoder = JSONDecoder()
-                            decoder.keyDecodingStrategy = .convertFromSnakeCase
-                            // 2
-                            newData = try decoder.decode([ShipAppData].self, from: response.result.value!)
-                        } catch let error { // 3
-                            print("Error creating current newDataObj from JSON because: \(error)")
-                        }
-                        
-                        self.arrayList.append(contentsOf: newData)
-                        self.tableView.tableFooterView = nil
-                    } else {
-                        if self.arrayList.isEmpty {
-                            self.btnMore.isHidden = true
-                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
-                        } else {
-                            self.currentPage -= 1
-                            Helper.showMessage(message: "No more data found")
-                        }
-                    }
-                } else {
-                    if self.arrayList.isEmpty {
-                        self.btnMore.isHidden = true
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
-                    } else {
-                        self.currentPage -= 1
-                    }
-                    print("Invalid Reponse")
-                }
-                self.tableView.reloadData()
-            }))
-        } else {
-            self.refreshControl.endRefreshing()
-            Helper.showNoInternetMessg()
-            
-            if self.arrayList.isEmpty {
-                btnMore.isHidden = true
-                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
-                self.tableView.reloadData()
-            } else {
-                self.currentPage -= 1
-            }
-        }
     }
+    
     
     @IBAction func btnMoreTapped(_ sender: Any) {
         self.loadMoreItemsForList()
@@ -218,18 +141,18 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
             }
         }
     }
+
 }
 
 
-// MARK: - UITableViewDataSource methods
-extension ShipmentAppListVC: UITableViewDataSource, UITableViewDelegate {
+extension ExportPresentationListVC: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.arrayList.count
+        return 2
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -237,26 +160,26 @@ extension ShipmentAppListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ShipmentAppListCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! EPRefListCell
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
-        if self.arrayList.count > 0 {
-            cell.setDataToView(data: self.arrayList[indexPath.row])
-        }
+        //        if self.arrayList.count > 0 {
+        //            cell.setDataToView(data: self.arrayList[indexPath.row])
+        //        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let saBuyerVC = self.storyboard?.instantiateViewController(withIdentifier: "ShipAppBuyerListVC") as! ShipAppBuyerListVC
-        saBuyerVC.saListData = self.arrayList[indexPath.row]
-        self.navigationController?.pushViewController(saBuyerVC, animated: true)
+        let epBillVC = self.storyboard?.instantiateViewController(withIdentifier: "EPBillDetailsController") as! EPBillDetailsController
+        //        saBuyerVC.saListData = self.arrayList[indexPath.row]
+        self.navigationController?.pushViewController(epBillVC, animated: true)
     }
     
 }
 
-extension ShipmentAppListVC: UISearchBarDelegate {
+extension ExportPresentationListVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if  searchText.isEmpty {
@@ -286,7 +209,7 @@ extension ShipmentAppListVC: UISearchBarDelegate {
 }
 
 // MARK: - WC_HeaderViewDelegate methods
-extension ShipmentAppListVC: WC_HeaderViewDelegate {
+extension ExportPresentationListVC: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
     }
@@ -301,7 +224,7 @@ extension ShipmentAppListVC: WC_HeaderViewDelegate {
 }
 
 
-extension ShipmentAppListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension ExportPresentationListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return FilterViewController.selectedDataObj.count
@@ -325,4 +248,5 @@ extension ShipmentAppListVC: UICollectionViewDelegate, UICollectionViewDataSourc
         return size
     }
 }
+
 

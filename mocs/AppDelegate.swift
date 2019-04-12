@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
         FirebaseApp.configure()
         self.logUser()
+        print("application:didFinishLaunchingWithOptions")
 
         UINavigationBar.appearance().barTintColor = AppColor.universalHeaderColor
         UINavigationBar.appearance().tintColor = UIColor.white
@@ -85,24 +86,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Crashlytics.sharedInstance().setUserName(Session.user)
     }
     
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        print("application:willFinishLaunchingWithOptions")
+        return true
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
-       
+       print("applicationWillResignActive")
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        
+        print("applicationDidEnterBackground")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-      
+        print("applicationWillEnterForeground")
+
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        
+        print("applicationDidBecomeActive")
+
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-       
+        print("applicationWillTerminate")
+
     }
 
 

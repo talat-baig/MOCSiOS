@@ -149,7 +149,7 @@ class EmptyState:UIControl{
         let button = UIButton(type: .system)
 
         if (UIDevice.current.userInterfaceIdiom == .pad) {
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         } else {
              button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         }
@@ -211,13 +211,14 @@ class EmptyState:UIControl{
         tempVw.heightAnchor.constraint(equalToConstant: 20).isActive = true
 
         if (UIDevice.current.userInterfaceIdiom == .pad) {
-            imageView.widthAnchor.constraint(equalToConstant: 250).isActive = true
-            imageView.heightAnchor.constraint(equalToConstant: 350).isActive = true
+            imageView1.widthAnchor.constraint(equalToConstant: 140).isActive = true
+            imageView2.widthAnchor.constraint(equalToConstant: 140).isActive = true
+
+            imageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         }  else {
             imageView1.widthAnchor.constraint(equalToConstant: 53).isActive = true
             imageView2.widthAnchor.constraint(equalToConstant: 53).isActive = true
 
-//            tempVw.backgroundColor = UIColor.cyan
             imageView.heightAnchor.constraint(equalToConstant: 110).isActive = true
             textLabel.frame.size.height = textLabel.intrinsicContentSize.height
             button.heightAnchor.constraint(equalToConstant: 20).isActive = true

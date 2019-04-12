@@ -22,16 +22,10 @@ class BusinessUnitFilterCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-//    var selectionItemBlock : ((BusinessUnitFilterCell) -> Void)?
 
     func setupCellViews(title : String){
         lblTitle.text = title
     }
     
-//    func selectionButtonTapped(_ sender : AnyObject) -> Void {
-//        if let action = selectionItemBlock {
-//            action(self)
-//        }
-//    }
-    
+
 }

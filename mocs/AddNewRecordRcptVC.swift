@@ -109,7 +109,7 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(doThisWhenNotify),
-                                               name: NSNotification.Name(rawValue: Constant.RO.roNotificationKey),
+                                               name: .relOrderNotify,
                                                object: nil)
         
     }
@@ -175,7 +175,7 @@ class AddNewRecordRcptVC: UIViewController, UIGestureRecognizerDelegate {
                         let success = UIAlertController(title: "Success", message: "Receipt Added Successfully", preferredStyle: .alert)
                         success.addAction(UIAlertAction(title: "OK", style: .default, handler: {(UIAlertAction) -> Void in
                             
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: Constant.RO.roNotificationKey), object: self)
+                            NotificationCenter.default.post(name: .relOrderNotify, object: self)
                             
                             if let viewController = self.navigationController?.viewControllers.first(where: {$0 is ReleaseOrderController}) {
                                 self.navigationController?.popToViewController(viewController, animated: false)

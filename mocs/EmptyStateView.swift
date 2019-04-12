@@ -40,34 +40,6 @@ class EmptyStateView:UIControl{
         }
     }
     
-//    /// The button's text
-//    @IBInspectable
-//    open var buttonText: String{
-//        get{
-//            return button.title(for: [])!
-//        }set{
-//            button.setTitle(newValue, for: [])
-//        }
-//    }
-    
-//    /// The button tint color
-//    @IBInspectable
-//    open var buttonTint: UIColor{
-//        get{
-//            return button.tintColor
-//        }set{
-//            button.layer.borderColor = newValue.cgColor
-//            button.tintColor = newValue
-//        }
-//    }
-    
-//    /// Is the button visable
-//    @IBInspectable
-//    open var buttonHidden: Bool = false{
-//        didSet{
-//            button.isHidden = buttonHidden
-//        }
-//    }
     
     /// Convenience initailizer
     ///

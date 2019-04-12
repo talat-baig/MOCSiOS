@@ -949,6 +949,16 @@ extension Calendar {
 }
 
 
+extension Notification.Name {
+    
+    static let relOrderNotify = Notification.Name("relOrderNotify")
+    
+    static let trfPopulateList = Notification.Name("TrvReqForm")
+
+//  static let trfPopulate = "com.tech.trf"
+
+}
+
 
 extension Date {
     var isDateInWeekend: Bool {
