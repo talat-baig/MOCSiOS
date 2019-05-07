@@ -18,7 +18,5 @@ class LMSLeaveData: NSObject {
     var status = ""
     var reqDate = ""
     var noOfDays = ""
-    var type = ""
-
-    
+    var type = ""    
 }

@@ -18,7 +18,6 @@ struct ShipAppProdData: Decodable {
     let saStatus: String?
 
     enum CodingKeys : String, CodingKey {
-        
         case qty = "Qty(Mt)"
         case price = "Price"
         case value = "Value"
@@ -26,5 +25,5 @@ struct ShipAppProdData: Decodable {
         case blDate = "BLDate"
         case saStatus = "Shipment Advise Status"
     }
-
+    
 }

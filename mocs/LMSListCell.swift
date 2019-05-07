@@ -16,7 +16,9 @@ class LMSListCell: UITableViewCell {
     @IBOutlet weak var lblTotalLeave: UILabel!
     @IBOutlet weak var lblUsedLeave: UILabel!
     @IBOutlet weak var lblBalLeave: UILabel!
-
+    @IBOutlet weak var lblRefId: UILabel!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 
@@ -35,4 +37,7 @@ class LMSListCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    func setDataToViews(data : LMSReportData) {
+        
+    }
 }

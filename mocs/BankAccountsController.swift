@@ -87,6 +87,7 @@ class BankAccountsController: UIViewController, IndicatorInfoProvider {
             
             lblIfsc.text! = j["BankIFSCCode"].stringValue
             
+            
             if j["SwiftCodeIBAN"].stringValue == "" {
                 lblSwiftCode.text! = "-"
             } else {

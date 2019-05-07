@@ -13,6 +13,10 @@ class EPRefListCell: UITableViewCell {
     @IBOutlet weak var headerVw: UIView!
     @IBOutlet weak var outrVw: UIView!
 
+    @IBOutlet weak var buyrName: UILabel!
+    @IBOutlet weak var scNo: UILabel!
+    @IBOutlet weak var invNo: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
 

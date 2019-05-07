@@ -165,15 +165,11 @@ extension ExportPresentationListVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
-        //        if self.arrayList.count > 0 {
-        //            cell.setDataToView(data: self.arrayList[indexPath.row])
-        //        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let epBillVC = self.storyboard?.instantiateViewController(withIdentifier: "EPBillDetailsController") as! EPBillDetailsController
-        //        saBuyerVC.saListData = self.arrayList[indexPath.row]
         self.navigationController?.pushViewController(epBillVC, animated: true)
     }
     

@@ -13,7 +13,7 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
 
     var searchString = ""
     var currentPage : Int = 1
-    var arrayList:[FRListData] = []
+    var arrayList:[LMSReportData] = []
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     

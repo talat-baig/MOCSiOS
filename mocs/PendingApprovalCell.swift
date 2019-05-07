@@ -10,11 +10,10 @@ import UIKit
 
 class PendingApprovalCell: UITableViewCell {
     
-    
     @IBOutlet weak var outrVw: UIView!
-    
     @IBOutlet weak var lblCount: UILabel!
     @IBOutlet weak var lblModName: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         outrVw.layer.shadowOpacity = 0.35

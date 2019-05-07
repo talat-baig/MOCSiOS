@@ -8,19 +8,17 @@
 
 struct ApiKey {
     // LIVE
-     static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
+  //   static let KEY = "ea138c72-a297-40d4-8e6a-8de6bb3a2a1a"
     
     // UAT
-//  static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
+     static let KEY = "739f9e13-e618-4214-9ffb-d1040609f5c2"
 }
 
 struct ApiUrl {
     
     // LIVE
-     static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
-    
-    // UAT
-//   static let URL = "http://172.16.13.12:85/api"
+    // static let URL = "http://ocsmis.phoenixgroup.net/MOCS_API/api"
+     static let URL = "http://172.16.13.12:85/api"
 }
 
 
@@ -44,7 +42,9 @@ enum RequestType: String {
 struct AppColor {
     
     static let universalHeaderColor = UIColor(red:69.0/255.0, green:138.0/255.0, blue:255.0/255.0, alpha:1.0)
+    // Hex: 458AFF
     static let universalBodyColor = UIColor(red:37.0/255.0, green:108.0/255.0, blue:230.0/255.0, alpha:1.0)
+    
     static let univPopUpBckgColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
     static let univVoucherCell = UIColor(red:69.0/255.0, green:138.0/255.0, blue:255.0/255.0, alpha:0.3)
     static let sideMenuGreen = UIColor(red: 26.0/255.0, green: 188.0/255.0, blue: 156.0/255.0, alpha: 1.0)
@@ -160,26 +160,20 @@ struct Constant
         static let EXPENSE_TYPE =  ApiUrl.URL + "/TCR/GetExpenseType?apikeytype=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidtype=%@"
         
         static let OLD_EXPENSE_TYPE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLET?apiKey="+ApiKey.KEY+"&AuthId=%@"
-
         
         static let OLD_CURRENCY_TYPE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFLC?apiKey="+ApiKey.KEY+"&AuthId=%@"
         
         static let CURRENCY_TYPE = ApiUrl.URL + "/TCR/GetAllCurrency?apikey=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@"
-        
 
         static let EXPENSE_ADD = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFITCREI?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefId=%@&ItemExpenseDate=%@&ItemExpenseCategory=%@&ItemExpenseSubCategory=%@&ItemExpenseVendor=%@&ItemExpensePaymentType=%@&ItemExpenseCurrency=%@&ItemExpenseAmount=%@&ItemExpenseComments=%@&TEXRefCounter=%d"
         
-        
         static let EXPENSE_EDIT = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFUTCREItem?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefId=%@&ExpenseId=%@&ItemExpenseDate=%@&ItemExpenseCategory=%@&ItemExpenseSubCategory=%@&ItemExpenseVendor=%@&ItemExpensePaymentType=%@&ItemExpenseCurrency=%@&ItemExpenseAmount=%@&ItemExpenseComments=%@&TEXRefCounter=%d"
-        
         
         static let EXPENSE_DELETE = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_TCRFDTCREI?apiKey="+ApiKey.KEY+"&AuthId=%@&TCRRefNo=%@&ExpenseId=%@&TEXCounter=%d"
         
         static let ECR_LIST = ApiUrl.URL + "/ECR/GetECR?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@"
         
-        
         static let ECR_ADD = ApiUrl.URL + "/ECR/AddECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&AuthId=%@&chktype=%d"
-        
         
         static let ECR_UPDATE =  ApiUrl.URL + "/ECR/UpdateECRDraft?apiky=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&counter=%d&reference=%@"
         
@@ -396,8 +390,9 @@ struct Constant
     struct CreditUtil {
         
         static let CU_LIST = ApiUrl.URL + "/Report/CustomerCreditLimitUtilization?apikeycc=33ddb2ee-59a5-428f-a0a5-7167859b8589&authidcc=%@&filtersa=%@&PageNo=%d&IsLanding=%d&ReferenceID=%@&CustomerID=%@"
-        
     }
+    
+  
     
 
     struct ShipmentAppropriation {
@@ -417,12 +412,14 @@ struct Constant
         static let FR_INSTRUMENT_DETAILS = ApiUrl.URL + "/Report/GetFundRemittanceSummaryRefWise?apifund=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&referenceID=%@"
 
         
-//        GetFundRemittanceSummaryRefWise(string apifund, string authref, string referenceID)
-//        GetFundRemittanceSummary(string apifund, string authid, string filter, int Page, string reference)
+    }
+    
+    
+    struct ExpPresentation {
+    
+        static let EP_LIST = ApiUrl.URL + "/Report/GetExportPresentationLandingData?apipres=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&Page=%d&reference=%@"
+
         
-//        static let SA_BUYER_LIST = ApiUrl.URL + "/Report/GetShipApproSumRefWise?apiref=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&reference=%@"
-//
-//        static let SA_SC_DETAILS = ApiUrl.URL + "/Report/GetShipApproSumRefSCWise?apisc=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&referenceid=%@&sc=%@&bagSize=%@"
         
     }
     
@@ -905,8 +902,8 @@ struct Constant
         
         static let CP_LIST = ApiUrl.URL + "/CounterParty/GetAttachmentsByCounterParty?api=33ddb2ee-59a5-428f-a0a5-7167859b8589&auth=%@&CPName=%@"
         
-//       static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
-        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
+       static let DROPBOX_BASE_PATH =  "/UAT/DOCS"
+//        static let DROPBOX_BASE_PATH =  "/LIVE/DOCS"
         
         static let ADD_ITEM = "https://api.appery.io/rest/1/apiexpress/api/ocsapicall/spmOCS_AITD?apiKey="+ApiKey.KEY+"&AuthId=%@&DocumentModuleName=%@&Company=%@&Location=%@&BusinessUnit=%@&DocumentReferenceID=%@&DocumentName=%@&DocumentDescription=%@&DocumentFilePath=%@"
         

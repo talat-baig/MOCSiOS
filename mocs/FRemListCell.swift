@@ -72,8 +72,6 @@ class FRemListCell: UITableViewCell {
         lblRemAmtFCY.text = data?.remAmtFCY != "" ? data?.remAmtFCY : "-"
         lblCurr.text = data?.curr != "" ? data?.curr : "-"
         lblReason.text = data?.reason != "" ? data?.reason : "-"
-
-
     }
     
 }

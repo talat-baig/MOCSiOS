@@ -40,10 +40,10 @@ class ShipBuyerCell: UITableViewCell {
     
     func setDataToViews(data: SABuyerData){
         
-        lblRefId.text = data.scNo
-        lblQlty.text = data.quality
-        lblSize.text = data.size
-        lblBrand.text = data.brand
-        lblProdName.text = data.product
+        lblRefId.text = data.refID != "" ? data.refID : "-"
+        lblQlty.text = data.quality != "" ? data.quality : "-"
+        lblSize.text = data.size != "" ? data.size : "-"
+        lblBrand.text = data.brand != "" ? data.brand : "-"
+        lblProdName.text = data.product != "" ? data.product : "-"
     }
 }

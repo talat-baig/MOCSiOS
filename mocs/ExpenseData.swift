@@ -7,7 +7,8 @@
 //
 
 import Foundation
-class ExpenseData{
+
+class ExpenseData {
     var expenseDate:String = ""
     var expenseID:String = ""
     var category:String = ""

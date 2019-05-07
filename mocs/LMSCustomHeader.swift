@@ -58,10 +58,6 @@ class LMSCustomHeader: UITableViewCell {
             tblVwSummary.reloadData()
         }
     }
-    
-    
-    
-    
 }
 
 extension LMSCustomHeader {

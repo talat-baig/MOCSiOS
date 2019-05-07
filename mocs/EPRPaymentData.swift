@@ -7,7 +7,9 @@
 //
 
 import Foundation
+
 class EPRPaymentData{
+    
     var itemDate:String = String()
     var reason:String = String()
     var chargeHead:String = String()
