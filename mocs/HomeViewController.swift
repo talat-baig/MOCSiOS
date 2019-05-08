@@ -13,12 +13,24 @@ import MaterialShowcase
 
 class HomeViewController: UIViewController , filterViewDelegate {
    
-
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collVwNews: UICollectionView!
+    
+    @IBOutlet weak var collVwMenus: UICollectionView!
+    //    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var barBtnFilter: UIBarButtonItem!
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     
+    @IBOutlet weak var scrlVw: UIScrollView!
+    
+    @IBOutlet weak var collVwHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var mySubVw: UIView!
+    
+    var arrayNews = NewsData()
+//    var arrImgForCollVw = ["sample_img","sampleimage2","sampleimage_3","sample_img"]
+    var arrMenuTitle = ["Administrative","Business","Pending Approvals","Task Manager", "Employee Directory"]
+    var arrMenuIcons = ["admin","briefcase","pencil","list","telephone"]
+
     var filterTransactionManger = TransitionManager()
     var listArray:[NewsData] = []
     lazy var refreshController = UIRefreshControl()
@@ -26,7 +38,7 @@ class HomeViewController: UIViewController , filterViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         refreshController = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
-        tableView.addSubview(refreshController)
+//        tableView.addSubview(refreshController)
         FilterViewController.filterDelegate = self
         
         if Session.news == "" {
@@ -43,14 +55,33 @@ class HomeViewController: UIViewController , filterViewDelegate {
         vwTopHeader.lblSubTitle.isHidden = true
 
         self.title = "OCS-Home"
-//        fatalError()
+
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+        
+        collVwNews.register(UINib.init(nibName: "NewsCollVwCell", bundle: nil), forCellWithReuseIdentifier: "newscell")
+        collVwMenus.register(UINib.init(nibName: "HomeMenuCell", bundle: nil), forCellWithReuseIdentifier: "menuscell")
+
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        flowLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
+        collVwNews.collectionViewLayout = flowLayout
+        collVwNews.showsHorizontalScrollIndicator = false
+        
+        let flowLayoutMenu = UICollectionViewFlowLayout()
+        flowLayoutMenu.scrollDirection = UICollectionView.ScrollDirection.vertical
+        collVwMenus.collectionViewLayout = flowLayoutMenu
+        collVwMenus.showsVerticalScrollIndicator = false
+        
+        collVwMenus.reloadData()
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
+//        self.collVwHeightConstraint.constant = self.collVwMenus.contentSize.height;
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -107,25 +138,24 @@ class HomeViewController: UIViewController , filterViewDelegate {
     }
     
     func cancelFilter(filterString: String) {
-        self.populateList()
+//        self.populateList()
     }
     
     func applyFilter(filterString: String) {
-        self.populateList()
+//        self.populateList()
     }
     
 
     @objc func populateList(){
-//        if Session.news == "" {
             if internetStatus != .notReachable {
                 let url = String.init(format: Constant.API.NEWS, Session.authKey)
-                refreshController.beginRefreshing()
-                self.refreshController.beginRefreshing()
+//                refreshController.beginRefreshing()
+//                self.refreshController.beginRefreshing()
 
                 Alamofire.request(url).responseData(completionHandler: { response in
                     self.refreshController.endRefreshing()
 
-                    if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+                    if Helper.isResponseValid(vc: self, response: response.result,tv: nil){
                         let jsonResponse = JSON(response.result.value!)
                         Session.news = jsonResponse.rawString()!
                         self.parseAndAssign(response: jsonResponse.rawString()!)
@@ -133,21 +163,18 @@ class HomeViewController: UIViewController , filterViewDelegate {
                 })
             } else {
                 Helper.showNoInternetMessg()
-                Helper.showNoInternetState(vc: self, tb: tableView,action: #selector(populateList))
+//                Helper.showNoInternetState(vc: self, tb: tableView,action: #selector(populateList))
             }
-//        } else {
-//            parseAndAssign(response: Session.news)
-//            self.refreshController.endRefreshing()
-//        }
+
     }
  
     func parseAndAssign(response:String){
         var jsonResponse = JSON.init(parseJSON: response)
         let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
         if jsonArray.count > 0{
-            
+
             self.listArray.removeAll()
-            
+
             for(_,j):(String,JSON) in jsonResponse {
                 let data:NewsData = NewsData()
                 data.id = j["ID"].stringValue
@@ -160,44 +187,41 @@ class HomeViewController: UIViewController , filterViewDelegate {
                     listArray.append(data)
                 }
             }
-            self.tableView.reloadData()
+//            self.tableView.reloadData()
+            self.collVwNews.reloadData()
         } else {
             Helper.showMessage(message: "No Latest News Available", style: .info)
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+//        scrlVw.contentSize = CGSize(width: mySubVw.frame.size.width, height: mySubVw.frame.size.height)
+        
+        
+//        let lastView : UIView! = mySubVw.subviews.last
+//        let height = lastView.frame.size.height
+//        let pos = lastView.frame.origin.y
+//        let sizeOfContent = height + pos + 30
+//
+//        scrlVw.contentSize.height = sizeOfContent
+        
+        self.collVwHeightConstraint.constant = self.collVwMenus.contentSize.height;
+
     }
 }
 
 
 extension HomeViewController: MaterialShowcaseDelegate {
+    
     func showCaseWillDismiss(showcase: MaterialShowcase) {
 //        print("Showcase \(showcase.primaryText) will dismiss.")
     }
+    
     func showCaseDidDismiss(showcase: MaterialShowcase) {
-       
     }
 }
 
-
-extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 240
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = listArray[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! HomeAdapter
-        cell.btnMore.tag = indexPath.row
-        
-        cell.btnMore.addTarget(self, action: #selector(self.openMoreVC(sender:)), for: UIControl.Event.touchUpInside)
-        cell.setDataToView(data: data)
-        return cell
-    }
-    
-}
 
 extension HomeViewController: WC_HeaderViewDelegate {
    
@@ -215,3 +239,52 @@ extension HomeViewController: WC_HeaderViewDelegate {
     }
     
 }
+
+
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        if collectionView == self.collVwNews {
+            return listArray.count
+        } else {
+            return arrMenuIcons.count
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if collectionView == self.collVwNews {
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newscell", for: indexPath as IndexPath) as! NewsCollVwCell
+            cell.setDataToView(newsData: listArray[indexPath.row])
+//            cell.imgVw.image = UIImage(named:  self.arrImgForCollVw[indexPath.row])
+//            cell.lblTitle.text = "This is a news feed Title"
+//            cell.lblSubtitle.text = "This is a news feed Sub title description"
+            return cell
+            
+        } else {
+            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "menuscell", for: indexPath as IndexPath) as! HomeMenuCell
+            cell.imgVw.image = UIImage(named:  self.arrMenuIcons[indexPath.row])
+            cell.lblTitle.text = arrMenuTitle[indexPath.row]
+            cell.lblDesc.text = "This is a news feed Sub title description"
+            return cell
+        }
+        
+    }
+    
+    func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
+    {
+        if collectionView == self.collVwNews {
+            return CGSize(width: collectionView.frame.size.width/1.6, height: 180)
+        } else {
+            return CGSize(width: collectionView.frame.size.width/2.09, height: 190)
+        }
+    }
+    
+}
+
+
+
+
