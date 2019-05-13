@@ -39,8 +39,9 @@ class TaskManagerController: UIViewController {
         btnWunderlist.layer.borderColor =  AppColor.universalHeaderColor.cgColor
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = "Task Manager"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -130,8 +131,8 @@ class TaskManagerController: UIViewController {
     func openInstallAppPopup() {
         
         self.wunderPopup = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
-        self.wunderPopup.setDataToCustomView(title: "Wunderlist App Not Found", description: "Download it from App Store?", leftButton: "NO", rightButton: "YES", isTxtVwHidden: true, isApprove: false, isFromEmpDirectory: true)
-        self.wunderPopup.wunderDelegate = self
+        self.wunderPopup.setDataToCustomView(title: "Wunderlist App Not Found", description: "Download it from App Store?", leftButton: "NO", rightButton: "YES", isTxtVwHidden: true, isApprove: false, isWithoutData: true, imgName : "wunderlist")
+        self.wunderPopup.cpvDelegate = self
         self.wunderPopup.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height)
         self.view.window?.addSubview(self.wunderPopup)
     }
@@ -235,7 +236,8 @@ extension TaskManagerController: WC_HeaderViewDelegate {
     
 }
 
-extension TaskManagerController: wunderlistPopupDelegate {
+extension TaskManagerController: customPopUpDelegate {
+
 
     func onRightBtnTap() {
         let urlStr = "itms-apps://itunes.apple.com/in/app/wunderlist-to-do-list-tasks/id406644151?mt=8"

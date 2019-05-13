@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,10 +24,10 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YTX-wA-r4X">
-                                    <rect key="frame" x="62" y="216.33333333333334" width="290" height="303.66666666666663"/>
+                                    <rect key="frame" x="62" y="211.33333333333334" width="290" height="313.66666666666663"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="9KF-mO-YFm">
-                                            <rect key="frame" x="0.0" y="0.0" width="290" height="303.66666666666669"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="9KF-mO-YFm">
+                                            <rect key="frame" x="0.0" y="0.0" width="290" height="313.66666666666669"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kk3-am-Rc5">
                                                     <rect key="frame" x="25" y="0.0" width="240" height="8"/>
@@ -37,14 +37,14 @@
                                                     </constraints>
                                                 </view>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="approve_questn" translatesAutoresizingMaskIntoConstraints="NO" id="FS0-If-lDn">
-                                                    <rect key="frame" x="99.666666666666657" y="16" width="91" height="91"/>
+                                                    <rect key="frame" x="99.666666666666657" y="18" width="91" height="91"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="91" id="fFU-M5-eLY"/>
                                                         <constraint firstAttribute="height" constant="91" id="jem-R7-cWR"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Approve?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g8C-WX-c4k">
-                                                    <rect key="frame" x="108" y="114.99999999999997" width="74" height="19.333333333333343"/>
+                                                    <rect key="frame" x="108" y="118.99999999999996" width="74" height="19.333333333333329"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="19.329999999999998" id="haH-xs-1Xx"/>
                                                     </constraints>
@@ -53,13 +53,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you sure you want to approve this Invoice? you cannot revert once approved ?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KBS-WR-xZj">
-                                                    <rect key="frame" x="16" y="142.33333333333334" width="258" height="50.333333333333343"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <nil key="textColor"/>
+                                                    <rect key="frame" x="16" y="148.33333333333334" width="258" height="50.333333333333343"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                    <color key="textColor" white="0.37872331267217629" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="asfzfsdfdds sdf sdfdsfsdf sgsdgsdgsdgdg gsdgdgsdgsgsg dgdgdgdfgdfgd dgdfg dgdf" translatesAutoresizingMaskIntoConstraints="NO" id="sk9-zd-Pxj">
-                                                    <rect key="frame" x="16" y="200.66666666666666" width="258" height="55"/>
+                                                    <rect key="frame" x="16" y="208.66666666666666" width="258" height="54.999999999999972"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="55" id="17i-jS-vgE"/>
@@ -68,7 +68,7 @@
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="61z-CS-Dkp">
-                                                    <rect key="frame" x="0.0" y="263.66666666666663" width="290" height="40"/>
+                                                    <rect key="frame" x="0.0" y="273.66666666666663" width="290" height="40"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EoA-Tz-vrb">
                                                             <rect key="frame" x="0.0" y="0.0" width="141" height="40"/>
@@ -172,6 +172,6 @@
         </view>
     </objects>
     <resources>
-        <image name="approve_questn" width="229" height="229"/>
+        <image name="approve_questn" width="170.66667175292969" height="170.66667175292969"/>
     </resources>
 </document>

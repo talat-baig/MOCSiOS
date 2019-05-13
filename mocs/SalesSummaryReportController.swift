@@ -24,11 +24,6 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
     // Countrparty Values arry to show on Graph
     var cpValuesArr : [String] = []
     
-//    var prdName : [String] = []
-//
-//    var prdQty : [String] = []
-
-    
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -52,12 +47,6 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllSSData))
         tableView.addSubview(refreshControl)
         
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-//        flowLayout.minimumInteritemSpacing = 5.0
-//        collVw.collectionViewLayout = flowLayout
-        
         Helper.setupCollVwFitler(collVw: self.collVw)
 
         FilterViewController.filterDelegate = self
@@ -67,7 +56,8 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Sales Summary"
         vwTopHeader.lblSubTitle.isHidden = true
@@ -463,6 +453,7 @@ extension SalesSummaryReportController: UICollectionViewDelegate, UICollectionVi
 extension SalesSummaryReportController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

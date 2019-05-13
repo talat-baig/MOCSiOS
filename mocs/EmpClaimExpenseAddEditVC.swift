@@ -257,7 +257,7 @@ class EmpClaimExpenseAddEditVC: UIViewController ,UIGestureRecognizerDelegate{
         var custPopUpVw = CustomPopUpView()
 
         custPopUpVw = Bundle.main.loadNibNamed("CustomPopUpView", owner: nil, options: nil)![0] as! CustomPopUpView
-        custPopUpVw.setDataToCustomView(title: "", description: "No benefits have been allocated to you, please contact HR" , leftButton: "", rightButton: "OK", isTxtVwHidden: true, isApprove: false, isFromEmpDirectory: false, isWarning : true, isOkButton: true)
+        custPopUpVw.setDataToCustomView(title: "", description: "No benefits have been allocated to you, please contact HR" , leftButton: "", rightButton: "OK", isTxtVwHidden: true, isApprove: false, isWithoutData: false, isEBRWarning : true, isOkButton: true, imgName: "warning")
        
         self.view.addMySubview(custPopUpVw)
     }

@@ -62,8 +62,9 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = "Purchase Summary"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -436,6 +437,7 @@ extension PurchaseSummRptController: UICollectionViewDelegate, UICollectionViewD
 extension PurchaseSummRptController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

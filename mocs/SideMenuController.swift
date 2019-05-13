@@ -7,26 +7,22 @@
 //
 
 import UIKit
-import ThreeLevelAccordian
+//import ThreeLevelAccordian
 import Alamofire
 import Toast_Swift
 import RATreeView
 
 
-class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, RATreeViewDelegate {
-    
-    func didSelectItemAtIndex(_ index: Int) {
-        
-    }
-    
+class SideMenuController: UIViewController, RATreeViewDataSource, RATreeViewDelegate {
+  
     @IBOutlet weak var lblVersionName: UILabel!
     @IBOutlet weak var stckVwHome: UIStackView!
     @IBOutlet weak var vwTreeTable: UIView!
     @IBOutlet weak var lblUserName: UILabel!
     @IBOutlet weak var menuTable: UITableView!
     
-    var cell = [TLACell]()
-    var delegateController: TLAViewController!
+//    var cell = [TLACell]()
+//    var delegateController: TLAViewController!
     var selectedItem : MenuDataObject?
     var helpDocViewer: UIDocumentInteractionController!
     var wunderPopup = CustomPopUpView()
@@ -69,7 +65,6 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         let form = MenuDataObject(name: "1.1 Forms" , children: [tcr_form, ecr_form, trf_form, trvl_tkct,lms_req], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "document"))
         
         let administrative = MenuDataObject(name: "Administrative", children: [form], storybdNAme: "", vcName: "", imageName: #imageLiteral(resourceName: "profile") )
-        
         
         
         /************************* Business Reports *****************************/
@@ -222,6 +217,11 @@ class SideMenuController: UIViewController, TLADelegate, RATreeViewDataSource, R
         
         treeView.reloadRows(forItems: [item], with: RATreeViewRowAnimationNone)
     }
+    
+    func didSelectItemAtIndex(_ index: Int) {
+        
+    }
+    
     
     func treeView(_ treeView: RATreeView, cellForItem item: Any?) -> UITableViewCell {
         

@@ -40,7 +40,8 @@ class TravelClaimController: UIViewController, UIGestureRecognizerDelegate, onTC
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.navigationBar.isHidden = true
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = "Travel Claims"
         vwTopHeader.lblSubTitle.isHidden = true
@@ -419,7 +420,7 @@ extension TravelClaimController: UITableViewDataSource, UITableViewDelegate, onM
 extension TravelClaimController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+         self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

@@ -16,7 +16,6 @@ class PendingApprovalsController: UIViewController {
 
     @IBOutlet weak var lblSummary: UILabel!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
-    
     @IBOutlet weak var tableView: UITableView!
     
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
@@ -26,7 +25,8 @@ class PendingApprovalsController: UIViewController {
         
         self.navigationController?.isNavigationBarHidden = true
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
         vwTopHeader.lblTitle.text = Constant.PAHeaderTitle.ALL
         vwTopHeader.lblSubTitle.isHidden = true
@@ -226,7 +226,7 @@ extension PendingApprovalsController : UITableViewDelegate, UITableViewDataSourc
 extension PendingApprovalsController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

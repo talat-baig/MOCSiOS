@@ -36,12 +36,12 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         
         srchBar.delegate = self
         
-//        resetViews()
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = "Employee Leave (LMS) Report"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -176,6 +176,7 @@ extension LMSReportListVC: UISearchBarDelegate {
 extension LMSReportListVC: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

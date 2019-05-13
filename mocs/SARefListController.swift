@@ -48,7 +48,8 @@ class SARefListController: UIViewController , filterViewDelegate, clearFilterDel
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Shipment Advise Summary"
         vwTopHeader.lblSubTitle.isHidden = true
@@ -283,6 +284,7 @@ extension SARefListController: UISearchBarDelegate {
 extension SARefListController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

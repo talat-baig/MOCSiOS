@@ -32,8 +32,10 @@ class LMSReqController: UIViewController , onLMSUpdate {
         self.navigationController?.navigationBar.isHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
+
         vwTopHeader.lblTitle.text = "Leave Request"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -169,7 +171,6 @@ class LMSReqController: UIViewController , onLMSUpdate {
             lmsReq.appStatus = json["Leave Application Status"].stringValue
             
             lmsReq.delegation = json["Delegation Work"].stringValue
-            
           
             
             if json["Leave Reason"].stringValue == "" {

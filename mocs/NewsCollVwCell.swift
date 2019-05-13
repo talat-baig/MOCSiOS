@@ -20,12 +20,10 @@ class NewsCollVwCell: UICollectionViewCell {
     @IBOutlet weak var outrVw: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-//        outrVw.layer.shadowOpacity = 0.25
-        outrVw.layer.cornerRadius = 5
-//        outrVw.layer.shadowRadius = 1
-//        outrVw.layer.shadowColor = UIColor.gray.cgColor
         
+        outrVw.layer.cornerRadius = 5
         imgVw.layer.cornerRadius = 5
+        
         self.contentView.layer.cornerRadius = 10
         self.contentView.layer.borderWidth = 1.0
         

@@ -47,8 +47,9 @@ class FundsRemittancListVC: UIViewController , filterViewDelegate, clearFilterDe
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
+         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = "Funds Remittance Summary"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -289,6 +290,7 @@ extension FundsRemittancListVC: UISearchBarDelegate {
 extension FundsRemittancListVC: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

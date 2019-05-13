@@ -49,7 +49,8 @@ class CLListController: UIViewController, filterViewDelegate, clearFilterDelegat
         self.navigationController?.isNavigationBarHidden = true
 
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Customer Ledger"
         vwTopHeader.lblSubTitle.isHidden = true
@@ -269,6 +270,7 @@ extension CLListController: UITableViewDataSource, UITableViewDelegate {
 extension CLListController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

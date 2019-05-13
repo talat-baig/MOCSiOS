@@ -28,23 +28,16 @@ class AvlRelBaseViewController: UIViewController,filterViewDelegate , clearFilte
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Available Releases"
         vwTopHeader.lblSubTitle.isHidden = true
-        
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-//        flowLayout.minimumInteritemSpacing = 5.0
-//        collVw.collectionViewLayout = flowLayout
 
         Helper.setupCollVwFitler(collVw: self.collVw)
 
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
-
-
     }
     
     func cancelFilter(filterString: String) {
@@ -124,6 +117,7 @@ extension AvlRelBaseViewController: UITableViewDelegate, UITableViewDataSource {
 extension AvlRelBaseViewController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

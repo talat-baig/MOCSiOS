@@ -47,7 +47,9 @@ class ECREmployeeListController: UIViewController, filterViewDelegate, clearFilt
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
+
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Employees Advances & Settlements"
         vwTopHeader.lblSubTitle.isHidden = true
@@ -281,6 +283,7 @@ extension ECREmployeeListController: UISearchBarDelegate {
 extension ECREmployeeListController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

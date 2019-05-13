@@ -47,8 +47,10 @@ class ShipmentAppListVC: UIViewController, filterViewDelegate, clearFilterDelega
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
+        vwTopHeader.btnBack.isHidden = false
+
         vwTopHeader.lblTitle.text = "Shipment Appropriation Summary"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -289,6 +291,7 @@ extension ShipmentAppListVC: UISearchBarDelegate {
 extension ShipmentAppListVC: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

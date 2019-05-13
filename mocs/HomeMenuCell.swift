@@ -20,15 +20,15 @@ class HomeMenuCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        imgVw.layer.borderWidth = 0.5
+//        imgVw.layer.borderWidth = 0.5
         imgVw.layer.masksToBounds = true
-        imgVw.layer.borderColor = AppColor.universalHeaderColor.cgColor
+//        imgVw.layer.borderColor = AppColor.universalHeaderColor.cgColor
         imgVw.layer.cornerRadius = imgVw.frame.height/2
         imgVw.clipsToBounds = false
         
         imgVw.layer.shadowColor = UIColor.lightGray.cgColor
         imgVw.layer.shadowOffset = CGSize(width: 0, height: 1.5)
-        imgVw.layer.shadowRadius = 3
+        imgVw.layer.shadowRadius = 2
         imgVw.layer.shadowOpacity = 1
 
         self.innerVw.layer.cornerRadius = 10

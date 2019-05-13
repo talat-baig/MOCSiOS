@@ -30,8 +30,10 @@ class EmployeeClaimController: UIViewController, onMoreClickListener, onECRUpdat
         super.viewDidLoad()
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
+
         vwTopHeader.lblTitle.text = "Employee Claims Reimbursement"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -453,7 +455,7 @@ extension EmployeeClaimController: UITableViewDataSource, UITableViewDelegate, o
 extension EmployeeClaimController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+         self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

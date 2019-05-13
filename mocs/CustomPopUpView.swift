@@ -9,11 +9,24 @@
 import UIKit
 
 protocol customPopUpDelegate {
-    func onRightBtnTap(data:AnyObject , text : String, isApprove : Bool) -> Void
+    func onRightBtnTap(data:AnyObject , text : String, isApprove : Bool) -> Void // optional method
+    func onRightBtnTap() -> Void // optional method
 }
+//
+//protocol wunderlistPopupDelegate {
+//    func onRightBtnTap() -> Void
+//}
 
-protocol wunderlistPopupDelegate {
-    func onRightBtnTap() -> Void
+
+extension customPopUpDelegate {
+    
+    func onRightBtnTap(data:AnyObject , text : String, isApprove : Bool) -> Void {
+        
+    }
+    
+    func onRightBtnTap()  -> Void {
+        //this is a empty implementation to allow this method to be optional
+    }
 }
 
 class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
@@ -41,10 +54,10 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     
      /// Delegate object for custom pop-up view
     var cpvDelegate: customPopUpDelegate?
-    var wunderDelegate: wunderlistPopupDelegate?
+//    var wunderDelegate: wunderlistPopupDelegate?
     
-    var isFromEmpDirectory = false
-    var isWarning = false
+    var isWithoutData = false
+    var isEBRWarning = false
 
     
      /// Object of type AnyObject
@@ -119,13 +132,13 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     /// Action method for right button tapped
     @IBAction func btnRightTapped(_ sender: Any) {
         
-        if isFromEmpDirectory {
+        if isWithoutData {
             
-            if let d = wunderDelegate {
+            if let d = cpvDelegate {
                
                 d.onRightBtnTap()
             }
-        } else if isWarning {
+        } else if isEBRWarning {
             self.removeFromSuperviewWithAnimate()
         } else {
             
@@ -148,7 +161,7 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     ///   - rightButton: Right button text
     ///   - isTxtVwHidden: Bool Flag to know if text view is hidden or not
     ///   - isApprove: Bool flag to know if pop-up is for Approve or Decline
-    func setDataToCustomView(title: String, description: String, leftButton: String = "", rightButton: String = "" ,isTxtVwHidden : Bool  = false , isApprove : Bool = true ,  isFromEmpDirectory : Bool = false , isWarning : Bool = false, isOkButton : Bool = false) {
+    func setDataToCustomView(title: String, description: String, leftButton: String = "", rightButton: String = "" ,isTxtVwHidden : Bool  = false , isApprove : Bool = true ,  isWithoutData : Bool = false , isEBRWarning : Bool = false, isOkButton : Bool = false, imgName : String = "") {
         
         self.lblTitle.text = title
         self.lblSubtitle.text = description
@@ -162,17 +175,22 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
         }
         
         self.isApprove = isApprove
-        self.isFromEmpDirectory = isFromEmpDirectory
-        self.isWarning = isWarning
+        self.isWithoutData = isWithoutData
+        self.isEBRWarning = isEBRWarning
 
-        if isFromEmpDirectory {
-            imgVw.image = UIImage(named: "wunderlist")
-        } else if isWarning {
-            imgVw.image = UIImage(named: "warning")
-        } else {
-            imgVw.image = UIImage(named: "approve_questn")
-        }
         
+        if imgName == "" {
+             imgVw.image = UIImage(named: "approve_questn")
+        } else {
+             imgVw.image = UIImage(named: imgName)
+        }
+//        if isWithoutData {
+//            imgVw.image = UIImage(named: "wunderlist")
+//        } else if isWarning {
+//            imgVw.image = UIImage(named: "warning")
+//        } else {
+//            imgVw.image = UIImage(named: "approve_questn")
+//        }
         
         
         if isTxtVwHidden {

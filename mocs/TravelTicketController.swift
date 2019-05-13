@@ -38,8 +38,10 @@ class TravelTicketController: UIViewController , UIGestureRecognizerDelegate, on
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.navigationController?.navigationBar.isHidden = true
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
+
         vwTopHeader.lblTitle.text = "Travel Tickets"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -588,7 +590,7 @@ extension TravelTicketController: UITableViewDataSource, UITableViewDelegate , o
 extension TravelTicketController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

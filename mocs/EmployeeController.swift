@@ -56,8 +56,9 @@ class EmployeeController: UIViewController , CNContactViewControllerDelegate , U
         
         self.navigationController?.isNavigationBarHidden = true
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = "Employee Directory"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -283,6 +284,7 @@ extension EmployeeController: UITableViewDelegate, UITableViewDataSource, onMore
 extension EmployeeController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

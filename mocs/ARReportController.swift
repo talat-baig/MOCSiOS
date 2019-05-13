@@ -33,13 +33,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
         
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllARData))
         tblVwARReport.addSubview(refreshControl)
-        
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-//        flowLayout.minimumInteritemSpacing = 5.0
-//        collVw.collectionViewLayout = flowLayout
-        
+
         Helper.setupCollVwFitler(collVw: self.collVw)
 
         FilterViewController.filterDelegate = self
@@ -50,8 +44,9 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = "Accounts Receivables"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -452,6 +447,7 @@ extension ARReportController: UITableViewDelegate {
 extension ARReportController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

@@ -35,12 +35,6 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(fetchAllFPSData))
         tableView.addSubview(refreshControl)
         
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5)
-//        flowLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
-//        flowLayout.minimumInteritemSpacing = 5.0
-//        collVw.collectionViewLayout = flowLayout
-        
         Helper.setupCollVwFitler(collVw: self.collVw)
 
         
@@ -51,7 +45,8 @@ class FundsPaymentController: UIViewController,filterViewDelegate, clearFilterDe
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Funds Payment & Settlement"
         vwTopHeader.lblSubTitle.isHidden = true
@@ -339,6 +334,7 @@ extension FundsPaymentController: UICollectionViewDelegate, UICollectionViewData
 extension FundsPaymentController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

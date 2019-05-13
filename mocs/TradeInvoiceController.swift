@@ -368,7 +368,6 @@ extension TradeInvoiceController: UISearchBarDelegate {
         guard let searchTxt = searchBar.text else {
             return
         }
-        
         self.searchString = searchTxt
         self.refreshList()
         self.handleTap()
@@ -388,7 +387,6 @@ extension TradeInvoiceController: WC_HeaderViewDelegate {
     
     func topMenuRightButtonTapped(sender: Any) {
         self.presentRightMenuViewController(sender as AnyObject)
-        
     }
     
 }

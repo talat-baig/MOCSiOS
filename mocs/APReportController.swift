@@ -49,7 +49,8 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Accounts Payable"
         vwTopHeader.lblSubTitle.isHidden = true
@@ -340,6 +341,7 @@ extension APReportController: UITableViewDataSource, UITableViewDelegate {
 extension APReportController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+           self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {
