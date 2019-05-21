@@ -605,6 +605,11 @@ class Helper: UIView {
     }
     
     
+    public static func getAppVersion() -> String {
+        
+        guard let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String else { return "" }
+        return appVersion
+    }
     
     
     public static func getNavTitleString(modName : ModName) -> String {

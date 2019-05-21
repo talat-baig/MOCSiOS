@@ -43,10 +43,12 @@ class TravelTicketCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        outerVw.layer.shadowOpacity = 0.25
-        outerVw.layer.shadowOffset = CGSize(width: 2, height: 2)
-        outerVw.layer.shadowRadius = 1
+        outerVw.layer.shadowOpacity = 0.50
+        outerVw.layer.shadowOffset = CGSize(width: 0, height: 2)
+        outerVw.layer.shadowRadius = 2.0
         outerVw.layer.shadowColor = UIColor.black.cgColor
+        outerVw.layer.masksToBounds = false
+ 
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

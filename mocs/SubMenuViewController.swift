@@ -8,9 +8,10 @@
 
 import UIKit
 
-class SubMenuViewController: UIViewController {
+class SubMenuViewController: UIViewController, filterViewDelegate {
     
     var navHeader = ""
+    var isFilter = true
     var arrMenuTitles : [String] = []
     @IBOutlet weak var collVw: UICollectionView!
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
@@ -27,11 +28,14 @@ class SubMenuViewController: UIViewController {
         vwTopHeader.delegate = self
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnLeft.isHidden = true
-        vwTopHeader.btnRight.isHidden = true
+        
+        vwTopHeader.btnRight.isHidden = self.isFilter ? false : true
+        
         vwTopHeader.lblTitle.text = navHeader
         vwTopHeader.lblSubTitle.isHidden = true
         
         self.title = "OCS-Home"
+        FilterViewController.filterDelegate = self
         
         collVw.register(UINib.init(nibName: "SubMenuCell", bundle: nil), forCellWithReuseIdentifier: "submenucell")
         
@@ -59,7 +63,6 @@ class SubMenuViewController: UIViewController {
                 
                 
             } else if index == 2 {
-                
                 selVC = UIStoryboard(name: "TravelRequest", bundle: nil).instantiateViewController(withIdentifier: "TravelRequestController") as! TravelRequestController
                 
             } else if index == 3 {
@@ -122,13 +125,21 @@ class SubMenuViewController: UIViewController {
                 selVC = UIStoryboard(name: "LMSReport", bundle: nil).instantiateViewController(withIdentifier: "LMSReportListVC") as! LMSReportListVC
             }
             break
-   
+            
         default:
             break
             
         }
         self.navigationController?.pushViewController(selVC, animated: true)
-
+    }
+    
+    
+    func applyFilter(filterString: String) {
+        
+    }
+    
+    func cancelFilter(filterString: String) {
+        
     }
     
     
@@ -156,9 +167,7 @@ extension SubMenuViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
         self.navigateToSelectedVC(module : navHeader, index : indexPath.row)
-        
     }
 }
 
@@ -173,6 +182,8 @@ extension SubMenuViewController: WC_HeaderViewDelegate {
     }
     
     func topMenuRightButtonTapped(sender: Any) {
+        self.presentRightMenuViewController(sender as AnyObject)
     }
     
 }
+

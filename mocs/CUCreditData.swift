@@ -18,3 +18,4 @@ class CUCreditData: NSObject {
     var grossAmtCCY = ""
     var curr = ""
 }
+

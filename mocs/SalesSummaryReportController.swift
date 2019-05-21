@@ -33,6 +33,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var lblNote: UILabel!
 
+    @IBOutlet weak var vwColl: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,7 +52,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
 
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
-        
+        self.resetViews()
         fetchAllSSData()
         self.navigationController?.isNavigationBarHidden = true
         
@@ -68,6 +69,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
     
     func clearAll() {
         self.collVw.reloadData()
+        self.resetViews()
         self.fetchAllSSData()
     }
     
@@ -84,6 +86,7 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
             return
         }
         self.fetchAllSSData()
+        self.resetViews()
         self.collVw.reloadData()
     }
     
@@ -91,7 +94,18 @@ class SalesSummaryReportController: UIViewController, filterViewDelegate, clearF
         self.ssData = nil
         self.cpBarDataEntry.removeAll()
         self.prodDataEntry.removeAll()
+        self.resetViews()
     }
+    
+    func resetViews() {
+        
+        if FilterViewController.selectedDataObj.isEmpty {
+            vwColl.isHidden = true
+        } else {
+            vwColl.isHidden = false
+        }
+    }
+    
     
     @objc func fetchAllSSData() {
         

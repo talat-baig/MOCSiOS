@@ -40,7 +40,9 @@ class NewsCollVwCell: UICollectionViewCell {
     func setDataToView(newsData : NewsData) {
         
         self.lblTitle.text = newsData.title
-        self.lblSubtitle.text = newsData.description
+        let newsDesc = newsData.description
+        
+        self.lblSubtitle.text = Helper.removingRegexMatches(str: newsDesc, pattern: "<.*?>")
 //        self.imgVw.image = new
 
         let url = URL(string: newsData.imgSrc)

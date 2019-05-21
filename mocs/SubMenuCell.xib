@@ -22,17 +22,34 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WoQ-PL-13a">
                         <rect key="frame" x="8" y="8" width="215" height="150"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.25" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="abstract2" translatesAutoresizingMaskIntoConstraints="NO" id="lWR-Kh-d7W">
+                                <rect key="frame" x="0.0" y="0.0" width="215" height="150"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gIN-qv-WHC">
                                 <rect key="frame" x="8" y="66" width="199" height="18"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <color key="textColor" red="0.16862745100000001" green="0.43921568630000002" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pheonix_leaf" translatesAutoresizingMaskIntoConstraints="NO" id="rlv-97-nw4">
+                                <rect key="frame" x="8" y="122" width="22" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="P09-we-nin"/>
+                                    <constraint firstAttribute="width" constant="22" id="cWh-qw-fjb"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="rlv-97-nw4" firstAttribute="leading" secondItem="WoQ-PL-13a" secondAttribute="leading" constant="8" id="4vu-Ud-ITW"/>
+                            <constraint firstAttribute="trailing" secondItem="lWR-Kh-d7W" secondAttribute="trailing" id="J3i-C7-GAo"/>
+                            <constraint firstItem="lWR-Kh-d7W" firstAttribute="leading" secondItem="WoQ-PL-13a" secondAttribute="leading" id="Jpj-za-MCQ"/>
                             <constraint firstAttribute="trailing" secondItem="gIN-qv-WHC" secondAttribute="trailing" constant="8" id="OOx-uC-61W"/>
                             <constraint firstItem="gIN-qv-WHC" firstAttribute="centerY" secondItem="WoQ-PL-13a" secondAttribute="centerY" id="Rvd-Rl-hGg"/>
                             <constraint firstItem="gIN-qv-WHC" firstAttribute="leading" secondItem="WoQ-PL-13a" secondAttribute="leading" constant="8" id="Uhn-q5-vkq"/>
+                            <constraint firstAttribute="bottom" secondItem="rlv-97-nw4" secondAttribute="bottom" constant="6" id="syB-ep-v1V"/>
+                            <constraint firstItem="lWR-Kh-d7W" firstAttribute="top" secondItem="WoQ-PL-13a" secondAttribute="top" id="uAx-7N-chj"/>
+                            <constraint firstAttribute="bottom" secondItem="lWR-Kh-d7W" secondAttribute="bottom" id="yRY-qy-yfg"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -46,10 +63,15 @@
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="231" height="166"/>
             <connections>
+                <outlet property="imgVw" destination="lWR-Kh-d7W" id="oLp-71-m0u"/>
                 <outlet property="lblTitle" destination="gIN-qv-WHC" id="Rqx-sT-rSv"/>
                 <outlet property="vwOutr" destination="WoQ-PL-13a" id="4sL-gg-qEf"/>
             </connections>
             <point key="canvasLocation" x="261.59420289855075" y="120.53571428571428"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="abstract2" width="350" height="219"/>
+        <image name="pheonix_leaf" width="50" height="27"/>
+    </resources>
 </document>

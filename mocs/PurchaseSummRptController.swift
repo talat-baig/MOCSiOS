@@ -18,6 +18,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
 
     var pcData : SSListData?
     
+    @IBOutlet weak var vwColl: UIView!
     // Countrparty Names arry to show on Graph
     var cpNameArr : [String] = []
     
@@ -57,7 +58,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
 
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
-        
+        self.resetViews()
         fetchAllPSData()
         self.navigationController?.isNavigationBarHidden = true
         
@@ -72,6 +73,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
     
     func clearAll() {
         self.collVw.reloadData()
+        self.resetViews()
         self.fetchAllPSData()
     }
     
@@ -89,6 +91,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
             return
         }
         self.fetchAllPSData()
+        self.resetViews()
         self.collVw.reloadData()
     }
     
@@ -96,6 +99,7 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
         self.pcData = nil
         self.barDataEntry.removeAll()
         self.prodDataEntry.removeAll()
+        self.resetViews()
     }
     
 
@@ -282,6 +286,14 @@ class PurchaseSummRptController: UIViewController, filterViewDelegate, clearFilt
         }
     }
     
+    func resetViews() {
+        
+        if FilterViewController.selectedDataObj.isEmpty {
+            vwColl.isHidden = true
+        } else {
+            vwColl.isHidden = false
+        }
+    }
     
     func resetData() {
         self.pcData = nil

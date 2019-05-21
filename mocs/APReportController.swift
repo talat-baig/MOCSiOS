@@ -20,6 +20,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var collVw: UICollectionView!
     
+    @IBOutlet weak var vwColl: UIView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -44,8 +45,8 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
 
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
-
-        fetchAllAPData()
+        self.resetViews()
+        self.fetchAllAPData()
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
@@ -188,6 +189,7 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
     
     func cancelFilter(filterString: String) {
         self.fetchAllAPData()
+        self.resetViews()
     }
     
     func applyFilter(filterString: String) {
@@ -202,15 +204,25 @@ class APReportController: UIViewController , filterViewDelegate, clearFilterDele
             return
         }
         self.fetchAllAPData()
+        self.resetViews()
         self.collVw.reloadData()
     }
     
     
     func clearAll() {
         self.collVw.reloadData()
+         self.resetViews()
         self.fetchAllAPData()
     }
     
+    func resetViews() {
+        
+        if FilterViewController.selectedDataObj.isEmpty {
+            vwColl.isHidden = true
+        } else {
+            vwColl.isHidden = false
+        }
+    }
     
     func resetData() {
         self.apData = nil

@@ -125,7 +125,6 @@ class PendingApprovalsController: UIViewController {
             let vc = UIStoryboard(name: "TCR", bundle: nil).instantiateViewController(withIdentifier: "TCRController") as! TCRController
             vc.navTitle = data.menuNames
             self.navigationController!.pushViewController(vc, animated: true)
-
             break
             
         case "epr":

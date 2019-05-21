@@ -13,9 +13,10 @@ class EPRefListCell: UITableViewCell {
     @IBOutlet weak var headerVw: UIView!
     @IBOutlet weak var outrVw: UIView!
 
-    @IBOutlet weak var buyrName: UILabel!
-    @IBOutlet weak var scNo: UILabel!
-    @IBOutlet weak var invNo: UILabel!
+    @IBOutlet weak var lblBuyr: UILabel!
+    @IBOutlet weak var lblSCNo: UILabel!
+    @IBOutlet weak var lblInvNo: UILabel!
+    @IBOutlet weak var lblRefId: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,6 +34,10 @@ class EPRefListCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    func setDataToViews(data : ExportPresData) {
+        
     }
     
 }

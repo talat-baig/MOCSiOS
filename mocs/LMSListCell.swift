@@ -16,7 +16,7 @@ class LMSListCell: UITableViewCell {
     @IBOutlet weak var lblTotalLeave: UILabel!
     @IBOutlet weak var lblUsedLeave: UILabel!
     @IBOutlet weak var lblBalLeave: UILabel!
-    @IBOutlet weak var lblRefId: UILabel!
+    @IBOutlet weak var lblEmpId: UILabel!
     
     
     override func awakeFromNib() {
@@ -38,6 +38,10 @@ class LMSListCell: UITableViewCell {
     }
     
     func setDataToViews(data : LMSReportData) {
-        
+     
+        lblTotalLeave.text = data.totalLeaves
+        lblEmpId.text = data.empID
+        lblUsedLeave.text = data.usedLeaves
+        lblBalLeave.text = data.balLeaves
     }
 }

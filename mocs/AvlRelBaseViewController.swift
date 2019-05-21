@@ -16,6 +16,7 @@ class AvlRelBaseViewController: UIViewController,filterViewDelegate , clearFilte
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var vwColl: UIView!
     @IBOutlet weak var collVw: UICollectionView!
     let arrImgName = [ "vessel", "product", "warehouse"]
     let arrTitle = ["Vessel", "Product" , "Warehouse"]
@@ -33,23 +34,37 @@ class AvlRelBaseViewController: UIViewController,filterViewDelegate , clearFilte
         vwTopHeader.btnRight.isHidden = false
         vwTopHeader.lblTitle.text = "Available Releases"
         vwTopHeader.lblSubTitle.isHidden = true
-
+        
         Helper.setupCollVwFitler(collVw: self.collVw)
-
+        
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
+        
+        self.resetViews()
     }
     
     func cancelFilter(filterString: String) {
+        self.resetViews()
     }
     
     
     func applyFilter(filterString: String) {
-       self.collVw.reloadData()
+        self.collVw.reloadData()
+        self.resetViews()
     }
     
     func clearAll() {
         self.collVw.reloadData()
+        self.resetViews()
+    }
+    
+    func resetViews() {
+        
+        if FilterViewController.selectedDataObj.isEmpty {
+            vwColl.isHidden = true
+        } else {
+            vwColl.isHidden = false
+        }
     }
     
     @objc func navigateToList(sender: UIButton) {
@@ -60,13 +75,13 @@ class AvlRelBaseViewController: UIViewController,filterViewDelegate , clearFilte
         }
         
         if sender.tag == 0 {
-//            getVesselData()
+            //            getVesselData()
             let vessl = self.storyboard?.instantiateViewController(withIdentifier: "VesselListViewController") as! VesselListViewController
             self.navigationController?.pushViewController(vessl, animated: true)
         } else if sender.tag == 1 {
             let prod = self.storyboard?.instantiateViewController(withIdentifier: "ProductListViewController") as! ProductListViewController
             self.navigationController?.pushViewController(prod, animated: true)
-
+            
         } else {
             let ware = self.storyboard?.instantiateViewController(withIdentifier: "WarehouseListViewController") as! WarehouseListViewController
             self.navigationController?.pushViewController(ware, animated: true)

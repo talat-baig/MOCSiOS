@@ -118,8 +118,6 @@ class EmployeeController: UIViewController , CNContactViewControllerDelegate , U
                         data.append(emp)
                     }
                     
-                    
-                    
                     data.sort { $0.name < $1.name }
                     
                     let emps = Array(Set(data.compactMap({ $0.name.first })))
@@ -212,7 +210,6 @@ extension EmployeeController: UITableViewDelegate, UITableViewDataSource, onMore
             tableView.separatorStyle = .none
         }
         return self.empSections.count
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -238,7 +235,6 @@ extension EmployeeController: UITableViewDelegate, UITableViewDataSource, onMore
             let data = empValues[indexPath.row]
             cell.setDataToView(data: data)
         }
-        
         return cell
     }
     

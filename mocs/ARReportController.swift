@@ -22,6 +22,8 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var collVw: UICollectionView!
 
+    @IBOutlet weak var vwColl: UIView!
+    
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -38,8 +40,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
 
         FilterViewController.filterDelegate = self
         FilterViewController.clearFilterDelegate = self
-
-        fetchAllARData()
+        self.resetViews()
         
         self.navigationController?.isNavigationBarHidden = true
         
@@ -50,6 +51,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
         vwTopHeader.lblTitle.text = "Accounts Receivables"
         vwTopHeader.lblSubTitle.isHidden = true
         
+        fetchAllARData()
     }
     
     
@@ -60,6 +62,7 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
     
     func cancelFilter(filterString: String) {
         self.fetchAllARData()
+        self.resetViews()
     }
     
     
@@ -76,11 +79,13 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
            self.resetData()
         }
         self.fetchAllARData()
+        self.resetViews()
         self.collVw.reloadData()
     }
     
     func clearAll() {
         self.collVw.reloadData()
+        self.resetViews()
         self.fetchAllARData()
     }
     
@@ -91,14 +96,19 @@ class ARReportController: UIViewController , filterViewDelegate ,clearFilterDele
         progressTimer = nil
     }
     
-
+    func resetViews() {
+        
+        if FilterViewController.selectedDataObj.isEmpty {
+            vwColl.isHidden = true
+        } else {
+            vwColl.isHidden = false
+        }
+    }
     
     @objc func fetchAllARData() {
         
         var messg = ""
         let arrFilterString = ["35+Ivory Coast+06", "25+Dubai+06"]
-        
-        
         
         if FilterViewController.getFilterString().contains(",") {
             Helper.showMessage(message: "Please select only one filter")

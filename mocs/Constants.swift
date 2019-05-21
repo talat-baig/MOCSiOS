@@ -55,6 +55,8 @@ struct AppColor {
     static let greenFlag = UIColor(red: 16.0/255.0, green: 155.0/255.0, blue: 53.0/255.0, alpha: 1.0)
     static let amberFlag = UIColor(red: 255.0/255.0, green: 194.0/255.0, blue: 0.0/255.0, alpha: 1.0)
     static let redFalg = UIColor(red: 239.0/255.0, green: 35.0/255.0, blue: 35.0/255.0, alpha: 1.0)
+    static let pheonixGreen = UIColor(red: 56.0/255.0, green: 174.0/255.0, blue: 71.0/255.0, alpha: 1.0)
+
     
     static let placeholderColor = UIColor(red: 0, green: 0, blue: 0.0980392, alpha: 0.22)
 }
@@ -410,16 +412,18 @@ struct Constant
         static let FR_LIST = ApiUrl.URL + "/Report/GetFundRemittanceSummary?apifund=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&Page=%d&reference=%@"
         
         static let FR_INSTRUMENT_DETAILS = ApiUrl.URL + "/Report/GetFundRemittanceSummaryRefWise?apifund=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&referenceID=%@"
-
-        
     }
     
     
     struct ExpPresentation {
     
         static let EP_LIST = ApiUrl.URL + "/Report/GetExportPresentationLandingData?apipres=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&Page=%d&reference=%@"
-
         
+    }
+    
+    struct LMS_RPT {
+        
+        static let LMS_LIST = ApiUrl.URL + "/Report/GetLmsReportLandingData?apipres=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&Page=%d&reference=%@"
         
     }
     

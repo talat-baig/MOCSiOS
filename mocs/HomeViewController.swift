@@ -12,28 +12,41 @@ import SwiftyJSON
 import MaterialShowcase
 
 class HomeViewController: UIViewController , filterViewDelegate , customPopUpDelegate {
-
     
     var arrayNews = NewsData()
+    
     var myView = CustomPopUpView()
-    var arrMenuTitle = ["Administrative","Business","Pending Approvals","Task Manager", "Employee Directory", "Help"]
+    
+    var arrMenuTitle = [["Administrative","All Forms are found here"],["Business","All Reports are found here"],["Pending Approvals","All Approvals are found here"],["Task Manager","All Task to be managed here"], ["Employee Directory","All Employee Data is found here"], ["Help","Find the oveview of the application here"]]
+    
     var arrMenuIcons = ["admin","briefcase","pencil","list","telephone", "info"]
+    
     var arrSubMenuTitle = [["Travel Claim Reimbursement (TCR) Form","Employee Claims Reimburstment (ECR) Form","Travel Request Form","Travel Ticket" , "Leave Request Form"], ["Accounts Receivables (AR) Report", "Accounts Payable Report", "Available Release Report", "Sales Summary Report","Purchase Summary Report", "Funds Receipt and Allocation", "Funds Payment & Settlement","Employee Advances,Settlements & Reimbursements Summary", "Cash and Bank Balance", "Customer Ledger","Payment Ledger", "Bank Charges Summary" ,"Shipment Advise Summary", "Credit Limit Utilisation Summary","Shipment Appropriation Summary" , "Funds Remittance Summary", "Export Presentation Report","Employee Leave (LMS) Report"]]
+    
     var helpDocViewer: UIDocumentInteractionController!
     
-    var filterTransactionManger = TransitionManager()
+    //    var filterTransactionManger = TransitionManager()
+    
     var listArray:[NewsData] = []
+    
     lazy var refreshController = UIRefreshControl()
     
     @IBOutlet weak var collVwNews: UICollectionView!
     
+    @IBOutlet weak var lblVersion: UILabel!
+    
     @IBOutlet weak var lblUserName: UILabel!
+    
     @IBOutlet weak var collVwMenus: UICollectionView!
-    //    @IBOutlet weak var tableView: UITableView!
+    
     @IBOutlet weak var barBtnFilter: UIBarButtonItem!
+    
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
+    
     @IBOutlet weak var scrlVw: UIScrollView!
+    
     @IBOutlet weak var collVwHeightConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var mySubVw: UIView!
     
     
@@ -42,6 +55,7 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         super.viewDidLoad()
         
         refreshController = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        self.collVwNews.addSubview(refreshController)
         FilterViewController.filterDelegate = self
         
         self.initialSetup()
@@ -62,13 +76,11 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         vwTopHeader.lblTitle.text = "OCS-Home"
         vwTopHeader.lblSubTitle.isHidden = true
         
-        self.title = "OCS-Home"
         
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+        //        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
         collVwNews.register(UINib.init(nibName: "NewsCollVwCell", bundle: nil), forCellWithReuseIdentifier: "newscell")
         collVwMenus.register(UINib.init(nibName: "HomeMenuCell", bundle: nil), forCellWithReuseIdentifier: "menuscell")
-        
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
@@ -83,14 +95,17 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         collVwMenus.reloadData()
         
         lblUserName.text = Session.user
+        
+        lblVersion.text =  String(format: "v%@",  Helper.getAppVersion())
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
         super.viewDidAppear(animated)
         
         if Helper.getUserDefaultForBool(forkey: "isAfterLogin") == true {
@@ -101,10 +116,6 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    @IBAction func filterBtnTapped(_ sender: Any) {
-        
     }
     
     func showCaseFilter() {
@@ -136,7 +147,8 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         
         let subMenuVC = self.storyboard?.instantiateViewController(withIdentifier: "SubMenuViewController") as! SubMenuViewController
         subMenuVC.arrMenuTitles = arrSubMenuTitle[index]
-        subMenuVC.navHeader = arrMenuTitle[index]
+        subMenuVC.navHeader = arrMenuTitle[index].first ?? ""
+        subMenuVC.isFilter = index == 0 ? false : true
         self.navigationController?.pushViewController(subMenuVC, animated: true)
     }
     
@@ -166,6 +178,7 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
     }
     
     func openHelpDoc() {
+        
         let newPath =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let newUrl = newPath.appendingPathComponent("mOCSHelp_iOS.pdf")
         
@@ -190,11 +203,16 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
     }
     
     @objc func populateList(){
+        
         if internetStatus != .notReachable {
+            
+//            self.view.showLoading()
+            
             let url = String.init(format: Constant.API.NEWS, Session.authKey)
             
             Alamofire.request(url).responseData(completionHandler: { response in
                 self.refreshController.endRefreshing()
+//                self.view.hideLoading()
                 
                 if Helper.isResponseValid(vc: self, response: response.result,tv: nil){
                     let jsonResponse = JSON(response.result.value!)
@@ -203,6 +221,7 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
                 }
             })
         } else {
+            
             Helper.showNoInternetMessg()
             //                Helper.showNoInternetState(vc: self, tb: tableView,action: #selector(populateList))
         }
@@ -213,6 +232,7 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
     }
     
     func parseAndAssign(response:String){
+        
         var jsonResponse = JSON.init(parseJSON: response)
         let jsonArray = jsonResponse.arrayObject as! [[String:AnyObject]]
         if jsonArray.count > 0{
@@ -242,7 +262,7 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         super.viewDidLayoutSubviews()
         self.collVwHeightConstraint.constant = self.collVwMenus.contentSize.height;
     }
-  
+    
     
     func onRightBtnTap() {
         self.logOutFromApp()
@@ -285,11 +305,9 @@ extension HomeViewController: MaterialShowcaseDelegate {
 extension HomeViewController: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
-        
     }
     
     func topMenuLeftButtonTapped(sender: Any) {
-        self.presentLeftMenuViewController(sender as AnyObject)
     }
     
     func topMenuRightButtonTapped(sender: Any) {
@@ -317,22 +335,20 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newscell", for: indexPath as IndexPath) as! NewsCollVwCell
             cell.setDataToView(newsData: listArray[indexPath.row])
             return cell
-            
         } else {
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "menuscell", for: indexPath as IndexPath) as! HomeMenuCell
             cell.imgVw.image = UIImage(named:  self.arrMenuIcons[indexPath.row])
-            cell.lblTitle.text = arrMenuTitle[indexPath.row]
-            cell.lblDesc.text = "This is a news feed Sub title description"
+            cell.lblTitle.text = arrMenuTitle[indexPath.row].first
+            cell.lblDesc.text = arrMenuTitle[indexPath.row].last
             return cell
         }
-        
     }
     
     func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
     {
         if collectionView == self.collVwNews {
-            return CGSize(width: collectionView.frame.size.width/1.6, height: 180)
+            return CGSize(width: collectionView.frame.size.width/1.05, height: 265)
         } else {
             return CGSize(width: collectionView.frame.size.width/2.09, height: 190)
         }
@@ -361,13 +377,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             }  else if indexPath.row == 5 {
                 
                 self.openHelpDoc()
-                
             } else {
+                
                 self.openSubMenu(index: indexPath.row)
             }
         }
     }
-    
 }
 
 
