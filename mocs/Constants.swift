@@ -417,9 +417,7 @@ struct Constant
     
     struct ExpPresentation {
     
-        static let EP_LIST = ApiUrl.URL + "/Report/GetExportPresentationLandingData?apipres=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&Page=%d&reference=%@"
-
-        
+        static let EP_LIST = ApiUrl.URL + "/Report/GetExportPresentationLandingData?apiexpo=33ddb2ee-59a5-428f-a0a5-7167859b8589&authexpo=%@&filter=%@&Page=%d&docreference=%@"
         
     }
     
