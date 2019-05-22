@@ -410,14 +410,14 @@ struct Constant
         static let FR_LIST = ApiUrl.URL + "/Report/GetFundRemittanceSummary?apifund=33ddb2ee-59a5-428f-a0a5-7167859b8589&authid=%@&filter=%@&Page=%d&reference=%@"
         
         static let FR_INSTRUMENT_DETAILS = ApiUrl.URL + "/Report/GetFundRemittanceSummaryRefWise?apifund=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&referenceID=%@"
-
-        
     }
     
     
     struct ExpPresentation {
     
         static let EP_LIST = ApiUrl.URL + "/Report/GetExportPresentationLandingData?apiexpo=33ddb2ee-59a5-428f-a0a5-7167859b8589&authexpo=%@&filter=%@&Page=%d&docreference=%@"
+        
+        static let EP_DETAILS = ApiUrl.URL + "/Report/GetExportPresentationRefWise?apiexp=33ddb2ee-59a5-428f-a0a5-7167859b8589&authref=%@&filter=%@&docreferenceID=%@"
         
     }
     

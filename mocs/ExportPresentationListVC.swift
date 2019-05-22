@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilterDelegate, UIGestureRecognizerDelegate {
-
+    
     var searchString = ""
     var currentPage : Int = 1
     var arrayList:[ExportPresData] = []
@@ -23,7 +25,7 @@ class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilt
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
     @IBOutlet weak var collVw: UICollectionView!
     @IBOutlet weak var btnMore: UIButton!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,8 +46,9 @@ class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilt
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = false
+        vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnRight.isHidden = false
+        vwTopHeader.btnBack.isHidden = false
         vwTopHeader.lblTitle.text = "Export Presentation Summary"
         vwTopHeader.lblSubTitle.isHidden = true
         
@@ -57,7 +60,7 @@ class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilt
         
         Helper.setupTableView(tableVw: self.tableView, nibName: "EPRefListCell" )
         self.refreshList()
-
+        
     }
     
     @objc func handleTap() {
@@ -102,6 +105,80 @@ class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilt
     
     @objc func populateList() {
         
+        if FilterViewController.getFilterString().contains(",") {
+            
+            Helper.showMessage(message: "Please select only one filter")
+            self.collVw.reloadData()
+            self.arrayList.removeAll()
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
+            return
+        }
+        
+        var newData :[ExportPresData] = []
+        
+        if internetStatus != .notReachable {
+            
+            let url = String.init(format: Constant.ExpPresentation.EP_LIST, Session.authKey,
+                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
+            print(url)
+            self.view.showLoading()
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                self.refreshControl.endRefreshing()
+                
+                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+                    
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+                    
+                    if arrayJson.count > 0 {
+                        
+                        do {
+                            // 1
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            // 2
+                            newData = try decoder.decode([ExportPresData].self, from: response.result.value!)
+                        } catch let error { // 3
+                            print("Error creating current newDataObj from JSON because: \(error)")
+                        }
+                        
+                        self.arrayList.append(contentsOf: newData)
+                        self.tableView.tableFooterView = nil
+                    } else {
+                        if self.arrayList.isEmpty {
+                            self.btnMore.isHidden = true
+                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
+                        } else {
+                            self.currentPage -= 1
+                            Helper.showMessage(message: "No more data found")
+                        }
+                    }
+                } else {
+                    if self.arrayList.isEmpty {
+                        self.btnMore.isHidden = true
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
+                    } else {
+                        self.currentPage -= 1
+                    }
+                    print("Invalid Reponse")
+                }
+                self.tableView.reloadData()
+            }))
+        } else {
+            self.refreshControl.endRefreshing()
+            Helper.showNoInternetMessg()
+            
+            if self.arrayList.isEmpty {
+                btnMore.isHidden = true
+                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+                self.tableView.reloadData()
+            } else {
+                self.currentPage -= 1
+            }
+        }
     }
     
     
@@ -141,7 +218,7 @@ class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilt
             }
         }
     }
-
+    
 }
 
 
@@ -152,7 +229,7 @@ extension ExportPresentationListVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -165,11 +242,16 @@ extension ExportPresentationListVC: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.layoutIfNeeded()
+        if self.arrayList.count > 0 {
+             cell.setDataToViews(data: self.arrayList[indexPath.row])
+        }
+       
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let epBillVC = self.storyboard?.instantiateViewController(withIdentifier: "EPBillDetailsController") as! EPBillDetailsController
+        epBillVC.docRef = self.arrayList[indexPath.row].docID ?? ""
         self.navigationController?.pushViewController(epBillVC, animated: true)
     }
     
@@ -208,6 +290,7 @@ extension ExportPresentationListVC: UISearchBarDelegate {
 extension ExportPresentationListVC: WC_HeaderViewDelegate {
     
     func backBtnTapped(sender: Any) {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func topMenuLeftButtonTapped(sender: Any) {

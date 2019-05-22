@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class EPBillDetailsController: UIViewController {
 
-
+    var docRef = ""
     var arrayList = [EPBillDetailData]()
     @IBOutlet weak var vwTopHeader: WC_HeaderView!
     @IBOutlet weak var tableView: UITableView!
@@ -31,6 +33,41 @@ class EPBillDetailsController: UIViewController {
     }
     
     @objc func populateList() {
+        
+        var newArr : [EPBillDetailData] = []
+        if internetStatus != .notReachable {
+            
+            self.view.showLoading()
+            let url:String = String.init(format: Constant.ExpPresentation.EP_DETAILS, Session.authKey,FilterViewController.getFilterString(), self.docRef )
+            
+            Alamofire.request(url).responseData(completionHandler: ({ response in
+                self.view.hideLoading()
+                if Helper.isResponseValid(vc: self, response: response.result){
+                    
+                    let jsonResp = JSON(response.result.value!)
+                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+                    
+                    if arrayJson.count > 0 {
+                        
+                        do {
+                            // 1
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            // 2
+                            newArr = try decoder.decode([EPBillDetailData].self, from: response.result.value!)
+                        } catch let error { // 3
+                            print("Error creating current newDataObj from JSON because: \(error)")
+                        }
+                        self.arrayList = newArr
+                    }
+                    self.tableView.setNeedsLayout()
+                    self.tableView.layoutIfNeeded()
+                    self.tableView.reloadData()
+                }
+            }))
+        } else {
+            Helper.showNoInternetMessg()
+        }
     }
 
 }
@@ -57,9 +94,9 @@ extension EPBillDetailsController: UITableViewDataSource, UITableViewDelegate {
         cell.layer.cornerRadius = 5
         cell.selectionStyle = .none
         cell.isUserInteractionEnabled = false
-        //        if self.arrayList.count > 0 {
-        //            cell.setDataToViews(data: self.arrayList[indexPath.row])
-        //        }
+                if self.arrayList.count > 0 {
+                    cell.setDataToView(data: self.arrayList[indexPath.row])
+                }
         return cell
     }
     

@@ -44,6 +44,18 @@ class EPBillDetailsCell: UITableViewCell {
     
     func setDataToView(data : EPBillDetailData) {
         
+        lblLoadPort.text = data.loadPort
+        lblDeschargePort.text = data.descPort
+        lblSOB.text = data.sob
+        lblETA.text = data.eta
+        lblCCY.text = data.ccy
+        lblDocsRcvdDate.text = data.docsRcvdDate
+        
+        lblPaymentMode.text = data.paymentMethod
+        lblBnkName.text = data.bankName
+        lblFundsRecptVal.text = data.fundsRcptVal
+        
+        lblReason.text = data.bankName
     }
     
 }
