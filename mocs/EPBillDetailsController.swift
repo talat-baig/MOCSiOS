@@ -42,13 +42,13 @@ class EPBillDetailsController: UIViewController {
             
             Alamofire.request(url).responseData(completionHandler: ({ response in
                 self.view.hideLoading()
+                
                 if Helper.isResponseValid(vc: self, response: response.result){
                     
                     let jsonResp = JSON(response.result.value!)
                     let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
                     
                     if arrayJson.count > 0 {
-                        
                         do {
                             // 1
                             let decoder = JSONDecoder()

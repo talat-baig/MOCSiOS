@@ -31,7 +31,7 @@ class Session {
         static let EXPSUBCATEGORY = "subcategory"
         static let NEWS = "news"
         static let FILTERLIST = "filterlist"
-        static let COMPANIES = "companylist"
+        static let COMPANIES = "companies"
         static let CITIES = "cities"
         static let LEAVETYPES = "leaveTypes"
 
@@ -184,13 +184,15 @@ class Session {
             UserDefaults.standard.set(empCode, forKey: Veriable.EMPCODE)
         }
     }
-    
-    public static var companies: String {
+//    let array = ["Hello", "World"]
+//    defaults.set(array, forKey: "SavedArray")
+
+    public static var companies: [String] {
         get{
-            return UserDefaults.standard.string(forKey: Veriable.COMPANIES) ?? ""
+            return UserDefaults.standard.stringArray(forKey: Veriable.COMPANIES) ?? []
         }
         set(companies){
-            UserDefaults.standard.set(currency, forKey: Veriable.COMPANIES)
+            UserDefaults.standard.set(companies, forKey: Veriable.COMPANIES)
         }
     }
     
@@ -202,6 +204,15 @@ class Session {
             UserDefaults.standard.set(cities, forKey: Veriable.CITIES)
         }
     }
+    
+//    public static var companiesList: String {
+//        get{
+//            return UserDefaults.standard.string(forKey: Veriable.CITIES) ?? ""
+//        }
+//        set(companiesList){
+//            UserDefaults.standard.set(companiesList, forKey: Veriable.CITIES)
+//        }
+//    }
     
     public static var leaveTypes: String {
         get{

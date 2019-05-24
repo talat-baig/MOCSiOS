@@ -27,7 +27,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     
     var dataObj : [DataObject] = []
     var treeView : RATreeView!
-    
+    var companies : [String] = []
     static var selectedDataObj : [DataObject] = []
     
     @IBOutlet weak var collVwFilter: UICollectionView!
@@ -52,7 +52,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
     
     @IBOutlet weak var vwCollection: UIView!
     @IBOutlet weak var collVw: UICollectionView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTreeView()
@@ -60,7 +60,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         
         
         Helper.setupCollVwFitler(collVw: self.collVwFilter)
-
+        
         //Added By RV : 13 May 18
         headerVwFilter = Bundle.main.loadNibNamed("FilterHeaderView", owner: nil, options: nil)![0] as? FilterHeaderView
         headerVwFilter?.frame = CGRect.init(x: 0, y: 0, width:  self.view.frame.size.width, height: 70 )
@@ -131,6 +131,19 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         }
     }
     
+    func getCompaniesArray(companiesStr : [String]) -> [String] {
+        
+        var compArr : [String] = []
+        
+        for newObj in companiesStr {
+            let index2 = newObj.range(of: " (", options: .backwards)?.lowerBound
+            let subStr = String(newObj[..<index2!])
+            print( "Substring--------",subStr)
+            compArr.append(subStr)
+        }
+        return compArr
+    }
+    
     func parseAndAssign(response:String){
         
         let jsonResponse = JSON.init(parseJSON: response)
@@ -138,6 +151,10 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
         if jsonResponse.arrayObject == nil {
             Helper.showNoInternetStateTreeVw(vc: self, treeVw: treeView, action: #selector(populateFilterList))
             return
+        }
+        
+        if self.companies.count > 0 {
+            self.companies.removeAll()
         }
         
         let jsonArr = jsonResponse.arrayObject as! [[String:AnyObject]]
@@ -150,6 +167,7 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             if companiesJson.arrayObject == nil {
                 Helper.showNoInternetStateTreeVw(vc: self, treeVw: treeView, action: #selector(populateFilterList))
                 return
+                
             }
             
             let companiesJsonArr = companiesJson.arrayObject as! [[String:AnyObject]]
@@ -160,8 +178,9 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                 for j in 0..<companiesJsonArr.count {
                     
                     let company = companiesJson[j]["Company"].stringValue
-                    let locs = companiesJson[j]["Locations"]
+                    self.companies.append(company)
                     
+                    let locs = companiesJson[j]["Locations"]
                     
                     var loc:[DataObject] = []
                     for k in 0..<locs.count {
@@ -180,14 +199,14 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                             
                             let sliced  = compStr.slice(from: "(", to: ")")
                             comp.compCode = sliced ?? "0"
-//                            print(comp.compCode)
+                            //                            print(comp.compCode)
                             
                             let loc = Location()
                             loc.locName = location
                             
                             let newBUString = busUnit[l]["BU"].stringValue
-                            let buSliced  = newBUString.slice(from: "(", to: ")")
-
+                            let buSliced = newBUString.slice(from: "(", to: ")")
+                            
                             //  print(buSliced!)
                             let newBName = busUnit[l]["BU"].stringValue
                             
@@ -204,6 +223,8 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
                     }
                     dataObject.append(DataObject(name: companiesJson[j]["Company"].stringValue, code:   companiesJson[j]["Company"].stringValue.slice(from: "(", to: ")")!, children: loc))
                 }
+                Session.companies = self.getCompaniesArray(companiesStr: self.companies)
+                print("Companieeeeeees - %d",Session.companies.count)
             } else {
                 vwBtnClear.isHidden = true
                 btnClear.isHidden = true

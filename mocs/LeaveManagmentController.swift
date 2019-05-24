@@ -14,7 +14,6 @@ import DropDown
 
 class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
-    
     var arrDept : [String] = []
     
     var fromDate = Date()
@@ -23,7 +22,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     var lmsData : [LMSEmpData] = []
     var lmsAllData : [LMSEmpData] = []
-    
     
     @IBOutlet weak var lblCount: UILabel!
     @IBOutlet weak var vwOuter: UIView!
@@ -42,7 +40,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     @IBOutlet weak var vwDept: UIView!
     @IBOutlet weak var vwFilter: UIView!
-    
     
     @IBOutlet var datePickerTool: UIView!
     
@@ -72,7 +69,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         self.handleTap()
-        //        self.initialSetup()
         self.getPendingLeaves()
     }
     
@@ -108,6 +104,8 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         txtFldEmpName.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: txtFldEmpName.frame.height))
         txtFldEmpName.leftViewMode = .always
         
+      //  txtFldEmpName.filterItems(Sessi)
+        
         let imgVwCal1 = UIImageView(image: UIImage(named: "calender"))
         if let size = imgVwCal1.image?.size {
             imgVwCal1.frame = CGRect(x: 0.0, y: 0.0, width: size.width + 10.0, height: size.height)
@@ -135,7 +133,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
     
     @objc func getPendingLeaves() {
         
-        
         self.getAllPendingLeaves { (res1) in
             if res1 {
                 self.getPendingLeavesByFilter { (res2, tpl) in
@@ -151,6 +148,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
             }
         }
     }
+    
     
     
     @objc func getAllPendingLeaves(comp : @escaping(Bool) -> ()) {
@@ -172,7 +170,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                     self.lmsAllData.removeAll()
                     if jsonArray.count > 0 {
                         
-                        for(_,j):(String,JSON) in jsonResponse{
+                        for(_,j):(String,JSON) in jsonResponse {
                             let data = LMSEmpData()
                             
                             data.empName = j["Employee Name"].stringValue
@@ -189,7 +187,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                             data.noOfLeaves = j["Applied Leaves"].stringValue
                             
                             newLMSData.append(data)
-                            
                         }
                         self.lmsAllData = newLMSData
                         comp(true)
@@ -202,7 +199,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
         } else {
             comp(false)
         }
-        
     }
     
     
@@ -266,7 +262,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                     comp(false, 0)
                 }
             }))
-            
         } else {
             Helper.showNoInternetMessg()
             comp(false, 0)

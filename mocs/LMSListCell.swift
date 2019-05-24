@@ -39,5 +39,9 @@ class LMSListCell: UITableViewCell {
     
     func setDataToViews(data : LMSReportData) {
         
+        lblUsedLeave.text = data.usedLeaves
+        lblRefId.text = data.empID
+        lblBalLeave.text = data.balLeaves
+        lblTotalLeave.text = data.totalLeaves
     }
 }
