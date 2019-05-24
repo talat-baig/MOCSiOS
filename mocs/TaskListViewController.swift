@@ -213,7 +213,7 @@ class TaskListViewController: UIViewController {
                     let responseJson = JSON(response.result.value!)
                     let jsonArray = responseJson.arrayObject as! [[String:AnyObject]]
                     if jsonArray.count > 0 {
-                        for(_,j):(String,JSON) in responseJson{
+                        for(_,j):(String,JSON) in responseJson {
                             let data = TaskDetails()
                             data.serialId = j["SERIALID"].stringValue
                             data.tName = j["NAME"].stringValue

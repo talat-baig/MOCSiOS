@@ -422,6 +422,12 @@ struct Constant
     }
     
     
+    struct LMS_Rept {
+        
+        static let LMS_LIST = ApiUrl.URL + "/Report/GetLMSReport?apilms=33ddb2ee-59a5-428f-a0a5-7167859b8589&authlms=%@&filter=%@&Page=%d&name=%@"
+    }
+    
+    
     struct EMPLOYEE {
         /**
          *Get All Employee Directory*

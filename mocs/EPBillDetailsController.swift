@@ -24,8 +24,8 @@ class EPBillDetailsController: UIViewController {
         vwTopHeader.btnLeft.isHidden = true
         vwTopHeader.btnBack.isHidden = false
         vwTopHeader.btnRight.isHidden = true
-        vwTopHeader.lblSubTitle.isHidden = false
-        vwTopHeader.lblTitle.text = ""
+        vwTopHeader.lblSubTitle.isHidden = true
+        vwTopHeader.lblTitle.text = docRef
         vwTopHeader.lblSubTitle.text = ""
         
         Helper.setupTableView(tableVw : self.tableView, nibName: "EPBillDetailsCell")
@@ -81,7 +81,7 @@ extension EPBillDetailsController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.arrayList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

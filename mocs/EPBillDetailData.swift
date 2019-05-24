@@ -20,8 +20,8 @@ struct EPBillDetailData: Decodable {
     let awbNo: String?
     let bnkRefNo: String?
     let docPic: String?
-    let stp: String?
-    let rtp: String?
+//    let stp: String?
+//    let rtp: String?
     let invQty: String?
     let invVal: String?
     let ccy: String?
@@ -40,8 +40,8 @@ struct EPBillDetailData: Decodable {
         case awbNo = "AWBNo"
         case bnkRefNo = "BankRefNo"
         case docPic = "DocPic"
-        case stp = "STP"
-        case rtp = "RTP"
+//        case stp = "STP"
+//        case rtp = "RTP"
         case invQty = "Invoice_Qty"
         case invVal = "Invoice_Value"
         case ccy = "CCY"

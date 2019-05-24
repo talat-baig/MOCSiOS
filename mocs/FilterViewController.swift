@@ -227,7 +227,6 @@ class FilterViewController: UIViewController, RATreeViewDelegate, RATreeViewData
             headerVwFilter?.isHidden = true
             //            collVwFilter.reloadData()
         }
-        
     }
     
     func cancelFilter() {

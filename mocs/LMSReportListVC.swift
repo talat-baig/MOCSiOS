@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import Alamofire
+import SwiftyJSON
 
 class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
 
@@ -62,13 +63,13 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
     @objc func refreshList() {
         self.arrayList.removeAll()
         self.currentPage = 1
-        self.populateList()
+//        self.populateList()
 //        self.resetViews()
     }
     
     func loadMoreItemsForList() {
         self.currentPage += 1
-        populateList()
+//        populateList()
     }
   
     @IBAction func btnMoreTapped(_ sender: Any) {
@@ -103,9 +104,72 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         }
     }
     
-    func populateList() {
-        
-    }
+//    func populateList() {
+//
+//        var newData :[ExportPresData] = []
+//
+//        if internetStatus != .notReachable {
+//
+//            let url = String.init(format: Constant.LMS_Rept.LMS_LIST , Session.authKey,
+//                                  Helper.encodeURL(url: FilterViewController.getFilterString()), self.currentPage, Helper.encodeURL(url: self.searchString))
+//            print(url)
+//            self.view.showLoading()
+//            Alamofire.request(url).responseData(completionHandler: ({ response in
+//                self.view.hideLoading()
+//                self.refreshControl.endRefreshing()
+//
+//                if Helper.isResponseValid(vc: self, response: response.result,tv: self.tableView){
+//
+//                    let jsonResp = JSON(response.result.value!)
+//                    let arrayJson = jsonResp.arrayObject as! [[String:AnyObject]]
+//
+//                    if arrayJson.count > 0 {
+//
+//                        do {
+//                            // 1
+//                            let decoder = JSONDecoder()
+//                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+//                            // 2
+//                            newData = try decoder.decode([ExportPresData].self, from: response.result.value!)
+//                        } catch let error { // 3
+//                            print("Error creating current newDataObj from JSON because: \(error)")
+//                        }
+//
+//                        self.arrayList.append(contentsOf: newData)
+//                        self.tableView.tableFooterView = nil
+//                    } else {
+//                        if self.arrayList.isEmpty {
+//                            self.btnMore.isHidden = true
+//                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
+//                        } else {
+//                            self.currentPage -= 1
+//                            Helper.showMessage(message: "No more data found")
+//                        }
+//                    }
+//                } else {
+//                    if self.arrayList.isEmpty {
+//                        self.btnMore.isHidden = true
+//                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
+//                    } else {
+//                        self.currentPage -= 1
+//                    }
+//                    print("Invalid Reponse")
+//                }
+//                self.tableView.reloadData()
+//            }))
+//        } else {
+//            self.refreshControl.endRefreshing()
+//            Helper.showNoInternetMessg()
+//
+//            if self.arrayList.isEmpty {
+//                btnMore.isHidden = true
+//                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+//                self.tableView.reloadData()
+//            } else {
+//                self.currentPage -= 1
+//            }
+//        }
+//    }
     
 }
 

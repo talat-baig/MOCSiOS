@@ -46,9 +46,9 @@ class ExportPresentationListVC: UIViewController , filterViewDelegate, clearFilt
         self.navigationController?.isNavigationBarHidden = true
         
         vwTopHeader.delegate = self
-        vwTopHeader.btnLeft.isHidden = true
+        vwTopHeader.btnLeft.isHidden = false
         vwTopHeader.btnRight.isHidden = false
-        vwTopHeader.btnBack.isHidden = false
+        vwTopHeader.btnBack.isHidden = true
         vwTopHeader.lblTitle.text = "Export Presentation Summary"
         vwTopHeader.lblSubTitle.isHidden = true
         
