@@ -37,7 +37,7 @@ class SubMenuViewController: UIViewController, filterViewDelegate {
         self.title = "OCS-Home"
         FilterViewController.filterDelegate = self
         
-        collVw.register(UINib.init(nibName: "SubMenuCell", bundle: nil), forCellWithReuseIdentifier: "submenucell")
+        collVw.register(UINib.init(nibName: "HomeMenuCell", bundle: nil), forCellWithReuseIdentifier: "submenucell")
         
         let flowLayoutMenu = UICollectionViewFlowLayout()
         flowLayoutMenu.scrollDirection = UICollectionView.ScrollDirection.vertical
@@ -61,7 +61,6 @@ class SubMenuViewController: UIViewController, filterViewDelegate {
             } else if index == 1 {
                 selVC = UIStoryboard(name: "EmployeeClaim", bundle: nil).instantiateViewController(withIdentifier: "EmployeeClaimController") as! EmployeeClaimController
                 
-                
             } else if index == 2 {
                 selVC = UIStoryboard(name: "TravelRequest", bundle: nil).instantiateViewController(withIdentifier: "TravelRequestController") as! TravelRequestController
                 
@@ -83,7 +82,6 @@ class SubMenuViewController: UIViewController, filterViewDelegate {
                 selVC = UIStoryboard(name: "AccountsPayable", bundle: nil).instantiateViewController(withIdentifier: "APReportController") as! APReportController
                 
             } else if index == 2 {
-                
                 selVC = UIStoryboard(name: "AvblReleases", bundle: nil).instantiateViewController(withIdentifier: "AvlRelBaseViewController") as! AvlRelBaseViewController
                 
             } else if index == 3 {
@@ -154,14 +152,17 @@ extension SubMenuViewController: UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "submenucell", for: indexPath as IndexPath) as! SubMenuCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "submenucell", for: indexPath as IndexPath) as! HomeMenuCell
+        cell.imgVw.image = UIImage(named: "briefcase")
         cell.lblTitle.text = arrMenuTitles[indexPath.row]
+        cell.lblDesc.isHidden = true
+
         return cell
     }
     
     func collectionView(_ collectionView : UICollectionView,layout  collectionViewLayout:UICollectionViewLayout,sizeForItemAt indexPath:IndexPath) -> CGSize
     {
-        return CGSize(width: collectionView.frame.size.width/2.09, height: 150)
+        return CGSize(width: collectionView.frame.size.width/2.09, height: 190)
     }
     
     
