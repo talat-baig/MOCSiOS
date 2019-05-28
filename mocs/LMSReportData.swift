@@ -11,16 +11,21 @@ import UIKit
 struct LMSReportData: Decodable {
     
     let empName: String?
-    let empID: String?
-    let totalLeaves: String?
-    let usedLeaves: String?
-    let balLeaves: String?
-
+    //    let empID: String?
+    let totalLeaves: Double?
+    let usedLeaves: Double?
+    let balLeaves: Double?
+    let balLeavesMonth : String?
+    let balLeavesYear : String?
+    
     enum CodingKeys : String, CodingKey {
-        case empName = "Employee Name"
-        case empID = "EmpId"
-        case totalLeaves = "Total Leaves"
-        case usedLeaves = "Used Leaves"
-        case balLeaves = "Balance Leaves"
+        case empName = "LeaveBalanceEmployeeName"
+        //        case empID = "EmpId"
+        case totalLeaves = "LeaveBalanceTotalLeaves"
+        case usedLeaves = "LeaveBalanceUsed"
+        case balLeaves = "LeaveBalanceNoOfLeave"
+        case balLeavesMonth = "LeaveBalanceMonth"
+        case balLeavesYear = "LeaveBalanceYear"
+        
     }
 }

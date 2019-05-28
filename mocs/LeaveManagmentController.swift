@@ -180,12 +180,10 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                             } else {
                                 data.reason =  j["Reason"].stringValue
                             }
-                            
                             data.empId = j["Employee Code"].stringValue
                             data.dept = j["Department"].stringValue
                             data.status = j["Reporting Manager Status"].stringValue
                             data.noOfLeaves = j["Applied Leaves"].stringValue
-                            
                             newLMSData.append(data)
                         }
                         self.lmsAllData = newLMSData
@@ -215,7 +213,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                 if Helper.isResponseValid(vc: self, response: response.result) {
                     
                     var lmsData1: [LMSEmpData] = []
-                    
                     let jsonResponse = JSON(response.result.value!)
                     let array = jsonResponse.arrayObject as! [[String:AnyObject]]
                     
@@ -236,11 +233,10 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                             lmsDta.empId = json["Employee Code"].stringValue
                             
                             if json["Reason"].stringValue == "" {
-                                lmsDta.reason =  "-"
+                                lmsDta.reason = "-"
                             } else {
-                                lmsDta.reason =  json["Reason"].stringValue
+                                lmsDta.reason = json["Reason"].stringValue
                             }
-                            
                             lmsDta.status = json["Reporting Manager Status"].stringValue
                             lmsData1.append(lmsDta)
                         }
@@ -249,9 +245,7 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
                         
                         let arrDep = self.lmsData.map { $0.dept }
                         
-                        //                        let uniqueUnordered = Array(Set(arrDep))
                         let uniqueOrdered = Array(NSOrderedSet(array: arrDep))
-                        
                         self.arrDept = uniqueOrdered as! [String]
                         
                         comp(true, totalCount)
@@ -282,7 +276,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
             txtFldTo.text = dateFormatter.string(from: datePicker.date) as String
             toDate = datePicker.date
         }
-        
         self.view.endEditing(true)
     }
     
@@ -312,7 +305,6 @@ class LeaveManagmentController: UIViewController , UIGestureRecognizerDelegate {
             txtFldFrom.text = ""
             btnDept.setTitle("Select Department", for: .normal)
         }
-        
     }
     
     @IBAction func btnDeptTapped(_ sender: Any) {

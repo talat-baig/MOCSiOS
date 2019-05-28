@@ -594,17 +594,25 @@ class Helper: UIView {
         } else {
             emptyView.button.isHidden = true
         }
-
+     
+//        let footerView = UIView(frame:  CGRect(x: 0, y: 100, width: tb.frame.size.width, height: tb.frame.size.height))
+//        footerView.backgroundColor = UIColor.blue
         tb.tableFooterView = emptyView
-        
+//
         emptyView.translatesAutoresizingMaskIntoConstraints = false
-        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
-        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
-        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
-        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+        emptyView.centerXAnchor.constraint(equalTo: tb.centerXAnchor).isActive = true
+//        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor ).isActive = true
+        emptyView.widthAnchor.constraint(equalTo: tb.widthAnchor, multiplier: 0.6).isActive = true
+         emptyView.topAnchor.constraint(equalTo: tb.topAnchor, constant: 30).isActive = true
+        emptyView.heightAnchor.constraint(equalTo: tb.heightAnchor, multiplier: 0.55).isActive = true
+        
+        // old code
+//        emptyView.translatesAutoresizingMaskIntoConstraints = false
+//        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+//        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+//        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+//        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
     }
-    
-    
     
     
     public static func getNavTitleString(modName : ModName) -> String {

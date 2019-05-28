@@ -15,7 +15,6 @@ import DropDown
 class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
     
     var searchString = ""
-//    var currentPage : Int = 1
     var arrayList:[LMSReportData] = []
     var arrLeaveType : [String] = []
     
@@ -24,9 +23,7 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
     @IBOutlet weak var vwCompFilter: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var srchBar: UISearchBar!
-    @IBOutlet weak var vwContent: UIView!
     lazy var refreshControl:UIRefreshControl = UIRefreshControl()
-    @IBOutlet weak var btnMore: UIButton!
     @IBOutlet weak var vwDept: UIView!
     
     @IBOutlet weak var btnLeaveType: UIButton!
@@ -35,7 +32,7 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
+        refreshControl = Helper.attachRefreshControl(vc: self, action: #selector(refreshList))
         tableView.addSubview(refreshControl)
         
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -52,16 +49,9 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         vwTopHeader.lblTitle.text = "Employee Leave (LMS) Report"
         vwTopHeader.lblSubTitle.isHidden = true
         
-        btnMore.isHidden = true
-        btnMore.layer.cornerRadius = 5.0
-        btnMore.layer.shadowRadius = 4.0
-        btnMore.layer.shadowOpacity = 0.8
-        btnMore.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
-        
         Helper.setupTableView(tableVw: self.tableView, nibName: "LMSListCell" )
         
         Helper.addBordersToView(view: txtFldCompany, borderColor : AppColor.lightGray.cgColor, borderWidth : 1)
-        
         Helper.addBordersToView(view: vwDept , borderColor : AppColor.lightGray.cgColor, borderWidth : 1)
         
         txtFldCompany.theme.font = UIFont.systemFont(ofSize: 14)
@@ -72,8 +62,11 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         txtFldCompany.leftViewMode = .always
         txtFldCompany.filterStrings(Session.companies)
         
-        btnLeaveType.setTitle("Select Leave Type", for: .normal)
+//        btnLeaveType.setTitle("Select Type", for: .normal)
         btnLeaveType.contentHorizontalAlignment = .left
+//        vwDept.alpha = 0.5
+        
+        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
         
         txtFldCompany.itemSelectionHandler = { filteredResults, itemPosition in
             // Just in case you need the item position
@@ -81,17 +74,29 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
             print("Item at position \(itemPosition): \(item.title)")
             
             self.txtFldCompany.text = item.title
-            
             self.getLeaveTypesByCompany(compStr: item.title )
+            self.enableDisableTOLBtn()
         }
         
+        
+        self.enableDisableTOLBtn()
     }
+    
     
     @objc func handleTap() {
         self.view.endEditing(true)
     }
     
+    @objc func refreshList() {
     
+        if txtFldCompany.text == "" {
+            Helper.showMessage(message: "Please Select Company")
+            self.refreshControl.endRefreshing()
+            return
+        }
+        self.arrayList.removeAll()
+        self.populateList()
+    }
     
     @IBAction func btnLeaveTypeTapped(_ sender: Any) {
         
@@ -100,10 +105,9 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         dropDown.dataSource = self.arrLeaveType
         dropDown.selectionAction = { [weak self] (index, item) in
             self?.btnLeaveType.setTitle(item, for: .normal)
-            self?.populateList()
+            self?.refreshList()
         }
         dropDown.show()
-        
         self.handleTap()
     }
     
@@ -120,26 +124,10 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         return true
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        let contentOffset = scrollView.contentOffset.y + scrollView.frame.size.height
-        let contentHeight = scrollView.contentSize.height
-        
-        if ((contentOffset) >= (contentHeight)) && self.arrayList.count > 9 {
-            DispatchQueue.main.async {
-                self.btnMore.isHidden = false
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.btnMore.isHidden = true
-            }
-        }
-    }
-    
     
     func getLeaveTypesByCompany(compStr : String)  {
         
-        var leavTypArr : [String] = []
+        var leavTypArr : [String] = ["All"]
         
         if internetStatus != .notReachable {
             
@@ -153,12 +141,14 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
                 if Helper.isResponseValid(vc: self, response: leaveResp.result) {
                     
                     let responseJson = JSON(leaveResp.result.value!)
+                    
                     for(_,j):(String,JSON) in responseJson {
                         let leavType = j["LeaveType"].stringValue
                         leavTypArr.append(leavType)
                     }
-                    
                     self.arrLeaveType = leavTypArr
+                    self.enableDisableTOLBtn()
+                    self.refreshList()
                 }
             }))
         } else {
@@ -166,13 +156,28 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         }
     }
     
+    func enableDisableTOLBtn(){
+        
+        if self.arrLeaveType.count < 2 {
+            btnLeaveType.setTitle("All", for: .normal)
+            btnLeaveType.isEnabled = false
+            srchBar.isHidden = true
+            vwDept.alpha = 0.50
+        } else {
+            btnLeaveType.isEnabled = true
+            srchBar.isHidden = false
+            vwDept.alpha = 1.0
+        }
+    }
     
-//    @objc func refreshList() {
-//        self.arrayList.removeAll()
-//        self.currentPage = 1
-//        self.populateList()
-//        self.resetViews()
+//    private func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
+//    {
+//        if (touch.view?.isDescendant(of: tableView))! {
+//            return false
+//        }
+//        return true
 //    }
+//
     
     @objc func populateList() {
         
@@ -180,9 +185,16 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
         
         if internetStatus != .notReachable {
             
+            let leavType = btnLeaveType.titleLabel?.text ?? ""
+            let compName = txtFldCompany.text ?? ""
+            
+//            if compName == "" {
+//                Helper.showMessage(message: "Please Select Company")
+//                return
+//            }
             
             let url = String.init(format: Constant.LMS_Rept.LMS_LIST , Session.authKey,
-                                  Helper.encodeURL(url: txtFldCompany.text ?? "") , 1, Helper.encodeURL(url: self.searchString), btnLeaveType.titleLabel?.text ?? "")
+                                  Helper.encodeURL(url: compName) , 1, Helper.encodeURL(url: self.searchString), leavType == "All" ? "" : leavType )
             print(url)
             self.view.showLoading()
             Alamofire.request(url).responseData(completionHandler: ({ response in
@@ -197,51 +209,29 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
                     if arrayJson.count > 0 {
                         
                         do {
-                            // 1
                             let decoder = JSONDecoder()
                             decoder.keyDecodingStrategy = .convertFromSnakeCase
-                            // 2
                             newData = try decoder.decode([LMSReportData].self, from: response.result.value!)
                         } catch let error { // 3
                             print("Error creating current newDataObj from JSON because: \(error)")
                         }
-                        
                         self.arrayList.append(contentsOf: newData)
                         self.tableView.tableFooterView = nil
                     } else {
-                        if self.arrayList.isEmpty {
-                            self.btnMore.isHidden = true
-                            Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
-                        } else {
-//                            self.currentPage -= 1
-                            Helper.showMessage(message: "No more data found")
-                        }
+                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
                     }
                 } else {
-                    if self.arrayList.isEmpty {
-                        self.btnMore.isHidden = true
-                        Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.populateList))
-                    } else {
-//                        self.currentPage -= 1
-                    }
-                    print("Invalid Reponse")
+                    Helper.showNoFilterState(vc: self, tb: self.tableView, reports: ModName.isReport, action: #selector(self.refreshList))
                 }
                 self.tableView.reloadData()
             }))
         } else {
             self.refreshControl.endRefreshing()
             Helper.showNoInternetMessg()
-            
-            if self.arrayList.isEmpty {
-                btnMore.isHidden = true
-                Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(populateList))
-                self.tableView.reloadData()
-            } else {
-//                self.currentPage -= 1
-            }
+            Helper.showNoInternetState(vc: self, tb: tableView, action: #selector(refreshList))
+            self.tableView.reloadData()
         }
     }
-    
 }
 
 
@@ -269,9 +259,14 @@ extension LMSReportListVC: UITableViewDataSource, UITableViewDelegate {
         if self.arrayList.count > 0 {
             cell.setDataToViews(data: self.arrayList[indexPath.row])
         }
-        
         return cell
     }
+    
+//    func tableView(_ ableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        let footerView = UIView(frame:  CGRect(x: 0, y: 100, width: 200, height: 400))
+//        footerView.backgroundColor = UIColor.blue
+//        return footerView
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
@@ -283,24 +278,24 @@ extension LMSReportListVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if  searchText.isEmpty {
             self.searchString = ""
+            self.refreshList()
             self.handleTap()
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        
         self.searchString = ""
+        self.refreshList()
         self.handleTap()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         srchBar.resignFirstResponder()
         guard let searchTxt = srchBar.text else {
             return
         }
         self.searchString = searchTxt
-        self.populateList()
+        self.refreshList()
         self.handleTap()
     }
 }
@@ -314,8 +309,6 @@ extension LMSReportListVC: UITextFieldDelegate {
         }
         return true
     }
-    
-    
     
 }
 

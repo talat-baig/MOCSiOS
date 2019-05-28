@@ -14,7 +14,10 @@ class LMSListCell: UITableViewCell {
     @IBOutlet weak var outrVw: UIView!
     
     @IBOutlet weak var lblTotalLeave: UILabel!
-    @IBOutlet weak var lblUsedLeave: UILabel!
+//    @IBOutlet weak var lblUsedLeave: UILabel!
+    @IBOutlet weak var lblBalMonth: UILabel!
+    @IBOutlet weak var lblBalYear: UILabel!
+
     @IBOutlet weak var lblBalLeave: UILabel!
     @IBOutlet weak var lblRefId: UILabel!
     
@@ -39,9 +42,11 @@ class LMSListCell: UITableViewCell {
     
     func setDataToViews(data : LMSReportData) {
         
-        lblUsedLeave.text = data.usedLeaves
-        lblRefId.text = data.empID
-        lblBalLeave.text = data.balLeaves
-        lblTotalLeave.text = data.totalLeaves
+//        lblUsedLeave.text = String(format: "%0.2f",data.usedLeaves ?? 0)
+        lblRefId.text = String(format: "%@",data.empName ?? "-")
+        lblBalLeave.text = String(format: "%0.2f",data.balLeaves ?? 0)
+        lblTotalLeave.text = String(format: "%0.2f",data.totalLeaves ?? 0)
+        lblBalMonth.text = String(format: "%@",data.balLeavesMonth ?? "-")
+        lblBalYear.text = String(format: "%@",data.balLeavesYear ?? "-")
     }
 }

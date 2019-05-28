@@ -50,7 +50,7 @@ class EPBillDetailsCell: UITableViewCell {
     
     func setDataToView(data : EPBillDetailData) {
         
-//        lblBLNo.text = data.b
+        lblBLNo.text = data.uniqBLNo
         lblLoadPort.text = data.loadPort
         lblDeschargePort.text = data.descPort
         lblSOB.text = data.sob

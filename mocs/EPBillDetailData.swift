@@ -27,6 +27,7 @@ struct EPBillDetailData: Decodable {
     let ccy: String?
     let reason: String?
     let fundsRcptVal: String?
+    let uniqBLNo: String?
 
     enum CodingKeys : String, CodingKey {
         
@@ -47,6 +48,9 @@ struct EPBillDetailData: Decodable {
         case ccy = "CCY"
         case reason = "Reason for Delay"
         case fundsRcptVal = "Funds Receipts Value"
+        
+         case uniqBLNo = "BLNo"
+
     }
 
 }
