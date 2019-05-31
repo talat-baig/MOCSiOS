@@ -153,7 +153,7 @@ extension SubMenuViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "submenucell", for: indexPath as IndexPath) as! HomeMenuCell
-        cell.imgVw.image = UIImage(named: "briefcase")
+        cell.imgVw.image = UIImage(named: "pheonix_leaf")
         cell.lblTitle.text = arrMenuTitles[indexPath.row]
         cell.lblDesc.isHidden = true
 

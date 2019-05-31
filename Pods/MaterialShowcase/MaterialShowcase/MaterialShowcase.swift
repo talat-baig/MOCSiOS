@@ -8,8 +8,8 @@
 import UIKit
 
 @objc public protocol MaterialShowcaseDelegate: class {
-  @objc optional func showCaseWillDismiss(showcase: MaterialShowcase)
-  @objc optional func showCaseDidDismiss(showcase: MaterialShowcase)
+  @objc optional func showCaseWillDismiss(showcase: MaterialShowcase, didTapTarget:Bool)
+  @objc optional func showCaseDidDismiss(showcase: MaterialShowcase, didTapTarget:Bool)
 }
 
 public class MaterialShowcase: UIView {
@@ -29,7 +29,7 @@ public class MaterialShowcase: UIView {
   
   // Other default properties
   let LABEL_DEFAULT_HEIGHT: CGFloat = 50
-  let BACKGROUND_DEFAULT_COLOR = UIColor.fromHex(hexString: "#458AFF")
+  let BACKGROUND_DEFAULT_COLOR = UIColor.fromHex(hexString: "#2196F3")
   let TARGET_HOLDER_COLOR = UIColor.white
   
   // MARK: Animation properties
@@ -61,7 +61,7 @@ public class MaterialShowcase: UIView {
   // Tap zone settings
   // - false: recognize tap from all displayed showcase.
   // - true: recognize tap for targetView area only.
-  @objc public var isTapRecognizerForTagretView: Bool = false
+  @objc public var isTapRecognizerForTargetView: Bool = false
   // Target
   @objc public var shouldSetTintColor: Bool = true
   @objc public var targetTintColor: UIColor!
@@ -230,7 +230,7 @@ extension MaterialShowcase {
   }
   
   func startAnimations() {
-    let options: UIViewKeyframeAnimationOptions = [.curveEaseInOut, .repeat]
+    let options: UIView.KeyframeAnimationOptions = [.curveEaseInOut, .repeat]
     UIView.animateKeyframes(withDuration: 1, delay: 0, options: options, animations: {
       UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5, animations: {
         self.targetRippleView.alpha = self.ANI_RIPPLE_ALPHA
@@ -274,19 +274,20 @@ extension MaterialShowcase {
     // Disable subview interaction to let users click to general view only
     subviews.forEach({$0.isUserInteractionEnabled = false})
     
-    if isTapRecognizerForTagretView && targetHolderColor != .clear{
+    if isTapRecognizerForTargetView {
       //Add gesture recognizer for targetCopyView
-      targetCopyView.addGestureRecognizer(tapGestureRecoganizer())
-      targetCopyView.isUserInteractionEnabled = true
+      hiddenTargetHolderView.addGestureRecognizer(tapGestureRecoganizer())
+      hiddenTargetHolderView.isUserInteractionEnabled = true
     } else {
       // Add gesture recognizer for both container and its subview
       addGestureRecognizer(tapGestureRecoganizer())
+      hiddenTargetHolderView.addGestureRecognizer(tapGestureRecoganizer())
+      hiddenTargetHolderView.isUserInteractionEnabled = true
     }
   }
   
   /// Add background which is a big circle
   private func addBackground() {
-    
     switch self.backgroundViewType {
     case .circle:
       let radius: CGFloat!
@@ -309,19 +310,17 @@ extension MaterialShowcase {
     backgroundView.backgroundColor = backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha)
     insertSubview(backgroundView, belowSubview: targetRippleView)
     addBackgroundMask(with: targetHolderRadius, in: backgroundView)
-
   }
   
   private func addBackgroundMask(with radius: CGFloat, in view: UIView) {
-    
     let center = backgroundViewType == .circle ? view.bounds.center : targetRippleView.center
     let mutablePath = CGMutablePath()
     mutablePath.addRect(view.bounds)
-    mutablePath.addArc(center: center, radius: radius, startAngle: 0.0, endAngle: 2 * 3.14, clockwise: false)
+    mutablePath.addArc(center: center, radius: radius, startAngle: 0.0, endAngle: 2 * .pi, clockwise: false)
     
     let mask = CAShapeLayer()
     mask.path = mutablePath
-    mask.fillRule = kCAFillRuleEvenOdd
+    mask.fillRule = CAShapeLayerFillRule.evenOdd
     
     view.layer.mask = mask
   }
@@ -334,14 +333,12 @@ extension MaterialShowcase {
     targetRippleView.alpha = 0.0 //set it invisible
     targetRippleView.asCircle()
     addSubview(targetRippleView)
-    
   }
-	
   
   /// A circle-shape background view of target view
   private func addTargetHolder(at center: CGPoint) {
     hiddenTargetHolderView = UIView()
-    hiddenTargetHolderView.isHidden = true
+    hiddenTargetHolderView.backgroundColor = .clear
     targetHolderView = UIView(frame: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
     targetHolderView.center = center
     targetHolderView.backgroundColor = targetHolderColor
@@ -463,15 +460,15 @@ extension MaterialShowcase {
     return tapGesture
   }
   
-  @objc private func tapGestureSelector() {
-    completeShowcase()
+  @objc private func tapGestureSelector(tapGesture:UITapGestureRecognizer) {
+    completeShowcase(didTapTarget: tapGesture.view === hiddenTargetHolderView)
   }
   
   /// Default action when dimissing showcase
   /// Notifies delegate, removes views, and handles out-going animation
-  @objc public func completeShowcase(animated: Bool = true) {
+  @objc public func completeShowcase(animated: Bool = true, didTapTarget: Bool = false) {
     if delegate != nil && delegate?.showCaseDidDismiss != nil {
-      delegate?.showCaseWillDismiss?(showcase: self)
+      delegate?.showCaseWillDismiss?(showcase: self, didTapTarget: didTapTarget)
     }
     if animated {
       targetRippleView.removeFromSuperview()
@@ -497,7 +494,7 @@ extension MaterialShowcase {
       self.removeFromSuperview()
     }
     if delegate != nil && delegate?.showCaseDidDismiss != nil {
-      delegate?.showCaseDidDismiss?(showcase: self)
+      delegate?.showCaseDidDismiss?(showcase: self, didTapTarget: didTapTarget)
     }
   }
   

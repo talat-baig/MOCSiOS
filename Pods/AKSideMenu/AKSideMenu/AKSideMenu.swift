@@ -122,29 +122,29 @@ import UIKit
         self.menuViewContainer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         if let leftMenuViewController = self.leftMenuViewController {
-            self.addChildViewController(leftMenuViewController)
+            self.addChild(leftMenuViewController)
             leftMenuViewController.view.frame = self.view.bounds
             leftMenuViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             self.menuViewContainer.addSubview(leftMenuViewController.view)
-            leftMenuViewController.didMove(toParentViewController: self)
+            leftMenuViewController.didMove(toParent: self)
         }
         
         if let rightMenuViewController = self.rightMenuViewController {
-            self.addChildViewController(rightMenuViewController)
+            self.addChild(rightMenuViewController)
             rightMenuViewController.view.frame = self.view.bounds
             rightMenuViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             self.menuViewContainer.addSubview(rightMenuViewController.view)
-            rightMenuViewController.didMove(toParentViewController: self)
+            rightMenuViewController.didMove(toParent: self)
         }
         
         self.contentViewContainer.frame = self.view.bounds
         self.contentViewContainer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         if let contentViewController = self.contentViewController {
-            self.addChildViewController(contentViewController)
+            self.addChild(contentViewController)
             contentViewController.view.frame = self.view.bounds
             self.contentViewContainer.addSubview(contentViewController.view)
-            contentViewController.didMove(toParentViewController: self)
+            contentViewController.didMove(toParent: self)
         }
         
         if self.fadeMenuView {
@@ -236,7 +236,7 @@ import UIKit
         if !animated {
             self.contentViewController = contentViewController
         } else {
-            self.addChildViewController(contentViewController)
+            self.addChild(contentViewController)
             contentViewController.view.alpha = 0
             contentViewController.view.frame = self.contentViewContainer.bounds
             self.contentViewContainer.addSubview(contentViewController.view)
@@ -247,7 +247,7 @@ import UIKit
                 if let contentViewController = self.contentViewController {
                     self.hideViewController(contentViewController)
                 }
-                contentViewController.didMove(toParentViewController: self)
+                contentViewController.didMove(toParent: self)
                 self.contentViewController = contentViewController
                 
                 self.statusBarNeedsAppearanceUpdate()
@@ -307,7 +307,11 @@ import UIKit
                 self.contentViewContainer.transform = .identity
             }
             
-            self.contentViewContainer.center = CGPoint(x: (UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) ? self.contentViewInLandscapeOffsetCenterX + self.view.frame.width : self.contentViewInPortraitOffsetCenterX + self.view.frame.width), y: self.contentViewContainer.center.y)
+            let x3 = UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.landscapeRight ||
+                UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.landscapeLeft ? self.contentViewInLandscapeOffsetCenterX + self.view.frame.width : self.contentViewInPortraitOffsetCenterX + self.view.frame.width
+            
+            self.contentViewContainer.center = CGPoint(x: x3, y: self.contentViewContainer.center.y)
+//            self.contentViewContainer.center = CGPoint(x: (UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) ? self.contentViewInLandscapeOffsetCenterX + self.view.frame.width : self.contentViewInPortraitOffsetCenterX + self.view.frame.width), y: self.contentViewContainer.center.y)
             
             if self.fadeMenuView {
                 self.menuViewContainer.alpha = 1.0
@@ -377,9 +381,9 @@ import UIKit
     }
     
     func hideViewController(_ viewController: UIViewController) {
-        viewController.willMove(toParentViewController: nil)
+        viewController.willMove(toParent: nil)
         viewController.view.removeFromSuperview()
-        viewController.removeFromParentViewController()
+        viewController.removeFromParent()
     }
     
     func hideMenuViewControllerAnimated(_ animated: Bool) {
@@ -448,7 +452,7 @@ import UIKit
             return
         }
         
-        self.contentButton.autoresizingMask = UIViewAutoresizing()
+        self.contentButton.autoresizingMask = UIView.AutoresizingMask()
         self.contentButton.frame = self.contentViewContainer.bounds
         self.contentButton.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.contentViewContainer.addSubview(self.contentButton)
@@ -763,14 +767,14 @@ import UIKit
             
             self._leftMenuViewController = newViewController
             
-            self.addChildViewController(newViewController)
+            self.addChild(newViewController)
             newViewController.view.frame = self.view.bounds
             newViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             self.menuViewContainer.addSubview(newViewController.view)
-            newViewController.didMove(toParentViewController: self)
+            newViewController.didMove(toParent: self)
             
             self.addContentViewControllerMotionEffects()
-            self.view.bringSubview(toFront: self.contentViewContainer)
+            self.view.bringSubviewToFront(self.contentViewContainer)
         }
     }
     
@@ -794,14 +798,14 @@ import UIKit
             
             self._rightMenuViewController = newViewController
             
-            self.addChildViewController(newViewController)
+            self.addChild(newViewController)
             newViewController.view.frame = self.view.bounds
             newViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             self.menuViewContainer.addSubview(newViewController.view)
-            newViewController.didMove(toParentViewController: self)
+            newViewController.didMove(toParent: self)
             
             self.addContentViewControllerMotionEffects()
-            self.view.bringSubview(toFront: self.contentViewContainer)
+            self.view.bringSubviewToFront(self.contentViewContainer)
         }
     }
     
@@ -829,11 +833,25 @@ import UIKit
             }
             
             let center: CGPoint
+            
+            
+            let x1 = UIDevice.current.orientation == UIDeviceOrientation.landscapeRight ||
+                UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft ? self.contentViewInLandscapeOffsetCenterX + self.view.frame.width : self.contentViewInPortraitOffsetCenterX + self.view.frame.width
+            
+            let x2 = UIDevice.current.orientation == UIDeviceOrientation.landscapeRight ||
+                UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft ? -self.contentViewInLandscapeOffsetCenterX : -self.contentViewInPortraitOffsetCenterX
+            
             if self.leftMenuVisible {
-                center = CGPoint(x: (UIDeviceOrientationIsLandscape(UIDevice.current.orientation) ? self.contentViewInLandscapeOffsetCenterX + self.view.frame.width : self.contentViewInPortraitOffsetCenterX + self.view.frame.width), y: self.contentViewContainer.center.y)
+                center = CGPoint(x: x1, y: self.contentViewContainer.center.y)
             } else {
-                center = CGPoint(x: (UIDeviceOrientationIsLandscape(UIDevice.current.orientation) ? -self.contentViewInLandscapeOffsetCenterX : -self.contentViewInPortraitOffsetCenterX), y: self.contentViewContainer.center.y)
+                center = CGPoint(x: x2, y: self.contentViewContainer.center.y)
             }
+//            if self.leftMenuVisible {
+//                center = CGPoint(x: (UIDeviceOrientationIsLandscape(UIDevice.current.orientation) ? self.contentViewInLandscapeOffsetCenterX + self.view.frame.width : self.contentViewInPortraitOffsetCenterX + self.view.frame.width), y: self.contentViewContainer.center.y)
+//            } else {
+//                center = CGPoint(x: (UIDeviceOrientationIsLandscape(UIDevice.current.orientation) ? -self.contentViewInLandscapeOffsetCenterX : -self.contentViewInPortraitOffsetCenterX), y: self.contentViewContainer.center.y)
+//            }
+            
             self.contentViewContainer.center = center
         }
         self.updateContentViewShadow()

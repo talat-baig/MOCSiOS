@@ -135,7 +135,6 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
                         } catch let error { // 3
                             print("Error creating current newDataObj from JSON because: \(error)")
                         }
-                        
                         self.arrayList.append(contentsOf: newData)
                         self.tableView.tableFooterView = nil
                     } else {
@@ -170,9 +169,7 @@ class LMSReportListVC: UIViewController , UIGestureRecognizerDelegate {
                 self.currentPage -= 1
             }
         }
-        
     }
-    
 }
 
 

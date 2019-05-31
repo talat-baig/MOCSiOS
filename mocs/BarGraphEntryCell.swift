@@ -61,7 +61,7 @@ func setupDataToViews(dataEntry : [BarChartDataEntry] , arrLabel : [String], arr
         rightAxis.axisMinimum = 0
         rightAxis.drawGridLinesEnabled = false
         
-        let chartDataSet = BarChartDataSet(values: dataEntry, label: "")
+    let chartDataSet = BarChartDataSet(entries: dataEntry, label: "")
         chartDataSet.colors = ChartColorTemplates.vordiplom()
         chartDataSet.drawValuesEnabled = false
         

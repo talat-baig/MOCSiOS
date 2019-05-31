@@ -539,7 +539,8 @@ class Helper: UIView {
         tableVw.rowHeight = UITableView.automaticDimension
     }
     
-    public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: ModName, action:Selector? = nil){
+    
+    public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: ModName, action:Selector? = nil) {
         
         let emptyView = EmptyState()
         emptyView.image = UIImage(named: "no_result")!
@@ -574,7 +575,7 @@ class Helper: UIView {
             
         case ModName.isReport :
             emptyView.message = "No Data for the current\nTry by changing filter"
-
+            
         case ModName.isApprovals :
             emptyView.message = " No data for the current "
             
@@ -582,7 +583,6 @@ class Helper: UIView {
             emptyView.message = "No Pending Approval Data for the current\nTry going back and changing filter"
         case ModName.isLMSApprovalDetails :
             emptyView.message = "No Leave Data Found for the current employee"
-//            emptyView.buttonText = "TRY AGAIN"
             
         default :
             emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
@@ -594,15 +594,82 @@ class Helper: UIView {
         } else {
             emptyView.button.isHidden = true
         }
-
-        tb.tableFooterView = emptyView
         
+        tb.tableFooterView = emptyView
+
         emptyView.translatesAutoresizingMaskIntoConstraints = false
-        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
-        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
-        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
-        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+        emptyView.centerXAnchor.constraint(equalTo: tb.centerXAnchor).isActive = true
+        emptyView.widthAnchor.constraint(equalTo: tb.widthAnchor, multiplier: 0.6).isActive = true
+        emptyView.topAnchor.constraint(equalTo: tb.topAnchor, constant: 30).isActive = true
+        emptyView.heightAnchor.constraint(equalTo: tb.heightAnchor, multiplier: 0.55).isActive = true
     }
+    
+    
+    
+//    public static func showNoFilterState(vc:UIViewController, tb:UITableView, reports: ModName, action:Selector? = nil){
+//
+//        let emptyView = EmptyState()
+//        emptyView.image = UIImage(named: "no_result")!
+//        emptyView.buttonText = "TRY AGAIN"
+//
+//        switch reports {
+//
+//        case ModName.isARReport :
+//            emptyView.message = "No AR Data for the current\nTry by changing filter"
+//
+//        case ModName.isAPReport :
+//            emptyView.message = "No AP Data for the current\nTry by changing filter"
+//
+//        case ModName.isTrvReq :
+//            emptyView.message = "No Travel Request Data found \nTry again by relaoding"
+//            emptyView.buttonText = "RELOAD"
+//
+//        case ModName.isCP :
+//            emptyView.message = "No Counterparty Data found \n Try again by reloading"
+//
+//        case ModName.isSC :
+//            emptyView.message = "No Sales Summary Data for the current\nTry by changing filter"
+//
+//        case ModName.isPC :
+//            emptyView.message = "No Purchase Summary Data for the current\nTry by changing filter"
+//
+//        case ModName.isFRA :
+//            emptyView.message = "No Funds Receipt Summary Data for the current\nTry by changing filter"
+//
+//        case ModName.isFPS :
+//            emptyView.message = "No Funds Payment & Settlement Data for the current\nTry by changing filter"
+//
+//        case ModName.isReport :
+//            emptyView.message = "No Data for the current\nTry by changing filter"
+//
+//        case ModName.isApprovals :
+//            emptyView.message = " No data for the current "
+//
+//        case ModName.isLMSApproval :
+//            emptyView.message = "No Pending Approval Data for the current\nTry going back and changing filter"
+//        case ModName.isLMSApprovalDetails :
+//            emptyView.message = "No Leave Data Found for the current employee"
+////            emptyView.buttonText = "TRY AGAIN"
+//
+//        default :
+//            emptyView.message = "No Pending Approval Data for the current\nTry by changing filter"
+//        }
+//
+//        if action != nil {
+//            emptyView.button.isHidden = false
+//            emptyView.button.addTarget(vc, action: action!, for: .touchUpInside)
+//        } else {
+//            emptyView.button.isHidden = true
+//        }
+//
+//        tb.tableFooterView = emptyView
+//
+//        emptyView.translatesAutoresizingMaskIntoConstraints = false
+//        emptyView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+//        emptyView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+//        emptyView.widthAnchor.constraint(equalTo: vc.view.widthAnchor, multiplier: 0.6).isActive = true
+//        emptyView.heightAnchor.constraint(equalTo: vc.view.heightAnchor, multiplier: 0.55).isActive = true
+//    }
     
     
     public static func getAppVersion() -> String {
@@ -902,7 +969,6 @@ class Helper: UIView {
     }
     
     
-    
     public static func getDataFromFileUrl(fileUrl: URL) -> Data? {
         
         var pData = Data()
@@ -914,7 +980,6 @@ class Helper: UIView {
         }
         return pData
     }
-    
     
     
     public static func parseAndAssignCurrency() -> [String] {
@@ -939,9 +1004,6 @@ class Helper: UIView {
         }
         return nil
     }
-    
-    
-    
     
 }
 protocol Utility {
@@ -1112,9 +1174,9 @@ extension UIView {
         blurEffectView.frame = self.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        let animationView = LOTAnimationView(name: "ocs_loading")
+        let animationView = AnimationView(name: "ocs_loading")
         animationView.frame = CGRect(x: 0, y: 0, width: 120, height: 100)
-        animationView.loopAnimation = true
+        animationView.loopMode = .loop
         animationView.play()
         
         blurEffectView.contentView.addSubview(animationView)
@@ -1130,9 +1192,9 @@ extension UIView {
         blurEffectView.frame = self.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        let animationView = LOTAnimationView(name: "ocs_loading")
+        let animationView = AnimationView(name: "ocs_loading")
         animationView.frame = CGRect(x: 0, y: 0, width: 120, height: 100)
-        animationView.loopAnimation = true
+        animationView.loopMode = .loop
         animationView.play()
         self.addSubview(blurEffectView)
         

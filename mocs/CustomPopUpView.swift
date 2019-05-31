@@ -92,7 +92,7 @@ class CustomPopUpView: UIView, UIGestureRecognizerDelegate, UITextViewDelegate {
     }
     
     deinit {
-        debugPrint("Remove NotificationCenter Deinit")
+//        debugPrint("Remove NotificationCenter Deinit")
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }

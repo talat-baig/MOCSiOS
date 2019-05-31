@@ -7,10 +7,10 @@
 //
 
 import UIKit
+import SDWebImage
 
 class NewsCollVwCell: UICollectionViewCell {
 
-    
     @IBOutlet weak var imgVw: UIImageView!
     
     @IBOutlet weak var lblTitle: UILabel!
@@ -43,9 +43,13 @@ class NewsCollVwCell: UICollectionViewCell {
         let newsDesc = newsData.description
         
         self.lblSubtitle.text = Helper.removingRegexMatches(str: newsDesc, pattern: "<.*?>")
-//        self.imgVw.image = new
 
         let url = URL(string: newsData.imgSrc)
-        self.imgVw.kf.setImage(with: url, placeholder: #imageLiteral(resourceName: "home_placeholder"), options: nil, progressBlock: nil, completionHandler: nil)
+//        self.imgVw.kf.setImage(with: url, placeholder: #imageLiteral(resourceName: "home_placeholder"), options: nil, progressBlock: nil, completionHandler: nil)
+        
+        
+        imgVw.sd_imageIndicator = SDWebImageActivityIndicator.gray
+        imgVw.sd_setImage(with:  url, placeholderImage: UIImage(named: "placeholder"))
+
     }
 }

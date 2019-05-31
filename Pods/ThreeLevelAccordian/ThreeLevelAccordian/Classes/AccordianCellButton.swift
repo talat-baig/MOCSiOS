@@ -13,12 +13,12 @@ class AccordianCellButton: UIButton {
     init(type: AccordianCellButtonType) {
         super.init(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         self.isUserInteractionEnabled = false
-        self.setImage(imageForType(type)!, for: UIControlState())
+        self.setImage(imageForType(type)!, for: UIControl.State())
     }
     
     init(image: UIImage) {
         super.init(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        self.setImage(image, for: UIControlState())
+        self.setImage(image, for: UIControl.State())
     }
     
     required init?(coder aDecoder: NSCoder) {

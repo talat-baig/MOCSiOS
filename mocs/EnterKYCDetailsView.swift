@@ -43,7 +43,7 @@ class EnterKYCDetailsView: UIView {
     }
     
     deinit {
-        debugPrint("Remove NotificationCenter Deinit")
+//        debugPrint("Remove NotificationCenter Deinit")
     }
     
     

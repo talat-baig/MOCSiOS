@@ -49,6 +49,7 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
     
     @IBOutlet weak var mySubVw: UIView!
     
+    var activityIndicatorView: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         
@@ -57,6 +58,10 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         refreshController = Helper.attachRefreshControl(vc: self, action: #selector(populateList))
         self.collVwNews.addSubview(refreshController)
         FilterViewController.filterDelegate = self
+        
+        activityIndicatorView = UIActivityIndicatorView(style: .gray)
+        
+        collVwNews.backgroundView = activityIndicatorView
         
         self.initialSetup()
         
@@ -133,7 +138,7 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         showcase.primaryTextSize = 21
         showcase.secondaryTextSize = 18
         showcase.secondaryTextColor = UIColor.white.withAlphaComponent(0.8)
-        showcase.isTapRecognizerForTagretView = false
+        showcase.isTapRecognizerForTargetView = false
         // Delegate to handle other action after showcase is dismissed.
         showcase.delegate = self
         showcase.show(completion: {
@@ -207,13 +212,13 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
         if internetStatus != .notReachable {
             
 //            self.view.showLoading()
-            
+//            activityIndicatorView.startAnimating()
             let url = String.init(format: Constant.API.NEWS, Session.authKey)
             
             Alamofire.request(url).responseData(completionHandler: { response in
                 self.refreshController.endRefreshing()
 //                self.view.hideLoading()
-                
+//                self.activityIndicatorView.stopAnimating()
                 if Helper.isResponseValid(vc: self, response: response.result,tv: nil){
                     let jsonResponse = JSON(response.result.value!)
                     Session.news = jsonResponse.rawString()!
@@ -221,7 +226,6 @@ class HomeViewController: UIViewController , filterViewDelegate , customPopUpDel
                 }
             })
         } else {
-            
             Helper.showNoInternetMessg()
             //                Helper.showNoInternetState(vc: self, tb: tableView,action: #selector(populateList))
         }

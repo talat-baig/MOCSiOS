@@ -41,7 +41,7 @@ class CustomTRIApproveView: UIView {
     }
     
     deinit {
-        debugPrint("Remove NotificationCenter Deinit")
+//        debugPrint("Remove NotificationCenter Deinit")
     }
     
     

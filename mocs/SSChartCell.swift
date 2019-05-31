@@ -56,7 +56,7 @@ class SSChartCell: UITableViewCell {
         rightAxis.axisMinimum = 0
         rightAxis.drawGridLinesEnabled = false
         
-        let chartDataSet = BarChartDataSet(values: dataEntry, label: "")
+        let chartDataSet = BarChartDataSet(entries: dataEntry, label: "")
         chartDataSet.colors = ChartColorTemplates.vordiplom()
         chartDataSet.drawValuesEnabled = false
         
@@ -117,8 +117,8 @@ class SSChartCell: UITableViewCell {
             dataEntries2.append(dataEntry)
         }
         
-        let chartDataSet1 = BarChartDataSet(values: dataEntries1, label: "Amount Paid")
-        let chartDataSet2 = BarChartDataSet(values: dataEntries2, label: "Balance Remaining")
+        let chartDataSet1 = BarChartDataSet(entries: dataEntries1, label: "Amount Paid")
+        let chartDataSet2 = BarChartDataSet(entries: dataEntries2, label: "Balance Remaining")
         chartDataSet1.colors =   [ChartColorTemplates.vordiplom()[0]]
         chartDataSet2.colors = [ChartColorTemplates.vordiplom()[1]]
         chartDataSet1.valueFont = UIFont.systemFont(ofSize: 6.0)

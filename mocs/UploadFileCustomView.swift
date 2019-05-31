@@ -72,7 +72,7 @@ class UploadFileCustomView: UIView , UIGestureRecognizerDelegate{
     }
 
     deinit {
-        debugPrint("Remove NotificationCenter Deinit")
+//        debugPrint("Remove NotificationCenter Deinit")
     }
     
     @IBAction func btnUploadTapped(_ sender: Any) {

@@ -11,7 +11,7 @@ target 'mocs' do
     pod 'Toast-Swift', '~> 3.0.1'
     pod 'ThreeLevelAccordian'
     pod 'lottie-ios'
-    pod 'AKSideMenu'
+    pod 'AKSideMenu','1.4.1'
     pod 'XLPagerTabStrip', '~> 8.0'
     pod 'SwiftyDropbox'
     pod 'NotificationBannerSwift'
@@ -26,7 +26,8 @@ target 'mocs' do
     pod 'Crashlytics', '~> 3.10.5'
     pod 'MaterialShowcase'
     pod 'SQLite.swift', '~> 0.11.5'
-    pod 'Siren'
+    pod 'Siren', '~> 5.1.0'
     pod 'UIEmptyState'
     pod 'SearchTextField'
+    pod 'SDWebImage', '~> 5.0'
 end

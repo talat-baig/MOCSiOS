@@ -65,7 +65,7 @@ class ARChartCell: UITableViewCell {
         
         arPieChart.centerAttributedText = centerText
         
-        let set = PieChartDataSet(values: dataEntry, label: "")
+        let set = PieChartDataSet(entries: dataEntry, label: "")
         set.drawIconsEnabled = false
         set.sliceSpace = 2
         
